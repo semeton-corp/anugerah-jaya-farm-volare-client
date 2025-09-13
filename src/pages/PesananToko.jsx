@@ -147,8 +147,6 @@ const PesananToko = () => {
 
   const confirmTelurOkHandle = async (payload) => {
     try {
-      console.log("payload: ", payload);
-      console.log("selectedItem.item.id: ", selectedItem.item.id);
       const confirmResponse = await warehouseConfirmationStoreRequestItem(
         payload,
         selectedItem.id
@@ -284,23 +282,22 @@ const PesananToko = () => {
         <h1 className="text-3xl font-bold">Pesanan Toko</h1>
 
         <div className="flex gap-2">
-          {userRole == "Owner" ||
-            (userRole == "Kepala Kandang" && (
-              <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
-                <MdStore size={18} />
-                <select
-                  value={selectedWarehouse}
-                  onChange={(e) => setSelectedWarehouse(e.target.value)}
-                  className="ml-2 bg-transparent text-base font-medium outline-none"
-                >
-                  {warehouses.map((warehouse) => (
-                    <option key={warehouse.id} value={warehouse.id}>
-                      {warehouse.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            ))}
+          {(userRole == "Owner" || userRole == "Kepala Kandang") && (
+            <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+              <MdStore size={18} />
+              <select
+                value={selectedWarehouse}
+                onChange={(e) => setSelectedWarehouse(e.target.value)}
+                className="ml-2 bg-transparent text-base font-medium outline-none"
+              >
+                {warehouses.map((warehouse) => (
+                  <option key={warehouse.id} value={warehouse.id}>
+                    {warehouse.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
 
           <div
             className="flex items-center rounded-lg bg-orange-300 hover:bg-orange-500 cursor-pointer gap-2"

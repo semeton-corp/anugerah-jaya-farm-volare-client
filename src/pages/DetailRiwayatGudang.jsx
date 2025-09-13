@@ -13,7 +13,7 @@ export default function DetailRiwayatGudang() {
   const fetchHistoryData = async () => {
     try {
       const historyResponse = await getWarehouseItemHistoryById(id);
-      console.log("historyResponse: ", historyResponse);
+      console.log("historyResponseDetail: ", historyResponse);
       if (historyResponse.status == 200) {
         setHistoryData(historyResponse.data.data);
       }
@@ -37,7 +37,9 @@ export default function DetailRiwayatGudang() {
             className={`inline-block px-3 py-1 rounded  font-semibold ${
               historyData?.status === "Barang Masuk"
                 ? "bg-aman-box-surface-color text-aman-text-color"
-                : "bg-yellow-300 text-yellow-800"
+                : historyData?.status === "Barang Keluar"
+                ? "bg-kritis-box-surface-color text-kritis-text-color"
+                : "bg-orange-200 text-yellow-900"
             }`}
           >
             {historyData?.status}
@@ -67,30 +69,28 @@ export default function DetailRiwayatGudang() {
               <p className=" text-gray-600">Asal Barang</p>
               <p className="font-bold text-lg">{historyData?.source}</p>
             </div>
-            <div>
-              <p className=" text-gray-600">Tujuan Barang</p>
-              <p className="font-bold text-lg">{historyData?.destination}</p>
-            </div>
+            {historyData?.destination != "-" && (
+              <div>
+                <p className=" text-gray-600">Tujuan Barang</p>
+                <p className="font-bold text-lg">{historyData?.destination}</p>
+              </div>
+            )}
           </div>
         )}
 
         <div className="mb-6">
           <p className=" text-gray-600">Nama barang</p>
-          <p className="font-bold text-lg">{historyData?.item?.name}</p>
-        </div>
-        <div className="mb-6">
-          <p className=" text-gray-600">Kategori barang</p>
-          <p className="font-bold text-lg">{historyData?.item?.category}</p>
+          <p className="font-bold text-lg">{historyData?.itemName}</p>
         </div>
 
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div>
             <p className=" text-gray-600">Jumlah barang awal</p>
-            <p className="font-bold text-lg">{`${historyData?.quantityBefore} ${historyData?.item?.unit}`}</p>
+            <p className="font-bold text-lg">{`${historyData?.quantityBefore}`}</p>
           </div>
           <div>
             <p className=" text-gray-600">Jumlah barang akhir</p>
-            <p className="font-bold text-lg">{`${historyData?.quantityAfter} ${historyData?.item?.unit}`}</p>
+            <p className="font-bold text-lg">{`${historyData?.quantityAfter}`}</p>
           </div>
         </div>
 
