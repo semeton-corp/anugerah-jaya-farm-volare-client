@@ -45,6 +45,10 @@ const DetailVaksinObat = () => {
         setChickenHealthMonitorings(
           detailResponse.data.data.chickenHealthMonitorings
         );
+        console.log(
+          "detailResponse.data.data.chickenHealthMonitorings: ",
+          detailResponse.data.data.chickenHealthMonitorings
+        );
       }
     } catch (error) {
       console.log("error :", error);
@@ -164,7 +168,7 @@ const DetailVaksinObat = () => {
                   className="border-t hover:bg-black-3 transition-all"
                 >
                   <td className="py-2 px-4">
-                    {row.date == "" ? "-" : row.date}
+                    {row.createdAt == "" ? "-" : row.createdAt}
                   </td>
                   <td className="py-2 px-4">{row.chickenCategory}</td>
                   <td className="py-2 px-4">{row.chickenAge}</td>

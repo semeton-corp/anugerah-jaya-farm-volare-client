@@ -30,7 +30,6 @@ const DetailKandang = () => {
   };
 
   const handleDelete = async () => {
-    // console.log("Kandang dihapus!");
     try {
       const deleteResponse = await deleteCage(data.cage.id);
       console.log("deleteResponse: ", deleteResponse);
@@ -46,10 +45,9 @@ const DetailKandang = () => {
   const fetchDetailKandang = async () => {
     try {
       const detailResponse = await getChickenCageById(id);
-      // console.log("detailResponse: ", detailResponse);
+      console.log("detailResponse: ", detailResponse);
       if (detailResponse.status === 200) {
         setData(detailResponse.data.data);
-        // console.log("detailResponse.data.data: ", detailResponse.data.data);
       }
     } catch (error) {
       console.log("error :", error);

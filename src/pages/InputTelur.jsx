@@ -123,7 +123,13 @@ const InputTelur = () => {
           // setSelectedCageName(data.cage.name);
         }
       } catch (error) {
-        console.error("Gagal memuat data kandang:", error);
+        if (error.data.message == "egg monitoring already exists for today") {
+          alert(
+            "❌Monitoring telur untuk hari ini sudah dilakukan untuk kandang ini!"
+          );
+        } else {
+          console.log("error: ", error);
+        }
       }
     };
 
@@ -166,12 +172,17 @@ const InputTelur = () => {
           console.log("status bukan 200:", response.data);
         }
       } catch (error) {
-        console.error("Gagal mengirim data telur:", error);
+        if (error.data.message == "egg monitoring already exists for today") {
+          alert(
+            "❌Monitoring telur untuk hari ini sudah dilakukan untuk kandang ini!"
+          );
+        } else {
+          console.error("Gagal mengirim data telur:", error);
+        }
       }
     } else {
       try {
         const response = await inputTelur(payload);
-        // console.log("response: ", response);
         if (response.status === 201) {
           console.log("Data berhasil dikirim:", response.data);
           navigate(-1, { state: { refetch: true } });
@@ -180,18 +191,13 @@ const InputTelur = () => {
         }
       } catch (error) {
         const errorMessage =
-          error?.response || error.message || "Terjadi kesalahan";
-
-        if (errorMessage === "egg monitoring already exists for today") {
-          alert("Sudah terdapat data untuk kandang yang dipilih hari ini!");
+          error?.response?.data?.message || "Terjadi kesalahan";
+        if (errorMessage == "egg monitoring already exists for today") {
+          alert("❌INPUT DATA HANYA BISA DILAKUKAN 1x SEHARI");
         } else {
           alert("Gagal menyimpan data: " + errorMessage.data.message);
         }
-
-        console.error(
-          "Gagal menyimpan atau mengupdate data ayam:",
-          errorMessage
-        );
+        console.log("error: ", error);
       }
     }
   };
@@ -358,8 +364,9 @@ const InputTelur = () => {
               {totalKarpetGoodEgg * 30 + totalRemainingGoodEgg > 0
                 ? (() => {
                     const avg =
-                      (totalWeightGoodEgg * 1000) /
-                      (totalKarpetGoodEgg * 30 + totalRemainingGoodEgg);
+                      (Number(totalWeightGoodEgg) * 1000) /
+                      (Number(totalKarpetGoodEgg) * 30 +
+                        Number(totalRemainingGoodEgg));
                     return avg.toFixed(2) === "0.00" ? "-" : avg.toFixed(2);
                   })()
                 : "-"}

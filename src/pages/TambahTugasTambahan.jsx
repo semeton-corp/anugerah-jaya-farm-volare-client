@@ -16,6 +16,7 @@ import {
   getAdditionalWorkById,
 } from "../services/dailyWorks";
 import { useNavigate, useParams } from "react-router-dom";
+import { formatThousand, onlyDigits } from "../utils/moneyFormat";
 
 const TambahTugasTambahan = () => {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ const TambahTugasTambahan = () => {
   const [slot, setSlot] = useState(1);
   const [salary, setSalary] = useState("");
   const [description, setDescription] = useState("");
-  const [workers, setWorkers] = useState([{ roleName: "", id: "" }]);
+  const [workers, setWorkers] = useState([]);
 
   const [employeeOptions, setEmployeeOptions] = useState();
   const [employeeOptionsMap, setEmployeeOptionsMap] = useState({});
@@ -70,6 +71,21 @@ const TambahTugasTambahan = () => {
   };
 
   const handleSubmit = async () => {
+    if (
+      !taskName ||
+      !site ||
+      !location ||
+      !specificLocation ||
+      !date ||
+      !time ||
+      !slot ||
+      !salary ||
+      !description
+    ) {
+      alert("❌Mohon isi semua data dengan benar!");
+      return;
+    }
+
     const userIds = workers
       .map((w) => w.id ?? w.userId ?? w.user?.id ?? "")
       .map((id) => (id === null || id === undefined ? "" : String(id).trim()))
@@ -468,8 +484,11 @@ const TambahTugasTambahan = () => {
         <input
           type="text"
           className="w-full border rounded p-2"
-          value={salary}
-          onChange={(e) => setSalary(e.target.value)}
+          value={formatThousand(salary)}
+          onChange={(e) => {
+            const raw = onlyDigits(e.target.value);
+            setSalary(raw);
+          }}
           placeholder="Rp 300.000"
         />
       </div>

@@ -19,7 +19,7 @@ import {
 } from "../utils/dateFormat";
 import { deleteAdditionalWorkById } from "../services/dailyWorks";
 import { updateAdditionalWorkById } from "../services/dailyWorks";
-import { formatRupiah, formatThousand } from "../utils/moneyFormat";
+import { formatRupiah, formatThousand, onlyDigits } from "../utils/moneyFormat";
 import { getRoles } from "../services/roles";
 import { getLocations } from "../services/location";
 import { getUserById, updateUser } from "../services/user";
@@ -648,7 +648,10 @@ function GajiPokokForm({
           placeholder="Masukkan gaji pokok"
           className="border rounded p-4 mb-3 pl-12 w-full"
           value={formatThousand(salary)}
-          onChange={(e) => setSalary(e.target.value)}
+          onChange={(e) => {
+            const raw = onlyDigits(e.target.value);
+            setSalary(raw);
+          }}
         />
       </div>
 
