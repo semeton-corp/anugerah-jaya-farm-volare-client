@@ -4,12 +4,15 @@ import {
   getAdditionalWorkById,
   deleteAdditionalWorkById,
 } from "../services/dailyWorks";
+import { formatThousand } from "../utils/moneyFormat";
+import DeleteModal from "../components/DeleteModal";
 
 const DetailTugasTambahan = () => {
   const userRole = localStorage.getItem("role");
   const navigate = useNavigate();
   const { id } = useParams();
 
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [detailData, setDetailData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -28,13 +31,13 @@ const DetailTugasTambahan = () => {
   };
 
   const handleDelete = async () => {
-    if (confirm("Yakin hapus tugas tambahan ini?")) {
-      try {
-        await deleteAdditionalWorkById(id);
+    try {
+      const deleteResponse = await deleteAdditionalWorkById(id);
+      if (deleteResponse.status == 204) {
         navigate(-1);
-      } catch (err) {
-        console.error("Gagal hapus: ", err);
       }
+    } catch (error) {
+      console.log("error :", error);
     }
   };
 
@@ -92,7 +95,9 @@ const DetailTugasTambahan = () => {
 
         <div className="mt-6">
           <div className="font-medium">Gaji Tambahan / Pekerja</div>
-          <div className="font-bold text-lg">{`RP ${detailData.salary}`}</div>
+          <div className="font-bold text-lg">{`RP ${formatThousand(
+            detailData.salary
+          )}`}</div>
         </div>
 
         <div className="mt-6">
@@ -127,15 +132,23 @@ const DetailTugasTambahan = () => {
         </div>
       </div>
       {userRole == "Owner" && (
-        <div className="text-right">
+        <div className="text-right mt-4">
           <button
-            onClick={handleDelete}
+            onClick={() => {
+              setShowDeleteModal(true);
+            }}
             className="bg-red-500 text-white py-2 px-6 rounded hover:bg-red-700"
           >
             Hapus Tugas Tambahan
           </button>
         </div>
       )}
+
+      <DeleteModal
+        isOpen={showDeleteModal}
+        onCancel={() => setShowDeleteModal(false)}
+        onConfirm={handleDelete}
+      />
     </div>
   );
 };

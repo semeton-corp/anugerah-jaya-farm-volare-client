@@ -7,6 +7,8 @@ import {
 } from "../services/cashflow";
 import { createStoreSalePayment } from "../services/stores";
 import { createAfkirChickenSalePayment } from "../services/chickenMonitorings";
+import { formatThousand, onlyDigits } from "../utils/moneyFormat";
+import { createWarehouseSalePayment } from "../services/warehouses";
 
 // ===== Utils =====
 const rupiah = (n) => `Rp ${Number(n || 0).toLocaleString("id-ID")}`;
@@ -95,8 +97,11 @@ const TambahPembayaranModal = ({
           type="number"
           className="w-full border rounded p-2 mb-3"
           placeholder="Masukkan nominal"
-          value={nominal}
-          onChange={(e) => setNominal(e.target.value)}
+          value={formatThousand(nominal)}
+          onChange={(e) => {
+            const raw = onlyDigits(e.target.value);
+            setNominal(raw);
+          }}
           min={0}
         />
 
@@ -151,11 +156,11 @@ const callAddPaymentByCategory = (category, id, payload) => {
   }
 
   if (cat.includes("penjualan telur gudang")) {
-    return createStoreSalePayment(id, payload);
+    return createWarehouseSalePayment(payload, id);
   }
 
   if (cat.includes("penjualan telur toko")) {
-    return createStoreSalePayment(id, payload);
+    return createStoreSalePayment(payload, id);
   }
 
   if (cat.includes("penjualan ayam afkir") || cat.includes("ayam afkir")) {

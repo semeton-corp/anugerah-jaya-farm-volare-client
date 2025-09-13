@@ -192,7 +192,7 @@ const TugasPegawai = () => {
                     <td className="py-3 px-4">
                       <span
                         className={`w-36 py-1 flex justify-center rounded text-sm font-semibold ${
-                          item.status === "Selesai"
+                          item.status === "Pekerja Terpenuhi"
                             ? "bg-aman-box-surface-color text-aman-text-color"
                             : item.status === "Sedang Diproses"
                             ? "bg-orange-200 text-kritis-text-color"
