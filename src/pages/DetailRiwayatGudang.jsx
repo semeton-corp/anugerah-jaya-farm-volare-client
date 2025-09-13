@@ -86,11 +86,11 @@ export default function DetailRiwayatGudang() {
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div>
             <p className=" text-gray-600">Jumlah barang awal</p>
-            <p className="font-bold text-lg">{`${historyData?.quantityBefore}`}</p>
+            <p className="font-bold text-lg">{`${historyData?.quantityBefore} ${historyData?.itemUnit}`}</p>
           </div>
           <div>
             <p className=" text-gray-600">Jumlah barang akhir</p>
-            <p className="font-bold text-lg">{`${historyData?.quantityAfter}`}</p>
+            <p className="font-bold text-lg">{`${historyData?.quantityAfter} ${historyData?.itemUnit}`}</p>
           </div>
         </div>
 

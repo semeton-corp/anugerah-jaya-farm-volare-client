@@ -171,13 +171,13 @@ const DetailAyam = () => {
           </div>
         </div>
       </div>
-
+      {/* 
       <div className="flex items-center bg-yellow-50 text-yellow-800 p-4 rounded-md border-l-4 border-yellow-400">
         <AlertTriangle className="w-5 h-5 mr-3 text-yellow-600" />
         <span className="font-medium">
           Periksa kandang A1 nilai mortalitas 5%
         </span>
-      </div>
+      </div> */}
 
       {/* Table Section */}
       <div className="bg-white p-4 border rounded-lg w-full border-black-6">

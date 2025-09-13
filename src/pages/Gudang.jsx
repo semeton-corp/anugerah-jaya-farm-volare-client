@@ -39,7 +39,7 @@ const Gudang = () => {
 
   const [totalDangerStock, setTotalDangerStock] = useState();
   const [totalSafeStock, setTotalSafeStock] = useState();
-  const [totalStoreRequest, setTotalStoreRequest] = useState();
+  const [totalItemInOrder, setTotalItemInOrder] = useState();
 
   const [eggStocks, setEggStocks] = useState();
   const [cornStocks, setCornStocks] = useState([]);
@@ -123,7 +123,7 @@ const Gudang = () => {
         setNotifications(overviewResponse.data.data.notifications);
         setTotalDangerStock(overviewResponse.data.data.totalDangerStock);
         setTotalSafeStock(overviewResponse.data.data.totalSafeStock);
-        setTotalStoreRequest(overviewResponse.data.data.totalStoreRequest);
+        setTotalItemInOrder(overviewResponse.data.data.totalItemInOrder);
         setCornStocks(overviewResponse.data.data.cornStocks);
       }
     } catch (error) {
@@ -297,7 +297,7 @@ const Gudang = () => {
                   <div className="flex">
                     {/* popuasl */}
                     <p className="text-3xl font-semibold pe-2">
-                      {totalStoreRequest ?? 0}
+                      {totalItemInOrder ?? 0}
                     </p>
                   </div>
                 </div>
@@ -374,7 +374,7 @@ const Gudang = () => {
                     <th className="py-2 px-4">Jumlah</th>
                     <th className="py-2 px-4">Satuan</th>
                     <th className="py-2 px-4">Kadaluarsa</th>
-                    <th className="py-2 px-4">Keterangan</th>
+                    {/* <th className="py-2 px-4">Keterangan</th> */}
                     <th className="py-2 px-4">Aksi</th>
                   </tr>
                 </thead>
@@ -386,7 +386,7 @@ const Gudang = () => {
                       <td className="py-2 px-4">{item.quantity}</td>
                       <td className="py-2 px-4">{item.item.unit}</td>
                       <td className="py-2 px-4">{item.expiredAt}</td>
-                      <td className="py-2 px-4 flex justify-center">
+                      {/* <td className="py-2 px-4 flex justify-center">
                         <span
                           className={`w-24 py-1 flex justify-center rounded text-sm font-semibold ${
                             item.description === "Aman"
@@ -396,7 +396,7 @@ const Gudang = () => {
                         >
                           {item.description}
                         </span>
-                      </td>
+                      </td> */}
                       <td className="py-2 px-4 justify-center gap-4">
                         <span
                           onClick={() => {

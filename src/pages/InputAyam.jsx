@@ -21,11 +21,11 @@ const InputAyam = () => {
   const locationId = localStorage.getItem("locationId");
   const userRole = localStorage.getItem("role");
   const userName = localStorage.getItem("userName");
-
   const [chickenCages, setChickenCages] = useState([]);
   const [selectedChickenCage, setSelectedChickenCage] = useState("");
   const isCageEmpty =
     selectedChickenCage?.cage && !selectedChickenCage.cage.isUsed;
+  const isAssignToCage = chickenCages.length > 0;
 
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
@@ -52,6 +52,8 @@ const InputAyam = () => {
         }
         const dataChickenCage = response.data.data;
 
+        console.log("dataChickenCage: ", dataChickenCage);
+
         if (userRole !== "Owner" && userRole !== "Kepala Kandang") {
           const filteredChickenCage = dataChickenCage.filter(
             (item) => item.chickenPic === userName
@@ -74,11 +76,6 @@ const InputAyam = () => {
           setTotalFeed(data.totalFeed);
           setNote(data.note);
           setIsEditMode(false);
-          // console.log("data.chickenCage.cage: ", data.chickenCage);
-        } else {
-          if (data.length > 0) {
-            // setSelectedCage(data[0].id);
-          }
         }
       } catch (error) {
         console.error("Gagal memuat data kandang:", error);
@@ -183,11 +180,10 @@ const InputAyam = () => {
           <h2 className="text-xl font-bold mb-1">Input data harian</h2>
           <p className="text-lg ">{getTodayDateInBahasa()}</p>
         </div>
-
         <label className="block font-medium  mb-1">Pilih kandang</label>
         {isEditMode ? (
           <select
-            className="w-full border bg-black-4 cursor-pointer rounded p-2 mb-8"
+            className="w-full border bg-black-4 cursor-pointer rounded p-2 mb-4"
             value={
               selectedChickenCage ? JSON.stringify(selectedChickenCage) : ""
             }
@@ -213,10 +209,15 @@ const InputAyam = () => {
             </p>
           </div>
         )}
-
         {isCageEmpty && (
           <p className="text-red-600 font-semibold mb-4">
             Kandang yang dipilih masih kosong
+          </p>
+        )}
+        {!isAssignToCage && (
+          <p className="text-red-600 font-semibold mb-4">
+            Anda belum menjadi PIC kandang manapun! Silahkan hubungi penanggung
+            jawab
           </p>
         )}
 
@@ -252,7 +253,6 @@ const InputAyam = () => {
             </div>
           </div>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
           <div>
             <label className="block font-medium mb-1">Jumlah ayam hidup</label>
@@ -265,7 +265,6 @@ const InputAyam = () => {
             </div>
           </div>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
           <div>
             <label className="block font-medium mb-1">Jumlah ayam sakit</label>
@@ -275,7 +274,7 @@ const InputAyam = () => {
                 value={getDisplayValue(totalSickChicken)}
                 className={`w-full border border-black-6 rounded p-2 
               ${
-                isCageEmpty
+                isCageEmpty || !isAssignToCage
                   ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                   : "bg-black-4"
               }`}
@@ -283,7 +282,7 @@ const InputAyam = () => {
                 onChange={(e) => {
                   setTotalSickChicken(e.target.value);
                 }}
-                disabled={isCageEmpty}
+                disabled={isCageEmpty || !isAssignToCage}
               />
             ) : (
               <div>
@@ -299,7 +298,7 @@ const InputAyam = () => {
                 value={getDisplayValue(totalDeathChicken)}
                 className={`w-full border border-black-6 rounded p-2 
                   ${
-                    isCageEmpty
+                    isCageEmpty || !isAssignToCage
                       ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                       : "bg-black-4"
                   }`}
@@ -307,7 +306,7 @@ const InputAyam = () => {
                 onChange={(e) => {
                   setTotalDeathChicken(e.target.value);
                 }}
-                disabled={isCageEmpty}
+                disabled={isCageEmpty || !isAssignToCage}
               />
             ) : (
               <div>
@@ -316,7 +315,6 @@ const InputAyam = () => {
             )}
           </div>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
           <div className="mt-4">
             <label className="block font-medium mb-1">Jumlah pakan (Kg)</label>
@@ -326,7 +324,7 @@ const InputAyam = () => {
                 value={getDisplayValue(totalFeed)}
                 className={`w-full border border-black-6 rounded p-2 
                   ${
-                    isCageEmpty
+                    isCageEmpty || !isAssignToCage
                       ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                       : "bg-black-4"
                   }`}
@@ -334,7 +332,7 @@ const InputAyam = () => {
                 onChange={(e) => {
                   setTotalFeed(e.target.value);
                 }}
-                disabled={isCageEmpty}
+                disabled={isCageEmpty || !isAssignToCage}
               />
             ) : (
               <div>
@@ -361,7 +359,6 @@ const InputAyam = () => {
             </div>
           </div>
         </div>
-
         <div className="mt-4">
           <label className="block font-medium mb-1">Catatan Pekerja</label>
           {isEditMode ? (
@@ -370,7 +367,7 @@ const InputAyam = () => {
               value={note}
               className={`w-full border border-black-6 rounded p-2 
                   ${
-                    isCageEmpty
+                    isCageEmpty || !isAssignToCage
                       ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                       : "bg-black-4"
                   }`}
@@ -378,7 +375,7 @@ const InputAyam = () => {
               onChange={(e) => {
                 setNote(e.target.value);
               }}
-              disabled={isCageEmpty}
+              disabled={isCageEmpty || !isAssignToCage}
             />
           ) : (
             <div>
@@ -409,7 +406,7 @@ const InputAyam = () => {
                 className="py-3 px-8 rounded text-white cursor-pointer
                 bg-green-700 hover:bg-green-900
                 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:bg-gray-400"
-                disabled={isCageEmpty}
+                disabled={isCageEmpty || !isAssignToCage}
               >
                 Simpan
               </button>
