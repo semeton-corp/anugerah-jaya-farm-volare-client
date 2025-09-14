@@ -7,7 +7,7 @@ import {
   getWarehousesByLocation,
 } from "../services/warehouses";
 import { getItems } from "../services/item";
-import { createStoreRequestItem } from "../services/stores";
+import { createStoreRequestItem, getStores } from "../services/stores";
 import { formatDate, formatDateToDDMMYYYY } from "../utils/dateFormat";
 import { useNavigate } from "react-router-dom";
 import { getCurrentUserStorePlacement } from "../services/placement";
@@ -23,7 +23,7 @@ const PesanBarang = () => {
   const [selectedWarehouse, setSelectedWarehouse] = useState("");
 
   const [stores, setStores] = useState([]);
-  const [storeId, setStoreId] = useState(0);
+  const [selectedStore, setSelectedStore] = useState(0);
 
   const [selectedWarehouseItem, setSelectedWarehouseItem] = useState(0);
 
@@ -50,7 +50,7 @@ const PesanBarang = () => {
       itemId: selectedWarehouseItem.id,
       warehouseId: parseInt(selectedWarehouse),
       quantity: parseInt(jumlah),
-      storeId: storeId,
+      storeId: parseInt(selectedStore),
     };
     try {
       const pesanResponse = await createStoreRequestItem(payload);
@@ -74,6 +74,7 @@ const PesanBarang = () => {
       // console.log("warehousesReponse: ", warehousesReponse);
       if (warehousesReponse.status == 200) {
         setWarehouses(warehousesReponse.data.data);
+        setSelectedWarehouse(warehousesReponse.data.data[0].id);
       }
     } catch (error) {
       console.log("error :", error);
@@ -117,16 +118,25 @@ const PesanBarang = () => {
     }
   };
 
+  const fetchAllStores = async () => {
+    try {
+      console.log("selectedSite: ", selectedSite);
+      const response = await getStores(selectedSite);
+      if (response.status == 200) {
+        setStores(response.data.data);
+        setSelectedStore(response.data.data[0].id);
+      }
+    } catch (error) {
+      alert("Gagal memuat data toko: ", error);
+      console.log("error: ", error);
+    }
+  };
+
   const fetchPlacement = async () => {
     try {
       const placementResponse = await getCurrentUserStorePlacement();
-      // console.log("placementResponse: ", placementResponse);
       if (placementResponse.status == 200) {
-        console.log(
-          "placementResponse.data.data[0].store.id: ",
-          placementResponse.data.data[0].store.id
-        );
-        setStoreId(placementResponse.data.data[0].store.id);
+        setSelectedStore(placementResponse.data.data[0].store.id);
       }
     } catch (error) {
       console.log("error :", error);
@@ -137,13 +147,16 @@ const PesanBarang = () => {
     fetchWarehouses();
     fetchWarehouseItem();
     if (userRole == "Owner") {
+      fetchAllStores();
     } else {
       fetchPlacement();
     }
   }, []);
 
   useEffect(() => {
-    fetchStok();
+    if (selectedWarehouse) {
+      fetchStok();
+    }
   }, [selectedWarehouse]);
 
   return (
@@ -200,6 +213,24 @@ const PesanBarang = () => {
             ))}
           </select>
         </div>
+
+        {userRole == "Owner" && (
+          <div>
+            <label className="block text-sm mb-1">Toko Pemesan</label>
+            <select
+              value={selectedStore}
+              onChange={(e) => setSelectedStore(e.target.value)}
+              className="w-full border bg-gray-100 p-2 rounded"
+            >
+              <option value="">Pilih toko pemesan</option>
+              {stores?.map((store, index) => (
+                <option key={index} value={store.id}>
+                  {store.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         <div>
           <label className="block text-sm mb-1">Nama Barang</label>
