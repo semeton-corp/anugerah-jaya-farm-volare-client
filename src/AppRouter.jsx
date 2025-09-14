@@ -525,8 +525,18 @@ const AppRouter = createBrowserRouter([
                 ],
               },
               {
-                path: "request-ke-gudang",
+                path: "pesan-ke-gudang",
                 element: <RequestKeGudang />,
+                children: [
+                  {
+                    path: "pesan-barang",
+                    element: <PesanBarang />,
+                  },
+                  {
+                    path: "detail-pesan-barang-gudang",
+                    element: <DetailPesanBarangGudang />,
+                  },
+                ],
               },
               {
                 path: "riwayat-stok",

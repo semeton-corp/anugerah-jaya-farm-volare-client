@@ -88,7 +88,7 @@ export const sidebarMenus = {
       subTabs: [
         { tabName: "Overview Toko", path: "stok-gudang" },
         { tabName: "Stok Toko", path: "pengadaan-barang" },
-        { tabName: "Request ke Gudang", path: "daftar-barang" },
+        { tabName: "Pesan ke Gudang", path: "daftar-barang" },
         { tabName: "Riwayat Stok", path: "pesanan-toko" },
       ],
     },

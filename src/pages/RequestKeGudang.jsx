@@ -12,49 +12,12 @@ import { getCurrentUserStorePlacement } from "../services/placement";
 import { useEffect } from "react";
 import {
   getStoreRequestItems,
+  getStores,
   storeConfirmationStoreRequestItem,
   updateStoreRequestItem,
 } from "../services/stores";
 import { formatDate, formatDateToDDMMYYYY } from "../utils/dateFormat";
-
-const dummyData = [
-  {
-    namaBarang: "Telur OK",
-    jumlah: 12,
-    gudang: "Gudang A1",
-    status: "Sedang Dikirim",
-  },
-  {
-    namaBarang: "Telur Retak",
-    jumlah: 12,
-    gudang: "Gudang A1",
-    status: "Pending",
-  },
-  {
-    namaBarang: "Telur OK",
-    jumlah: 10,
-    gudang: "Gudang A1",
-    status: "Ditolak",
-  },
-  {
-    namaBarang: "Telur Retak",
-    jumlah: 10,
-    gudang: "Gudang A1",
-    status: "Sampai - Sesuai",
-  },
-  {
-    namaBarang: "Telur OK",
-    jumlah: 10,
-    gudang: "Gudang A1",
-    status: "Dibatalkan",
-  },
-  {
-    namaBarang: "Telur OK",
-    jumlah: 10,
-    gudang: "Gudang A1",
-    status: "Sampai - Tidak Sesuai",
-  },
-];
+import { MdStore } from "react-icons/md";
 
 const getStatusStyle = (status) => {
   switch (status) {
@@ -103,10 +66,18 @@ const RequestKeGudang = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const [selectedSite] = useState(
+    userRole === "Owner" ? 0 : localStorage.getItem("locationId")
+  );
+
   const [requestData, setRequestData] = useState([]);
 
   const [storePlacement, setStorePlacement] = useState();
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
+
+  const [stores, setStores] = useState([]);
+  const [selectedStore, setSelectedStore] = useState("");
+
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalData, setTotalData] = useState(0);
@@ -159,27 +130,32 @@ const RequestKeGudang = () => {
     } catch (error) {
       console.log("error :", error);
     }
-    // console.log("payload: ", payload);
-
-    // Kirim ke backend di sini
-    // contoh: await api.konfirmasiBarangSampai(data)
-  };
-
-  const handleLihatDetail = () => {
-    const currentPath = location.pathname;
-    const inputPath = currentPath + "/detail-pesan-barang-gudang";
-    navigate(inputPath);
   };
 
   const fetchPlacementData = async () => {
     try {
       const placementResponse = await getCurrentUserStorePlacement();
-      // console.log("placementResponse: ", placementResponse);
+      console.log("placementResponse: ", placementResponse);
       if (placementResponse.status == 200) {
         setStorePlacement(placementResponse.data.data[0].store);
+        setSelectedStore(placementResponse.data.data[0].store.id);
       }
     } catch (error) {
       console.log("error :", error);
+    }
+  };
+
+  const fetchAllStores = async () => {
+    try {
+      console.log("selectedSite: ", selectedSite);
+      const response = await getStores(selectedSite);
+      if (response.status == 200) {
+        setStores(response.data.data);
+        setSelectedStore(response.data.data[0].id);
+      }
+    } catch (error) {
+      alert("Gagal memuat data toko: ", error);
+      console.log("error: ", error);
     }
   };
 
@@ -190,7 +166,7 @@ const RequestKeGudang = () => {
         date,
         page,
         undefined,
-        storePlacement?.id
+        selectedStore
       );
       console.log("requestReponse: ", requestReponse);
       if (requestReponse.status == 200) {
@@ -225,8 +201,6 @@ const RequestKeGudang = () => {
         setShowBatalModal(false);
         fetchRequestItemsData();
       }
-      // console.log("cancelResponse: ", cancelResponse);
-      // console.log("confirmResponse: ", confirmResponse);
     } catch (error) {
       alert("Terjadi kesalahan dalam melakukan konfirmasi: ", error);
       console.log("error :", error);
@@ -240,7 +214,11 @@ const RequestKeGudang = () => {
   };
 
   useEffect(() => {
-    fetchPlacementData();
+    if (userRole == "Owner") {
+      fetchAllStores();
+    } else {
+      fetchPlacementData();
+    }
     if (location.state?.refetch) {
       fetchDataAyam();
       window.history.replaceState({}, document.title);
@@ -248,12 +226,10 @@ const RequestKeGudang = () => {
   }, [location]);
 
   useEffect(() => {
-    if (storePlacement) {
+    if (selectedStore) {
       fetchRequestItemsData();
     }
-  }, [storePlacement, page, selectedDate]);
-
-
+  }, [selectedStore, page, selectedDate]);
 
   return (
     <>
@@ -263,19 +239,37 @@ const RequestKeGudang = () => {
         <div className="flex flex-col px-4 py-3 gap-4 ">
           {/* header */}
           <div className="flex justify-between mb-2 flex-wrap gap-4">
-            <h1 className="text-3xl font-bold">Request ke Gudang</h1>
+            <h1 className="text-3xl font-bold">Pesan ke Gudang</h1>
 
-            <div
-              className="flex items-center rounded-lg bg-orange-300 hover:bg-orange-500 cursor-pointer gap-2"
-              onClick={openDatePicker}
-            >
-              <input
-                ref={dateInputRef}
-                type="date"
-                value={selectedDate}
-                onChange={handleDateChange}
-                className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer gap-2"
-              />
+            <div className="flex gap-4">
+              {userRole != "Pekerja Toko" && (
+                <div className="flex items-center rounded px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+                  <MdStore size={18} />
+                  <select
+                    value={selectedStore}
+                    onChange={(e) => setSelectedStore(e.target.value)}
+                    className="ml-2 bg-transparent text-base font-medium outline-none"
+                  >
+                    {stores.map((site) => (
+                      <option key={site.id} value={site.id}>
+                        {site.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+              <div
+                className="flex items-center rounded-lg bg-orange-300 hover:bg-orange-500 cursor-pointer gap-2"
+                onClick={openDatePicker}
+              >
+                <input
+                  ref={dateInputRef}
+                  type="date"
+                  value={selectedDate}
+                  onChange={handleDateChange}
+                  className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer gap-2"
+                />
+              </div>
             </div>
           </div>
 
