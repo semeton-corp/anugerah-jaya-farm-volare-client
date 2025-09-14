@@ -115,7 +115,8 @@ const Toko = () => {
         itemId,
         graphFilter
       );
-      console.log("overviewResponse: ", overviewResponse);
+      // console.log("overviewResponse: ", overviewResponse);
+      
       if (overviewResponse.status === 200) {
         const data = overviewResponse.data.data.storeOverviewDetail;
         setStoreGraph(overviewResponse.data.data.storeGraphs);
@@ -294,7 +295,7 @@ const Toko = () => {
               <div className="flex mt-4">
                 <div className=" items-center">
                   <p className="text-xl font-semibold me-3">{`${crackedEggInIkat} Ikat`}</p>
-                  <p className="text-xl font-semibold me-3">{`${crackedEggInKg} Ikat`}</p>
+                  <p className="text-xl font-semibold me-3">{`${crackedEggInKg} Kg`}</p>
                 </div>
               </div>
             </div>

@@ -49,7 +49,6 @@ const VaksinObat = () => {
     navigate(`${currectPath}/detail-vaksin-&-obat/${dataId}`);
   }
 
-
   const fetchDataAyam = async () => {
     try {
       // console.log("selectedSite: ", selectedSite);
@@ -140,7 +139,7 @@ const VaksinObat = () => {
                   className="border-t border-gray-200 hover:bg-gray-50 text-center"
                 >
                   <td className="py-2 px-4">{row.batchId}</td>
-                  <td className="py-2 px-4">{row.cage.chickenCategory}</td>
+                  <td className="py-2 px-4">{row.chickenCategory}</td>
                   <td className="py-2 px-4">{row.chickenAge}</td>
                   <td className="py-2 px-4">{row.cage.name}</td>
                   <td className="py-2 px-4">

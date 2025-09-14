@@ -149,19 +149,6 @@ const PengadaanBarang = () => {
       {/* Header */}
       <div className="flex justify-between items-center mb-2 flex-wrap gap-4">
         <h1 className="text-3xl font-bold">Pengadaan Barang</h1>
-        TIDAK ADA DATE adanya PAGINATION
-        <div
-          className="flex items-center rounded-lg bg-orange-300 hover:bg-orange-500 cursor-pointer gap-2"
-          onClick={openDatePicker}
-        >
-          <input
-            ref={dateInputRef}
-            type="date"
-            value={selectedDate}
-            onChange={handleDateChange}
-            className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer gap-2"
-          />
-        </div>
       </div>
 
       <div className="bg-white p-4 border rounded-lg w-full border-black-6">
@@ -312,6 +299,7 @@ const PengadaanBarang = () => {
           </table>
         </div>
       </div>
+
       {isShowConfirmModal && selectedItem && (
         <KonfirmasiBarangSampaiGudangModal
           isOpen={isShowConfirmModal}

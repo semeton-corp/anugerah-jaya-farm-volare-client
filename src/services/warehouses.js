@@ -217,12 +217,12 @@ export const deleteWarehouseItemProcurementDraft = (id) => {
   });
 };
 
-export const getWarehouseItemProcurements = (date) => {
+export const getWarehouseItemProcurements = (date, page = 1) => {
   return api.get("/warehouses/items/procurements", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-    params: { date: date },
+    params: { date: date, page: page },
   });
 };
 

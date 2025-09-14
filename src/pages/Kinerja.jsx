@@ -44,16 +44,6 @@ import { getLocations } from "../services/location";
 import { getChickenCage } from "../services/cages";
 import { getChickenAndCompanyPerformanceOverview } from "../services/chickenMonitorings";
 
-const performanceData = [
-  { day: "Minggu", value: 36 },
-  { day: "Senin", value: 42 },
-  { day: "Selasa", value: 25 },
-  { day: "Rabu", value: 40 },
-  { day: "Kamis", value: 43 },
-  { day: "Jumat", value: 33 },
-  { day: "Sabtu", value: 41 },
-];
-
 const getBarColor = (day) => {
   if (day === "Selasa") return "#FF5E5E";
   if (day === "Jumat") return "#F2D08A";
@@ -77,9 +67,10 @@ const Kinerja = () => {
   const [chickenPerformanceSummary, setChickenPerformanceSummary] = useState(
     []
   );
+
   const [
-    profitabilityPerformanceBarCharts,
-    setProfitabilityPerformanceBarCharts,
+    incomeAndExpensePerformanceBarCharts,
+    setIncomeAndExpensePerformanceBarCharts,
   ] = useState([]);
 
   const ageDistributionData = useMemo(() => {
@@ -166,12 +157,18 @@ const Kinerja = () => {
         setChickenPerformanceSummary(
           performanceResponse.data.data.chickenPerformanceSummary
         );
+        setIncomeAndExpensePerformanceBarCharts(
+          performanceResponse.data.data.incomeAndExpensePerformanceBarCharts
+        );
+
+        console.log(
+          "performanceResponse.data.data.incomeAndExpensePerformanceBarCharts: ",
+          performanceResponse.data.data.incomeAndExpensePerformanceBarCharts
+        );
+
         setBepGoodEgg(performanceResponse.data.data.bepGoodEgg);
         setMarginOfSafety(performanceResponse.data.data.marginOfSafety);
         setRcRatio(performanceResponse.data.data.rcRatio);
-        setProfitabilityPerformanceBarCharts(
-          performanceResponse.data.data.profitabilityPerformanceBarCharts
-        );
       }
     } catch (error) {
       console.log("error :", error);
@@ -186,7 +183,7 @@ const Kinerja = () => {
   useEffect(() => {
     fetchPerformanceOverview();
   }, [selectedChickenCage, selectedSite]);
-  
+
   return (
     <>
       {isDetailPage ? (
@@ -345,7 +342,7 @@ const Kinerja = () => {
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <div className="lg:col-span-2">
-              <div className="p-4 border rounded-lg">
+              <div className="p-4 border border-black-6 rounded-lg">
                 <h2 className="text-lg font-bold mb-4">Distribusi Usia Ayam</h2>
                 <ResponsiveContainer width="100%" height={400}>
                   <BarChart data={ageDistributionData}>
@@ -359,7 +356,7 @@ const Kinerja = () => {
               </div>
             </div>
 
-            <div className=" p-4 border rounded-lg">
+            <div className=" p-4 border border-black-6 rounded-lg">
               <div className="space-y-4 mt-3">
                 <div className="flex justify-end">
                   <span className="inline-block rounded bg-gray-300 px-4 py-1 font-semibold text-gray-800 shadow">
@@ -399,56 +396,39 @@ const Kinerja = () => {
             </div>
           </div>
 
-          {/* <div className="flex flex-col lg:flex-row gap-6">
-            <div className="w-full p-4 border rounded-lg">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-bold">Kinerja perusahaan</h2>
-                <div className="flex gap-2">
-                  <select className="text-sm rounded bg-[#BFBFBF] px-2 py-1 text-gray-700">
-                    <option>Rentabilitas</option>
-                    <option>Produktivitas</option>
-                  </select>
-                  <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 ">
-                    <FaCalendarAlt size={18} />
-                    <select
-                      value={graphFilter}
-                      onChange={(e) => setGraphFilter(e.target.value)}
-                      className="ml-2 bg-transparent text-base font-medium outline-none cursor-pointer"
-                    >
-                      {graphFilterOptions.map((choice, index) => (
-                        <option key={index} value={choice}>
-                          {choice}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <span className="inline-block rounded bg-gray-300 px-4 py-1 font-semibold text-gray-800 shadow">
-                    {getTodayYear()}
-                  </span>
-                </div>
-              </div>
-
-              {profitabilityPerformanceBarCharts?.length === 0 ? (
-                <p className="italic text-gray-300">
-                  Belum ada Data kinerja perusahaan
-                </p>
-              ) : (
-                <ResponsiveContainer width="100%" height={370}>
-                  <BarChart data={performanceData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="day" />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="value">
-                      {performanceData.map((entry, index) => (
-                        <Cell key={index} fill={getBarColor(entry.day)} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              )}
-            </div>
-          </div> */}
+          <div className="p-4 border border-black-6 rounded-lg mt-3">
+            <h2 className="text-lg font-bold mb-4">
+              Grafik Pendapatan vs Pengeluaran
+            </h2>
+            <ResponsiveContainer width="100%" height={400}>
+              <LineChart
+                data={incomeAndExpensePerformanceBarCharts}
+                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="key" />
+                <YAxis tickFormatter={(v) => v.toLocaleString("id-ID")} />
+                <Tooltip formatter={(v) => v.toLocaleString("id-ID")} />
+                <Legend />
+                <Line
+                  type="monotone"
+                  dataKey="income"
+                  stroke="#10b981"
+                  strokeWidth={2}
+                  dot={false}
+                  name="Pendapatan"
+                />
+                <Line
+                  type="monotone"
+                  dataKey="expense"
+                  stroke="#ef4444"
+                  strokeWidth={2}
+                  dot={false}
+                  name="Pengeluaran"
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       )}
     </>
