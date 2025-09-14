@@ -137,12 +137,12 @@ const PengadaanBarang = () => {
 
   useEffect(() => {
     fetchBarangData();
-
     if (location.state?.refetch) {
       fetchBarangData();
       window.history.replaceState({}, document.title);
     }
   }, [location]);
+  
   useEffect(() => {
     fetchBarangData();
   }, [selectedDate, page]);

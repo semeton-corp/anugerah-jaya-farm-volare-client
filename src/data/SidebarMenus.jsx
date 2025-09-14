@@ -311,10 +311,6 @@ export const sidebarMenus = {
     {
       icon: <img src={produksiTelur} alt="Overview Icon" className="h-4 w-4" />,
       tabName: "Produksi Telur",
-      subTabs: [
-        { tabName: "Ringkasan Produksi Telur", path: "overview-gudang" },
-        { tabName: "Data Produksi Telur", path: "riwayat-gudang" },
-      ],
     },
     {
       icon: <img src={gudang} alt="ayam Icon" className="h-4 w-4" />,

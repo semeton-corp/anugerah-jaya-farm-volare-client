@@ -224,24 +224,8 @@ const Gudang = () => {
               </span>
             </div>
           )}
+
           <div className="flex md:grid-cols-2 gap-4 justify-between">
-            {/* <div className="p-4 w-full rounded-md bg-green-100">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold">Total Item</h2>
-                <div className="p-2 rounded-xl bg-green-700">
-                  <BiSolidBox size={24} color="white" />
-                </div>
-              </div>
-
-              <div className="flex flex-wrap gap-4">
-                <div className="flex items-center">
-                  <p className="text-3xl font-semibold me-3">Rp</p>
-                  <p className="text-3xl font-semibold">25.000</p>
-                </div>
-              </div>
-            </div> */}
-
-            {/* ayam sakit */}
             <div className="p-4 w-full rounded-md bg-green-100">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-semibold">Stok Aman</h2>
@@ -253,7 +237,6 @@ const Gudang = () => {
               <div className="flex  flex-wrap gap-4">
                 <div className="flex flex-wrap gap-4">
                   <div>
-                    {/* popuasl */}
                     <p className="text-3xl font-semibold">
                       {totalSafeStock ?? 0}
                     </p>
@@ -261,7 +244,6 @@ const Gudang = () => {
                 </div>
               </div>
             </div>
-            {/* penjualan telur */}
             <div className="p-4 w-full rounded-md bg-green-100">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-semibold">Stok Kritis</h2>
@@ -271,10 +253,8 @@ const Gudang = () => {
               </div>
 
               <div className="flex flex-wrap gap-4">
-                {/* item butir */}
                 <div className="flex flex-wrap gap-4">
                   <div>
-                    {/* popuasl */}
                     <p className="text-3xl font-semibold">
                       {totalDangerStock ?? 0}
                     </p>
@@ -282,7 +262,6 @@ const Gudang = () => {
                 </div>
               </div>
             </div>
-            {/* penjualan telur */}
             <div className="p-4 w-full rounded-md bg-green-100">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-semibold">Dalam Pesanan</h2>
@@ -292,10 +271,8 @@ const Gudang = () => {
               </div>
 
               <div className="flex flex-wrap gap-4">
-                {/* item butir */}
                 <div className="flex flex-wrap gap-4">
                   <div className="flex">
-                    {/* popuasl */}
                     <p className="text-3xl font-semibold pe-2">
                       {totalItemInOrder ?? 0}
                     </p>
@@ -305,10 +282,8 @@ const Gudang = () => {
             </div>
           </div>
 
-          {/* chart, incomes, and history section */}
           <div className="flex flex-col lg:flex-row gap-6">
-            {/* Chart Section (3/4 width on large screens) */}
-            <div className="w-full bg-white px-8 py-6 rounded-lg border border-gray-300">
+            <div className="w-full bg-white px-4 py-4 rounded-lg border border-gray-300">
               <div className="flex justify-between items-start mb-4">
                 <h2 className="text-lg font-semibold">Stok Telur</h2>
               </div>
@@ -443,17 +418,44 @@ const Gudang = () => {
                       <td className="py-2 px-4">
                         {`${parseInt(item.estimationRunOut)} hari`}
                       </td>
-                      <td className="py-2 px-4 flex justify-center">
-                        <span
-                          className={`w-24 py-1 flex justify-center rounded text-sm font-semibold ${
-                            item.description === "Aman"
-                              ? "bg-aman-box-surface-color text-aman-text-color"
-                              : "bg-kritis-box-surface-color text-kritis-text-color"
-                          }`}
-                        >
-                          {item.description}
-                        </span>
+                      <td className="py-2 px-4">
+                        <div className="flex justify-center items-center relative group">
+                          <span
+                            className={`w-24 py-1 flex justify-center items-center rounded text-sm font-semibold ${
+                              item.description === "Aman"
+                                ? "bg-aman-box-surface-color text-aman-text-color"
+                                : "bg-kritis-box-surface-color text-kritis-text-color"
+                            }`}
+                          >
+                            {item.description}
+                          </span>
+
+                          {item.description === "Kritis" && (
+                            <div
+                              className="
+                              absolute
+                              left-0
+                              top-1/2
+                              -translate-x-full
+                              -translate-y-1/2
+                              mr-2
+                              w-80
+                              bg-gray-800 text-white
+                              px-3 py-2 rounded-lg
+                              opacity-0 group-hover:opacity-100
+                              transition-opacity duration-200
+                              z-50
+                            "
+                            >
+                              <p>
+                                <strong>Kritis:</strong> Stok kemungkinan habis
+                                dalam waktu kurang dari 3 hari.
+                              </p>
+                            </div>
+                          )}
+                        </div>
                       </td>
+
                       <td className="py-2 px-4 justify-center gap-4">
                         <span
                           onClick={() => {

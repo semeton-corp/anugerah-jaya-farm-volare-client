@@ -149,16 +149,18 @@ const DetailProduksi = () => {
 
       <div className=" flex gap-4">
         <div className=" w-full bg-white px-8 py-6 rounded-lg border border-black-6">
-          <div className="flex justify-end items-start mb-4">
-            <div
-              onClick={inputTelurHandle}
-              className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer"
-            >
-              <div className="text-base font-medium ms-2 text-black">
-                + Input Data Harian
+          {userRole != "Pekerja Gudang" && (
+            <div className="flex justify-end items-start mb-4">
+              <div
+                onClick={inputTelurHandle}
+                className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer"
+              >
+                <div className="text-base font-medium ms-2 text-black">
+                  + Input Data Harian
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           <table className="w-full text-sm">
             <thead>

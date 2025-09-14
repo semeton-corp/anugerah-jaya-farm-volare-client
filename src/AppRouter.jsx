@@ -1527,16 +1527,7 @@ const AppRouter = createBrowserRouter([
           },
           {
             path: "produksi-telur",
-            children: [
-              {
-                path: "ringkasan-produksi-telur",
-                element: <ProduksiTelur />,
-              },
-              {
-                path: "data-produksi-telur",
-                element: <DetailProduksi />,
-              },
-            ],
+            element: <DetailProduksi />,
           },
           {
             path: "gudang",
