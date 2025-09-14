@@ -9,6 +9,7 @@ import {
 import { EditPembayaranModal } from "../components/EditPembayaranModal";
 import { MdDelete } from "react-icons/md";
 import { BiSolidEditAlt } from "react-icons/bi";
+import { formatThousand, onlyDigits } from "../utils/moneyFormat";
 
 const rupiah = (n) => `Rp ${Number(n || 0).toLocaleString("id-ID")}`;
 const toDDMMYYYY = (d) => {
@@ -82,8 +83,11 @@ const TambahPembayaranModal = ({
           type="number"
           className="w-full border rounded p-2 mb-3"
           placeholder="Masukkan nominal"
-          value={nominal}
-          onChange={(e) => setNominal(e.target.value)}
+          value={formatThousand(nominal)}
+          onChange={(e) => {
+            const raw = onlyDigits(e.target.value);
+            setNominal(raw);
+          }}
           min={0}
         />
 
@@ -563,7 +567,7 @@ export default function DetailPengadaanJagung() {
         onClose={() => setShowPaymentModal(false)}
         onSave={submitPayment}
       />
-      {/* EDIT modal */}
+
       <EditPembayaranModal
         open={showEditModal}
         onClose={() => {

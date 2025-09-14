@@ -61,8 +61,12 @@ const PengadaanBarang = () => {
   const [isShowConfirmModal, setIsShowConfirmModal] = useState(false);
   const [isShowBatalModal, setIsShowBatalModal] = useState(false);
 
-  const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
+  const [page, setPage] = useState(1);
 
+  const [totalData, setTotaldata] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
   const [selectedItem, setSelectedItem] = useState(null);
 
   const detailPages = ["draft-pengadaan-barang", "detail-pengadaan-barang"];
@@ -74,9 +78,12 @@ const PengadaanBarang = () => {
   const fetchBarangData = async () => {
     try {
       const date = formatDateToDDMMYYYY(selectedDate);
-      const dataResponse = await getWarehouseItemProcurements(date);
+      const dataResponse = await getWarehouseItemProcurements(date, page);
+      console.log("dataResponse: ", dataResponse);
       if (dataResponse.status == 200) {
         setDaftarBarangData(dataResponse.data.data.warehouseItemProcurements);
+        setTotaldata(dataResponse.data.data.totalData);
+        setTotalPages(dataResponse.data.data.totalPage);
       }
     } catch (error) {
       console.log("error :", error);
@@ -138,7 +145,7 @@ const PengadaanBarang = () => {
   }, [location]);
   useEffect(() => {
     fetchBarangData();
-  }, [selectedDate]);
+  }, [selectedDate, page]);
 
   if (isDetailPage) {
     return <Outlet />;
@@ -285,7 +292,7 @@ const PengadaanBarang = () => {
                 );
               })}
 
-              {daftarBarangData.length === 0 && (
+              {daftarBarangData.length == 0 && (
                 <tr>
                   <td
                     colSpan={9}
@@ -297,6 +304,38 @@ const PengadaanBarang = () => {
               )}
             </tbody>
           </table>
+          <div className="flex justify-between mt-16 px-6">
+            {daftarBarangData?.length > 0 ? (
+              <p className="text-sm text-[#CCCCCC]">{`Menampilkan halaman ${page} dari ${totalPages} halaman. Total ${totalData} data riwayat`}</p>
+            ) : (
+              <p></p>
+            )}
+
+            <div className="flex gap-3">
+              <div
+                className={`rounded-[4px] py-2 px-6 ${
+                  page <= 1 || totalPages <= 0
+                    ? "bg-gray-200 cursor-not-allowed"
+                    : "bg-green-100 hover:bg-green-200 cursor-pointer"
+                } flex items-center justify-center text-black text-base font-medium `}
+                onClick={() => page > 1 && totalPages > 0 && setPage(page - 1)}
+              >
+                <p>Previous</p>
+              </div>
+              <div
+                className={`rounded-[4px] py-2 px-6 ${
+                  page >= totalPages || totalPages <= 0
+                    ? "bg-gray-200 cursor-not-allowed"
+                    : "bg-green-700 hover:bg-green-800 cursor-pointer"
+                } flex items-center justify-center text-white text-base font-medium `}
+                onClick={() =>
+                  page < totalPages && totalPages > 0 && setPage(page + 1)
+                }
+              >
+                <p>Next</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
