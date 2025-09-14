@@ -28,7 +28,7 @@ const DaftarPegawai = () => {
   const [totalData, setTotalData] = useState(0);
   const [pageSize, setPageSize] = useState(0);
 
-  const detailPages = ["tambah-pegawai", "profil"];
+  const detailPages = ["tambah-pegawai", "profile"];
 
   const isDetailPage = detailPages.some((segment) =>
     location.pathname.includes(segment)
@@ -83,7 +83,7 @@ const DaftarPegawai = () => {
   };
 
   const handleDetail = (userId) => {
-    navigate(`${location.pathname}/profil/${userId}`);
+    navigate(`${location.pathname}/profile/${userId}`);
   };
 
   const tambahPegawaiHandle = () => {

@@ -9,7 +9,7 @@ import {
 } from "../services/dailyWorks";
 import { useState, useEffect } from "react";
 import { translateDateToBahasa } from "../utils/dateFormat";
-import { getCurrentPresence } from "../services/presence";
+import { getSelfCurrentUserPresence } from "../services/presence";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 const Tugas = () => {
@@ -65,7 +65,9 @@ const Tugas = () => {
       const takeResponse = await takeAdditionalWorks(id);
       // console.log("takeResponse: ", takeResponse);
       if (takeResponse.status == 201) {
-        alert("Berhasil mengambil tugas tambahan, tugas akan masuk ke tugas pegawai esok hari!")
+        alert(
+          "Berhasil mengambil tugas tambahan, tugas akan masuk ke tugas pegawai esok hari!"
+        );
         fetchTugasTambahanData();
       }
     } catch (error) {
@@ -75,7 +77,7 @@ const Tugas = () => {
 
   const getTodayPresence = async (id) => {
     try {
-      const presenceResponse = await getCurrentPresence();
+      const presenceResponse = await getSelfCurrentUserPresence();
       // console.log("presenceResponse: ", presenceResponse);
       if (presenceResponse.status == 200) {
         console.log(

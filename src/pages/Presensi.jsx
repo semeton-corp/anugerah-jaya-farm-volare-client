@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { formatDate, getTodayDateInBahasa } from "../utils/dateFormat";
 import { PiCalendarBlank } from "react-icons/pi";
 import {
-  getCurrentPresence,
+  getSelfCurrentUserPresence,
   arrivalPresence,
   departurePresence,
-  getAllPresence,
+  getSelfCurrentUserPresences,
   updatePresence,
 } from "../services/presence";
 import MonthYearSelector from "../components/MonthYearSelector";
@@ -51,7 +51,7 @@ const Presensi = () => {
 
   const getTodayPresence = async () => {
     try {
-      const presenceResponse = await getCurrentPresence();
+      const presenceResponse = await getSelfCurrentUserPresence();
       console.log("currentPresenceResponse: ", presenceResponse);
       if (presenceResponse.status == 200) {
         const presenceData = presenceResponse.data.data;
@@ -78,7 +78,10 @@ const Presensi = () => {
 
   const getAttandanceData = async () => {
     try {
-      const allPresenceResponse = await getAllPresence(monthName, year);
+      const allPresenceResponse = await getSelfCurrentUserPresences(
+        monthName,
+        year
+      );
       console.log("allPresenceResponse: ", allPresenceResponse);
       if (allPresenceResponse.status == 200) {
         setAttendanceData(allPresenceResponse.data.data.presences);

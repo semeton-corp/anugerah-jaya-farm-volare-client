@@ -14,7 +14,7 @@ import {
   getTodayDateInBahasa,
   translateDateToBahasa,
 } from "../utils/dateFormat";
-import { getCurrentPresence } from "../services/presence";
+import { getSelfCurrentUserPresence } from "../services/presence";
 import { PiCalendarBlank } from "react-icons/pi";
 import { useParams } from "react-router-dom";
 import MonthYearSelector from "../components/MonthYearSelector";
@@ -55,9 +55,9 @@ const DetailPenyelesaianPekerjaan = () => {
     };
     try {
       const response = await getAdditionalWorkUserByUserId(userId, params);
+      console.log("additional work response: ", response);
       if (response.status === 200) {
         const data = response?.data?.data?.additionalWorkUsers;
-        console.log("data: ", data);
         setAdditionalWorks(data);
         setMaxPageAdditional(Number(data.totalPage || data.totalPages || 1));
       }
@@ -137,23 +137,33 @@ const DetailPenyelesaianPekerjaan = () => {
             </tr>
           </thead>
           <tbody>
-            {additionalWorks?.map((item, index) => (
-              <tr key={index} className="border-b">
-                <td className="py-2 px-4">{item.additionalWork.time}</td>
-                <td className="py-2 px-4">{item.additionalWork.description}</td>
-                <td className="py-2 px-4">
-                  <span
-                    className={`px-3 py-1 rounded text-sm font-medium ${
-                      item.isDone
-                        ? "bg-aman-box-surface-color text-aman-text-color"
-                        : "bg-kritis-box-surface-color text-kritis-text-color"
-                    }`}
-                  >
-                    {item.isDone ? "Selesai" : "Dalam Proses"}
-                  </span>
+            {!additionalWorks || additionalWorks.length === 0 ? (
+              <tr>
+                <td colSpan={3} className="py-4 text-center text-gray-500">
+                  Belum terdapat data pekerjaan tambahan
                 </td>
               </tr>
-            ))}
+            ) : (
+              additionalWorks.map((item, index) => (
+                <tr key={index} className="border-b">
+                  <td className="py-2 px-4">{item.additionalWork.time}</td>
+                  <td className="py-2 px-4">
+                    {item.additionalWork.description}
+                  </td>
+                  <td className="py-2 px-4">
+                    <span
+                      className={`px-3 py-1 rounded text-sm font-medium ${
+                        item.isDone
+                          ? "bg-aman-box-surface-color text-aman-text-color"
+                          : "bg-kritis-box-surface-color text-kritis-text-color"
+                      }`}
+                    >
+                      {item.isDone ? "Selesai" : "Dalam Proses"}
+                    </span>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
 
@@ -210,23 +220,31 @@ const DetailPenyelesaianPekerjaan = () => {
             </tr>
           </thead>
           <tbody>
-            {dailyWorks?.map((item, index) => (
-              <tr key={index} className="border-b">
-                <td className="py-2 px-4">{item.dailyWork.endTime}</td>
-                <td className="py-2 px-4">{item.dailyWork.description}</td>
-                <td className="py-2 px-4">
-                  <span
-                    className={`px-3 py-1 rounded text-sm font-medium ${
-                      item.isDone
-                        ? "bg-aman-box-surface-color text-aman-text-color"
-                        : "bg-kritis-box-surface-color text-kritis-text-color"
-                    }`}
-                  >
-                    {item.isDone ? "Selesai" : "Tidak Selesai"}
-                  </span>
+            {!dailyWorks || dailyWorks.length === 0 ? (
+              <tr>
+                <td colSpan={3} className="text-center py-4 text-gray-500">
+                  Belum ada pekerjaan harian
                 </td>
               </tr>
-            ))}
+            ) : (
+              dailyWorks.map((item, index) => (
+                <tr key={index} className="border-b">
+                  <td className="py-2 px-4">{item.dailyWork.endTime}</td>
+                  <td className="py-2 px-4">{item.dailyWork.description}</td>
+                  <td className="py-2 px-4">
+                    <span
+                      className={`px-3 py-1 rounded text-sm font-medium ${
+                        item.isDone
+                          ? "bg-aman-box-surface-color text-aman-text-color"
+                          : "bg-kritis-box-surface-color text-kritis-text-color"
+                      }`}
+                    >
+                      {item.isDone ? "Selesai" : "Tidak Selesai"}
+                    </span>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
         <div className="flex justify-between mt-16 px-6">

@@ -2,13 +2,18 @@ import React, { useEffect, useState } from "react";
 import { getTodayDateInBahasa } from "../utils/dateFormat";
 import { PiCalendarBlank } from "react-icons/pi";
 import {
-  getCurrentPresence,
+  getSelfCurrentUserPresence,
   arrivalPresence,
   departurePresence,
-  getAllPresence,
+  getSelfCurrentUserPresences,
+  getUserPresences,
 } from "../services/presence";
 import MonthYearSelector from "../components/MonthYearSelector";
-const DetailAbsensi = () => {
+import { useParams } from "react-router-dom";
+
+const DetailAbsensi = ({ mode }) => {
+  const { id } = useParams();
+
   const [presenceId, setPresenceId] = useState(0);
   const [isPresence, setIsPresence] = useState(false);
   const [isGoHome, setIsGoHome] = useState(false);
@@ -19,6 +24,12 @@ const DetailAbsensi = () => {
   const [monthName, setMonthName] = useState(
     new Intl.DateTimeFormat("id-ID", { month: "long" }).format(new Date())
   );
+
+  const [page, setPage] = useState(1);
+  const [historyData, setHistoryData] = useState([]);
+
+  const [totalData, setTotaldata] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
 
   const monthNamesBahasa = [
     "Januari",
@@ -35,16 +46,18 @@ const DetailAbsensi = () => {
     "Desember",
   ];
 
-  const getTodayPresence = async (id) => {
+  const getSelfAttandanceData = async () => {
     try {
-      const presenceResponse = await getCurrentPresence();
-      console.log("currentPresenceResponse: ", presenceResponse);
-      if (presenceResponse.status == 200) {
-        setPresenceId(presenceResponse.data.data.id);
-        setIsPresence(presenceResponse.data.data.isPresent);
-        if (presenceResponse.data.data.endTime != "-") {
-          setIsGoHome(true);
-        }
+      const allPresenceResponse = await getSelfCurrentUserPresences(
+        monthName,
+        year,
+        page
+      );
+      console.log("allPresenceResponse: ", allPresenceResponse);
+      if (allPresenceResponse.status == 200) {
+        setAttendanceData(allPresenceResponse.data.data.presences);
+        setTotaldata(allPresenceResponse.data.data.totalData);
+        setTotalPages(allPresenceResponse.data.data.totalPage);
       }
     } catch (error) {
       console.log("error :", error);
@@ -53,47 +66,34 @@ const DetailAbsensi = () => {
 
   const getAttandanceData = async () => {
     try {
-      console.log("monthName: ", monthName);
-      console.log("year: ", year);
-
-      const allPresenceResponse = await getAllPresence(monthName, year);
+      const allPresenceResponse = await getUserPresences(
+        id,
+        monthName,
+        year,
+        page
+      );
       console.log("allPresenceResponse: ", allPresenceResponse);
       if (allPresenceResponse.status == 200) {
         setAttendanceData(allPresenceResponse.data.data.presences);
+        setTotaldata(allPresenceResponse.data.data.totalData);
+        setTotalPages(allPresenceResponse.data.data.totalPage);
       }
     } catch (error) {
       console.log("error :", error);
     }
   };
 
-  const arrivalHandlePresence = async () => {
-    try {
-      const presenceResponse = await arrivalPresence(presenceId);
-      console.log("presenceResponse: ", presenceResponse);
-      if (presenceResponse.status == 200) {
-        setIsPresence(presenceResponse.data.data.isPresent);
-      }
-    } catch (error) {
-      console.log("error :", error);
-    }
-  };
-
-  const departureHandlePresence = async () => {
-    try {
-      const presenceResponse = await departurePresence(presenceId);
-      console.log("presenceResponse: ", presenceResponse);
-      if (presenceResponse.status == 200) {
-        setIsGoHome(true);
-      }
-    } catch (error) {
-      console.log("error :", error);
-    }
-  };
-  
   useEffect(() => {
-    getTodayPresence();
-    getAttandanceData();
-  }, [isPresence, isGoHome, monthName]);
+    if (mode == "StaffDetail") {
+      getAttandanceData();
+    } else {
+      getSelfAttandanceData();
+    }
+  }, [monthName, year, page]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [monthName, year]);
 
   return (
     <div className="p-4">
@@ -107,7 +107,6 @@ const DetailAbsensi = () => {
           setYear={setYear}
         />
       </div>
-      {/* Tabel Presensi */}
       <div className="bg-white rounded border border-black-6 p-6">
         <table className="w-full border-collapse ">
           <thead className="bg-green-700 text-white text-sm">
@@ -120,40 +119,68 @@ const DetailAbsensi = () => {
             </tr>
           </thead>
           <tbody>
-            {attendanceData.map((row, i) => (
-              <tr key={i} className="border-b">
-                <td className="p-2">{row.date}</td>
-                <td className="p-2">{row.startTime}</td>
-                <td className="p-2">{row.endTime}</td>
-                <td className="p-2">{row.overTime}</td>
-                <td className="p-2">
-                  <span
-                    className={`px-3 py-1 rounded ${
-                      row.startTime !== ""
-                        ? "bg-aman-box-surface-color text-aman-text-color"
-                        : "bg-kritis-box-surface-color text-kritis-text-color"
-                    }`}
-                  >
-                    {row.startTime !== "" ? "Hadir" : "Tidak hadir"}
-                  </span>
+            {attendanceData.length === 0 ? (
+              <tr>
+                <td colSpan={5} className="text-center py-4 text-gray-500">
+                  Belum ada data absensi
                 </td>
               </tr>
-            ))}
+            ) : (
+              attendanceData.map((row, i) => (
+                <tr key={i} className="border-b">
+                  <td className="p-2">{row.date}</td>
+                  <td className="p-2">{row.startTime}</td>
+                  <td className="p-2">{row.endTime}</td>
+                  <td className="p-2">{row.overTime}</td>
+                  <td className="p-2">
+                    <span
+                      className={`px-3 py-1 rounded ${
+                        row.startTime !== ""
+                          ? "bg-aman-box-surface-color text-aman-text-color"
+                          : "bg-kritis-box-surface-color text-kritis-text-color"
+                      }`}
+                    >
+                      {row.startTime !== "" ? "Hadir" : "Tidak hadir"}
+                    </span>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
 
-        {/* footer */}
-        {/* <div className="flex justify-between mt-16 px-6">
-          <p className="text-sm text-[#CCCCCC]">Menampilkan 1-7 data</p>
+        <div className="flex justify-between mt-16 px-6">
+          {attendanceData?.length > 0 ? (
+            <p className="text-sm text-[#CCCCCC]">{`Menampilkan halaman ${page} dari ${totalPages} halaman. Total ${totalData} data riwayat`}</p>
+          ) : (
+            <p></p>
+          )}
+
           <div className="flex gap-3">
-            <div className="rounded-[4px] py-2 px-6 bg-green-100 flex items-center justify-center text-black text-base font-medium hover:bg-green-200 cursor-pointer">
-              <p>Previous </p>
+            <div
+              className={`rounded-[4px] py-2 px-6 ${
+                page <= 1 || totalPages <= 0
+                  ? "bg-gray-200 cursor-not-allowed"
+                  : "bg-green-100 hover:bg-green-200 cursor-pointer"
+              } flex items-center justify-center text-black text-base font-medium `}
+              onClick={() => page > 1 && totalPages > 0 && setPage(page - 1)}
+            >
+              <p>Previous</p>
             </div>
-            <div className="rounded-[4px] py-2 px-6 bg-green-700 flex items-center justify-center text-white text-base font-medium hover:bg-green-800 cursor-pointer">
+            <div
+              className={`rounded-[4px] py-2 px-6 ${
+                page >= totalPages || totalPages <= 0
+                  ? "bg-gray-200 cursor-not-allowed"
+                  : "bg-green-700 hover:bg-green-800 cursor-pointer"
+              } flex items-center justify-center text-white text-base font-medium `}
+              onClick={() =>
+                page < totalPages && totalPages > 0 && setPage(page + 1)
+              }
+            >
               <p>Next</p>
             </div>
           </div>
-        </div> */}
+        </div>
       </div>
     </div>
   );

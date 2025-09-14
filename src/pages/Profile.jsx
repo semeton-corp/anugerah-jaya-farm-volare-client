@@ -73,7 +73,11 @@ const Profile = ({ mode }) => {
   const [monthName, setMonthName] = useState(
     new Intl.DateTimeFormat("id-ID", { month: "long" }).format(new Date())
   );
-  const detailPages = ["tambah-pegawai"];
+  const detailPages = [
+    "tambah-pegawai",
+    "detail-absensi",
+    "detail-penyelesaian-pekerjaan",
+  ];
 
   const isDetailPage = detailPages.some((segment) =>
     location.pathname.includes(segment)

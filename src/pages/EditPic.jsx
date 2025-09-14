@@ -4,6 +4,7 @@ import { getListUser } from "../services/user";
 import { useEffect } from "react";
 import { createCagePlacement } from "../services/placement";
 import { getChickenCageById } from "../services/cages";
+import { getRoles } from "../services/roles";
 
 const EditPic = () => {
   const navigate = useNavigate();
@@ -12,8 +13,7 @@ const EditPic = () => {
     picTelur: "",
   });
 
-  const picOptions = ["Siti Rahayu", "Yono", "Budi Santoso", "Abdi"];
-
+  const [roles, setRoles] = useState([]);
   const [picCageOptions, setPicCageOptions] = useState([]);
   const [picEggOptions, setPicEggOptions] = useState([]);
 
@@ -25,13 +25,21 @@ const EditPic = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const kandangRole = roles.find((item) => item.name == "Pekerja Kandang");
+    const kandangRoleId = kandangRole.id;
+
+    const telurRole = roles.find((item) => item.name == "Pekerja Telur");
+    const telurRoleId = telurRole.id;
+
     const payload = [
       form.picKandang && {
         userId: form.picKandang,
+        roleId: kandangRoleId,
         cageId: parseInt(cageId, 10),
       },
       form.picTelur && {
         userId: form.picTelur,
+        roleId: telurRoleId,
         cageId: parseInt(cageId, 10),
       },
     ].filter(Boolean);
@@ -59,7 +67,6 @@ const EditPic = () => {
       if (picEggResponse.status == 200) {
         setPicEggOptions(picEggResponse.data.data);
         console.log("picEggResponse: ", picEggResponse);
-        // console.log("picEggResponse: ", picEggResponse.data.data.users);
       }
     } catch (error) {
       console.log("error :", error);
@@ -90,8 +97,19 @@ const EditPic = () => {
     }
   };
 
+  const fetchRoles = async () => {
+    try {
+      const roleResponse = await getRoles();
+      if (roleResponse.status == 200) {
+        setRoles(roleResponse.data.data);
+      }
+    } catch (error) {
+      console.log("error :", error);
+    }
+  };
   useEffect(() => {
     fetchPicList();
+    fetchRoles();
   }, []);
 
   useEffect(() => {
@@ -105,14 +123,26 @@ const EditPic = () => {
       <h2 className="text-lg font-bold mb-6">Edit PIC</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block font-medium mb-1">PIC Kandang</label>
+          <div className="flex gap-3 items-center mb-3">
+            <label className="block font-medium mb-1">PIC Kandang</label>
+
+            {form.picKandang && (
+              <button
+                type="button"
+                onClick={() => setForm({ ...form, picKandang: "" })}
+                className="px-2 py-1 text-red-600 border border-red-600 rounded hover:bg-red-600 hover:text-white cursor-pointer"
+              >
+                Kosongkan PIC
+              </button>
+            )}
+          </div>
           <select
             name="picKandang"
             value={form.picKandang}
             onChange={handleChange}
             className="w-full border rounded px-4 py-2 bg-gray-100"
           >
-            <option value="" disabled hidden>
+            <option className="" value="" disabled hidden>
               Pilih PIC Kandang...
             </option>
             {picCageOptions?.map((option, index) => (
@@ -124,7 +154,19 @@ const EditPic = () => {
         </div>
 
         <div>
-          <label className="block font-medium mb-1">PIC Telur</label>
+          <div className="flex gap-3 items-center mb-3">
+            <label className="block font-medium mb-1">PIC Telur</label>
+
+            {form.picTelur && (
+              <button
+                type="button"
+                onClick={() => setForm({ ...form, picTelur: "" })}
+                className="px-2 py-1 text-red-600 border border-red-600 rounded hover:bg-red-600 hover:text-white cursor-pointer"
+              >
+                Kosongkan PIC
+              </button>
+            )}
+          </div>
           <select
             name="picTelur"
             value={form.picTelur}

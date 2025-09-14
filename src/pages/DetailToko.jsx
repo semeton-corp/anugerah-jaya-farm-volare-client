@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { useNavigate, useLocation, useParams, Outlet } from "react-router-dom";
 import { deleteStore, getStoreDetail } from "../services/stores";
 import TambahPekerjaModal from "../components/TambahPekerjaModal";
 import {
@@ -25,6 +25,12 @@ const DetailToko = () => {
 
   const [roles, setRoles] = useState([]);
   const [selectedRole, setSelectedRole] = useState("");
+
+  const detailPages = ["profil"];
+
+  const isDetailPage = detailPages.some((segment) =>
+    location.pathname.includes(segment)
+  );
 
   const handleEditToko = () => {
     const newPath = location.pathname.replace("detail-toko", "tambah-toko");
@@ -58,13 +64,12 @@ const DetailToko = () => {
     }
   };
   const handleViewProfile = (empId) => {
-    alert(`Lihat profil pegawai ID: ${empId}`);
+    navigate(`${location.pathname}/profile/${empId}`);
   };
 
   const handleDeleteEmployee = async (userId) => {
     try {
       const deleteEmployeeResponse = await deleteStorePlacementById(userId);
-      // console.log("deleteEmployeeResponse: ", deleteEmployeeResponse);
       if (deleteEmployeeResponse.status === 204) {
         alert(`✅Pegawai Berhasil dihapus`);
         fetchTokoDetail();
@@ -131,6 +136,10 @@ const DetailToko = () => {
     fetchRoles();
     fetchEmployees();
   }, [selectedRole]);
+
+  if (isDetailPage) {
+    return <Outlet />;
+  }
 
   return (
     <div className="flex flex-col gap-6 p-4">

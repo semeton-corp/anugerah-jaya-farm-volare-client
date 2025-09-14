@@ -634,6 +634,24 @@ const AppRouter = createBrowserRouter([
                   {
                     path: "detail-toko/:id/:locationId",
                     element: <DetailToko />,
+                    children: [
+                      {
+                        path: "profile/:id",
+                        element: <Profile mode="StaffDetail" />,
+                        children: [
+                          {
+                            path: "detail-absensi",
+                            element: <DetailAbsensi mode="StaffDetail" />,
+                          },
+                          {
+                            path: "detail-penyelesaian-pekerjaan/:userId",
+                            element: (
+                              <DetailPenyelesaianPekerjaan mode="StaffDetail" />
+                            ),
+                          },
+                        ],
+                      },
+                    ],
                   },
                 ],
               },
@@ -674,10 +692,16 @@ const AppRouter = createBrowserRouter([
                     path: "tambah-pegawai/:userId",
                     element: <TambahPegawai />,
                   },
-
                   {
-                    path: "profil/:id",
+                    path: "profile/:id",
                     element: <Profile mode="StaffDetail" />,
+                    children: [
+                      { path: "detail-absensi", element: <DetailAbsensi /> },
+                      {
+                        path: "detail-penyelesaian-pekerjaan/:userId",
+                        element: <DetailPenyelesaianPekerjaan />,
+                      },
+                    ],
                   },
                 ],
               },
