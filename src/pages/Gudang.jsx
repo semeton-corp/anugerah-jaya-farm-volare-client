@@ -85,7 +85,7 @@ const Gudang = () => {
 
   const fetchWarehouseData = async () => {
     try {
-      const warehouseResponse = await getWarehousesByLocation(selectedSite);
+      const warehouseResponse = await getWarehouses(selectedSite);
       console.log("warehouseResponse: ", warehouseResponse);
       if (warehouseResponse.status == 200) {
         setWarehouses(warehouseResponse.data.data);
@@ -100,9 +100,9 @@ const Gudang = () => {
   const fetchWarehousePlacement = async () => {
     try {
       const placementResponse = await getCurrentUserWarehousePlacement();
-      // console.log("placementResponse: ", placementResponse);
+      console.log("placementResponse: ", placementResponse);
       if (placementResponse.status == 200) {
-        setSelectedWarehouse(placementResponse?.data?.data?.warehouse?.id);
+        setSelectedWarehouse(placementResponse?.data?.data[0]?.warehouse?.id);
       }
     } catch (error) {
       console.log("error :", error);

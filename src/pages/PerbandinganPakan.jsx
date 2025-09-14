@@ -8,6 +8,7 @@ import {
 import { getItems } from "../services/item";
 import { useLocation, useNavigate } from "react-router-dom";
 import { use } from "react";
+import { getCurrentUserWarehousePlacement } from "../services/placement";
 
 const rupiah = (n) =>
   `Rp ${Number(n || 0).toLocaleString("id-ID", { maximumFractionDigits: 0 })}`;
@@ -23,6 +24,10 @@ export default function PerbandinganPakan() {
   const location = useLocation();
   const userRole = localStorage.getItem("role");
   const locationId = localStorage.getItem("locationId");
+
+  const [selectedSite] = useState(
+    userRole === "Owner" ? 0 : localStorage.getItem("locationId")
+  );
 
   const [warehouses, setWarehouses] = useState([]);
   const [selectedWarehouse, setSelectedWarehouse] = useState(WAREHOUSES[0]);
@@ -174,22 +179,29 @@ export default function PerbandinganPakan() {
     }
   };
 
-  const fetchWarehouses = async () => {
+  const fetchWarehouseData = async () => {
     try {
-      const warehouseResponse = await getWarehouses();
+      const warehouseResponse = await getWarehouses(selectedSite);
       console.log("warehouseResponse: ", warehouseResponse);
-      if (warehouseResponse.status === 200) {
-        let warehouses = warehouseResponse.data.data;
-        if (userRole !== "Owner" && locationId) {
-          warehouses = warehouses.filter(
-            (w) => String(w.location.id) === String(locationId)
-          );
-        }
+      if (warehouseResponse.status == 200) {
+        setWarehouses(warehouseResponse.data.data);
+        setSelectedWarehouse(warehouseResponse.data.data[0].id);
+        setCornCapacity(warehouseResponse.data.data[0].cornCapacity);
+      }
+    } catch (error) {
+      console.log("error :", error);
+    }
+  };
+
+  const fetchWarehousePlacement = async () => {
+    try {
+      const placementResponse = await getCurrentUserWarehousePlacement();
+      if (placementResponse.status == 200) {
+        const warehouses = placementResponse.data.data.map(
+          (item) => item.warehouse
+        );
         setWarehouses(warehouses);
-        if (warehouses.length > 0) {
-          setSelectedWarehouse(warehouses[0]);
-        }
-        console.log("warehouses: ", warehouses);
+        setSelectedWarehouse(warehouses[0]);
       }
     } catch (error) {
       console.log("error :", error);
@@ -260,7 +272,11 @@ export default function PerbandinganPakan() {
   };
 
   useEffect(() => {
-    fetchWarehouses();
+    if (userRole == "Pekerja Gudang") {
+      fetchWarehousePlacement();
+    } else {
+      fetchWarehouseData();
+    }
     fetchPakanJadiData();
   }, []);
 
@@ -300,7 +316,7 @@ export default function PerbandinganPakan() {
         <div className="relative">
           <select
             className="w-full px-4 py-2 rounded-md border border-gray-300 bg-white"
-            value={selectedWarehouse.id}
+            value={selectedWarehouse?.id}
             onChange={(e) => {
               const next = warehouses.find(
                 (w) => w.id === Number(e.target.value)
@@ -383,7 +399,6 @@ export default function PerbandinganPakan() {
                 {selectedWarehouse?.cornCapacity
                   ? selectedWarehouse.cornCapacity
                   : "-"}
-                  
                 Kg
               </div>
             </div>
