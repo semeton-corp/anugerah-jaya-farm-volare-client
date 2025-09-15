@@ -127,9 +127,13 @@ const Presensi = () => {
           // console.log("Update success:", res.data);
         } catch (err) {
           const serverMessage = err?.response?.data?.message;
-          // console.log("serverMessage: ", serverMessage);
 
-          let customMessage = "Terjadi kesalahan tak terduga";
+          let customMessage = "Terjadi kesalahan tak terduga" + err;
+
+          if (serverMessage === "can't presence start more than 17.00 PM") {
+            customMessage =
+              "❌Tidak bisa melakukan presensi melebihi jam kerja 17.00 PM";
+          }
 
           if (serverMessage === "location is not within the allowed radius") {
             customMessage =
