@@ -529,9 +529,9 @@ const AntrianPesanan = () => {
                   </select>
                 </div>
               )}
-              <div className="text-base flex gap-2">
+              {/* <div className="text-base flex gap-2">
                 <p>{`Hari ini (${getTodayDateInBahasa()})`}</p>
-              </div>
+              </div> */}
             </div>
           </div>
 

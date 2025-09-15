@@ -130,11 +130,11 @@ const RiwayatStok = () => {
                   <td className="py-2 px-4">
                     <span
                       className={`py-1 px-5 rounded text-sm font-semibold ${
-                        item.status === "Barang masuk"
+                        item.status === "Barang Masuk"
                           ? "bg-aman-box-surface-color text-aman-text-color"
                           : item.status === "Pending"
                           ? "bg-green-200 text-green-900"
-                          : item.status === "Barang keluar"
+                          : item.status === "Stok Diperbarui"
                           ? "bg-orange-200 text-orange-900"
                           : "bg-kritis-box-surface-color text-kritis-text-color"
                       }`}

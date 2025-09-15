@@ -206,7 +206,7 @@ const Profile = ({ mode }) => {
                 </p>
               </div>
             </div>
-            <div className="flex justify-between w-full px-4 ">
+            <div className="flex justify-between w-full px-4 mb-2">
               <div>
                 <p className="text-base font-medium">Alamat Tinggal </p>
               </div>

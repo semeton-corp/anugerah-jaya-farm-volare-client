@@ -91,15 +91,15 @@ export default function DetailRiwayatStok() {
 
         <div className="mb-6">
           <p className="text-gray-600">Nama barang</p>
-          <p className="font-bold text-lg">{historyData?.item?.name || "-"}</p>
+          <p className="font-bold text-lg">{historyData?.itemName || "-"}</p>
         </div>
 
-        <div className="mb-6">
+        {/* <div className="mb-6">
           <p className="text-gray-600">Kategori barang</p>
           <p className="font-bold text-lg">
-            {historyData?.item?.category || "-"}
+            {historyData?.item?.category || "Telur"}
           </p>
-        </div>
+        </div> */}
 
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div>

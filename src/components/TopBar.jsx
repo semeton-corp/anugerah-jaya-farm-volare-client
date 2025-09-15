@@ -12,22 +12,21 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
   const photoProfile = localStorage.getItem("photoProfile") || "";
 
   const [isOptionExpanded, setIsOptionExpanded] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [isNotifOpen, setIsNotifOpen] = useState(false);
+
   const profileHandle = () => {
     setIsOptionExpanded((s) => !s);
   };
 
   const onLogout = () => {
-    // clear auth and navigate to login
     localStorage.removeItem("token");
     localStorage.removeItem("role");
-    // optional: remove other user data
     localStorage.removeItem("userName");
     localStorage.removeItem("photoProfile");
 
-    // close dropdown
     setIsOptionExpanded(false);
 
-    // close mobile drawer if provided
     if (typeof setIsMobileOpen === "function") {
       setIsMobileOpen(false);
     }
@@ -48,9 +47,7 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
     <div className="fixed top-0 w-full z-40">
       <nav className="bg-white p-4 shadow-sm">
         <div className="px-6 lg:px-16 flex items-center justify-between gap-4">
-          {/* left: hamburger (mobile) + logo & company */}
           <div className="flex items-center gap-4">
-            {/* Mobile menu button (render only on mobile) */}
             <button
               aria-label={isMobileOpen ? "Close menu" : "Open menu"}
               aria-expanded={!!isMobileOpen}
@@ -103,7 +100,6 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
             </div>
           </div>
 
-          {/* right: profile section */}
           <div className="flex items-center gap-4">
             <IoIosNotificationsOutline
               size={28}
@@ -112,7 +108,6 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
             <div className="h-6 w-[1px] bg-gray-400 rounded-full" />
 
             <div className="flex items-center gap-6 relative">
-              {/* profile picture */}
               <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-full overflow-hidden">
                 <img
                   src={photoProfile || profileAvatar}
@@ -121,13 +116,11 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
                 />
               </div>
 
-              {/* user name + role (hidden on very small screens if needed) */}
               <div className="hidden sm:block">
                 <p className="text-base font-bold leading-tight">{userName}</p>
                 <p className="text-sm text-gray-500">{role}</p>
               </div>
 
-              {/* dropdown arrow */}
               <div>
                 <div
                   onClick={profileHandle}
@@ -140,16 +133,13 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
                 </div>
               </div>
 
-              {/* Dropdown Content */}
               {isOptionExpanded && (
                 <div className="absolute right-0 top-full mt-3 z-50">
-                  {/* Triangle */}
                   <div className="absolute -top-2 right-4">
                     <div className="w-0 h-0 border-l-8 border-r-8 border-b-8 border-transparent border-b-white"></div>
                   </div>
 
                   <div className="bg-white rounded-lg shadow-lg w-48 px-3 py-4">
-                    {/* Profil */}
                     <button
                       onClick={onProfile}
                       className="w-full flex items-center gap-2 px-4 py-2 mb-2 border rounded-md hover:bg-gray-100 font-semibold cursor-pointer"
@@ -157,7 +147,6 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
                       <FiUser /> Profil
                     </button>
 
-                    {/* Keluar */}
                     <button
                       onClick={onLogout}
                       className="w-full flex items-center gap-2 px-4 py-2 border rounded-md hover:bg-gray-100 font-semibold cursor-pointer"
