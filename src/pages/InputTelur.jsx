@@ -20,21 +20,21 @@ const InputTelur = () => {
   );
 
   const [chickenCages, setChickenCages] = useState([]);
-  const [selectedChickenCage, setSelectedChickenCage] = useState(0);
+  const [selectedChickenCage, setSelectedChickenCage] = useState("");
 
   const [warehouses, setWarehouses] = useState([]);
-  const [selectedWarehouse, setSelectedWarehouse] = useState(0);
+  const [selectedWarehouse, setSelectedWarehouse] = useState("");
 
-  const [totalKarpetGoodEgg, setTotalKarpetGoodEgg] = useState(0);
-  const [totalRemainingGoodEgg, setTotalRemainingGoodEgg] = useState(0);
-  const [totalWeightGoodEgg, setTotalWeightGoodEgg] = useState(0);
+  const [totalKarpetGoodEgg, setTotalKarpetGoodEgg] = useState("");
+  const [totalRemainingGoodEgg, setTotalRemainingGoodEgg] = useState("");
+  const [totalWeightGoodEgg, setTotalWeightGoodEgg] = useState("");
 
-  const [totalKarpetCrackedEgg, setTotalKarpetCrackedEgg] = useState(0);
-  const [totalRemainingCrackedEgg, setTotalRemainingCrackedEgg] = useState(0);
-  const [totalWeightCrackedEgg, setTotalWeightCrackedEgg] = useState(0);
+  const [totalKarpetCrackedEgg, setTotalKarpetCrackedEgg] = useState("");
+  const [totalRemainingCrackedEgg, setTotalRemainingCrackedEgg] = useState("");
+  const [totalWeightCrackedEgg, setTotalWeightCrackedEgg] = useState("");
 
-  const [totalKarpetRejectEgg, setTotalKarpetRejectEgg] = useState(0);
-  const [totalRemainingRejectEgg, setTotalRemainingRejectEgg] = useState(0);
+  const [totalKarpetRejectEgg, setTotalKarpetRejectEgg] = useState("");
+  const [totalRemainingRejectEgg, setTotalRemainingRejectEgg] = useState("");
 
   const [isEditMode, setIsEditMode] = useState(true);
 
