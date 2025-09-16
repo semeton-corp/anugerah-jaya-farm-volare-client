@@ -33,6 +33,7 @@ const Gudang = () => {
   const [warehouses, setWarehouses] = useState();
   const [selectedWarehouse, setSelectedWarehouse] = useState();
   const [cornCapacity, setCornCapacity] = useState(0);
+  const [currentCornStockKg, setCurrentCornStockKg] = useState(0);
 
   const [isEditCapacityOpen, setIsEditCapacityOpen] = useState(false);
   const [newCornCapacity, setNewCornCapacity] = useState(cornCapacity);
@@ -132,9 +133,15 @@ const Gudang = () => {
   };
 
   const handleUpdateCornCapacity = async () => {
+    if (newCornCapacity < currentCornStockKg) {
+      alert(
+        `❌ Stok jagung saat ini (${currentCornStockKg} Kg) melebihi kapasitas baru (${newCornCapacity} Kg)!`
+      );
+      return;
+    }
+
     try {
       const selected = warehouses?.find((w) => w.id == selectedWarehouse);
-      console.log("selected: ", selected);
 
       if (!selected) return;
       const payload = {
@@ -172,6 +179,14 @@ const Gudang = () => {
       window.history.replaceState({}, document.title);
     }
   }, [selectedWarehouse, location]);
+
+  useEffect(() => {
+    const totalCornStockKg = cornStocks.reduce(
+      (sum, item) => sum + item.quantity,
+      0
+    );
+    setCurrentCornStockKg(totalCornStockKg);
+  }, [cornStocks]);
 
   if (isDetailPage) {
     return <Outlet />;

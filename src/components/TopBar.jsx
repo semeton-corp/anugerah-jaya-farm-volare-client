@@ -4,6 +4,8 @@ import profileAvatar from "../assets/profile_avatar.svg";
 import { useState } from "react";
 import { FiUser, FiLogOut } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
+import { useEffect } from "react";
 
 export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
   const navigate = useNavigate();
@@ -12,8 +14,23 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
   const photoProfile = localStorage.getItem("photoProfile") || "";
 
   const [isOptionExpanded, setIsOptionExpanded] = useState(false);
+  const dropdownRef = useRef(null);
+
   const [notifications, setNotifications] = useState([]);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOptionExpanded(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const profileHandle = () => {
     setIsOptionExpanded((s) => !s);
@@ -107,7 +124,7 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
             />
             <div className="h-6 w-[1px] bg-gray-400 rounded-full" />
 
-            <div className="flex items-center gap-6 relative">
+            <div className="flex items-center gap-6 relative" ref={dropdownRef}>
               <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-full overflow-hidden">
                 <img
                   src={photoProfile || profileAvatar}

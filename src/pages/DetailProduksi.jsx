@@ -14,13 +14,14 @@ import {
 import { useRef } from "react";
 import { getLocations } from "../services/location";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { setNotificationState } from "../utils/notificationHelper";
 
 const DetailProduksi = () => {
   const userRole = localStorage.getItem("role");
   const userName = localStorage.getItem("userName");
 
-  const userId = useSelector((state) => state.store.userId);
-  const selectedStore = useSelector((state) => state.store.selectedStore);
+  const dispatch = useDispatch();
 
   const [cageId, setCageId] = useState(0);
   const [siteOptions, setSiteOptions] = useState([]);
@@ -65,7 +66,6 @@ const DetailProduksi = () => {
   const fetchDataTelur = async () => {
     try {
       let response;
-
       const date = formatDateToDDMMYYYY(selectedDate);
       response = await getEggMonitoring(selectedSite, date);
       console.log("response: ", response);
@@ -225,25 +225,16 @@ const DetailProduksi = () => {
               ))}
             </tbody>
           </table>
-
-          {/* {userRole === "Owner" && (
-            <div className="border-t-3 border-t-black-6 mt-12">
-              <div className="mb-10"></div>
-              <div className="flex justify-between mt-4 px-6">
-                <p className="text-sm text-[#CCCCCC]">Menampilkan 1-7 data</p>
-                <div className="flex gap-3">
-                  <div className="rounded-[4px] py-2 px-6 bg-green-100 flex items-center justify-center text-black text-base font-medium hover:bg-green-200 cursor-pointer">
-                    <p>Previous </p>
-                  </div>
-                  <div className="rounded-[4px] py-2 px-6 bg-green-700 flex items-center justify-center text-white text-base font-medium hover:bg-green-800 cursor-pointer">
-                    <p>Next</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )} */}
         </div>
       </div>
+
+      {/* <p>User ID: {userId ?? "Not set"}</p>
+      <button onClick={() => dispatch(setUserId("12345"))}>Set User</button>
+
+      <p>Selected Store: {selectedStore ?? "None"}</p>
+      <button onClick={() => dispatch(setSelectedStore("Store A"))}>
+        Select Store
+      </button> */}
     </div>
   );
 };

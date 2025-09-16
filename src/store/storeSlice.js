@@ -12,16 +12,16 @@ const storeSlice = createSlice({
   name: "store",
   initialState,
   reducers: {
-    setUserId: (state, action) => {
+    setNotificationUserId: (state, action) => {
       state.userId = action.payload;
     },
-    setSelectedStore: (state, action) => {
+    setNotificationSelectedStore: (state, action) => {
       state.selectedStore = action.payload;
     },
-    setSelectedWarehouse: (state, action) => {
+    setNotificationSelectedWarehouse: (state, action) => {
       state.selectedWarehouse = action.payload;
     },
-    setSelectedCage: (state, action) => {
+    setNotificationSelectedCage: (state, action) => {
       state.selectedCage = action.payload;
     },
     setNotificationContexts: (state, action) => {
@@ -31,10 +31,10 @@ const storeSlice = createSlice({
 });
 
 export const {
-  setUserId,
-  setSelectedStore,
-  setSelectedWarehouse,
-  setSelectedCage,
+  setNotificationUserId,
+  setNotificationSelectedStore,
+  setNotificationSelectedWarehouse,
+  setNotificationSelectedCage,
   setNotificationContexts,
 } = storeSlice.actions;
 
