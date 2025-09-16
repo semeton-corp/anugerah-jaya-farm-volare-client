@@ -72,10 +72,12 @@ const Gudang = () => {
     const currentPath = location.pathname;
     const detailPath = currentPath + "/edit-stok-barang";
 
+    const itemId = item.item.name == "Jagung" ? item.id : item.item.id;
+
     navigate(detailPath, {
       state: {
         warehouseId: selectedWarehouse,
-        itemId: item.item.id,
+        itemId: itemId,
         quantity: item.quantity,
         itemName: item.item.name,
         estimationRunOut: item.estimationRunOut,
@@ -126,6 +128,10 @@ const Gudang = () => {
         setTotalSafeStock(overviewResponse.data.data.totalSafeStock);
         setTotalItemInOrder(overviewResponse.data.data.totalItemInOrder);
         setCornStocks(overviewResponse.data.data.cornStocks);
+        console.log(
+          "overviewResponse.data.data.cornStocks: ",
+          overviewResponse.data.data.cornStocks
+        );
       }
     } catch (error) {
       console.log("error :", error);
@@ -376,17 +382,6 @@ const Gudang = () => {
                       <td className="py-2 px-4">{item.quantity}</td>
                       <td className="py-2 px-4">{item.item.unit}</td>
                       <td className="py-2 px-4">{item.expiredAt}</td>
-                      {/* <td className="py-2 px-4 flex justify-center">
-                        <span
-                          className={`w-24 py-1 flex justify-center rounded text-sm font-semibold ${
-                            item.description === "Aman"
-                              ? "bg-aman-box-surface-color text-aman-text-color"
-                              : "bg-kritis-box-surface-color text-kritis-text-color"
-                          }`}
-                        >
-                          {item.description}
-                        </span>
-                      </td> */}
                       <td className="py-2 px-4 justify-center gap-4">
                         <span
                           onClick={() => {

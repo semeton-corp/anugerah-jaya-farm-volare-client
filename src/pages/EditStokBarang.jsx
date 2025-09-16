@@ -1,7 +1,10 @@
 import { useState } from "react";
 import ConfirmUpdateModal from "../components/ConfirmModal";
 import { useLocation, useNavigate } from "react-router-dom";
-import { updateWarehouseItem } from "../services/warehouses";
+import {
+  updateWarehouseItem,
+  updateWarehouseItemCorn,
+} from "../services/warehouses";
 
 export default function EditStokBarang() {
   const location = useLocation();
@@ -24,17 +27,25 @@ export default function EditStokBarang() {
   const [showConfirm, setShowConfirm] = useState(false);
 
   const handleSubmit = async () => {
-    const payload = {
+    let payload = {
       quantity: parseInt(jumlah),
-      runOutCountDown: parseInt(estimasiHabis),
     };
-    console.log("payload: ", payload);
+
+    if (itemName !== "Jagung") {
+      payload.runOutCountDown = parseInt(estimasiHabis);
+    }
+
     try {
-      const updateResponse = await updateWarehouseItem(
-        payload,
-        warehouseId,
-        itemId
-      );
+      let updateResponse;
+      if (itemName !== "Jagung") {
+        updateResponse = await updateWarehouseItem(
+          payload,
+          warehouseId,
+          itemId
+        );
+      } else if (itemName == "Jagung") {
+        updateResponse = await updateWarehouseItemCorn(payload, itemId);
+      }
       // console.log("updateResponse: ", updateResponse);
       if (updateResponse.status == 200) {
         setShowConfirm(false);

@@ -129,6 +129,14 @@ export const updateWarehouseItem = (payload, warehouseId, itemId) => {
   });
 };
 
+export const updateWarehouseItemCorn = (payload, itemId) => {
+  return api.put(`/warehouses/items/corns/${itemId}`, payload, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
 export const createWarehouseItems = (payload) => {
   return api.post("/warehouses/items", payload, {
     headers: {
