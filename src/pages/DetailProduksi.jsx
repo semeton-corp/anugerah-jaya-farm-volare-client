@@ -13,19 +13,20 @@ import {
 } from "../utils/dateFormat";
 import { useRef } from "react";
 import { getLocations } from "../services/location";
+import { useSelector } from "react-redux";
 
 const DetailProduksi = () => {
   const userRole = localStorage.getItem("role");
   const userName = localStorage.getItem("userName");
 
+  const userId = useSelector((state) => state.store.userId);
+  const selectedStore = useSelector((state) => state.store.selectedStore);
+
+  const [cageId, setCageId] = useState(0);
   const [siteOptions, setSiteOptions] = useState([]);
   const [selectedSite, setSelectedSite] = useState(
     userRole === "Owner" ? 0 : localStorage.getItem("locationId")
   );
-
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [totalData, setTotalData] = useState(0);
 
   const location = useLocation();
   const navigate = useNavigate();
