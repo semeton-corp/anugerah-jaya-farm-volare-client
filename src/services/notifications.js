@@ -9,3 +9,11 @@ export const getNotifications = (params) => {
     params: params,
   });
 };
+
+export const markNotification = (payload) => {
+  return api.patch("/notifications", payload, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};

@@ -8,10 +8,17 @@ import { useRef } from "react";
 import { useEffect } from "react";
 import { getNotificationContextsByRole } from "../data/NotificationsMap";
 import getNotificationsPlacementsIds from "../utils/getNotificationsPlacementIds";
-import { getNotifications } from "../services/notifications";
+import { getNotifications, markNotification } from "../services/notifications";
 import { useDispatch } from "react-redux";
-import { setNotifications } from "../store/notificationsSlice";
+import {
+  clearAllNotifications,
+  markAllNotificationsDone,
+  markNotificationDone,
+  removeNotification,
+  setNotifications,
+} from "../store/notificationsSlice";
 import { useSelector } from "react-redux";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
   const navigate = useNavigate();
@@ -25,6 +32,7 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
   const notifications = useSelector((state) => state?.notifications);
 
   const dropdownRef = useRef(null);
+  const notifRef = useRef(null);
   const dispatch = useDispatch();
 
   const profileHandle = () => {
@@ -62,11 +70,14 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
       params = await getNotificationsPlacementsIds(userId, userRole);
       const notificationsContexs = getNotificationContextsByRole(userRole);
       params.notificationsContexs = notificationsContexs;
+      params.isMarked = false;
 
+      console.log("params: ", params);
       const notificationResponse = await getNotifications(params);
       if (notificationResponse?.status === 200) {
         const notificationsData =
           notificationResponse.data?.data || notificationResponse.data || [];
+        console.log("notificationsData: ", notificationsData);
         dispatch(setNotifications(notificationsData));
       }
     } catch (error) {
@@ -76,8 +87,14 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target) &&
+        notifRef.current &&
+        !notifRef.current.contains(event.target)
+      ) {
         setIsOptionExpanded(false);
+        setIsNotifOpen(false);
       }
     };
 
@@ -87,8 +104,39 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
     };
   }, []);
 
+  const handleMarkNotification = async (id) => {
+    try {
+      const payload = {
+        ids: [id],
+      };
+      const markResponse = await markNotification(payload);
+      console.log("markResponse: ", markResponse);
+    } catch (error) {
+      console.log("error :", error);
+    }
+  };
+
+  const handleMarkAllNotification = async () => {
+    try {
+      const ids = notifications.map((item) => item.id);
+      const payload = {
+        ids,
+      };
+      const markResponse = await markNotification(payload);
+      console.log("markResponse: ", markResponse);
+    } catch (error) {
+      console.log("error :", error);
+    }
+  };
+
   useEffect(() => {
     getNotificationsState();
+
+    const interval = setInterval(() => {
+      getNotificationsState();
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -155,42 +203,104 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
                 className="text-black cursor-pointer"
                 onClick={() => setIsNotifOpen((prev) => !prev)}
               />
-              {notifications?.filter((n) => !n.done).length > 0 && (
+              {notifications?.filter((n) => !n.isMarked).length > 0 && (
                 <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  {notifications.filter((n) => !n.done).length}
+                  {notifications.filter((n) => !n.isMarked).length}
                 </span>
               )}
               {isNotifOpen && (
-                <div className="absolute border right-0 mt-2 w-80 bg-white shadow-lg rounded-lg z-50">
-                  <div className="p-3 border-b">
-                    <h3 className="font-semibold">Notifications</h3>
+                <div
+                  ref={notifRef}
+                  className="absolute right-0 mt-2 w-96 bg-white shadow-xl rounded-lg z-50 border border-gray-200"
+                >
+                  <div className="flex justify-between items-center p-4 border-b">
+                    <h3 className="font-semibold text-gray-800">Notifikasi</h3>
+                    <button
+                      onClick={() => {
+                        dispatch(markAllNotificationsDone());
+
+                        setTimeout(() => {
+                          dispatch(clearAllNotifications());
+                          handleMarkAllNotification();
+                        }, 2000);
+                      }}
+                      className="text-sm text-gray-600 hover:text-black-5 cursor-pointer"
+                    >
+                      Tandai Baca semua
+                    </button>
                   </div>
-                  <div className="max-h-64 overflow-y-auto">
+
+                  <div className="max-h-110 overflow-y-auto">
                     {notifications?.length === 0 ? (
-                      <p className="p-3 text-sm text-gray-500">
-                        No notifications
+                      <p className="p-4 text-sm text-gray-500 text-center">
+                        Tidak ada notifikasi
                       </p>
                     ) : (
-                      notifications.map((notif) => (
-                        <div
-                          key={notif.id}
-                          className={`p-3 border-b flex justify-between items-center ${
-                            notif.done ? "opacity-50" : ""
-                          }`}
-                        >
-                          <span>{notif.description}</span>
-                          {!notif.done && (
-                            <button
-                              className="text-xs text-blue-600 hover:underline"
-                              onClick={() =>
-                                dispatch(markNotificationDone(notif.id))
-                              }
+                      <AnimatePresence>
+                        {notifications.map((notif) => (
+                          <motion.div
+                            key={notif.id}
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, x: 50 }}
+                            transition={{ duration: 0.4 }}
+                            className={`flex items-start gap-3 p-4 mb-2 border border-black-5 last:border-none ${
+                              notif.isMarked
+                                ? "bg-gray-50 text-gray-400"
+                                : "bg-orange-50 hover:bg-orange-100"
+                            } transition rounded-md`}
+                          >
+                            <div
+                              className={`flex-shrink-0 mt-1 ${
+                                notif.isMarked
+                                  ? "text-gray-400"
+                                  : "text-orange-300"
+                              }`}
                             >
-                              Mark as done
-                            </button>
-                          )}
-                        </div>
-                      ))
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-5 w-5"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M8.257 3.099c.366-.756 1.42-.756 1.786 0l6.516 13.463c.334.69-.197 1.438-.993 1.438H2.734c-.796 0-1.327-.748-.993-1.438L8.257 3.1zM11 15a1 1 0 10-2 0 1 1 0zm-1-2a.75.75 0 01-.75-.75v-3.5a.75.75 0 011.5 0v3.5A.75.75 0 0110 13z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                            </div>
+
+                            <div className="flex-1">
+                              <p
+                                className={`text-sm ${
+                                  notif.isMarked
+                                    ? "text-gray-400"
+                                    : "text-gray-800 font-medium"
+                                }`}
+                              >
+                                {notif.description}
+                              </p>
+                            </div>
+
+                            <div>
+                              <input
+                                type="checkbox"
+                                checked={notif.isMarked}
+                                onChange={() => {
+                                  dispatch(markNotificationDone(notif.id));
+
+                                  setTimeout(() => {
+                                    dispatch(removeNotification(notif.id));
+                                    handleMarkNotification(notif.id);
+                                  }, 2000);
+                                }}
+                                className="h-4 w-4 text-blue-600 rounded focus:ring-blue-500 cursor-pointer"
+                              />
+                            </div>
+                          </motion.div>
+                        ))}
+                      </AnimatePresence>
                     )}
                   </div>
                 </div>
