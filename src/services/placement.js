@@ -59,3 +59,11 @@ export const createCagePlacement = (payload) => {
     },
   });
 };
+
+export const getCurrentUserCagePlacement = () => {
+  return api.get("/placements/cages/me", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};

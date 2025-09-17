@@ -28,23 +28,6 @@ import { getListUser, getOverviewUser, getUserById } from "../services/user";
 import MonthYearSelector from "../components/MonthYearSelector";
 import { deleteAccount } from "../services/authServices";
 
-const data = [
-  { date: "29 Mar", red: 300, yellow: 20 },
-  { date: "30 Mar", red: 200, yellow: 22 },
-  { date: "31 Mar", red: 400, yellow: 21 },
-  { date: "01 Apr", red: 320, yellow: 18 },
-  { date: "02 Apr", red: 250, yellow: 17 },
-  { date: "03 Apr", red: 330, yellow: 18 },
-  { date: "04 Apr", red: 480, yellow: 19 },
-];
-
-const salaryDetails = {
-  baseSalary: 4500000,
-  overtime: 450000,
-  bonus: 250000,
-  kasbon: 250000,
-};
-
 const Profile = ({ mode }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -86,12 +69,6 @@ const Profile = ({ mode }) => {
   const [userData, setUserData] = useState([]);
   const [userPlacements, setUserPlacements] = useState([]);
 
-  const total =
-    salaryDetails.baseSalary +
-    salaryDetails.overtime +
-    salaryDetails.bonus -
-    salaryDetails.kasbon;
-
   const fetchOverviewData = async () => {
     try {
       // console.log("monthName: ", monthName);
@@ -99,7 +76,6 @@ const Profile = ({ mode }) => {
       // console.log("overviewResponse: ", overviewResponse);
       if (overviewResponse.status == 200) {
         const data = overviewResponse.data.data;
-        console.log("data.userInformation:", data.userInformation);
         setUserInformation(data.userInformation);
         setUserPresenceInformation(data.userPresenceInformation);
         setUserSalaryInformation(data.userSalaryInformation);
@@ -107,6 +83,7 @@ const Profile = ({ mode }) => {
         setKpiPerformances(data.kpiPerformances);
         setUserData(data.user);
         setUserPlacements(data.placements);
+        console.log("data.placements: ", data.placements);
       }
     } catch (error) {
       alert(

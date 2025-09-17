@@ -6,31 +6,23 @@ import { FiUser, FiLogOut } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import { useEffect } from "react";
+import { getNotificationContextsByRole } from "../data/NotificationsMap";
+import getNotificationsPlacementsIds from "../utils/getNotificationsPlacementIds";
 
 export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
   const navigate = useNavigate();
   const userName = localStorage.getItem("userName") || "User";
-  const role = localStorage.getItem("role") || "";
+  const userId = localStorage.getItem("userId");
+  const userRole = localStorage.getItem("role") || "";
   const photoProfile = localStorage.getItem("photoProfile") || "";
 
   const [isOptionExpanded, setIsOptionExpanded] = useState(false);
   const dropdownRef = useRef(null);
 
+  const [placements, setPlacements] = useState([]);
+  const notificationContexs = getNotificationContextsByRole(userRole);
   const [notifications, setNotifications] = useState([]);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOptionExpanded(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   const profileHandle = () => {
     setIsOptionExpanded((s) => !s);
@@ -52,7 +44,7 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
   };
 
   const onProfile = () => {
-    const rolePath = role.toLowerCase().replace(/\s+/g, "-");
+    const rolePath = userRole.toLowerCase().replace(/\s+/g, "-");
     setIsOptionExpanded(false);
     if (typeof setIsMobileOpen === "function") {
       setIsMobileOpen(false);
@@ -60,6 +52,30 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
     navigate(`/${rolePath}/profile`);
   };
 
+  const fetchPlacements = async () => {
+    try {
+      getNotificationsPlacementsIds(userId, userRole);
+    } catch (error) {
+      console.log("error :", error);
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOptionExpanded(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    fetchPlacements();
+  }, []);
   return (
     <div className="fixed top-0 w-full z-40">
       <nav className="bg-white p-4 shadow-sm">
@@ -135,7 +151,7 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
 
               <div className="hidden sm:block">
                 <p className="text-base font-bold leading-tight">{userName}</p>
-                <p className="text-sm text-gray-500">{role}</p>
+                <p className="text-sm text-gray-500">{userRole}</p>
               </div>
 
               <div>

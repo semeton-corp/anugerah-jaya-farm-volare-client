@@ -72,7 +72,7 @@ const DaftarPegawai = () => {
   const fetchRoles = async () => {
     try {
       const res = await getRoles();
-      console.log("res: ", res);
+      console.log("roles res: ", res);
       if (res?.status === 200) {
         setRoleOptions(res.data.data);
       }
