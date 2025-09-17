@@ -8,6 +8,10 @@ import { useRef } from "react";
 import { useEffect } from "react";
 import { getNotificationContextsByRole } from "../data/NotificationsMap";
 import getNotificationsPlacementsIds from "../utils/getNotificationsPlacementIds";
+import { getNotifications } from "../services/notifications";
+import { useDispatch } from "react-redux";
+import { setNotifications } from "../store/notificationsSlice";
+import { useSelector } from "react-redux";
 
 export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
   const navigate = useNavigate();
@@ -16,13 +20,12 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
   const userRole = localStorage.getItem("role") || "";
   const photoProfile = localStorage.getItem("photoProfile") || "";
 
-  const [isOptionExpanded, setIsOptionExpanded] = useState(false);
-  const dropdownRef = useRef(null);
-
-  const [placements, setPlacements] = useState([]);
-  const notificationContexs = getNotificationContextsByRole(userRole);
-  const [notifications, setNotifications] = useState([]);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
+  const [isOptionExpanded, setIsOptionExpanded] = useState(false);
+  const notifications = useSelector((state) => state?.notifications);
+
+  const dropdownRef = useRef(null);
+  const dispatch = useDispatch();
 
   const profileHandle = () => {
     setIsOptionExpanded((s) => !s);
@@ -52,9 +55,20 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
     navigate(`/${rolePath}/profile`);
   };
 
-  const fetchPlacements = async () => {
+  const getNotificationsState = async () => {
     try {
-      getNotificationsPlacementsIds(userId, userRole);
+      let params;
+
+      params = await getNotificationsPlacementsIds(userId, userRole);
+      const notificationsContexs = getNotificationContextsByRole(userRole);
+      params.notificationsContexs = notificationsContexs;
+
+      const notificationResponse = await getNotifications(params);
+      if (notificationResponse?.status === 200) {
+        const notificationsData =
+          notificationResponse.data?.data || notificationResponse.data || [];
+        dispatch(setNotifications(notificationsData));
+      }
     } catch (error) {
       console.log("error :", error);
     }
@@ -74,8 +88,9 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
   }, []);
 
   useEffect(() => {
-    fetchPlacements();
+    getNotificationsState();
   }, []);
+
   return (
     <div className="fixed top-0 w-full z-40">
       <nav className="bg-white p-4 shadow-sm">
@@ -134,10 +149,53 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
           </div>
 
           <div className="flex items-center gap-4">
-            <IoIosNotificationsOutline
-              size={28}
-              className="text-black cursor-pointer"
-            />
+            <div className="relative">
+              <IoIosNotificationsOutline
+                size={28}
+                className="text-black cursor-pointer"
+                onClick={() => setIsNotifOpen((prev) => !prev)}
+              />
+              {notifications?.filter((n) => !n.done).length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  {notifications.filter((n) => !n.done).length}
+                </span>
+              )}
+              {isNotifOpen && (
+                <div className="absolute border right-0 mt-2 w-80 bg-white shadow-lg rounded-lg z-50">
+                  <div className="p-3 border-b">
+                    <h3 className="font-semibold">Notifications</h3>
+                  </div>
+                  <div className="max-h-64 overflow-y-auto">
+                    {notifications?.length === 0 ? (
+                      <p className="p-3 text-sm text-gray-500">
+                        No notifications
+                      </p>
+                    ) : (
+                      notifications.map((notif) => (
+                        <div
+                          key={notif.id}
+                          className={`p-3 border-b flex justify-between items-center ${
+                            notif.done ? "opacity-50" : ""
+                          }`}
+                        >
+                          <span>{notif.description}</span>
+                          {!notif.done && (
+                            <button
+                              className="text-xs text-blue-600 hover:underline"
+                              onClick={() =>
+                                dispatch(markNotificationDone(notif.id))
+                              }
+                            >
+                              Mark as done
+                            </button>
+                          )}
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
             <div className="h-6 w-[1px] bg-gray-400 rounded-full" />
 
             <div className="flex items-center gap-6 relative" ref={dropdownRef}>

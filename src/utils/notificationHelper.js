@@ -17,3 +17,4 @@ export const setNotificationState = (
   dispatch(setNotificationSelectedCage(selectedCage));
   dispatch(setNotificationContexts(notificationContexts));
 };
+
