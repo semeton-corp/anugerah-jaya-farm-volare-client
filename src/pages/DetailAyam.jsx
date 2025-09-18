@@ -28,7 +28,6 @@ const DetailAyam = () => {
   const pageNotifications = notifications.filter((item) =>
     item.notificationContexts.includes("Monitoring Ayam")
   );
-  console.log("pageNotifications: ", pageNotifications);
 
   const [siteOptions, setSiteOptions] = useState([]);
   const [selectedSite, setSelectedSite] = useState(

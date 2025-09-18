@@ -4,6 +4,8 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { getAfkirChickenSales } from "../services/chickenMonitorings";
 import { useEffect } from "react";
 import { LiaOilCanSolid } from "react-icons/lia";
+import { useSelector } from "react-redux";
+import PageNotificationsCard from "../components/PageNotificationsCard";
 
 const getStatusColor = (status) => {
   switch (status) {
@@ -29,6 +31,12 @@ const JualAyamAfkir = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalData, setTotalData] = useState(0);
+
+  const notifications = useSelector((state) => state?.notifications);
+  const pageNotifications = notifications.filter((item) =>
+    item.notificationContexts.includes("Penjualan Ayam")
+  );
+  console.log("pageNotifications: ", pageNotifications);
 
   const detailPages = [
     "draft-penjualan-ayam",
@@ -96,6 +104,13 @@ const JualAyamAfkir = () => {
             ))}
           </select>
         </div>
+      </div>
+
+      <div className="max-h-72 overflow-y-auto flex flex-col gap-3">
+        {pageNotifications &&
+          pageNotifications.map((item, index) => (
+            <PageNotificationsCard key={index} description={item.description} />
+          ))}
       </div>
 
       <div className="bg-white p-4 rounded shadow border">
