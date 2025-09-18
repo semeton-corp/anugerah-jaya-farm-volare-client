@@ -35,6 +35,7 @@ const getCurrentPlacementIds = async (userId, role) => {
           cageIds: undefined,
         };
     }
+    console.log("currentPlacementResponse", currentPlacementResponse);
     if (currentPlacementResponse?.status === 200) {
       const placementName =
         role === "Pekerja Telur" || role === "Pekerja Kandang"

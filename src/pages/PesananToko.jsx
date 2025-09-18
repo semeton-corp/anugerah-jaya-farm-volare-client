@@ -227,7 +227,7 @@ const PesananToko = () => {
       const placementResponse = await getCurrentUserWarehousePlacement();
       console.log("placementResponse: ", placementResponse);
       if (placementResponse.status == 200) {
-        setSelectedWarehouse(placementResponse?.data?.data?.warehouse?.id);
+        setSelectedWarehouse(placementResponse?.data?.data[0].warehouse?.id);
       }
     } catch (error) {
       console.log("error :", error);
@@ -236,6 +236,7 @@ const PesananToko = () => {
 
   const fetchEggWarehouseSummary = async () => {
     try {
+      console.log("selectedWarehouse: ", selectedWarehouse);
       const eggResponse = await getEggWarehouseItemSummary(selectedWarehouse);
       console.log("eggResponse: ", eggResponse);
       if (eggResponse.status == 200) {
@@ -271,9 +272,10 @@ const PesananToko = () => {
   }, []);
 
   useEffect(() => {
-    console.log("selectedWarehouse: ", selectedWarehouse);
-    fetchRequestItemsData();
-    fetchEggWarehouseSummary();
+    if (selectedWarehouse) {
+      fetchRequestItemsData();
+      fetchEggWarehouseSummary();
+    }
   }, [selectedWarehouse, page, selectedDate]);
 
   return (

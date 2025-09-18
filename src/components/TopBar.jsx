@@ -69,15 +69,16 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
 
       params = await getNotificationsPlacementsIds(userId, userRole);
       const notificationsContexs = getNotificationContextsByRole(userRole);
+      params.userId = userId;
       params.notificationsContexs = notificationsContexs;
       params.isMarked = false;
 
-      console.log("params: ", params);
+      // console.log("params: ", params);
       const notificationResponse = await getNotifications(params);
       if (notificationResponse?.status === 200) {
         const notificationsData =
           notificationResponse.data?.data || notificationResponse.data || [];
-        console.log("notificationsData: ", notificationsData);
+        // console.log("notificationsData: ", notificationsData);
         dispatch(setNotifications(notificationsData));
       }
     } catch (error) {
@@ -110,7 +111,7 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
         ids: [id],
       };
       const markResponse = await markNotification(payload);
-      console.log("markResponse: ", markResponse);
+      // console.log("markResponse: ", markResponse);
     } catch (error) {
       console.log("error :", error);
     }
@@ -123,7 +124,7 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
         ids,
       };
       const markResponse = await markNotification(payload);
-      console.log("markResponse: ", markResponse);
+      // console.log("markResponse: ", markResponse);
     } catch (error) {
       console.log("error :", error);
     }

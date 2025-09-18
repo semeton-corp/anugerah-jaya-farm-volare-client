@@ -162,7 +162,7 @@ const Tugas = () => {
       {/* header */}
       <div className="text-3xl font-bold mb-4">Tugas</div>
       {!isPresence && (
-        <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6 rounded">
+        <div className="bg-yellow-50 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6 rounded">
           <p className="flex items-center">
             <span className="mr-2 text-lg">⚠️</span>
             Lakukan presensi harian untuk melihat tugas hari ini

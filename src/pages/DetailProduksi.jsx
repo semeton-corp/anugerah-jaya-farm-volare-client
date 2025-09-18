@@ -16,12 +16,18 @@ import { getLocations } from "../services/location";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { setNotificationState } from "../utils/notificationHelper";
+import PageNotificationsCard from "../components/PageNotificationsCard";
 
 const DetailProduksi = () => {
   const userRole = localStorage.getItem("role");
   const userName = localStorage.getItem("userName");
 
   const dispatch = useDispatch();
+  const notifications = useSelector((state) => state?.notifications);
+  const pageNotifications = notifications.filter((item) =>
+    item.notificationContexts.includes("Monitoring Telur")
+  );
+  // console.log("pageNotifications: ", pageNotifications);
 
   const [cageId, setCageId] = useState(0);
   const [siteOptions, setSiteOptions] = useState([]);
@@ -147,6 +153,11 @@ const DetailProduksi = () => {
           </div>
         </div>
       </div>
+
+      {pageNotifications &&
+        pageNotifications.map((item) => (
+          <PageNotificationsCard description={item.description} />
+        ))}
 
       <div className=" flex gap-4">
         <div className=" w-full bg-white px-8 py-6 rounded-lg border border-black-6">
