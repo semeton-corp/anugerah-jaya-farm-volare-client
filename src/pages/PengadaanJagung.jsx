@@ -13,6 +13,8 @@ import {
   getWarehouseItemCornProcurements,
 } from "../services/warehouses";
 import KonfirmasiBarangSampaiJagungModal from "../components/KonfirmasiBarangSampaiJagungModal";
+import { useSelector } from "react-redux";
+import PageNotificationsSection from "../components/PageNotificationsSection";
 
 const badge = (text, variant = "neutral") => {
   const map = {
@@ -38,6 +40,11 @@ const PengadaanJagung = () => {
 
   const isDetailPage = detailPages.some((segment) =>
     location.pathname.includes(segment)
+  );
+
+  const notifications = useSelector((state) => state?.notifications);
+  const pageNotifications = notifications.filter((item) =>
+    item.notificationContexts.includes("Pengadaan Barang Jagung")
   );
 
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
@@ -137,6 +144,8 @@ const PengadaanJagung = () => {
           />
         </div>
       </div>
+
+      <PageNotificationsSection pageNotifications={pageNotifications} />
 
       {/* Main Table Section */}
       <div className="bg-white p-4 border rounded-lg w-full border-black-6">
