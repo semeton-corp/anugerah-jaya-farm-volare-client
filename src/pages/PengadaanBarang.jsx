@@ -21,6 +21,8 @@ import {
 import KonfirmasiBarangSampaiGudangModal from "../components/KonfirmasiBarangSampaiGudangModal";
 import BatalPengadaanBarangModal from "../components/BatalPengadaanBarangModal";
 import { GoAlertFill } from "react-icons/go";
+import { useSelector } from "react-redux";
+import PageNotificationsSection from "../components/PageNotificationsSection";
 
 const toNice = (iso) =>
   new Date(iso + "T00:00:00").toLocaleDateString("id-ID", {
@@ -60,6 +62,11 @@ const PengadaanBarang = () => {
   const [daftarBarangData, setDaftarBarangData] = useState([]);
   const [isShowConfirmModal, setIsShowConfirmModal] = useState(false);
   const [isShowBatalModal, setIsShowBatalModal] = useState(false);
+
+  const notifications = useSelector((state) => state?.notifications);
+  const pageNotifications = notifications.filter((item) =>
+    item.notificationContexts.includes("Pengadaan Barang")
+  );
 
   const [page, setPage] = useState(1);
 
@@ -142,7 +149,7 @@ const PengadaanBarang = () => {
       window.history.replaceState({}, document.title);
     }
   }, [location]);
-  
+
   useEffect(() => {
     fetchBarangData();
   }, [selectedDate, page]);
@@ -157,6 +164,8 @@ const PengadaanBarang = () => {
       <div className="flex justify-between items-center mb-2 flex-wrap gap-4">
         <h1 className="text-3xl font-bold">Pengadaan Barang</h1>
       </div>
+
+      <PageNotificationsSection pageNotifications={pageNotifications} />
 
       <div className="bg-white p-4 border rounded-lg w-full border-black-6">
         <div className="flex justify-end items-center mb-4">
