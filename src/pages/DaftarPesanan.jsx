@@ -24,6 +24,8 @@ import {
   getCurrentUserStorePlacement,
   getCurrentUserWarehousePlacement,
 } from "../services/placement";
+import { useSelector } from "react-redux";
+import PageNotificationsCard from "../components/PageNotificationsCard";
 
 const DaftarPesanan = () => {
   const userRole = localStorage.getItem("role");
@@ -37,6 +39,18 @@ const DaftarPesanan = () => {
   const [dataAntrianPesanan, setDataAntrianPesanan] = useState([]);
   const [showSendModal, setShowSendModal] = useState(false);
   const [selectedSendId, setSelectedSendId] = useState("");
+
+  const notificationContexs =
+    userRole === "Owner"
+      ? ["Penjualan Toko", "Penjualan Gudang"]
+      : userRole == "Pekerja Toko"
+      ? ["Penjualan Toko"]
+      : ["Penjualan Gudang"];
+  const notifications = useSelector((state) => state?.notifications);
+  const pageNotifications = notifications.filter((item) =>
+    item.notificationContexts.some((ctx) => notificationContexs.includes(ctx))
+  );
+  console.log("pageNotifications: ", pageNotifications);
 
   const [page, setPage] = useState(1);
   const [paymentStatus, setPaymentStatus] = useState("");
@@ -313,6 +327,16 @@ const DaftarPesanan = () => {
                 />
               </div>
             </div>
+          </div>
+
+          <div className="max-h-72 overflow-y-auto flex flex-col gap-3">
+            {pageNotifications &&
+              pageNotifications.map((item, index) => (
+                <PageNotificationsCard
+                  key={index}
+                  description={item.description}
+                />
+              ))}
           </div>
 
           {/* detail penjualan */}
