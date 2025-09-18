@@ -154,10 +154,12 @@ const DetailProduksi = () => {
         </div>
       </div>
 
-      {pageNotifications &&
-        pageNotifications.map((item) => (
-          <PageNotificationsCard description={item.description} />
-        ))}
+      <div className="max-h-72 overflow-y-auto flex flex-col gap-3">
+        {pageNotifications &&
+          pageNotifications.map((item, index) => (
+            <PageNotificationsCard key={index} description={item.description} />
+          ))}
+      </div>
 
       <div className=" flex gap-4">
         <div className=" w-full bg-white px-8 py-6 rounded-lg border border-black-6">

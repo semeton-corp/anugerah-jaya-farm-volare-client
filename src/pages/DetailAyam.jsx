@@ -14,6 +14,8 @@ import {
 import { AlertTriangle } from "lucide-react";
 import { getLocations } from "../services/location";
 import { useRef } from "react";
+import { useSelector } from "react-redux";
+import PageNotificationsCard from "../components/PageNotificationsCard";
 
 const DetailAyam = () => {
   const userRole = localStorage.getItem("role");
@@ -21,6 +23,12 @@ const DetailAyam = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
+
+  const notifications = useSelector((state) => state?.notifications);
+  const pageNotifications = notifications.filter((item) =>
+    item.notificationContexts.includes("Monitoring Ayam")
+  );
+  console.log("pageNotifications: ", pageNotifications);
 
   const [siteOptions, setSiteOptions] = useState([]);
   const [selectedSite, setSelectedSite] = useState(
@@ -171,13 +179,13 @@ const DetailAyam = () => {
           </div>
         </div>
       </div>
-      {/* 
-      <div className="flex items-center bg-yellow-50 text-yellow-800 p-4 rounded-md border-l-4 border-yellow-400">
-        <AlertTriangle className="w-5 h-5 mr-3 text-yellow-600" />
-        <span className="font-medium">
-          Periksa kandang A1 nilai mortalitas 5%
-        </span>
-      </div> */}
+
+      <div className="max-h-72 overflow-y-auto flex flex-col gap-3">
+        {pageNotifications &&
+          pageNotifications.map((item, index) => (
+            <PageNotificationsCard key={index} description={item.description} />
+          ))}
+      </div>
 
       {/* Table Section */}
       <div className="bg-white p-4 border rounded-lg w-full border-black-6">
