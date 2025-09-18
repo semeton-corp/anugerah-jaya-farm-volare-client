@@ -11,6 +11,8 @@ import {
 import { useEffect } from "react";
 import { GoAlertFill } from "react-icons/go";
 import { parseToDate } from "../utils/dateFormat";
+import { useSelector } from "react-redux";
+import PageNotificationsSection from "../components/PageNotificationsSection";
 
 const getPaymentClass = (status) => {
   switch (status) {
@@ -46,6 +48,11 @@ const PengadaanDoc = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalData, setTotalData] = useState(0);
+
+  const notifications = useSelector((state) => state?.notifications);
+  const pageNotifications = notifications.filter((item) =>
+    item.notificationContexts.includes("Pengadaan Ayam")
+  );
 
   const [paymentStatus, setPaymentStatus] = useState("");
   const paymentStatusOptions = ["Belum Dibayar", "Belum Lunas", "Lunas"];
@@ -139,7 +146,9 @@ const PengadaanDoc = () => {
         </div>
       </div>
 
-      <div className="bg-white p-6 rounded-lg border border-gray-300">
+      <PageNotificationsSection pageNotifications={pageNotifications} />
+
+      <div className="bg-white p-6 rounded-lg border border-gray-300 mt-3">
         <div className="flex justify-end items-center mb-2">
           <button
             onClick={draftPesanDocHandle}
