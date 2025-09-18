@@ -6,6 +6,8 @@ import {
   getUserCashAdvanceByUserId,
 } from "../services/cashflow";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import PageNotificationsSection from "../components/PageNotificationsSection";
 
 const formatRupiah = (n = 0) =>
   "Rp " +
@@ -45,6 +47,11 @@ export default function TambahKasbon() {
   const location = useLocation();
   const today = useMemo(() => new Date(), []);
   const dueDefault = useMemo(() => addOneMonth(today), [today]);
+
+  const notifications = useSelector((state) => state?.notifications);
+  const pageNotifications = notifications.filter((item) =>
+    item.notificationContexts.includes("Pinjaman Pegawai")
+  );
 
   const [users, setUsers] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState("");
@@ -132,6 +139,8 @@ export default function TambahKasbon() {
           {formatTanggalID(today)}
         </div>
       </div>
+
+      <PageNotificationsSection pageNotifications={pageNotifications} />
 
       <form
         onSubmit={handleSubmit}
