@@ -16,88 +16,8 @@ import {
   getStores,
 } from "../services/stores";
 import { getCurrentUserStorePlacement } from "../services/placement";
-
-const stokTokoData = [
-  {
-    namaBarang: "Telur OK",
-    idBarang: "ID1234",
-    satuan: "Ikat",
-    kuantitas: 40,
-    tempat: "Toko A",
-    keterangan: "kritis",
-  },
-  {
-    namaBarang: "Telur Retak",
-    idBarang: "ID1234",
-    satuan: "Butir",
-    kuantitas: 12,
-    tempat: "Toko B",
-    keterangan: "kritis",
-  },
-  {
-    namaBarang: "Telur Pecah",
-    idBarang: "ID1234",
-    satuan: "Butir",
-    kuantitas: 12,
-    tempat: "Toko C",
-    keterangan: "aman",
-  },
-  {
-    namaBarang: "Telur Retak",
-    idBarang: "ID1234",
-    satuan: "Butir",
-    kuantitas: 12,
-    tempat: "Toko D",
-    keterangan: "aman",
-  },
-];
-
-export const barangPesananData = [
-  {
-    id: 1,
-    tanggal: "20 Mar 2025",
-    namaBarang: "Telur OK",
-    satuan: "Ikat",
-    kuantitas: 12,
-    tempat: "Gudang A1",
-    keterangan: "Sedang Dikirim",
-    status: "warning",
-    aksi: "Barang Sampai",
-  },
-  {
-    id: 2,
-    tanggal: "18 Mar 2025",
-    namaBarang: "Telur retak",
-    satuan: "Karpet",
-    kuantitas: 12,
-    tempat: "Gudang A1",
-    keterangan: "Pending",
-    status: "pending",
-    aksi: "Edit",
-  },
-  {
-    id: 3,
-    tanggal: "19 Mar 2025",
-    namaBarang: "Telur pecah",
-    satuan: "Karpet",
-    kuantitas: 10,
-    tempat: "Gudang A1",
-    keterangan: "Selesai",
-    status: "success",
-    aksi: "",
-  },
-  {
-    id: 4,
-    tanggal: "19 Mar 2025",
-    namaBarang: "Telur pecah",
-    satuan: "Karpet",
-    kuantitas: 10,
-    tempat: "Gudang A1",
-    keterangan: "Ditolak",
-    status: "danger",
-    aksi: "",
-  },
-];
+import { useSelector } from "react-redux";
+import PageNotificationsSection from "../components/PageNotificationsSection";
 
 const OverviewStok = () => {
   const userRole = localStorage.getItem("role");
@@ -109,6 +29,11 @@ const OverviewStok = () => {
   const [telurRetakKg, setTelurRetakKg] = useState(0);
   const [telurRetakIkat, setTelurRetakIkat] = useState(0);
   const [telurBonyokPlastik, setTelurBonyokPlastik] = useState(0);
+
+  const notifications = useSelector((state) => state?.notifications);
+  const pageNotifications = notifications.filter((item) =>
+    item.notificationContexts.includes("Barang Toko")
+  );
 
   const [storeItems, setStoreItems] = useState([]);
 
@@ -259,6 +184,8 @@ const OverviewStok = () => {
             </div>
           </div>
 
+          <PageNotificationsSection pageNotifications={pageNotifications} />
+
           <div className="flex md:grid-cols-2 gap-4 justify-between">
             <div className="p-4 w-full rounded-md border-2 border-black-6">
               <div className="flex justify-between items-center mb-4">
@@ -339,37 +266,10 @@ const OverviewStok = () => {
                 </div>
               </div>
             </div>
-            {/* penjualan telur */}
-            {/* <div className="p-4 w-full rounded-md border-2 border-black-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold">Stok Telur Pecah</h2>
-                <div className="p-2 rounded-xl bg-green-700">
-                  <TbEggCrackedFilled size={24} color="white" />
-                </div>
-              </div>
-
-              <div className="flex justify-center flex-wrap gap-4">
-                <div className="flex flex-col items-center justify-center w-32 py-4 bg-green-200 rounded-md">
-                  <p className="text-3xl font-bold text-center">80</p>
-                  <p className="text-xl text-center">Butir</p>
-                </div>
-              </div>
-            </div> */}
           </div>
 
-          {/* chart, incomes, and history section */}
           <div className="flex flex-col lg:flex-row h-120 gap-6">
-            {/* Chart Section (3/4 width on large screens) */}
             <div className="w-full bg-white px-8 py-6 rounded-lg border border-gray-300">
-              {/* <div className="flex justify-between items-start mb-4">
-                <h2 className="text-lg font-semibold">Stok toko</h2>
-                <div
-                  onClick={detailStokTokoHandle}
-                  className="p-2 rounded-full hover:bg-black-4 cursor-pointer"
-                >
-                  <FiMaximize2 size={24} color="" />
-                </div>
-              </div> */}
               <div className="overflow-x-auto">
                 <table className="w-full text-base">
                   <thead>
@@ -387,7 +287,6 @@ const OverviewStok = () => {
                         <td className="py-2 px-4">{item.item.name}</td>
                         <td className="py-2 px-4">{item.item.unit}</td>
                         <td className="py-2 px-4">{item.quantity}</td>
-                        {/* <td className="py-2 px-4">{item.tempat}</td> */}
                         <td className="py-2 px-4 ">
                           <span
                             className={`w-24 py-1 px-5 rounded text-sm font-semibold ${
@@ -416,61 +315,6 @@ const OverviewStok = () => {
               </div>
             </div>
           </div>
-          {/* {userRole !== "Owner"  && (
-            <div className="p-6 border border-black-6 rounded-lg shadow">
-              <h2 className="text-base font-semibold mb-4 pb-2 flex justify-between">
-                <span className="">Barang Dalam Pesanan</span>.
-                <button className="mb-4 px-4 py-2 bg-green-700 text-white rounded hover:bg-green-900 cursor-pointer">
-                  + Tambah Data Pesan Barang
-                </button>
-              </h2>
-
-              <table className="w-full text-sm text-center ">
-                <thead className="bg-green-700 text-white ">
-                  <tr>
-                    <th className="px-4 py-2">Tanggal Pesan</th>
-                    <th className="px-4 py-2">Nama barang</th>
-                    <th className="px-4 py-2">Satuan</th>
-                    <th className="px-4 py-2">Kuantitas</th>
-                    <th className="px-4 py-2">Tempat pemesanan</th>
-                    <th className="px-4 py-2">Keterangan</th>
-                    <th className="px-4 py-2">Aksi</th>
-                  </tr>
-                </thead>
-                <tbody className="text-center">
-                  {barangPesananData.map((item) => (
-                    <tr key={item.id} className="border-b">
-                      <td className="px-4 py-2">{item.tanggal}</td>
-                      <td className="px-4 py-2">{item.namaBarang}</td>
-                      <td className="px-4 py-2">{item.satuan}</td>
-                      <td className="px-4 py-2">{item.kuantitas}</td>
-                      <td className="px-4 py-2">{item.tempat}</td>
-                      <td className="px-4 py-2">
-                        <span
-                          className={`py-1 px-5 rounded text-sm font-semibold ${
-                            item.keterangan === "Selesai"
-                              ? "bg-aman-box-surface-color text-aman-text-color"
-                              : item.keterangan === "Pending"
-                              ? "bg-green-200 text-green-900"
-                              : item.keterangan === "Sedang Dikirim"
-                              ? "bg-orange-200 text-orange-900"
-                              : "bg-kritis-box-surface-color text-kritis-text-color"
-                          }`}
-                        >
-                          {item.keterangan}
-                        </span>
-                      </td>
-                      <td className="px-4 py-2 text-sm font-semibold">
-                        <button className="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-900 cursor-pointer">
-                          Barang Sampai
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )} */}
           <button
             onClick={() => {
               console.log("selectedStore: ", selectedStore);
