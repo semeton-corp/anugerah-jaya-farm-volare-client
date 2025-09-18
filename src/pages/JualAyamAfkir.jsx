@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { LiaOilCanSolid } from "react-icons/lia";
 import { useSelector } from "react-redux";
 import PageNotificationsCard from "../components/PageNotificationsCard";
+import PageNotificationsSection from "../components/PageNotificationsSection";
 
 const getStatusColor = (status) => {
   switch (status) {
@@ -36,7 +37,6 @@ const JualAyamAfkir = () => {
   const pageNotifications = notifications.filter((item) =>
     item.notificationContexts.includes("Penjualan Ayam")
   );
-  console.log("pageNotifications: ", pageNotifications);
 
   const detailPages = [
     "draft-penjualan-ayam",
@@ -106,12 +106,7 @@ const JualAyamAfkir = () => {
         </div>
       </div>
 
-      <div className="max-h-72 overflow-y-auto flex flex-col gap-3">
-        {pageNotifications &&
-          pageNotifications.map((item, index) => (
-            <PageNotificationsCard key={index} description={item.description} />
-          ))}
-      </div>
+      <PageNotificationsSection pageNotifications={pageNotifications} />
 
       <div className="bg-white p-4 rounded shadow border">
         <div className="flex justify-end items-center mb-3">

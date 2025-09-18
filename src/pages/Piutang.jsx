@@ -13,6 +13,8 @@ import MonthYearSelector from "../components/MonthYearSelector";
 import { getReceivablesOverview } from "../services/cashflow";
 import { FaPlus, FaWhatsapp, FaExclamationTriangle } from "react-icons/fa";
 import { IoLogoWhatsapp } from "react-icons/io";
+import { useSelector } from "react-redux";
+import PageNotificationsSection from "../components/PageNotificationsSection";
 
 // --- helpers ---
 const formatRupiah = (n = 0) =>
@@ -49,6 +51,11 @@ export default function Piutang() {
   const [year, setYear] = useState(new Date().getFullYear());
   const [monthName, setMonthName] = useState(
     new Intl.DateTimeFormat("id-ID", { month: "long" }).format(new Date())
+  );
+
+  const notifications = useSelector((state) => state?.notifications);
+  const pageNotifications = notifications.filter((item) =>
+    item.notificationContexts.includes("Piutang")
   );
 
   const [category, setCategory] = useState("Semua");
@@ -166,6 +173,8 @@ export default function Piutang() {
           />
         </div>
       </div>
+
+      <PageNotificationsSection pageNotifications={pageNotifications} />
 
       {/* Card */}
       <div className="border rounded-md p-4">

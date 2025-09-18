@@ -16,6 +16,7 @@ import { getLocations } from "../services/location";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
 import PageNotificationsCard from "../components/PageNotificationsCard";
+import PageNotificationsSection from "../components/PageNotificationsSection";
 
 const DetailAyam = () => {
   const userRole = localStorage.getItem("role");
@@ -179,12 +180,7 @@ const DetailAyam = () => {
         </div>
       </div>
 
-      <div className="max-h-72 overflow-y-auto flex flex-col gap-3">
-        {pageNotifications &&
-          pageNotifications.map((item, index) => (
-            <PageNotificationsCard key={index} description={item.description} />
-          ))}
-      </div>
+      <PageNotificationsSection pageNotifications={pageNotifications} />
 
       {/* Table Section */}
       <div className="bg-white p-4 border rounded-lg w-full border-black-6">

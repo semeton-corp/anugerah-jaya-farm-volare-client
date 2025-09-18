@@ -13,6 +13,8 @@ import MonthYearSelector from "../components/MonthYearSelector";
 import { IoLogoWhatsapp } from "react-icons/io";
 import { FaExclamationTriangle } from "react-icons/fa";
 import { getDebtOverview } from "../services/cashflow";
+import { useSelector } from "react-redux";
+import PageNotificationsSection from "../components/PageNotificationsSection";
 
 const formatRupiah = (n = 0) =>
   "Rp " + n || (0).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -38,6 +40,11 @@ export default function Hutang() {
   const [year, setYear] = useState(new Date().getFullYear());
   const [monthName, setMonthName] = useState(
     new Intl.DateTimeFormat("id-ID", { month: "long" }).format(new Date())
+  );
+
+  const notifications = useSelector((state) => state?.notifications);
+  const pageNotifications = notifications.filter((item) =>
+    item.notificationContexts.includes("Hutang")
   );
 
   const category = "Semua";
@@ -168,6 +175,8 @@ export default function Hutang() {
           <span className="font-medium">{nearingDue}</span>
         </div>
       )}
+
+      <PageNotificationsSection pageNotifications={pageNotifications} />
 
       {/* Card */}
       <div className="border rounded-md p-4">

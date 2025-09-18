@@ -19,6 +19,8 @@ import { formatDate } from "../utils/dateFormat";
 import { useRef } from "react";
 import { GoAlertFill } from "react-icons/go";
 import { getCurrentUserWarehousePlacement } from "../services/placement";
+import { useSelector } from "react-redux";
+import PageNotificationsSection from "../components/PageNotificationsSection";
 
 const Gudang = () => {
   const location = useLocation();
@@ -29,6 +31,11 @@ const Gudang = () => {
     userRole === "Owner" ? 0 : localStorage.getItem("locationId")
   );
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
+
+  const notifications = useSelector((state) => state?.notifications);
+  const pageNotifications = notifications.filter((item) =>
+    item.notificationContexts.includes("Barang Gudang")
+  );
 
   const [warehouses, setWarehouses] = useState();
   const [selectedWarehouse, setSelectedWarehouse] = useState();
@@ -45,7 +52,6 @@ const Gudang = () => {
   const [eggStocks, setEggStocks] = useState();
   const [cornStocks, setCornStocks] = useState([]);
   const [equipmentStocks, setEquipmentStocks] = useState();
-  const [notifications, setNotifications] = useState();
 
   const detailPages = ["edit-stok-telur", "edit-stok-barang"];
 
@@ -123,7 +129,6 @@ const Gudang = () => {
       if (overviewResponse.status == 200) {
         setEggStocks(overviewResponse.data.data.eggStocks);
         setEquipmentStocks(overviewResponse.data.data.equipmentStocks);
-        setNotifications(overviewResponse.data.data.notifications);
         setTotalDangerStock(overviewResponse.data.data.totalDangerStock);
         setTotalSafeStock(overviewResponse.data.data.totalSafeStock);
         setTotalItemInOrder(overviewResponse.data.data.totalItemInOrder);
@@ -245,6 +250,8 @@ const Gudang = () => {
               </span>
             </div>
           )}
+
+          <PageNotificationsSection pageNotifications={pageNotifications} />
 
           <div className="flex md:grid-cols-2 gap-4 justify-between">
             <div className="p-4 w-full rounded-md bg-green-100">
