@@ -35,6 +35,15 @@ const TambahKandang = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (
+      !form.name ||
+      !form.locationId ||
+      !form.chickenCategory ||
+      !form.capacity
+    ) {
+      alert("❌ Mohon masukkan semua data kandang dengan benar!");
+      return;
+    }
     // console.log("Data disimpan:", form);
 
     try {

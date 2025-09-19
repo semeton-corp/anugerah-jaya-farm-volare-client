@@ -16,6 +16,11 @@ const TambahToko = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!namaToko || !lokasi) {
+      alert("❌ Mohon masukkan semua data toko dengan benar!");
+      return;
+    }
+
     const payload = {
       name: namaToko,
       locationId: parseInt(lokasi),

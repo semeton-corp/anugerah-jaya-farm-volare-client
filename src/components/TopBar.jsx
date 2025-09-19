@@ -69,6 +69,13 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
 
       params = await getNotificationsPlacementsIds(userId, userRole);
       const notificationsContexs = getNotificationContextsByRole(userRole);
+
+      // if (!params.cageIds && !params.storeIds && !params.storeIds) {
+      //   params.userId = undefined;
+      // } else {
+      //   params.userId = userId;
+      // }
+
       params.userId = userId;
       params.notificationsContexs = notificationsContexs;
       params.isMarked = false;

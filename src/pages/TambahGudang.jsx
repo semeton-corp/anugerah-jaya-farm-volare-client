@@ -23,6 +23,11 @@ const TambahGudang = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!namaGudang || !lokasiGudang || !maxCornCapacity) {
+      alert("❌ Mohon masukkan semua data gudang dengan benar!");
+      return;
+    }
+
     const data = {
       name: namaGudang,
       locationId: parseInt(lokasiGudang),

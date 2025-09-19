@@ -9,7 +9,6 @@ import { getWarehouses } from "../services/warehouses";
 import { getStores } from "../services/stores";
 
 const getCurrentPlacementIds = async (userId, role) => {
-  let placementIds = {};
   let keyName;
 
   try {
@@ -48,10 +47,12 @@ const getCurrentPlacementIds = async (userId, role) => {
         (item) => item[placementName].id
       );
 
+      const finalIds = ids.length > 0 ? ids : undefined;
+
       return {
-        storeIds: keyName === "storeIds" ? ids : undefined,
-        warehouseIds: keyName === "warehouseIds" ? ids : undefined,
-        cageIds: keyName === "cageIds" ? ids : undefined,
+        storeIds: keyName === "storeIds" ? finalIds : undefined,
+        warehouseIds: keyName === "warehouseIds" ? finalIds : undefined,
+        cageIds: keyName === "cageIds" ? finalIds : undefined,
       };
     }
 
