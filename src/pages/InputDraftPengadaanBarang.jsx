@@ -21,7 +21,6 @@ export default function InputDraftPengadaanBarang() {
 
   const allowedCategories = ["Pakan Jadi", "Barang", "Bahan Baku Adukan"];
 
-  // selections
   const [warehouseOptions, setWarehouseOptions] = useState([]);
   const [warehouse, setWarehouse] = useState(null);
 
@@ -33,11 +32,9 @@ export default function InputDraftPengadaanBarang() {
   const [supplierOptions, setSupplierOptions] = useState([]);
   const [supplier, setSupplier] = useState(null);
 
-  // inputs
   const [days, setDays] = useState("");
   const [pricePerUnit, setPricePerUnit] = useState("");
 
-  // derived
   const perHari = useMemo(() => Number(item?.dailyNeed || 0), [item]);
   const totalOrder = useMemo(() => {
     const d = Number(days || 0);
@@ -48,7 +45,6 @@ export default function InputDraftPengadaanBarang() {
     return totalOrder * p;
   }, [totalOrder, pricePerUnit]);
 
-  // today (pretty)
   const todayLabel = useMemo(() => {
     const d = new Date("2025-03-20");
     return d.toLocaleDateString("id-ID", {
@@ -171,11 +167,23 @@ export default function InputDraftPengadaanBarang() {
     }
   };
 
+  const tambahSupplierHandle = () => {
+    const newPath = location.pathname.replace(
+      "input-draft-pengadaan-barang",
+      "tambah-supplier"
+    );
+    navigate(newPath);
+  };
+
   useEffect(() => {
     fetchWarehouses();
     fetchItems();
     fetchSupplier();
-  }, []);
+    if (location?.state?.refetch) {
+      fetchSupplier();
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
 
   useEffect(() => {
     if (warehouseOptions && itemOptions && supplierOptions) {
@@ -264,6 +272,16 @@ export default function InputDraftPengadaanBarang() {
               </option>
             ))}
           </select>
+        </div>
+        <div className="flex items-center mb-4">
+          <div
+            onClick={() => {
+              tambahSupplierHandle();
+            }}
+            className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer"
+          >
+            <div className="text-base font-medium ms-2 ">+ Tambah Supplier</div>
+          </div>
         </div>
 
         <div>

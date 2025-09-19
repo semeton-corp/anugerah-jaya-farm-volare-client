@@ -158,7 +158,7 @@ const Penjualan = () => {
         year,
         selectedItem
       );
-      // console.log("saleResponse: ", saleResponse);
+      console.log("saleResponse: ", saleResponse);
       if (saleResponse.status === 200) {
         const data = saleResponse.data.data;
         setCashflowSaleSummary(data.cashflowSaleSummary);
@@ -276,7 +276,7 @@ const Penjualan = () => {
                     <FaArrowUpLong color="#00A651" />
                     <p className="text-[16px] text-[#00A651] ml-1">
                       {`${cashflowSaleSummary.incomeDiffPercentage}`}% dibanding
-                      kemarin
+                      bulan kemarin
                     </p>
                   </>
                 ) : (
@@ -284,7 +284,7 @@ const Penjualan = () => {
                     <FaArrowDownLong color="#F41C1C" />
                     <p className="text-[16px] text-[#F41C1C] ml-1">
                       {`${cashflowSaleSummary.incomeDiffPercentage}`}% dibanding
-                      kemarin
+                      bulan kemarin
                     </p>
                   </>
                 )}
@@ -308,7 +308,7 @@ const Penjualan = () => {
                     <FaArrowUpLong color="#00A651" />
                     <p className="text-[16px] text-[#00A651] ml-1">
                       {`${cashflowSaleSummary.profitDiffPercentage}`}% dibanding
-                      kemarin
+                      bulan kemarin
                     </p>
                   </>
                 ) : (
@@ -316,7 +316,7 @@ const Penjualan = () => {
                     <FaArrowDownLong color="#F41C1C" />
                     <p className="text-[16px] text-[#F41C1C] ml-1">
                       {`${cashflowSaleSummary.incomeDiffPercentage}`}% dibanding
-                      kemarin
+                      bulan kemarin
                     </p>
                   </>
                 )}
@@ -337,7 +337,7 @@ const Penjualan = () => {
                   <>
                     <FaArrowUpLong color="#00A651" />
                     <p className="text-[16px] text-[#00A651] ml-1">
-                      {`${cashflowSaleSummary.expenseDiffPercentage}`}%
+                      {`${cashflowSaleSummary.expenseDiffPercentage}`}% bulan
                       dibanding kemarin
                     </p>
                   </>
@@ -345,7 +345,7 @@ const Penjualan = () => {
                   <>
                     <FaArrowDownLong color="#F41C1C" />
                     <p className="text-[16px] text-[#F41C1C] ml-1">
-                      {`${cashflowSaleSummary.expenseDiffPercentage}`}%
+                      {`${cashflowSaleSummary.expenseDiffPercentage}`}% bulan
                       dibanding kemarin
                     </p>
                   </>

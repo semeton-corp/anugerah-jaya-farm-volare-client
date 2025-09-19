@@ -28,6 +28,7 @@ const TambahGudang = () => {
       return;
     }
 
+    
     const data = {
       name: namaGudang,
       locationId: parseInt(lokasiGudang),

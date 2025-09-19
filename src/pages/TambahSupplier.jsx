@@ -61,7 +61,6 @@ const TambahSupplier = () => {
 
   useEffect(() => {
     fetchWarehouseItems();
-
     if (id) {
       fetchSupplierById();
     }
@@ -80,7 +79,6 @@ const TambahSupplier = () => {
     if (id) {
       try {
         const updateResponse = await updateSuppliers(payload, id);
-        // console.log("updateResponse: ", updateResponse);
         if (updateResponse.status == 200) {
           navigate(-1, { state: { refetch: true } });
         }

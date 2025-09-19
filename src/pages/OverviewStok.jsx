@@ -292,6 +292,8 @@ const OverviewStok = () => {
                             className={`w-24 py-1 px-5 rounded text-sm font-semibold ${
                               item.description === "aman"
                                 ? "bg-aman-box-surface-color text-aman-text-color"
+                                : item.description === "-"
+                                ? "bg-black-4 text-aman-text-color"
                                 : "bg-kritis-box-surface-color text-kritis-text-color"
                             }`}
                           >

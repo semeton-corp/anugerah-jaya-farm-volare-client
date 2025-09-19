@@ -27,7 +27,7 @@ const DraftPengadaanBarang = () => {
 
   const [selectedItem, setSelectedItem] = useState(null);
 
-  const detailPages = ["input-draft-pengadaan-barang"];
+  const detailPages = ["input-draft-pengadaan-barang", "tambah-supplier"];
   const isDetailPage = detailPages.some((segment) =>
     location.pathname.includes(segment)
   );

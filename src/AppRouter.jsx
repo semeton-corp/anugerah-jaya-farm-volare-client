@@ -401,6 +401,10 @@ const AppRouter = createBrowserRouter([
                         path: "input-draft-pengadaan-barang/:id",
                         element: <InputDraftPengadaanBarang />,
                       },
+                      {
+                        path: "tambah-supplier",
+                        element: <TambahSupplier />,
+                      },
                     ],
                   },
                   {
@@ -1306,6 +1310,10 @@ const AppRouter = createBrowserRouter([
                         path: "input-draft-pengadaan-barang/:id",
                         element: <InputDraftPengadaanBarang />,
                       },
+                      {
+                        path: "tambah-supplier",
+                        element: <TambahSupplier />,
+                      },
                     ],
                   },
                   {
@@ -1573,6 +1581,10 @@ const AppRouter = createBrowserRouter([
                       {
                         path: "input-draft-pengadaan-barang/:id",
                         element: <InputDraftPengadaanBarang />,
+                      },
+                      {
+                        path: "tambah-supplier",
+                        element: <TambahSupplier />,
                       },
                     ],
                   },
