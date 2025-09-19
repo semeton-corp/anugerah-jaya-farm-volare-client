@@ -29,7 +29,7 @@ const DraftPengadaanBarang = () => {
 
   const detailPages = ["input-draft-pengadaan-barang", "tambah-supplier"];
   const isDetailPage = detailPages.some((segment) =>
-    location.pathname.includes(segment)
+    location.pathname?.includes(segment)
   );
 
   const inputDraftPesanBarangHandle = () => {

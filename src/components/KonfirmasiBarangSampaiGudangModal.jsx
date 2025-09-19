@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { IoLogoWhatsapp } from "react-icons/io5";
 
 const KonfirmasiBarangSampaiGudangModal = ({
   isOpen,
@@ -9,6 +10,7 @@ const KonfirmasiBarangSampaiGudangModal = ({
   const [mode, setMode] = useState("Sesuai");
   const [jumlah, setJumlah] = useState(data?.quantity || "");
   const [catatan, setCatatan] = useState("");
+  const expectedQuantity = data?.quantity;
 
   if (!isOpen) return null;
 
@@ -20,11 +22,31 @@ const KonfirmasiBarangSampaiGudangModal = ({
     onClose();
   };
 
+  const handleContactSeller = () => {
+    const message = `Halo ${
+      data?.supplier?.name
+    }, kami dari Anugerah Jaya Farm ingin menyampaikan ada ketidaksesuaian pada barang yang dikirim:
+    
+    📦 Barang: ${data?.item?.name}
+    📊 Jumlah yang dipesan: ${expectedQuantity}  
+    📊 Jumlah diterima: ${jumlah} ${data?.item?.unit}
+    📝 Catatan: ${catatan || "-"}
+    
+    Mohon tindak lanjutnya, terima kasih 🙏`;
+
+    console.log("data?.supplier?.phoneNumber: ", data?.supplier?.phoneNumber);
+
+    const whatsappUrl = `https://wa.me/${
+      data?.supplier?.phoneNumber
+    }?text=${encodeURIComponent(message)}`;
+
+    window.open(whatsappUrl, "_blank");
+  };
+
   return (
     <div className="fixed inset-0 bg-black/15 bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white p-6 rounded shadow-lg w-full max-w-lg">
         <h2 className="text-lg font-bold mb-4">Konfirmasi barang sampai</h2>
-
         <div className="flex mb-4 gap-2">
           <button
             className={`flex-1 py-2 rounded border ${
@@ -87,16 +109,27 @@ const KonfirmasiBarangSampaiGudangModal = ({
           </div>
         )}
 
-        <div className="text-right mt-4">
+        <div className="flex justify-end gap-3 mt-4">
           <button
             onClick={onClose}
-            className=" text-green-900 border border-green-100 px-4 py-2 rounded  me-3 hover:bg-green-200 cursor-pointer"
+            className="text-green-900 border border-green-300 px-4 py-2 rounded hover:bg-green-100 transition"
           >
             Batal
           </button>
+
+          {mode === "Tidak Sesuai" && (
+            <button
+              onClick={handleContactSeller}
+              className="flex items-center gap-2 bg-green-700 hover:bg-green-900 text-white px-4 py-2 rounded transition cursor-pointer"
+            >
+              <IoLogoWhatsapp className="text-lg" />
+              Hubungi Supplier
+            </button>
+          )}
+
           <button
             onClick={handleSubmit}
-            className="bg-green-700 hover:bg-green-900 cursor-pointer text-white px-4 py-2 rounded "
+            className="bg-green-700 hover:bg-green-900 text-white px-4 py-2 rounded transition cursor-pointer"
           >
             Konfirmasi
           </button>

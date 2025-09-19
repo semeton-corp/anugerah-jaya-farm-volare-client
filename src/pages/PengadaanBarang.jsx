@@ -65,7 +65,7 @@ const PengadaanBarang = () => {
 
   const notifications = useSelector((state) => state?.notifications);
   const pageNotifications = notifications.filter((item) =>
-    item.notificationContexts.includes("Pengadaan Barang")
+    item.notificationContexts?.includes("Pengadaan Barang")
   );
 
   const [page, setPage] = useState(1);
@@ -274,6 +274,7 @@ const PengadaanBarang = () => {
                               onClick={() => {
                                 setIsShowConfirmModal(true);
                                 setSelectedItem(r);
+                                console.log("r: ", r);
                               }}
                               className="bg-orange-300 hover:bg-orange-500 cursor-pointer text-black px-3 py-1 rounded"
                             >
@@ -291,7 +292,6 @@ const PengadaanBarang = () => {
                       </td>
                     </tr>
 
-                    {/* thin separator */}
                     <tr>
                       <td colSpan={9}>
                         <div className="h-px bg-gray-200 w-full" />

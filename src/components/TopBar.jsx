@@ -76,7 +76,7 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
       //   params.userId = userId;
       // }
 
-      params.userId = userId;
+      params.userIds = userId;
       params.notificationsContexs = notificationsContexs;
       params.isMarked = false;
 

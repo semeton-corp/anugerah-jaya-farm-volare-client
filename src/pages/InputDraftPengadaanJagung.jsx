@@ -226,6 +226,7 @@ const InputDraftPengadaanJagung = () => {
       const supplierResponse = await getSuppliers();
       if (supplierResponse.status === 200) {
         setsupplierOptions(supplierResponse.data.data);
+        console.log("supplierResponse.data.data: ", supplierResponse.data.data);
       }
     } catch (error) {
       console.log("error :", error);

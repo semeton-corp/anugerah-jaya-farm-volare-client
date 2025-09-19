@@ -1,6 +1,7 @@
 import React, { useMemo, useRef, useState } from "react";
 import { BiSolidEditAlt } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
+import { formatThousand, onlyDigits } from "../utils/moneyFormat";
 
 const rupiah = (n) => `Rp ${Number(n || 0).toLocaleString("id-ID")}`;
 const toYmd = (d = new Date()) => {
@@ -430,7 +431,6 @@ const KonfirmasiPemesananBarangModal = ({
         </div>
       </div>
 
-      {/* Modal Pembayaran */}
       {showPaymentModal && (
         <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/50">
           <div className="bg-white w-full max-w-lg p-6 rounded shadow-xl">
@@ -438,11 +438,15 @@ const KonfirmasiPemesananBarangModal = ({
 
             <label className="block mb-1 font-medium">Nominal Pembayaran</label>
             <input
-              type="number"
+              type="text"
+              inputMode="numeric"
               className="w-full border rounded p-2 mb-3"
               placeholder="Masukkan nominal"
-              value={nominal}
-              onChange={(e) => setNominal(e.target.value)}
+              value={formatThousand(nominal)}
+              onChange={(e) => {
+                const raw = onlyDigits(e.target.value);
+                setNominal(raw);
+              }}
               min={0}
             />
 
