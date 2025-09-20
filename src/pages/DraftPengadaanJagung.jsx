@@ -2,7 +2,11 @@ import { useEffect, useRef } from "react";
 import { useState } from "react";
 import { PiCalendarBlank } from "react-icons/pi";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { formatDate, formatDateToDDMMYYYY, getTodayDateInBahasa } from "../utils/dateFormat";
+import {
+  formatDate,
+  formatDateToDDMMYYYY,
+  getTodayDateInBahasa,
+} from "../utils/dateFormat";
 import {
   confirmationWarehouseItemCornProcurementDraft,
   deleteWarehouseItemCornProcurementDraft,
@@ -55,6 +59,7 @@ const DraftPengadaanJagung = () => {
   };
 
   const handlePesan = (item) => {
+    console.log("item: ", item);
     setSelectedDraft(item);
     setOpenModal(true);
   };

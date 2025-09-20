@@ -13,6 +13,7 @@ import {
   updateWarehouseItemCornProcurementDraft,
 } from "../services/warehouses";
 import { getSuppliers } from "../services/supplier";
+import { getItems } from "../services/item";
 
 const discountDataInit = [
   { range: [0, 15.0], discount: 0 },
@@ -69,6 +70,8 @@ const InputDraftPengadaanJagung = () => {
     supplier: "",
     quantity: "",
   });
+
+  const [jagungItemIds, setJagungItemIds] = useState([]);
 
   const [warehouseOptions, setWarehouseOptions] = useState([]);
   const [selectedWarehouse, setSelectedWarehouse] = useState();
@@ -225,8 +228,11 @@ const InputDraftPengadaanJagung = () => {
     try {
       const supplierResponse = await getSuppliers();
       if (supplierResponse.status === 200) {
-        setsupplierOptions(supplierResponse.data.data);
-        console.log("supplierResponse.data.data: ", supplierResponse.data.data);
+        const allSupplier = supplierResponse.data.data;
+        const filteredSupplier = allSupplier.filter((item) =>
+          item.itemIds.some((id) => jagungItemIds.includes(id))
+        );
+        setsupplierOptions(filteredSupplier);
       }
     } catch (error) {
       console.log("error :", error);
@@ -286,6 +292,18 @@ const InputDraftPengadaanJagung = () => {
     }
   };
 
+  const fetchItems = async () => {
+    try {
+      const jagungItemsResponse = await getItems("Bahan Baku Adukan - Jagung");
+      if (jagungItemsResponse.status == 200) {
+        const itemIds = jagungItemsResponse.data.data.map((item) => item.id);
+        setJagungItemIds(itemIds);
+      }
+    } catch (error) {
+      console.log("error :", error);
+    }
+  };
+
   useEffect(() => {
     if (isOvenConditionDisabled && formData.ovenCondition !== "") {
       setFormData((prev) => ({ ...prev, ovenCondition: "" }));
@@ -299,14 +317,18 @@ const InputDraftPengadaanJagung = () => {
   }, [isOvenCanOperateDisabled]);
 
   useEffect(() => {
+    fetchItems();
     fetchWarehouses();
-    fetchSuppliers();
     fetchDiscountData();
     if (id) {
       fetchDetailData();
     }
     console.log("id: ", id);
   }, []);
+
+  useEffect(() => {
+    fetchSuppliers();
+  }, [jagungItemIds]);
 
   useEffect(() => {
     fetchCornSummary();

@@ -106,7 +106,7 @@ const Profile = ({ mode }) => {
   };
 
   const handleEditPegawai = () => {
-    const newPath = location?.pathname.replace("profil", "tambah-pegawai");
+    const newPath = location?.pathname.replace("profile", "tambah-pegawai");
     navigate(newPath);
   };
 

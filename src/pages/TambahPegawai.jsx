@@ -49,9 +49,9 @@ const TambahPegawai = () => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
-  const [salary, setSalary] = useState(0);
+  const [salary, setSalary] = useState("");
   const [username, setUsername] = useState("");
-  const [photoProfile, setPhotoProfile] = useState("");
+  const [photoProfile, setPhotoProfile] = useState("https://example.com");
 
   const [showPopup, setShowPopup] = useState(false);
   const [password, setPassword] = useState("");
@@ -77,7 +77,9 @@ const TambahPegawai = () => {
       if (rolesResponse.status == 200) {
         console.log("rolesResponse.data.data: ", rolesResponse.data.data);
         setRoles(rolesResponse.data.data);
-        setSelectedRole(rolesResponse.data.data[0].id);
+        if (!userId) {
+          setSelectedRole(rolesResponse.data.data[0].id);
+        }
       }
     } catch (error) {
       console.log("error :", error);
@@ -126,8 +128,8 @@ const TambahPegawai = () => {
         const placementIds = userData.placements.map((placement) =>
           placement.placeId.toString()
         );
-        console.log("placementIds: ", placementIds);
         setSelectedPic(placementIds || []);
+        setPhotoProfile(userData.photoProfile);
       }
     } catch (error) {
       console.log("error :", error);
@@ -186,8 +188,6 @@ const TambahPegawai = () => {
   }, [selectedRole, locationId, roles]);
 
   const handleSave = async () => {
-    const generatedPassword = generatePassword();
-    setPassword(generatedPassword);
     const payload = {
       email: email,
       name: name,
@@ -199,6 +199,7 @@ const TambahPegawai = () => {
       address: address,
       phoneNumber: phone,
       salary: salary,
+      photoProfile: photoProfile,
       salaryInterval: selectedSalaryInterval,
     };
     console.log("payload: ", payload);
@@ -206,11 +207,12 @@ const TambahPegawai = () => {
       try {
         const updateResponse = await updateUser(payload, userId);
         if (updateResponse.status == 200) {
-          const basePath =
-            location.pathname.split("/tambah-pegawai")[0] + "/tambah-pegawai";
-          navigate(basePath.replace("/tambah-pegawai", ""), {
-            state: { refetch: true },
-          });
+          // const basePath =
+          //   location.pathname.split("/tambah-pegawai")[0] + "/tambah-pegawai";
+          // navigate(basePath.replace("/tambah-pegawai", ""), {
+          //   state: { refetch: true },
+          // });
+          navigate(-1, { state: { refetch: true } });
         }
       } catch (error) {
         var customMessage =
@@ -411,6 +413,7 @@ function ProfilPegawaiForm({
   username,
   setUsername,
 }) {
+  const { userId } = useParams();
   const [placeHolderLokasi, setPlaceHolderLokasi] = useState(
     "Pilih site lokasi gudang"
   );
@@ -445,11 +448,18 @@ function ProfilPegawaiForm({
     } else if (roleName === "Owner") {
       setIsShowLocationIdField(false);
       setIsShowPicField(false);
+    } else if (roleName === "Lainnya") {
+      setIsShowLocationIdField(true);
+      setIsShowPicField(false);
     } else {
       setIsShowLocationIdField(true);
       setIsShowPicField(true);
       setLabelLokasi("Lokasi Bekerja");
       setPlaceHolderLokasi("Pilih lokasi bekerja");
+    }
+
+    if (userId) {
+      setIsShowPicField(false);
     }
   }, [selectedRole, roles]);
 
@@ -513,8 +523,8 @@ function ProfilPegawaiForm({
                   >
                     <input
                       type="checkbox"
-                      value={pic.cage.id}
-                      checked={selectedPic?.includes(String(pic.cage.id))}
+                      value={pic?.cage?.id}
+                      checked={selectedPic?.includes(String(pic?.cage?.id))}
                       onChange={(e) => {
                         if (e.target.checked) {
                           setSelectedPic((prev) => [...prev, e.target.value]);
