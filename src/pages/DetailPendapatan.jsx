@@ -1,7 +1,9 @@
 // src/pages/DetailPendapatan.jsx
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getIncome } from "../services/cashflow";
+import ReceiptModal from "../components/Receipt";
+import { getStoreSaleById } from "../services/stores";
 
 const formatRupiah = (n = 0) =>
   "Rp " +
@@ -53,9 +55,23 @@ const Field = ({ label, value, className = "" }) => (
 );
 
 export default function DetailPendapatan() {
-  const { category, id } = useParams();
+  const { category, id, parentId } = useParams();
   const [raw, setRaw] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const [showReceiptModal, setShowReceiptModal] = useState(false);
+
+  const [customerName, setCustomerName] = useState("");
+  const [phone, setPhone] = useState(0);
+  const [itemName, setItemName] = useState();
+  const [quantity, setQuantity] = useState();
+  const [unit, setUnit] = useState();
+  const [itemPrice, setItemPrice] = useState();
+  const [itemTotalPrice, setItemTotalPrice] = useState();
+  const [itemPriceDiscount, setItemPriceDiscount] = useState();
+  const [paymentHistory, setPaymentHistory] = useState();
+  const [remaining, setRemaining] = useState();
+  const receiptRef = useRef();
 
   const data = useMemo(() => {
     if (!raw) return null;
@@ -93,9 +109,45 @@ export default function DetailPendapatan() {
     }
   };
 
+  const fetchTransactionData = async () => {
+    try {
+      console.log("data: ", data);
+      let transactionDataResponse;
+      if (data.kategori == "Penjualan Telur Toko") {
+        transactionDataResponse = await getStoreSaleById(parentId);
+      }
+      console.log("transactionDataResponse: ", transactionDataResponse);
+      if (transactionDataResponse.status == 200) {
+        const transactionData = transactionDataResponse.data.data;
+        setCustomerName(transactionData.customer.name);
+        setPhone(transactionData.customer.phoneNumber);
+        setItemName(transactionData.item.name);
+        setQuantity(transactionData.quantity);
+        setUnit(transactionData.item.unit);
+        setItemPrice(transactionData.price);
+
+        const totalitemPrice = transactionData.price * transactionData.quantity;
+        setItemTotalPrice(totalitemPrice);
+
+        const totalDiscount = totalitemPrice - transactionData.totalPrice;
+        setItemPriceDiscount(totalDiscount);
+
+        setRemaining(transactionData.remainingPayment);
+      }
+    } catch (error) {
+      console.log("error :", error);
+    }
+  };
+
   useEffect(() => {
     fetchDetail();
   }, [category, id]);
+
+  useEffect(() => {
+    if (data?.kategori) {
+      fetchTransactionData();
+    }
+  }, [data]);
 
   if (loading) {
     return (
@@ -174,22 +226,38 @@ export default function DetailPendapatan() {
             Lihat Bukti Transaksi
           </a>
           <a
-            href={data.strukUrl || "#"}
-            target="_blank"
-            rel="noreferrer"
-            className="rounded bg-orange-300 hover:bg-orange-500 px-4 py-2 font-medium text-black"
-            onClick={(e) => !data.strukUrl && e.preventDefault()}
+            className="rounded bg-orange-300 hover:bg-orange-500 px-4 py-2 font-medium text-black cursor-pointer"
+            onClick={() => {
+              setShowReceiptModal(true);
+            }}
           >
             Lihat Struk Transaksi
           </a>
         </div>
 
-        {/* Footer */}
         <div className="mt-6">
           <div className="text-gray-600">Transaksi Diinputkan oleh</div>
           <div className="mt-1 font-extrabold">{data.diinputOleh || "-"}</div>
         </div>
       </div>
+
+      {showReceiptModal && (
+        <ReceiptModal
+          orderId={parentId}
+          customerName={customerName}
+          customerPhoneNumber={phone}
+          itemName={itemName}
+          quantity={quantity}
+          unit={unit}
+          itemPrice={itemPrice}
+          itemTotalPrice={itemTotalPrice}
+          itemPriceDiscount={itemPriceDiscount}
+          paymentHistory={paymentHistory}
+          remaining={remaining}
+          onClose={() => setShowReceiptModal(false)}
+          ref={receiptRef}
+        />
+      )}
     </div>
   );
 }

@@ -10,7 +10,7 @@ export default function EditStokTelur() {
   const { warehouseId, itemId, quantity, itemName, unit, description } =
     location.state || {};
 
-  const [jumlah, setJumlah] = useState(quantity || 0);
+  const [jumlah, setJumlah] = useState(quantity || "");
   const [showConfirm, setShowConfirm] = useState(false);
 
   useEffect(() => {

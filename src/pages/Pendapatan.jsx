@@ -159,8 +159,10 @@ export default function Pendapatan() {
     );
   };
 
-  const handleDetail = (category, id) => {
-    navigate(`${location.pathname}/detail-pendapatan/${category}/${id}`);
+  const handleDetail = (category, id, parentId) => {
+    navigate(
+      `${location.pathname}/detail-pendapatan/${category}/${id}/${parentId}`
+    );
   };
 
   const fetchIncomeData = async () => {
@@ -317,7 +319,7 @@ export default function Pendapatan() {
                         <button
                           className="rounded bg-green-700 hover:bg-green-900 text-white px-3 py-1.5 cursor-pointer"
                           onClick={() => {
-                            handleDetail(item.category, item.id);
+                            handleDetail(item.category, item.id, item.parentId);
                           }}
                         >
                           Lihat detail

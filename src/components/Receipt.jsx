@@ -71,7 +71,6 @@ const ReceiptModal = forwardRef(
             ref={ref}
             className="bg-white text-black w-[400px] p-4 shadow-md text-[12px] font-mono relative"
           >
-            {/* Close Button */}
             <button
               onClick={onClose}
               className="absolute top-3 right-3 text-gray-600 hover:text-black text-xl cursor-pointer"
@@ -79,7 +78,6 @@ const ReceiptModal = forwardRef(
               ✕
             </button>
 
-            {/* Header toko */}
             <div className="text-center mb-2">
               <div className="flex justify-center">
                 <img
@@ -95,7 +93,6 @@ const ReceiptModal = forwardRef(
               <hr className="border-t border-gray-300 my-2" />
             </div>
 
-            {/* Info waktu dan struk */}
             <div className="mb-2">
               <p>
                 Waktu:{" "}
@@ -109,7 +106,6 @@ const ReceiptModal = forwardRef(
               </p>
             </div>
 
-            {/* Info pelanggan */}
             <div className="mb-2">
               <p>
                 Pelanggan: <span className="float-right">{customerName}</span>
@@ -142,7 +138,6 @@ const ReceiptModal = forwardRef(
 
             <hr className="border-t border-gray-300 my-2" />
 
-            {/* Ringkasan */}
             <div className="text-[12px] mb-3">
               <p>
                 Sub Total:{" "}
@@ -199,13 +194,11 @@ const ReceiptModal = forwardRef(
 
             <hr className="border-t border-gray-300 my-3" />
 
-            {/* Footer */}
             <div className="text-center text-[10px]">
               <p>Terima kasih telah berbelanja</p>
               <p>di Anugerah Jaya Farm</p>
             </div>
           </div>
-          {/* Action Buttons */}
           <div className="mt-3 flex gap-3 justify-between">
             <button
               onClick={handleDownload}
