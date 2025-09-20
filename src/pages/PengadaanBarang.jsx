@@ -70,7 +70,7 @@ const PengadaanBarang = () => {
   const [selectedWarehouse, setSelectedWarehouse] = useState("");
 
   const [paymentStatus, setPaymentStatus] = useState("");
-  const paymentStatusOptions = ["Belum Dibayar", "Belum Lunas", "Lunas"];
+  const paymentStatusOptions = ["Belum Lunas", "Lunas"];
 
   const [daftarBarangData, setDaftarBarangData] = useState([]);
   const [isShowConfirmModal, setIsShowConfirmModal] = useState(false);
@@ -82,7 +82,6 @@ const PengadaanBarang = () => {
   );
 
   const [page, setPage] = useState(1);
-
   const [totalData, setTotaldata] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
 
@@ -206,7 +205,6 @@ const PengadaanBarang = () => {
 
   return (
     <div className="flex flex-col px-4 py-3 gap-4">
-      {/* Header */}
       <div className="flex justify-between items-center mb-2 flex-wrap gap-4">
         <h1 className="text-3xl font-bold">Pengadaan Barang</h1>
         <div className="flex gap-4">

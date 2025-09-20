@@ -367,12 +367,31 @@ export const confirmationWarehouseItemCornProcurementDraft = (payload, id) => {
   );
 };
 
-export const getWarehouseItemCornProcurements = (date) => {
+export const getWarehouseItemCornProcurements = (
+  warehouseId,
+  paymentStatus,
+  date,
+  page = 1
+) => {
+  const params = {
+    warehouseId: warehouseId,
+    date: date,
+    page: page,
+  };
+
+  if (
+    paymentStatus !== undefined &&
+    paymentStatus !== null &&
+    paymentStatus !== ""
+  ) {
+    params.paymentStatus = paymentStatus;
+  }
+
   return api.get(`/warehouses/items/corns/procurements`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-    params: { date: date },
+    params,
   });
 };
 

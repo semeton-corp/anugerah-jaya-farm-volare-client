@@ -339,7 +339,11 @@ const Presensi = () => {
           {/* Hadir / Pulang / Info */}
           <div
             onClick={
-              isPresence ? departureHandlePresence : arrivalHandlePresence
+              isGoHome
+                ? () => {}
+                : isPresence
+                ? departureHandlePresence
+                : arrivalHandlePresence
             }
             className={`text-center py-2 rounded text-lg font-semibold ${
               isGoHome

@@ -11,10 +11,14 @@ import {
 import {
   arrivalConfirmationWarehouseItemCornProcurement,
   getWarehouseItemCornProcurements,
+  getWarehouses,
 } from "../services/warehouses";
 import KonfirmasiBarangSampaiJagungModal from "../components/KonfirmasiBarangSampaiJagungModal";
 import { useSelector } from "react-redux";
 import PageNotificationsSection from "../components/PageNotificationsSection";
+import { FaMoneyBillWave } from "react-icons/fa";
+import { MdStore } from "react-icons/md";
+import { getCurrentUserWarehousePlacement } from "../services/placement";
 
 const badge = (text, variant = "neutral") => {
   const map = {
@@ -32,11 +36,24 @@ const badge = (text, variant = "neutral") => {
 };
 
 const PengadaanJagung = () => {
+  const userRole = localStorage.getItem("role");
+
   const location = useLocation();
   const navigate = useNavigate();
 
+  const [selectedSite] = useState(
+    userRole === "Owner" ? 0 : localStorage.getItem("locationId")
+  );
+
   const [daftarJagungData, setDaftarJagungData] = useState([]);
   const detailPages = ["draft-pengadaan-jagung", "detail-pengadaan-jagung"];
+
+  const [paymentStatus, setPaymentStatus] = useState("");
+  const paymentStatusOptions = ["Belum Lunas", "Lunas"];
+
+  const [page, setPage] = useState(1);
+  const [totalData, setTotaldata] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
 
   const isDetailPage = detailPages.some((segment) =>
     location.pathname.includes(segment)
@@ -48,6 +65,9 @@ const PengadaanJagung = () => {
   );
 
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
+
+  const [warehouses, setWarehouses] = useState();
+  const [selectedWarehouse, setSelectedWarehouse] = useState("");
 
   const [isShowConfirmModal, setIsShowConfirmModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -62,12 +82,19 @@ const PengadaanJagung = () => {
   const fetchJagungData = async () => {
     try {
       const date = formatDateToDDMMYYYY(selectedDate);
-      const dataResponse = await getWarehouseItemCornProcurements(date);
+      const dataResponse = await getWarehouseItemCornProcurements(
+        selectedWarehouse,
+        paymentStatus,
+        date,
+        page
+      );
       console.log("dataResponse: ", dataResponse);
       if (dataResponse.status === 200) {
         setDaftarJagungData(
           dataResponse.data.data.WarehouseItemCornProcurements
         );
+        setTotaldata(dataResponse.data.data.totalData);
+        setTotalPages(dataResponse.data.data.totalPage);
       }
     } catch (error) {
       console.error("Error fetching corn data:", error);
@@ -92,13 +119,44 @@ const PengadaanJagung = () => {
     setIsShowConfirmModal(false);
   };
 
+  const fetchWarehouseData = async () => {
+    try {
+      const warehouseResponse = await getWarehouses(selectedSite);
+      console.log("warehouseResponse: ", warehouseResponse);
+      if (warehouseResponse.status == 200) {
+        setWarehouses(warehouseResponse.data.data);
+      }
+    } catch (error) {
+      console.log("error :", error);
+    }
+  };
+
+  const fetchWarehousePlacement = async () => {
+    try {
+      const placementResponse = await getCurrentUserWarehousePlacement();
+      console.log("placementResponse: ", placementResponse);
+      if (placementResponse.status == 200) {
+        setSelectedWarehouse(placementResponse?.data?.data[0]?.warehouse?.id);
+      }
+    } catch (error) {
+      console.log("error :", error);
+    }
+  };
+
   useEffect(() => {
     fetchJagungData();
     if (location.state?.refetch) {
       fetchJagungData();
       window.history.replaceState({}, document.title);
     }
-  }, [location]);
+  }, [
+    location,
+    location,
+    selectedDate,
+    page,
+    selectedWarehouse,
+    paymentStatus,
+  ]);
 
   useEffect(() => {
     fetchJagungData();
@@ -122,6 +180,14 @@ const PengadaanJagung = () => {
     setSelectedDate(date);
   };
 
+  useEffect(() => {
+    if (userRole == "Pekerja Gudang") {
+      fetchWarehousePlacement();
+    } else {
+      fetchWarehouseData();
+    }
+  }, []);
+
   if (isDetailPage) {
     return <Outlet />;
   }
@@ -131,17 +197,43 @@ const PengadaanJagung = () => {
       {/* Header Section */}
       <div className="flex justify-between items-center mb-2 flex-wrap gap-4">
         <h1 className="text-3xl font-bold">Pengadaan Jagung</h1>
-        <div
-          className="flex items-center rounded-lg bg-orange-300 hover:bg-orange-500 cursor-pointer gap-2"
-          onClick={openDatePicker}
-        >
-          <input
-            ref={dateInputRef}
-            type="date"
-            value={selectedDate}
-            onChange={handleDateChange}
-            className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer gap-2"
-          />
+        <div className="flex gap-4">
+          <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+            <FaMoneyBillWave size={18} />
+            <select
+              value={paymentStatus}
+              onChange={(e) => setPaymentStatus(e.target.value)}
+              className="ml-2 bg-transparent text-base font-medium outline-none"
+            >
+              <option value="">Semua Status Pembayaran</option>
+              {paymentStatusOptions.map((opt) => (
+                <option key={opt} value={opt} className="text-black">
+                  {opt}
+                </option>
+              ))}
+            </select>
+          </div>
+          {(userRole === "Owner" || userRole === "Kepala Kandang") && (
+            <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+              <MdStore size={18} />
+              <select
+                value={selectedWarehouse}
+                onChange={(e) => {
+                  const warehouseId = e.target.value;
+                  console.log("warehouseId: ", warehouseId);
+                  setSelectedWarehouse(warehouseId);
+                }}
+                className="ml-2 bg-transparent text-base font-medium outline-none"
+              >
+                <option value="">Semua Gudang</option>
+                {warehouses?.map((warehouse) => (
+                  <option key={warehouse.id} value={warehouse.id}>
+                    {warehouse.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
         </div>
       </div>
 
@@ -288,18 +380,36 @@ const PengadaanJagung = () => {
             </tbody>
           </table>
         </div>
-        {/* Pagination Section */}
-        <div className="flex justify-between items-center mt-4">
-          <span className="text-sm text-gray-500">
-            Menampilkan 1-10 dari 1000 riwayat
-          </span>
-          <div className="flex gap-2">
-            <button className="px-4 py-2 rounded-md bg-green-200 text-green-700 font-medium">
-              Previous
-            </button>
-            <button className="px-4 py-2 rounded-md bg-green-700 text-white font-medium">
-              Next
-            </button>
+        <div className="flex justify-between mt-16 px-6">
+          {daftarJagungData?.length > 0 ? (
+            <p className="text-sm text-[#CCCCCC]">{`Menampilkan halaman ${page} dari ${totalPages} halaman. Total ${totalData} data riwayat`}</p>
+          ) : (
+            <p></p>
+          )}
+
+          <div className="flex gap-3">
+            <div
+              className={`rounded-[4px] py-2 px-6 ${
+                page <= 1 || totalPages <= 0
+                  ? "bg-gray-200 cursor-not-allowed"
+                  : "bg-green-100 hover:bg-green-200 cursor-pointer"
+              } flex items-center justify-center text-black text-base font-medium `}
+              onClick={() => page > 1 && totalPages > 0 && setPage(page - 1)}
+            >
+              <p>Previous</p>
+            </div>
+            <div
+              className={`rounded-[4px] py-2 px-6 ${
+                page >= totalPages || totalPages <= 0
+                  ? "bg-gray-200 cursor-not-allowed"
+                  : "bg-green-700 hover:bg-green-800 cursor-pointer"
+              } flex items-center justify-center text-white text-base font-medium `}
+              onClick={() =>
+                page < totalPages && totalPages > 0 && setPage(page + 1)
+              }
+            >
+              <p>Next</p>
+            </div>
           </div>
         </div>
       </div>
