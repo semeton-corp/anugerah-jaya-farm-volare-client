@@ -132,6 +132,7 @@ const DaftarKandang = () => {
         <table className="min-w-full table-auto border-gray-200">
           <thead className="bg-green-700 text-white">
             <tr>
+              <th className="px-4 py-2 text-left">Status</th>
               <th className="px-4 py-2 text-left">Kandang</th>
               <th className="px-4 py-2 text-left">ID Batch</th>
               <th className="px-4 py-2 text-left">Kategori</th>
@@ -145,6 +146,17 @@ const DaftarKandang = () => {
           <tbody>
             {kandangData.map((row, index) => (
               <tr key={index} className="border-t">
+                <td className="px-4 py-2">
+                  {row.batchId ? (
+                    <span className="px-3 py-1 bg-aman-box-surface-color text-aman-text-color font-semibold rounded shadow-sm">
+                      Kandang Aktif
+                    </span>
+                  ) : (
+                    <span className="px-3 py-1 bg-kritis-box-surface-color text-kritis-text-color rounded shadow-sm">
+                      Kandang Tidak Aktif
+                    </span>
+                  )}
+                </td>
                 <td className="px-4 py-2">{row.cage.name}</td>
                 <td className="px-4 py-2">{row.batchId}</td>
                 <td className="px-4 py-2">{row.cage.chickenCategory}</td>

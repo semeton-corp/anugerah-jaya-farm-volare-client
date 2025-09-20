@@ -34,7 +34,7 @@ const Gudang = () => {
 
   const notifications = useSelector((state) => state?.notifications);
   const pageNotifications = notifications.filter((item) =>
-    item.notificationContexts.includes("Barang Gudang")
+    item.notificationContexts?.includes("Barang Gudang")
   );
 
   const [warehouses, setWarehouses] = useState();

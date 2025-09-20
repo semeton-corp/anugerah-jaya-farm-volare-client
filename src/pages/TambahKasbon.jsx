@@ -50,7 +50,7 @@ export default function TambahKasbon() {
 
   const notifications = useSelector((state) => state?.notifications);
   const pageNotifications = notifications.filter((item) =>
-    item.notificationContexts.includes("Pinjaman Pegawai")
+    item.notificationContexts?.includes("Pinjaman Pegawai")
   );
 
   const [users, setUsers] = useState([]);

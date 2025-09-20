@@ -51,7 +51,7 @@ const PengadaanDoc = () => {
 
   const notifications = useSelector((state) => state?.notifications);
   const pageNotifications = notifications.filter((item) =>
-    item.notificationContexts.includes("Pengadaan Ayam")
+    item.notificationContexts?.includes("Pengadaan Ayam")
   );
 
   const [paymentStatus, setPaymentStatus] = useState("");

@@ -32,7 +32,7 @@ const OverviewStok = () => {
 
   const notifications = useSelector((state) => state?.notifications);
   const pageNotifications = notifications.filter((item) =>
-    item.notificationContexts.includes("Barang Toko")
+    item.notificationContexts?.includes("Barang Toko")
   );
 
   const [storeItems, setStoreItems] = useState([]);

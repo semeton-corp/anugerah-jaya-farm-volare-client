@@ -44,7 +44,7 @@ export default function Hutang() {
 
   const notifications = useSelector((state) => state?.notifications);
   const pageNotifications = notifications.filter((item) =>
-    item.notificationContexts.includes("Hutang")
+    item.notificationContexts?.includes("Hutang")
   );
 
   const category = "Semua";

@@ -44,7 +44,7 @@ const PengadaanJagung = () => {
 
   const notifications = useSelector((state) => state?.notifications);
   const pageNotifications = notifications.filter((item) =>
-    item.notificationContexts.includes("Pengadaan Barang Jagung")
+    item.notificationContexts?.includes("Pengadaan Barang Jagung")
   );
 
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));

@@ -24,7 +24,13 @@ const InputAyam = () => {
   const [chickenCages, setChickenCages] = useState([]);
   const [selectedChickenCage, setSelectedChickenCage] = useState("");
   const isCageEmpty =
-    selectedChickenCage?.cage && !selectedChickenCage.cage.isUsed;
+    (selectedChickenCage?.cage && !selectedChickenCage.cage.isUsed) ||
+    selectedChickenCage?.totalChicken == 0;
+  console.log("isCageEmpty: ", isCageEmpty);
+  console.log(
+    "selectedChickenCage?.totalChicken: ",
+    selectedChickenCage?.totalChicken
+  );
   const isAssignToCage = chickenCages.length > 0;
 
   const [loading, setLoading] = useState(true);
@@ -107,28 +113,18 @@ const InputAyam = () => {
   async function simpanAyamHandle() {
     setLoading(true);
 
-    if (
-      !selectedChickenCage ||
-      !totalSickChicken ||
-      !totalDeathChicken ||
-      !totalFeed
-    ) {
-      alert("Semua field utama harus diisi!");
+    if (!selectedChickenCage || !totalFeed) {
+      alert("❌Silahkan masukkan jumlah pakan dengan benar!");
       setLoading(false);
       return;
     }
 
     const payload = {
       chickenCageId: parseInt(selectedChickenCage.id),
-      // chickenCategory: selectedChikenCategory,
-      // age: parseInt(ageChiken),
-      // totalLiveChicken: parseInt(totalLiveChicken),
-      totalSickChicken: parseInt(totalSickChicken),
-      totalDeathChicken: parseInt(totalDeathChicken),
+      totalSickChicken: parseInt(totalSickChicken ?? 0),
+      totalDeathChicken: parseInt(totalDeathChicken ?? 0),
       totalFeed: parseFloat(totalFeed),
       note: note,
-      // chickenDiseases,
-      // chickenVaccines,
     };
 
     console.log("Payload ready to send: ", payload);
@@ -137,7 +133,7 @@ const InputAyam = () => {
       if (id) {
         const updateResponse = await updateChickenMonitoring(id, payload);
         if (updateResponse.status === 200) {
-          navigate(-1);
+          navigate(-1, { state: { refetch: true } });
         }
       } else {
         const response = await inputAyam(payload);
@@ -154,12 +150,15 @@ const InputAyam = () => {
         error?.response?.data?.message || error.message || "Terjadi kesalahan";
 
       if (errorMessage === "chicken monitoring already exists for today") {
-        alert("Sudah terdapat data untuk kandang yang dipilih hari ini!");
+        alert("❌Sudah terdapat data untuk kandang yang dipilih hari ini!");
       } else {
-        alert("Gagal menyimpan data: " + errorMessage);
+        alert("❌Gagal menyimpan data: " + errorMessage);
       }
 
-      console.error("Gagal menyimpan atau mengupdate data ayam:", errorMessage);
+      console.error(
+        "❌Gagal menyimpan atau mengupdate data ayam:",
+        errorMessage
+      );
     } finally {
       setLoading(false);
     }

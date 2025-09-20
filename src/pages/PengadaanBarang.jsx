@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { PiCalendarBlank } from "react-icons/pi";
 import { BiSolidEditAlt } from "react-icons/bi";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdStore } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, Outlet } from "react-router-dom";
 import { getChickenMonitoring } from "../services/chickenMonitorings";
@@ -16,6 +16,7 @@ import {
   arrivalConfirmationWarehouseItemProcurement,
   getWarehouseItemProcurements,
   getWarehouseOrderItems,
+  getWarehouses,
   takeWarehouseOrderItem,
 } from "../services/warehouses";
 import KonfirmasiBarangSampaiGudangModal from "../components/KonfirmasiBarangSampaiGudangModal";
@@ -23,6 +24,7 @@ import BatalPengadaanBarangModal from "../components/BatalPengadaanBarangModal";
 import { GoAlertFill } from "react-icons/go";
 import { useSelector } from "react-redux";
 import PageNotificationsSection from "../components/PageNotificationsSection";
+import { getCurrentUserWarehousePlacement } from "../services/placement";
 
 const toNice = (iso) =>
   new Date(iso + "T00:00:00").toLocaleDateString("id-ID", {
@@ -59,6 +61,13 @@ const PengadaanBarang = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const [selectedSite] = useState(
+    userRole === "Owner" ? 0 : localStorage.getItem("locationId")
+  );
+
+  const [warehouses, setWarehouses] = useState();
+  const [selectedWarehouse, setSelectedWarehouse] = useState();
+
   const [daftarBarangData, setDaftarBarangData] = useState([]);
   const [isShowConfirmModal, setIsShowConfirmModal] = useState(false);
   const [isShowBatalModal, setIsShowBatalModal] = useState(false);
@@ -85,12 +94,42 @@ const PengadaanBarang = () => {
   const fetchBarangData = async () => {
     try {
       const date = formatDateToDDMMYYYY(selectedDate);
-      const dataResponse = await getWarehouseItemProcurements(date, page);
+      const dataResponse = await getWarehouseItemProcurements(
+        selectedWarehouse,
+        date,
+        page
+      );
       console.log("dataResponse: ", dataResponse);
       if (dataResponse.status == 200) {
         setDaftarBarangData(dataResponse.data.data.warehouseItemProcurements);
         setTotaldata(dataResponse.data.data.totalData);
         setTotalPages(dataResponse.data.data.totalPage);
+      }
+    } catch (error) {
+      console.log("error :", error);
+    }
+  };
+
+  const fetchWarehouseData = async () => {
+    try {
+      const warehouseResponse = await getWarehouses(selectedSite);
+      console.log("warehouseResponse: ", warehouseResponse);
+      if (warehouseResponse.status == 200) {
+        setWarehouses(warehouseResponse.data.data);
+        setSelectedWarehouse(warehouseResponse.data.data[0].id);
+        setCornCapacity(warehouseResponse.data.data[0].cornCapacity);
+      }
+    } catch (error) {
+      console.log("error :", error);
+    }
+  };
+
+  const fetchWarehousePlacement = async () => {
+    try {
+      const placementResponse = await getCurrentUserWarehousePlacement();
+      console.log("placementResponse: ", placementResponse);
+      if (placementResponse.status == 200) {
+        setSelectedWarehouse(placementResponse?.data?.data[0]?.warehouse?.id);
       }
     } catch (error) {
       console.log("error :", error);
@@ -143,16 +182,22 @@ const PengadaanBarang = () => {
   };
 
   useEffect(() => {
-    fetchBarangData();
+    if (userRole == "Pekerja Gudang") {
+      fetchWarehousePlacement();
+    } else {
+      fetchWarehouseData();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (selectedWarehouse) {
+      fetchBarangData();
+    }
     if (location.state?.refetch) {
       fetchBarangData();
       window.history.replaceState({}, document.title);
     }
-  }, [location]);
-
-  useEffect(() => {
-    fetchBarangData();
-  }, [selectedDate, page]);
+  }, [location, selectedDate, page, selectedWarehouse]);
 
   if (isDetailPage) {
     return <Outlet />;
@@ -163,6 +208,30 @@ const PengadaanBarang = () => {
       {/* Header */}
       <div className="flex justify-between items-center mb-2 flex-wrap gap-4">
         <h1 className="text-3xl font-bold">Pengadaan Barang</h1>
+        {(userRole === "Owner" || userRole === "Kepala Kandang") && (
+          <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+            <MdStore size={18} />
+            <select
+              value={selectedWarehouse}
+              onChange={(e) => {
+                const warehouseId = e.target.value;
+                setSelectedWarehouse(warehouseId);
+
+                const selected = warehouses?.find((w) => w.id == warehouseId);
+                if (selected) {
+                  setCornCapacity(selected.cornCapacity);
+                }
+              }}
+              className="ml-2 bg-transparent text-base font-medium outline-none"
+            >
+              {warehouses?.map((warehouse) => (
+                <option key={warehouse.id} value={warehouse.id}>
+                  {warehouse.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
 
       <PageNotificationsSection pageNotifications={pageNotifications} />

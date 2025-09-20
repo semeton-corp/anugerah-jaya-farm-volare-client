@@ -35,7 +35,7 @@ const JualAyamAfkir = () => {
 
   const notifications = useSelector((state) => state?.notifications);
   const pageNotifications = notifications.filter((item) =>
-    item.notificationContexts.includes("Penjualan Ayam")
+    item.notificationContexts?.includes("Penjualan Ayam")
   );
 
   const detailPages = [
@@ -43,6 +43,7 @@ const JualAyamAfkir = () => {
     "daftar-pelanggan-ayam",
     "detail-penjualan-ayam",
   ];
+
   const isDetailPage = detailPages.some((segment) =>
     location.pathname.includes(segment)
   );

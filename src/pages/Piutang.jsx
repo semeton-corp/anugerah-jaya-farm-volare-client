@@ -55,7 +55,7 @@ export default function Piutang() {
 
   const notifications = useSelector((state) => state?.notifications);
   const pageNotifications = notifications.filter((item) =>
-    item.notificationContexts.includes("Piutang")
+    item.notificationContexts?.includes("Piutang")
   );
 
   const [category, setCategory] = useState("Semua");

@@ -25,7 +25,7 @@ const DetailProduksi = () => {
 
   const notifications = useSelector((state) => state?.notifications);
   const pageNotifications = notifications.filter((item) =>
-    item.notificationContexts.includes("Monitoring Telur")
+    item.notificationContexts?.includes("Monitoring Telur")
   );
 
   const [cageId, setCageId] = useState(0);

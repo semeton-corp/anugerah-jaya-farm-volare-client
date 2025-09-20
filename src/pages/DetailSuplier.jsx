@@ -27,7 +27,6 @@ const DetailSupplier = () => {
   const handleDelete = async () => {
     try {
       const deleteResponse = await deleteSupplier(id);
-      console.log("deleteResponse: ", deleteResponse);
       if (deleteResponse.status === 204) {
         setShowModal(false);
         navigate(-1, { state: { refetch: true } });
@@ -55,34 +54,37 @@ const DetailSupplier = () => {
       <h1 className="text-2xl font-bold">Detail Supplier</h1>
 
       <div className="bg-white border rounded p-4">
-        <p className="text-sm text-gray-600">Nama Supplier</p>
+        <p className="text-gray-600">Nama Supplier</p>
         <p className="font-bold">{supplierData?.name}</p>
 
-        <p className="text-sm text-gray-600 mt-4">Tipe Supplier</p>
+        <p className="text-gray-600 mt-4">Tipe Supplier</p>
         <p className="font-bold">{supplierData?.supplierType}</p>
 
-        <p className="text-sm text-gray-600 mt-4">Alamat Supplier</p>
+        <p className="text-gray-600 mt-4">Alamat Supplier</p>
         <p className="font-bold">{supplierData?.address}</p>
 
-        <p className="text-sm text-gray-600 mt-4">Nomor Telepon Supplier</p>
+        <p className="text-gray-600 mt-4">Nomor Telepon Supplier</p>
         <p className="font-bold">{supplierData?.phoneNumber}</p>
       </div>
 
       {supplierData?.supplierType == "Barang" && (
         <div className="bg-white border rounded p-4">
-          <p className="text-sm font-semibold mb-4">
-            Daftar barang yang disupply
-          </p>
-          {supplierData?.items?.map((item, index) => (
-            <div className="mb-2" key={index}>
-              <p className="text-sm text-gray-600">
-                {`Nama Barang ${index + 1}`}.
-              </p>
-              <p key={index} className="font-bold">
-                {item.name}
-              </p>
-            </div>
-          ))}
+          <p className="text font-semibold mb-4">Daftar barang yang disupply</p>
+
+          {supplierData?.items && supplierData.items.length > 0 ? (
+            supplierData.items.map((item, index) => (
+              <div className="mb-2" key={index}>
+                <p className="text text-gray-600">{`Nama Barang ${
+                  index + 1
+                }.`}</p>
+                <p className="font-bold">{item.name}</p>
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-500 italic">
+              Belum ada barang yang disupply
+            </p>
+          )}
         </div>
       )}
 
