@@ -26,7 +26,7 @@ const DetailToko = () => {
   const [roles, setRoles] = useState([]);
   const [selectedRole, setSelectedRole] = useState("");
 
-  const detailPages = ["profil"];
+  const detailPages = ["profile"];
 
   const isDetailPage = detailPages.some((segment) =>
     location.pathname.includes(segment)
@@ -63,18 +63,20 @@ const DetailToko = () => {
       console.log("error :", error);
     }
   };
+
   const handleViewProfile = (empId) => {
     navigate(`${location.pathname}/profile/${empId}`);
   };
 
   const handleDeleteEmployee = async (userId) => {
     try {
-      const deleteEmployeeResponse = await deleteStorePlacementById(userId);
+      const deleteEmployeeResponse = await deleteStorePlacementById(id, userId);
       if (deleteEmployeeResponse.status === 204) {
         alert(`✅Pegawai Berhasil dihapus`);
         fetchTokoDetail();
       }
     } catch (error) {
+      alert("❌Terjadi kesalahan dalam menghapus data pegawai");
       console.log("error :", error);
     }
   };
@@ -108,6 +110,15 @@ const DetailToko = () => {
         fetchTokoDetail();
       }
     } catch (error) {
+      const msg = error.response.data.message;
+
+      console.log("error.response.data.message: ", error.response.data.message);
+      if (msg && msg.includes("user has been exits in store")) {
+        const storeName = msg.split("in store")[1].trim();
+        alert(`❌ Pegawai ini sudah terdaftar di ${storeName}`);
+        console.log(storeName);
+      }
+      alert(`❌Pegawai ini sudah terdaftar di ${storeName}`);
       console.log("error :", error);
     }
   };
@@ -122,9 +133,9 @@ const DetailToko = () => {
         selectedRole,
         locationId
       );
-      //   console.log("employeeResponse: ", employeeResponse.data.data.users);
+      console.log("employeeOptionsResponse: ", employeeOptionsResponse);
       if (employeeOptionsResponse.status) {
-        setEmployeeOptions(employeeOptionsResponse.data.data.users);
+        setEmployeeOptions(employeeOptionsResponse.data.data);
       }
     } catch (error) {
       console.log("error :", error);

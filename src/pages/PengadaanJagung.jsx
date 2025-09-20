@@ -81,11 +81,9 @@ const PengadaanJagung = () => {
 
   const fetchJagungData = async () => {
     try {
-      const date = formatDateToDDMMYYYY(selectedDate);
       const dataResponse = await getWarehouseItemCornProcurements(
         selectedWarehouse,
         paymentStatus,
-        date,
         page
       );
       console.log("dataResponse: ", dataResponse);

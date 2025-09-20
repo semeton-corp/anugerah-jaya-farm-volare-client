@@ -31,18 +31,14 @@ const EditPic = () => {
     const telurRole = roles.find((item) => item.name == "Pekerja Telur");
     const telurRoleId = telurRole.id;
 
-    const payload = [
-      form.picKandang && {
-        userId: form.picKandang,
-        roleId: kandangRoleId,
-        cageId: parseInt(cageId, 10),
-      },
-      form.picTelur && {
-        userId: form.picTelur,
-        roleId: telurRoleId,
-        cageId: parseInt(cageId, 10),
-      },
-    ].filter(Boolean);
+    const payload = {
+      cageId: parseInt(cageId, 10),
+      users: [
+        form.picKandang && { userId: form.picKandang, roleId: kandangRoleId },
+        form.picTelur && { userId: form.picTelur, roleId: telurRoleId },
+      ].filter(Boolean),
+    };
+
     try {
       const placementResponse = await createCagePlacement(payload);
       if (placementResponse.status == 200) {

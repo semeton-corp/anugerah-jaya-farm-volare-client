@@ -681,6 +681,24 @@ const AppRouter = createBrowserRouter([
                   {
                     path: "detail-gudang/:id/:locationId",
                     element: <DetailGudang />,
+                    children: [
+                      {
+                        path: "profile/:id",
+                        element: <Profile mode="StaffDetail" />,
+                        children: [
+                          {
+                            path: "detail-absensi",
+                            element: <DetailAbsensi mode="StaffDetail" />,
+                          },
+                          {
+                            path: "detail-penyelesaian-pekerjaan/:userId",
+                            element: (
+                              <DetailPenyelesaianPekerjaan mode="StaffDetail" />
+                            ),
+                          },
+                        ],
+                      },
+                    ],
                   },
                 ],
               },

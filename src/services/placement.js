@@ -18,8 +18,8 @@ export const getCurrentUserStorePlacement = () => {
   });
 };
 
-export const deleteStorePlacementById = (payload) => {
-  return api.delete(`/placements/stores/${payload}`, {
+export const deleteStorePlacementById = (storeId, userId) => {
+  return api.delete(`/placements/stores/${storeId}/users/${userId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -35,8 +35,8 @@ export const createWarehousePlacement = (payload) => {
   });
 };
 
-export const deleteWarehousePlacementById = (payload) => {
-  return api.delete(`/placements/warehouses/${payload}`, {
+export const deleteWarehousePlacementById = (warehouseId, userId) => {
+  return api.delete(`/placements/warehouses/${warehouseId}/users/${userId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

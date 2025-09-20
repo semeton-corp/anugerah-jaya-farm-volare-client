@@ -370,12 +370,10 @@ export const confirmationWarehouseItemCornProcurementDraft = (payload, id) => {
 export const getWarehouseItemCornProcurements = (
   warehouseId,
   paymentStatus,
-  date,
   page = 1
 ) => {
   const params = {
     warehouseId: warehouseId,
-    date: date,
     page: page,
   };
 

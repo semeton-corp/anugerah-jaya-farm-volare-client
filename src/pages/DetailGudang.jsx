@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import { deleteWarehouse, getWarehousesDetail } from "../services/warehouses";
 import TambahPekerjaModal from "../components/TambahPekerjaModal";
 import { getRoles } from "../services/roles";
@@ -28,6 +28,12 @@ const DetailGudang = () => {
 
   const [employees, setEmployees] = useState([]);
 
+  const detailPages = ["profile"];
+
+  const isDetailPage = detailPages.some((segment) =>
+    location.pathname.includes(segment)
+  );
+
   const handleEditGudang = () => {
     const newPath = location.pathname.replace("detail-gudang", "tambah-gudang");
     navigate(newPath);
@@ -44,13 +50,16 @@ const DetailGudang = () => {
     }
   };
 
-  const handleViewProfile = (id) => {
-    alert(`View profile of employee ID: ${id}`);
+  const handleViewProfile = (empId) => {
+    navigate(`${location.pathname}/profile/${empId}`);
   };
 
   const handleDeleteEmployee = async (userId) => {
     try {
-      const deleteEmployeeResponse = await deleteWarehousePlacementById(userId);
+      const deleteEmployeeResponse = await deleteWarehousePlacementById(
+        id,
+        userId
+      );
       // console.log("deleteEmployeeResponse: ", deleteEmployeeResponse);
       if (deleteEmployeeResponse.status === 204) {
         alert(`✅Pegawai Berhasil dihapus`);
@@ -132,6 +141,10 @@ const DetailGudang = () => {
     fetchEmployees();
   }, [selectedRole]);
 
+  if (isDetailPage) {
+    return <Outlet />;
+  }
+
   return (
     <div className="flex flex-col gap-6 p-4">
       {/* Detail Gudang */}
@@ -195,7 +208,7 @@ const DetailGudang = () => {
                   <td className="px-4 py-2">{emp.phoneNumber}</td>
                   <td className="px-4 py-2 space-x-2">
                     <button
-                      className="bg-green-700 hover:bg-green-900 cursor-pointer text-white px-3 py-1 rounded"
+                      className="bg-green-700 hover:bg-green-900 text-white px-3 py-1 rounded"
                       onClick={() => handleViewProfile(emp.id)}
                     >
                       Lihat Profil
