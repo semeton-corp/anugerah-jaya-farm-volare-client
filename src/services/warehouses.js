@@ -225,12 +225,30 @@ export const deleteWarehouseItemProcurementDraft = (id) => {
   });
 };
 
-export const getWarehouseItemProcurements = (warehouseId, date, page = 1) => {
+export const getWarehouseItemProcurements = (
+  warehouseId,
+  paymentStatus,
+  date,
+  page = 1
+) => {
+  const params = {
+    warehouseId: warehouseId,
+    date: date,
+    page: page,
+  };
+
+  if (
+    paymentStatus !== undefined &&
+    paymentStatus !== null &&
+    paymentStatus !== ""
+  ) {
+    params.paymentStatus = paymentStatus;
+  }
   return api.get("/warehouses/items/procurements", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-    params: { warehouseId: warehouseId, date: date, page: page },
+    params,
   });
 };
 

@@ -25,6 +25,7 @@ import { GoAlertFill } from "react-icons/go";
 import { useSelector } from "react-redux";
 import PageNotificationsSection from "../components/PageNotificationsSection";
 import { getCurrentUserWarehousePlacement } from "../services/placement";
+import { FaMoneyBillWave } from "react-icons/fa6";
 
 const toNice = (iso) =>
   new Date(iso + "T00:00:00").toLocaleDateString("id-ID", {
@@ -66,7 +67,10 @@ const PengadaanBarang = () => {
   );
 
   const [warehouses, setWarehouses] = useState();
-  const [selectedWarehouse, setSelectedWarehouse] = useState();
+  const [selectedWarehouse, setSelectedWarehouse] = useState("");
+
+  const [paymentStatus, setPaymentStatus] = useState("");
+  const paymentStatusOptions = ["Belum Dibayar", "Belum Lunas", "Lunas"];
 
   const [daftarBarangData, setDaftarBarangData] = useState([]);
   const [isShowConfirmModal, setIsShowConfirmModal] = useState(false);
@@ -96,6 +100,7 @@ const PengadaanBarang = () => {
       const date = formatDateToDDMMYYYY(selectedDate);
       const dataResponse = await getWarehouseItemProcurements(
         selectedWarehouse,
+        paymentStatus,
         date,
         page
       );
@@ -116,8 +121,6 @@ const PengadaanBarang = () => {
       console.log("warehouseResponse: ", warehouseResponse);
       if (warehouseResponse.status == 200) {
         setWarehouses(warehouseResponse.data.data);
-        setSelectedWarehouse(warehouseResponse.data.data[0].id);
-        setCornCapacity(warehouseResponse.data.data[0].cornCapacity);
       }
     } catch (error) {
       console.log("error :", error);
@@ -190,14 +193,12 @@ const PengadaanBarang = () => {
   }, []);
 
   useEffect(() => {
-    if (selectedWarehouse) {
-      fetchBarangData();
-    }
+    fetchBarangData();
     if (location.state?.refetch) {
       fetchBarangData();
       window.history.replaceState({}, document.title);
     }
-  }, [location, selectedDate, page, selectedWarehouse]);
+  }, [location, selectedDate, page, selectedWarehouse, paymentStatus]);
 
   if (isDetailPage) {
     return <Outlet />;
@@ -208,30 +209,44 @@ const PengadaanBarang = () => {
       {/* Header */}
       <div className="flex justify-between items-center mb-2 flex-wrap gap-4">
         <h1 className="text-3xl font-bold">Pengadaan Barang</h1>
-        {(userRole === "Owner" || userRole === "Kepala Kandang") && (
+        <div className="flex gap-4">
           <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
-            <MdStore size={18} />
+            <FaMoneyBillWave size={18} />
             <select
-              value={selectedWarehouse}
-              onChange={(e) => {
-                const warehouseId = e.target.value;
-                setSelectedWarehouse(warehouseId);
-
-                const selected = warehouses?.find((w) => w.id == warehouseId);
-                if (selected) {
-                  setCornCapacity(selected.cornCapacity);
-                }
-              }}
+              value={paymentStatus}
+              onChange={(e) => setPaymentStatus(e.target.value)}
               className="ml-2 bg-transparent text-base font-medium outline-none"
             >
-              {warehouses?.map((warehouse) => (
-                <option key={warehouse.id} value={warehouse.id}>
-                  {warehouse.name}
+              <option value="">Semua Status Pembayaran</option>
+              {paymentStatusOptions.map((opt) => (
+                <option key={opt} value={opt} className="text-black">
+                  {opt}
                 </option>
               ))}
             </select>
           </div>
-        )}
+          {(userRole === "Owner" || userRole === "Kepala Kandang") && (
+            <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+              <MdStore size={18} />
+              <select
+                value={selectedWarehouse}
+                onChange={(e) => {
+                  const warehouseId = e.target.value;
+                  console.log("warehouseId: ", warehouseId);
+                  setSelectedWarehouse(warehouseId);
+                }}
+                className="ml-2 bg-transparent text-base font-medium outline-none"
+              >
+                <option value="">Semua Gudang</option>
+                {warehouses?.map((warehouse) => (
+                  <option key={warehouse.id} value={warehouse.id}>
+                    {warehouse.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+        </div>
       </div>
 
       <PageNotificationsSection pageNotifications={pageNotifications} />
