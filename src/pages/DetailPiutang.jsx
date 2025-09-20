@@ -94,7 +94,8 @@ const TambahPembayaranModal = ({
 
         <label className="block mb-1 font-medium">Nominal Pembayaran</label>
         <input
-          type="number"
+          type="text"
+          inputMode="numeric"
           className="w-full border rounded p-2 mb-3"
           placeholder="Masukkan nominal"
           value={formatThousand(nominal)}
@@ -114,13 +115,7 @@ const TambahPembayaranModal = ({
         />
 
         <label className="block mb-1 font-medium">Bukti Pembayaran (URL)</label>
-        <input
-          type="text"
-          className="w-full border rounded p-2 mb-4"
-          placeholder="https://contoh.com/bukti"
-          value={paymentProof}
-          onChange={(e) => setPaymentProof(e.target.value)}
-        />
+        <input type="file" className="w-full border rounded p-2 mb-4" />
 
         <div className="flex justify-end gap-2">
           <button

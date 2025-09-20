@@ -278,7 +278,7 @@ export default function TambahPengeluaran() {
             type="text"
             value={form.name}
             onChange={onChange("name")}
-            placeholder="Nama Tugas Tambahan"
+            placeholder="Masukkan nama traksaksi..."
             className="w-full rounded border border-gray-300 bg-gray-100 px-3 py-2 outline-none"
           />
         </div>
@@ -290,7 +290,7 @@ export default function TambahPengeluaran() {
               type="text"
               value={form.receiverName}
               onChange={onChange("receiverName")}
-              placeholder="Masukkan tanggal pelaksanaan tugas"
+              placeholder="Masukkan nama penerima..."
               className="w-full rounded border border-gray-300 bg-gray-100 px-3 py-2 outline-none"
             />
           </div>
@@ -302,7 +302,7 @@ export default function TambahPengeluaran() {
               type="number"
               value={form.receiverPhoneNumber}
               onChange={onChange("receiverPhoneNumber")}
-              placeholder="Masukkan waktu pelaksanaan tugas"
+              placeholder="Masukkan nomor telepon penerima..."
               className="w-full rounded border border-gray-300 bg-gray-100 px-3 py-2 outline-none"
             />
           </div>
@@ -349,22 +349,9 @@ export default function TambahPengeluaran() {
             Bukti Pembayaran
           </label>
           <input
-            ref={fileRef}
             type="file"
-            className="hidden"
-            onChange={onFile}
-            accept="image/*,application/pdf"
+            className="w-full rounded border border-gray-300 bg-gray-100 px-3 py-2 outline-none"
           />
-          <button
-            type="button"
-            onClick={onChooseFile}
-            className="inline-flex items-center gap-2 rounded border border-gray-300 bg-gray-100 px-3 py-2"
-          >
-            <span className="inline-flex h-6 w-6 items-center justify-center rounded border border-gray-300">
-              <FiUpload size={14} />
-            </span>
-            {form.paymentProof ? form.paymentProof : "Unggah bukti pembayaran"}
-          </button>
         </div>
 
         <div className="mb-6">
@@ -375,7 +362,7 @@ export default function TambahPengeluaran() {
             rows={3}
             value={form.description}
             onChange={onChange("description")}
-            placeholder="Tuliskan deskripsi pekerjaan tambahan"
+            placeholder="Tuliskan deskripsi pengeluaran..."
             className="w-full rounded border border-gray-300 bg-gray-100 px-3 py-2 outline-none"
           />
         </div>

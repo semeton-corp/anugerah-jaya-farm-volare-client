@@ -54,7 +54,7 @@ export default function DetailPengeluaran() {
 
   const createdAt = data?.createdAt || data?.date || null;
   const dateDisplay = formatDateID(createdAt);
-  const timeDisplay = data?.time || formatTime(createdAt); // prefer explicit time if provided
+  const timeDisplay = data?.time || formatTime(createdAt);
 
   const handleOpenProof = () => {
     const url =
@@ -145,7 +145,7 @@ export default function DetailPengeluaran() {
 
             <Row
               label="Transaksi Diinputkan oleh"
-              value={data?.inputBy  || data?.operator}
+              value={data?.inputBy || data?.operator}
             />
           </div>
 

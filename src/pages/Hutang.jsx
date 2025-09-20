@@ -15,6 +15,7 @@ import { FaExclamationTriangle } from "react-icons/fa";
 import { getDebtOverview } from "../services/cashflow";
 import { useSelector } from "react-redux";
 import PageNotificationsSection from "../components/PageNotificationsSection";
+import { formatThousand } from "../utils/moneyFormat";
 
 const formatRupiah = (n = 0) =>
   "Rp " + n || (0).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -268,10 +269,10 @@ export default function Hutang() {
                     <td className="py-3 px-4">{r.placeName}</td>
                     <td className="py-3 px-4">{r.name}</td>
                     <td className="py-3 px-4 font-medium">
-                      {formatRupiah(r.nominal)}
+                      {formatRupiah(formatThousand(r.nominal))}
                     </td>
                     <td className="py-3 px-4 font-medium">
-                      {formatRupiah(r.remainingPayment)}
+                      {formatRupiah(formatThousand(r.remainingPayment))}
                     </td>
                     <td className="py-3 px-4">{statusPill(r.paymentStatus)}</td>
                     <td className="py-3 px-4">

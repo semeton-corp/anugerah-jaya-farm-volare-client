@@ -204,9 +204,7 @@ const OverviewKelolaPegawai = () => {
         </div>
       </div>
 
-      {/* Telur  ok, retak, pecah, reject*/}
       <div className="flex md:grid-cols-2 gap-4 justify-between">
-        {/* telur OK */}
         <div className="p-4 w-full rounded-md bg-green-100">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold">Pegawai Aktif</h2>
@@ -217,7 +215,6 @@ const OverviewKelolaPegawai = () => {
               <BsPersonVcardFill size={24} color="white" />
             </div>
             <div className="flex items-center">
-              {/* popuasl */}
               <p className="text-3xl font-semibold me-3">
                 {`${userPerformanceSummary?.totalUser ?? "-"} Orang`}
               </p>
@@ -225,20 +222,17 @@ const OverviewKelolaPegawai = () => {
           </div>
         </div>
 
-        {/* penjualan telur */}
         <div className="p-4 w-full rounded-md bg-green-100">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold">KPI All</h2>
           </div>
 
           <div className="flex flex-wrap gap-4">
-            {/* item butir */}
             <div className="flex flex-wrap gap-4">
               <div className="flex flex-wrap gap-4 items-center">
                 <div className="p-2 rounded-xl bg-green-700">
                   <FaPercentage size={24} color="white" />
                 </div>
-                {/* popuasl */}
                 <div className="flex items-center">
                   <p className="text-3xl font-semibold pe-2">
                     {userPerformanceSummary?.kpiAll != null
@@ -261,13 +255,11 @@ const OverviewKelolaPegawai = () => {
           </div>
 
           <div className="flex flex-wrap gap-4">
-            {/* item butir */}
             <div className="flex flex-wrap gap-4">
               <div className="flex flex-wrap gap-4 items-center">
                 <div className="p-2 rounded-xl bg-green-700">
                   <FaPercentage size={24} color="white" />
                 </div>
-                {/* popuasl */}
                 <div className="flex items-center">
                   <p className="text-3xl font-semibold pe-2">
                     {userPerformanceSummary?.kpiUser != null
@@ -290,13 +282,11 @@ const OverviewKelolaPegawai = () => {
           </div>
 
           <div className="flex flex-wrap gap-4">
-            {/* item butir */}
             <div className="flex flex-wrap gap-4">
               <div className="flex flex-wrap gap-4 items-center">
                 <div className="p-2 rounded-xl bg-green-700">
                   <FaPercentage size={24} color="white" />
                 </div>
-                {/* popuasl */}
                 <div className="flex items-center">
                   <p className="text-3xl font-semibold pe-2">
                     {userPerformanceSummary?.kpiChicken != null
@@ -314,7 +304,6 @@ const OverviewKelolaPegawai = () => {
         </div>
       </div>
 
-      {/* chart, incomes, and history section */}
       <div className="flex flex-col lg:flex-row gap-6">
         <div className="w-5/5 bg-white rounded-lg py-6 ps-6 pe-9 border border-gray-300">
           <h2 className="text-lg font-semibold mb-4 ">Statistik KPI Pegawai</h2>

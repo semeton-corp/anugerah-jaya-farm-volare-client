@@ -60,10 +60,10 @@ export default function DetailPendapatan() {
   const data = useMemo(() => {
     if (!raw) return null;
     return {
-      tanggal: raw.date, // "03 Aug 2025"
-      waktu: raw.time, // "00:00" or "10:30"
+      tanggal: raw.date,
+      waktu: raw.time,
       kategori: mapIncomeCategory(raw.category),
-      lokasi: raw.placeName, // e.g. "Toko A"
+      lokasi: raw.placeName,
       namaPelanggan: raw.customerName,
       telpPelanggan: raw.customerPhoneNumber,
       namaBarang: raw.itemName,
@@ -72,13 +72,9 @@ export default function DetailPendapatan() {
       totalTransaksi: Number(raw.totalPrice || 0),
       nominalPemasukan: Number(raw.nominal || 0),
       metodePembayaran: raw.paymentMethod,
-      diinputOleh:
-        raw.inputBy ??
-        raw["inputBy "] ?? // just in case backend sends trailing-space key
-        raw.operator ??
-        "-",
+      diinputOleh: raw.inputBy ?? raw["inputBy "] ?? raw.operator ?? "-",
       buktiUrl: raw.paymentProof || "",
-      strukUrl: raw.receiptUrl || "", // backend may not provide this
+      strukUrl: raw.receiptUrl || "",
     };
   }, [raw]);
 
@@ -99,7 +95,6 @@ export default function DetailPendapatan() {
 
   useEffect(() => {
     fetchDetail();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category, id]);
 
   if (loading) {

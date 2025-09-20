@@ -18,6 +18,7 @@ import {
 import { BiSolidEditAlt } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import { EditPembayaranModal } from "../components/EditPembayaranModal";
+import { formatThousand, onlyDigits } from "../utils/moneyFormat";
 
 const rupiah = (n) => `Rp ${Number(n || 0).toLocaleString("id-ID")}`;
 
@@ -95,11 +96,15 @@ const TambahPembayaranModal = ({
 
         <label className="block mb-1 font-medium">Nominal Pembayaran</label>
         <input
-          type="number"
+          type="text"
+          inputMode="numeric"
           className="w-full border rounded p-2 mb-3"
           placeholder="Masukkan nominal"
-          value={nominal}
-          onChange={(e) => setNominal(e.target.value)}
+          value={formatThousand(nominal)}
+          onChange={(e) => {
+            const raw = onlyDigits(e.target.value);
+            setNominal(raw);
+          }}
           min={0}
         />
 
@@ -112,13 +117,7 @@ const TambahPembayaranModal = ({
         />
 
         <label className="block mb-1 font-medium">Bukti Pembayaran (URL)</label>
-        <input
-          type="text"
-          className="w-full border rounded p-2 mb-4"
-          placeholder="https://contoh.com/bukti"
-          value={paymentProof}
-          onChange={(e) => setPaymentProof(e.target.value)}
-        />
+        <input type="file" className="w-full border rounded p-2 mb-4" />
 
         <div className="flex justify-end gap-2">
           <button
@@ -394,9 +393,10 @@ export default function DetailHutang() {
       alert("✅ Pembayaran berhasil ditambahkan");
       setShowPaymentModal(false);
       fetchDetail();
-    } catch (e) {
-      console.error(e);
-      alert(e?.message || "Gagal menambahkan pembayaran.");
+    } catch (error) {
+      if (error.response.data.message == "nominal is to high") {
+        alert("❌Nominal pembayaran melebihi sisa pembayaran!");
+      }
     }
   };
 
@@ -455,6 +455,7 @@ export default function DetailHutang() {
               {data?.receiverName ||
                 data?.supplier?.name ||
                 data?.partnerName ||
+                data?.name ||
                 "-"}
             </div>
           </div>
