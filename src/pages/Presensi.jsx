@@ -15,7 +15,7 @@ const Presensi = () => {
   const [isPresence, setIsPresence] = useState(false);
   const [isGoHome, setIsGoHome] = useState(false);
   const [attendanceData, setAttendanceData] = useState([]);
-  const [note, setNote] = useState([]);
+  const [note, setNote] = useState("");
 
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState("");
@@ -239,7 +239,7 @@ const Presensi = () => {
           if (res.status == 200) {
             getTodayPresence();
             alert(
-              "Berhasil melakukan pengajuan sakit, mohon tunggu persetujuan"
+              "✅Berhasil melakukan pengajuan sakit, mohon tunggu persetujuan"
             );
             setShowModal(false);
           }

@@ -315,20 +315,31 @@ const OverviewKelolaPegawai = () => {
       </div>
 
       {/* chart, incomes, and history section */}
-      <div className="flex flex-col lg:flex-row h-120 gap-6">
+      <div className="flex flex-col lg:flex-row gap-6">
         <div className="w-5/5 bg-white rounded-lg py-6 ps-6 pe-9 border border-gray-300">
           <h2 className="text-lg font-semibold mb-4 ">Statistik KPI Pegawai</h2>
           <ResponsiveContainer width="100%" height={380}>
             <LineChart data={performaKpiChart}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="key" />
-              <Tooltip />
+              <YAxis
+                label={{
+                  value: "Nilai KPI",
+                  angle: -90,
+                  position: "insideLeft",
+                }}
+              />
+              <Tooltip
+                formatter={(value) => value.toFixed(2)}
+                labelFormatter={(label) => `Minggu: ${label}`}
+              />
               <Line
                 type="monotone"
                 dataKey="kpiUserPerformance"
                 stroke="#ef4444"
                 strokeWidth={2}
                 dot={{ r: 4 }}
+                name="Kinerja Pegawai"
               />
             </LineChart>
           </ResponsiveContainer>

@@ -4,6 +4,7 @@ import {
   getLocationPresenceSummaries,
   getUserPresencePending,
 } from "../services/presence";
+import { getTodayDateInBahasa } from "../utils/dateFormat";
 
 const classNames = (...arr) => arr.filter(Boolean).join(" ");
 
@@ -237,7 +238,7 @@ export default function PresensiKelolaPegawai() {
     <div className="mx-auto w-full p-6">
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-2xl font-extrabold tracking-tight">Presensi</h1>
-        <div className="text-right text-gray-500">20 Maret 2025</div>
+        <div className="text-right text-gray-500">{getTodayDateInBahasa()}</div>
       </div>
 
       <div className="overflow-hidden rounded border shadow-sm">
