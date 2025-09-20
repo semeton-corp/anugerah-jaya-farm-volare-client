@@ -30,6 +30,8 @@ export default function InputDraftPengadaanBarang() {
   const [item, setItem] = useState(null);
 
   const [supplierOptions, setSupplierOptions] = useState([]);
+  const [filteredSupplierOptions, setFilteredSupplierOptions] = useState([]);
+
   const [supplier, setSupplier] = useState(null);
 
   const [days, setDays] = useState("");
@@ -129,8 +131,7 @@ export default function InputDraftPengadaanBarang() {
           allowedCategories.includes(item.category)
         );
         setItemOptions(filteredItem);
-        console.log("filteredItem: ", filteredItem);
-        console.log("itemsData: ", itemsData);
+        setItem(filteredItem[0]);
       }
     } catch (error) {
       console.log("error :", error);
@@ -193,6 +194,11 @@ export default function InputDraftPengadaanBarang() {
 
   useEffect(() => {
     setDailySpending(item?.dailySpending);
+
+    const filteredSupplier = supplierOptions.filter((supplier) =>
+      supplier.itemIds.includes(item.id)
+    );
+    setFilteredSupplierOptions(filteredSupplier);
   }, [item]);
 
   return (
@@ -264,13 +270,20 @@ export default function InputDraftPengadaanBarang() {
             }
           >
             <option value="" disabled>
-              Pilih nama supplier
+              Pilih barang...
             </option>
-            {supplierOptions.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.name}
+
+            {filteredSupplierOptions.length > 0 ? (
+              filteredSupplierOptions.map((b) => (
+                <option key={b.id} value={b.id}>
+                  {b.name}
+                </option>
+              ))
+            ) : (
+              <option value="" disabled>
+                Tidak ada supplier tersedia untuk barang yang dipilih
               </option>
-            ))}
+            )}
           </select>
         </div>
         <div className="flex items-center mb-4">
