@@ -428,7 +428,6 @@ export default function PerbandinganPakan() {
                   className="w-full px-3 py-2 rounded-md border border-gray-300"
                   value={priceDedak}
                   onChange={(e) => setPriceDedak(Number(e.target.value))}
-                  min={0}
                 />
                 <span className="ml-2 text-gray-600">/ Kg</span>
               </div>

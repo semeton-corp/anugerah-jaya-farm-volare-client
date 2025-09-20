@@ -44,7 +44,6 @@ export default function EditStokTelur() {
       <h1 className="text-2xl font-bold mb-4">Edit Stok Telur</h1>
 
       <div className="border rounded p-8">
-        {/* Keterangan Stok */}
         {description && (
           <>
             <label className="block text-sm font-medium mb-1">
@@ -64,13 +63,11 @@ export default function EditStokTelur() {
         )}
         <div className="mb-4"></div>
 
-        {/* Nama Barang */}
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1">Nama Barang</label>
           <p className="font-bold">{itemName}</p>
         </div>
 
-        {/* Jumlah Barang */}
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1">
             Jumlah Barang

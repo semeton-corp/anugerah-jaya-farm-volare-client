@@ -179,27 +179,21 @@ export default function DetailPendapatan() {
           <Field label="Tanggal" value={formatTanggalID(data.tanggal)} />
           <Field label="Waktu" value={formatTime(data.waktu)} />
 
-          {/* Baris 2 */}
           <Field label="Kategori" value={data.kategori} />
           <div />
 
-          {/* Baris 3 */}
           <Field label="Lokasi Transaksi" value={data.lokasi} />
           <div />
 
-          {/* Baris 4 */}
           <Field label="Nama Pelanggan" value={data.namaPelanggan} />
           <Field label="Nomor Telepon Pelanggan" value={data.telpPelanggan} />
 
-          {/* Baris 5 */}
           <Field label="Nama barang" value={data.namaBarang} />
           <Field label="Jumlah Barang" value={data.jumlahBarang} />
 
-          {/* Baris 6 */}
           <Field label="Tipe Transaksi" value={data.tipeTransaksi} />
           <div />
 
-          {/* Baris 7 */}
           <Field
             label="Total Transaksi"
             value={formatRupiah(data.totalTransaksi)}
