@@ -185,8 +185,7 @@ export default function PerbandinganPakan() {
       console.log("warehouseResponse: ", warehouseResponse);
       if (warehouseResponse.status == 200) {
         setWarehouses(warehouseResponse.data.data);
-        setSelectedWarehouse(warehouseResponse.data.data[0].id);
-        setCornCapacity(warehouseResponse.data.data[0].cornCapacity);
+        setSelectedWarehouse(warehouseResponse.data.data[0]);
       }
     } catch (error) {
       console.log("error :", error);
@@ -364,8 +363,7 @@ export default function PerbandinganPakan() {
                     type="number"
                     className="w-full px-3 py-2 rounded-md border border-gray-300"
                     value={priceJagung}
-                    onChange={(e) => setPriceJagung(Number(e.target.value))}
-                    min={0}
+                    onChange={(e) => setPriceJagung(e.target.value)}
                   />
                   <span className="ml-2 text-gray-600">/ Kg</span>
                 </div>
@@ -384,7 +382,7 @@ export default function PerbandinganPakan() {
                   min={0}
                   className="w-full px-3 py-2 rounded-md border border-gray-300"
                   value={daysAdukan}
-                  onChange={(e) => setDaysAdukan(Number(e.target.value))}
+                  onChange={(e) => setDaysAdukan(e.target.value)}
                 />
                 <span className="absolute right-8 top-1/2 -translate-y-1/2 text-gray-500">
                   Hari
@@ -427,7 +425,7 @@ export default function PerbandinganPakan() {
                   type="number"
                   className="w-full px-3 py-2 rounded-md border border-gray-300"
                   value={priceDedak}
-                  onChange={(e) => setPriceDedak(Number(e.target.value))}
+                  onChange={(e) => setPriceDedak(e.target.value)}
                 />
                 <span className="ml-2 text-gray-600">/ Kg</span>
               </div>
@@ -457,8 +455,7 @@ export default function PerbandinganPakan() {
                   type="number"
                   className="w-full px-3 py-2 rounded-md border border-gray-300"
                   value={priceKonsentrat}
-                  onChange={(e) => setpriceKonsentrat(Number(e.target.value))}
-                  min={0}
+                  onChange={(e) => setpriceKonsentrat(e.target.value)}
                 />
                 <span className="ml-2 text-gray-600">/ Kg</span>
               </div>
@@ -489,8 +486,7 @@ export default function PerbandinganPakan() {
                   type="number"
                   className="w-full px-3 py-2 rounded-md border border-gray-300"
                   value={pricePremix}
-                  onChange={(e) => setPricePremix(Number(e.target.value))}
-                  min={0}
+                  onChange={(e) => setPricePremix(e.target.value)}
                 />
                 <span className="ml-2 text-gray-600">/ Kg</span>
               </div>
@@ -549,7 +545,7 @@ export default function PerbandinganPakan() {
                   min={0}
                   className="w-full px-3 py-2 rounded-md border border-gray-300"
                   value={daysJadi}
-                  onChange={(e) => setDaysJadi(Number(e.target.value))}
+                  onChange={(e) => setDaysJadi(e.target.value)}
                 />
                 <span className="absolute right-8 top-1/2 -translate-y-1/2 text-gray-500">
                   Hari
@@ -584,7 +580,7 @@ export default function PerbandinganPakan() {
                   value={hargaPakanJadi}
                   onChange={(e) => {
                     const raw = e.target.value.replace(/\D/g, "");
-                    setHargaPakanJadi(Number(raw || 0));
+                    setHargaPakanJadi(raw);
                   }}
                 />
                 <span className="absolute right-10 top-1/2 -translate-y-1/2 text-gray-500">

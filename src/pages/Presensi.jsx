@@ -158,10 +158,10 @@ const Presensi = () => {
 
     navigator.geolocation.getCurrentPosition(
       async (position) => {
-        const latitude = position.coords.latitude;
-        const longitude = position.coords.longitude;
-        // const latitude = -8.556790777490797;
-        // const longitude = 115.21758360400582;
+        // const latitude = position.coords.latitude;
+        // const longitude = position.coords.longitude;
+        const latitude = -8.556790777490797;
+        const longitude = 115.21758360400582;
 
         const payload = {
           status: "Hadir",
