@@ -9,6 +9,7 @@ import {
 import { getItems } from "../services/item";
 import { getSuppliers } from "../services/supplier";
 import { useNavigate, useParams } from "react-router-dom";
+import { formatThousand, onlyDigits } from "../utils/moneyFormat";
 
 const fmtIDR = (n) =>
   n == null || n === "" ? "-" : `Rp ${Number(n || 0).toLocaleString("id-ID")}`;
@@ -270,7 +271,7 @@ export default function InputDraftPengadaanBarang() {
             }
           >
             <option value="" disabled>
-              Pilih barang...
+              Pilih suppplier...
             </option>
 
             {filteredSupplierOptions.length > 0 ? (
@@ -313,15 +314,15 @@ export default function InputDraftPengadaanBarang() {
             </label>
             <div className="flex items-center gap-2">
               <input
-                type="number"
-                min={0}
+                type="text"
+                inputMode="numeric"
                 className="w-full border rounded px-3 py-2 bg-gray-100"
                 placeholder="Masukkan untuk kebutuhan berapa hari akan dipesan"
-                value={days}
+                value={formatThousand(days)}
                 onChange={(e) => {
-                  const v = e.target.value;
-                  if (v === "") return setDays("");
-                  const num = Math.max(0, Number(v));
+                  const raw = onlyDigits(e.target.value);
+                  if (raw === "") return setDays("");
+                  const num = Math.max(0, Number(raw));
                   setDays(num);
                 }}
               />
@@ -347,14 +348,14 @@ export default function InputDraftPengadaanBarang() {
             </label>
             <div className="flex items-center gap-2">
               <input
-                type="number"
-                min={0}
+                type="text"
+                inputMode="numeric"
                 className="w-full border rounded px-3 py-2 bg-gray-100"
-                value={pricePerUnit}
+                value={formatThousand(pricePerUnit)}
                 onChange={(e) => {
-                  const v = e.target.value;
-                  if (v === "") return setPricePerUnit("");
-                  setPricePerUnit(Math.max(0, Number(v)));
+                  const raw = onlyDigits(e.target.value);
+                  if (raw === "") return setPricePerUnit("");
+                  setPricePerUnit(Math.max(0, Number(raw)));
                 }}
                 placeholder="Rp 0"
               />

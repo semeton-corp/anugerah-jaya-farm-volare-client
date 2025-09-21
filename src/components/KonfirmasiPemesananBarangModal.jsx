@@ -38,36 +38,37 @@ const toDDMMYYYY = (iso) => {
 
 const KonfirmasiPemesananBarangModal = ({
   selectedItem = {},
+  supplierOptions,
   onClose,
   onConfirm,
 }) => {
-  // Map data dari selectedItem
   const itemObj = selectedItem?.item ?? {};
   const supplierObj = selectedItem?.supplier ?? {};
 
-  // Header/info atas
-  const [orderDate] = useState(todayNice());
+  const orderDate = selectedItem?.inputDate;
   const [itemName] = useState(itemObj?.name ?? "—");
   const unit = itemObj?.unit || "Kg";
   const [supplier, setSupplier] = useState(supplierObj?.name || "");
 
-  const [deadlinePaymentDate, setDeadlinePaymentDate] = useState(
-    new Date().toISOString().slice(0, 10) // default today's date
+  const filteredSupplier = supplierOptions?.filter((supplier) =>
+    supplier.itemIds.includes(selectedItem.item.id)
   );
 
-  // Nilai editable utama
+  const [deadlinePaymentDate, setDeadlinePaymentDate] = useState(
+    new Date().toISOString().slice(0, 10)
+  );
+
   const [dailyNeed, setDailyNeed] = useState(
     num(selectedItem?.dailySpending, 1)
   );
   const [daysNeed, setDaysNeed] = useState(num(selectedItem?.daysNeed, 1));
   const [pricePerUnit, setPricePerUnit] = useState(num(selectedItem?.price, 0));
 
-  // Toggle edit ikon pensil
   const [editDaily, setEditDaily] = useState(false);
   const [editDays, setEditDays] = useState(false);
   const [editPrice, setEditPrice] = useState(false);
+  const [editSupplier, setEditSupplier] = useState(false);
 
-  // Hitungan
   const qty = useMemo(
     () => Math.max(num(dailyNeed) * num(daysNeed), 0),
     [dailyNeed, daysNeed]
@@ -77,13 +78,11 @@ const KonfirmasiPemesananBarangModal = ({
     [qty, pricePerUnit]
   );
 
-  // Tanggal lain
   const [etaDate, setEtaDate] = useState(new Date().toISOString().slice(0, 10));
   const [expiredAt, setExpiredAt] = useState(
     new Date().toISOString().slice(0, 10)
   );
 
-  // Pembayaran
   const [paymentType, setPaymentType] = useState("Penuh");
   const [payments, setPayments] = useState([]);
   const totalPaid = useMemo(
@@ -128,6 +127,11 @@ const KonfirmasiPemesananBarangModal = ({
     setPayments((prev) => prev.filter((_, i) => i !== idx));
 
   const handleConfirm = () => {
+    if (!supplier?.id) {
+      alert("❌ Silahkan memilih supplier terlebih dahulu pada tombol edit!");
+      return;
+    }
+
     if (paymentType === "Penuh" && totalPaid != orderTotal) {
       alert(
         "❌ Total pembayaran harus sama dengan total harga untuk pembayaran penuh."
@@ -140,15 +144,10 @@ const KonfirmasiPemesananBarangModal = ({
       return;
     }
 
-    if (!selectedItem?.supplier?.id) {
-      alert("❌ Silahkan memilih supplier terlebih dahulu pada tombol edit!");
-      return;
-    }
-
     const payload = {
       warehouseId: selectedItem?.warehouse?.id ?? null,
       itemId: selectedItem?.item?.id ?? null,
-      supplierId: selectedItem?.supplier?.id ?? null,
+      supplierId: supplier?.id ?? null,
       dailySpending: parseInt(dailyNeed),
       daysNeed: parseInt(daysNeed),
       price: String(pricePerUnit),
@@ -186,8 +185,55 @@ const KonfirmasiPemesananBarangModal = ({
             <p className="font-semibold">{itemName}</p>
           </div>
           <div>
-            <p className="text-sm text-gray-600">Supplier</p>
-            <p className="font-semibold">{supplier}</p>
+            <div className="flex">
+              <p className="text-sm text-gray-600">Supplier</p>
+              <button
+                className="p-1 rounded border hover:bg-gray-100"
+                onClick={() => setEditSupplier((v) => !v)}
+                title="Edit"
+              >
+                <BiSolidEditAlt size={16} />
+              </button>
+            </div>
+            {editSupplier ? (
+              <>
+                <select
+                  className="w-full border rounded px-3 py-2 bg-gray-100"
+                  value={supplier?.id || ""}
+                  onChange={(e) =>
+                    setSupplier(
+                      filteredSupplier.find(
+                        (s) => s.id === Number(e.target.value)
+                      )
+                    )
+                  }
+                >
+                  <option value="" disabled>
+                    Pilih supplier...
+                  </option>
+
+                  {filteredSupplier?.length > 0 ? (
+                    filteredSupplier?.map((b) => (
+                      <option key={b.id} value={b.id}>
+                        {b.name}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="" disabled>
+                      Tidak ada supplier tersedia untuk barang yang dipilih
+                    </option>
+                  )}
+                </select>
+              </>
+            ) : (
+              <p
+                className={` ${
+                  supplier ? "font-semibold" : "italic text-black-5"
+                }`}
+              >
+                {supplier ? supplier : "supplier belum dipilih"}
+              </p>
+            )}
           </div>
         </div>
 

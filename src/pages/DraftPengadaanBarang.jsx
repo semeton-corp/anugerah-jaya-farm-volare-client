@@ -11,6 +11,7 @@ import {
 import { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import KonfirmasiPemesananBarangModal from "../components/KonfirmasiPemesananBarangModal";
+import { getSuppliers } from "../services/supplier";
 
 const toRupiah = (n) =>
   `Rp ${Number(n || 0).toLocaleString("id-ID", { maximumFractionDigits: 0 })}`;
@@ -24,6 +25,7 @@ const DraftPengadaanBarang = () => {
   const [showBatalModal, setShowBatalModal] = useState(false);
   const [showOrderModal, setShowOrderModal] = useState(false);
   const [kandangOptions, setKandangOptions] = useState(false);
+  const [supplierOptions, setSupplierOptions] = useState([]);
 
   const [selectedItem, setSelectedItem] = useState(null);
 
@@ -43,9 +45,20 @@ const DraftPengadaanBarang = () => {
   const fetchDraftData = async () => {
     try {
       const draftResponse = await getWarehouseItemProcurementDrafts();
-      // console.log("draftResponse: ", draftResponse);
       if (draftResponse.status == 200) {
         setDraftData(draftResponse.data.data);
+      }
+    } catch (error) {
+      console.log("error :", error);
+    }
+  };
+
+  const fetchSupplier = async () => {
+    try {
+      const supplierResponse = await getSuppliers("Barang");
+      console.log("supplierResponse: ", supplierResponse);
+      if (supplierResponse.status == 200) {
+        setSupplierOptions(supplierResponse.data.data);
       }
     } catch (error) {
       console.log("error :", error);
@@ -99,6 +112,7 @@ const DraftPengadaanBarang = () => {
 
   useEffect(() => {
     fetchDraftData();
+    fetchSupplier();
     if (location?.state?.refetch) {
       fetchDraftData();
       window.history.replaceState({}, document.title);
@@ -242,11 +256,10 @@ const DraftPengadaanBarang = () => {
           selectedItem={selectedItem}
           onClose={() => setShowOrderModal(false)}
           onConfirm={(payload) => {
-            handleConfirmProcuremnet(payload);
             console.log("ORDER PAYLOAD →", payload);
-            // setShowOrderModal(false);
-            // TODO: call API here
+            handleConfirmProcuremnet(payload);
           }}
+          supplierOptions={supplierOptions}
         />
       )}
     </div>
