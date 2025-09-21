@@ -76,12 +76,19 @@ export const getUserPresencePending = ({
   placeId,
   presenceStatus,
   submissionPresence = "Menunggu",
+  locationType,
 }) => {
   return api.get(`/presences/pending`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-    params: { roleId, placeId, presenceStatus, submissionPresence },
+    params: {
+      roleId,
+      placeId,
+      presenceStatus,
+      submissionPresence,
+      locationType,
+    },
   });
 };
 

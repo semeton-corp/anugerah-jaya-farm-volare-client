@@ -112,7 +112,7 @@ export default function PresensiKelolaPegawai() {
     const row = rows[rowIndex];
     const roleId = row.roleId ?? row.role?.id;
     const placeId = row.placeId ?? row.locationId ?? row.place?.id;
-
+    const placeType = row.placeType;
     const presenceStatus = type === "sakit" ? "Sakit" : "Izin";
 
     setModalLoading(true);
@@ -122,6 +122,7 @@ export default function PresensiKelolaPegawai() {
         placeId,
         presenceStatus,
         submissionPresence: "Menunggu",
+        locationType: placeType,
       });
 
       console.log("resp: ", resp);
@@ -448,8 +449,9 @@ function ApprovalModal({
                 </label>
                 {!!r.buktiUrl && (
                   <PillButton
-                    onClick={() => window.open(r.buktiUrl, "_blank")}
-                    variant="ghost"
+                    onClick={() =>
+                      alert("❌Fitur bukti izin sedang dikembangkan!")
+                    }
                   >
                     Bukti Izin
                   </PillButton>
