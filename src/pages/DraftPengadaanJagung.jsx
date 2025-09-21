@@ -13,6 +13,7 @@ import {
   getWarehouseItemCornProcurementDrafts,
 } from "../services/warehouses";
 import KonfirmasiPemesananJagungModal from "../components/KonfirmasiPemesananJagungModal";
+import { getSuppliers } from "../services/supplier";
 
 const DraftPengadaanJagung = () => {
   const location = useLocation();
@@ -22,9 +23,10 @@ const DraftPengadaanJagung = () => {
   const [openModal, setOpenModal] = useState(false);
   const [showBatalModal, setShowBatalModal] = useState(false);
 
+  const [supplierOptions, setSupplierOptions] = useState([]);
+
   const [selectedDraft, setSelectedDraft] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
-
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
 
   const detailPages = ["input-draft-pengadaan-jagung"];
@@ -50,6 +52,18 @@ const DraftPengadaanJagung = () => {
       }
     } catch (error) {
       console.error("Error fetching draft data:", error);
+    }
+  };
+
+  const fetchSupplier = async () => {
+    try {
+      const supplierResponse = await getSuppliers("Barang");
+      console.log("supplierResponse: ", supplierResponse);
+      if (supplierResponse.status == 200) {
+        setSupplierOptions(supplierResponse.data.data);
+      }
+    } catch (error) {
+      console.log("error :", error);
     }
   };
 
@@ -119,6 +133,8 @@ const DraftPengadaanJagung = () => {
 
   useEffect(() => {
     fetchDraftsData();
+    fetchSupplier();
+
     if (location.state?.refetch) {
       fetchDraftsData();
       window.history.replaceState({}, document.title);
@@ -252,6 +268,7 @@ const DraftPengadaanJagung = () => {
         data={selectedDraft}
         onClose={handleCloseModal}
         onConfirm={handleConfirmOrder}
+        supplierOptions={supplierOptions}
       />
     </div>
   );

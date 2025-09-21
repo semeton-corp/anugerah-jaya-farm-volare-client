@@ -48,7 +48,7 @@ const KonfirmasiPemesananBarangModal = ({
   const orderDate = selectedItem?.inputDate;
   const [itemName] = useState(itemObj?.name ?? "—");
   const unit = itemObj?.unit || "Kg";
-  const [supplier, setSupplier] = useState(supplierObj?.name || "");
+  const [supplier, setSupplier] = useState(supplierObj || "");
 
   const filteredSupplier = supplierOptions?.filter((supplier) =>
     supplier.itemIds.includes(selectedItem.item.id)
@@ -228,10 +228,10 @@ const KonfirmasiPemesananBarangModal = ({
             ) : (
               <p
                 className={` ${
-                  supplier ? "font-semibold" : "italic text-black-5"
+                  supplier.name ? "font-semibold" : "italic text-black-5"
                 }`}
               >
-                {supplier ? supplier : "supplier belum dipilih"}
+                {supplier.name ? supplier.name : "supplier belum dipilih"}
               </p>
             )}
           </div>

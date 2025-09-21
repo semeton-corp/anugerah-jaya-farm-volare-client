@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { BiSolidEditAlt } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
+import { formatThousand, onlyDigits } from "../utils/moneyFormat";
 
 const rupiah = (n) => `Rp ${Number(n || 0).toLocaleString("id-ID")}`;
 const toInputDate = (d) => {
@@ -21,16 +22,8 @@ const KonfirmasiPemesananJagungModal = ({
   open = true,
   onClose,
   onConfirm,
-  data = {
-    id: null,
-    quantity: 50,
-    pricePerKg: 5000,
-    totalPrice: 250000,
-    supplier: { id: 1, name: "Super Jagung" },
-    maxOrderQuantity: 100,
-    moistureLevel: 16.5,
-    ovenCondition: "Hidup",
-  },
+  data,
+  supplierOptions,
 }) => {
   const unitPriceFromDraft = useMemo(() => {
     const q = Number(data?.quantity || 0);
@@ -45,10 +38,20 @@ const KonfirmasiPemesananJagungModal = ({
     return 0;
   }, [data]);
 
+  const filteredSupplier = supplierOptions?.filter((supplier) =>
+    supplier.itemIds.includes(data?.item?.id)
+  );
+  const [supplier, setSupplier] = useState(data?.supplier);
+
+  console.log("data.supplier: ", data?.supplier);
+  console.log("filteredSupplier: ", filteredSupplier);
+
   const [qty, setQty] = useState(Number(data?.quantity || 0));
   const [pricePerKg, setPricePerKg] = useState(Number(unitPriceFromDraft || 0));
   const [editQty, setEditQty] = useState(false);
   const [editPrice, setEditPrice] = useState(false);
+  const [editSupplier, setEditSupplier] = useState(false);
+
   const maxQty = Number(data?.maxOrderQuantity || 0);
 
   const [expiredAt, setExpiredAt] = useState(
@@ -95,6 +98,10 @@ const KonfirmasiPemesananJagungModal = ({
     setPaymentProof("https://example.com");
   }, [open, data, unitPriceFromDraft]);
 
+  useEffect(() => {
+    setSupplier(data?.supplier);
+  }, [data]);
+
   const remainingAfterIdx = (idx) => {
     const paidToIdx = payments
       .slice(0, idx + 1)
@@ -135,19 +142,19 @@ const KonfirmasiPemesananJagungModal = ({
       return;
     }
 
-    if (!data?.supplier?.id) {
+    if (!supplier?.id) {
       alert("❌ Silahkan memilih supplier terlebih dahulu pada tombol edit!");
       return;
     }
     const payload = {
       warehouseId: data?.warehouse?.id,
-      supplierId: data?.supplier?.id ?? null,
-      ovenCondition: data?.oveCondition,
-      cornWaterLevel: data?.cornWaterLevel,
-      isOvenCanOperateInNearDay: data?.isOvenCanOperateInNearDay,
+      supplierId: supplier?.id ?? null,
+      ovenCondition: data?.ovenCondition,
+      cornWaterLevel: data?.cornWaterLevel ?? 16,
+      isOvenCanOperateInNearDay: data?.isOvenCanOperateInNearDay ?? true,
       quantity: Number(qty || 0),
       price: data?.price,
-      discount: data?.discount,
+      discount: data?.discount ?? 0,
       paymentType,
       expiredAt: toInputDate(expiredAt),
       deadlinePaymentDate:
@@ -188,48 +195,90 @@ const KonfirmasiPemesananJagungModal = ({
               })}
             </p>
 
-            <p className="text-sm text-gray-600 mt-3">Supplier</p>
-            <p className="font-semibold">{data?.supplier?.name || "-"}</p>
+            <div className="flex mt-4">
+              <p className="text-sm text-gray-600">Supplier</p>
+              <button
+                className="p-1 rounded border hover:bg-gray-100"
+                onClick={() => setEditSupplier((v) => !v)}
+                title="Edit"
+              >
+                <BiSolidEditAlt size={16} />
+              </button>
+            </div>
+            {editSupplier ? (
+              <>
+                <select
+                  className="w-full border rounded px-3 py-2 bg-gray-100"
+                  value={supplier?.id || ""}
+                  onChange={(e) =>
+                    setSupplier(
+                      filteredSupplier.find(
+                        (s) => s.id === Number(e.target.value)
+                      )
+                    )
+                  }
+                >
+                  <option value="" disabled>
+                    Pilih supplier...
+                  </option>
+
+                  {filteredSupplier?.length > 0 ? (
+                    filteredSupplier?.map((b) => (
+                      <option key={b.id} value={b.id}>
+                        {b.name}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="" disabled>
+                      Tidak ada supplier tersedia untuk barang yang dipilih
+                    </option>
+                  )}
+                </select>
+              </>
+            ) : (
+              <p
+                className={` ${
+                  supplier?.name ? "font-semibold" : "italic text-black-5"
+                }`}
+              >
+                {supplier?.name ? supplier.name : "supplier belum dipilih"}
+              </p>
+            )}
           </div>
 
-          <div>
+          <div className="mt-">
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-sm text-gray-600">Kadar Air Jagung</p>
                 <p className="font-semibold">
                   {data?.cornWaterLevel != null
                     ? `${data.cornWaterLevel}%`
-                    : "> 16 %"}
+                    : " - %"}
                 </p>
               </div>
-              <div>
+              {/* <div>
                 <p className="text-sm text-gray-600">Kondisi Oven</p>
                 <p className="font-semibold">{data?.ovenCondition || "-"}</p>
-              </div>
-              <div>
+              </div> */}
+              {/* <div>
                 <p className="text-sm text-gray-600">Jumlah Maksimum Pesan</p>
                 <p className="font-semibold">{maxQty ? `${maxQty} Kg` : "-"}</p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Harga Total (auto)</p>
-                <p className="font-semibold">{rupiah(totalPrice)}</p>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
 
-        {/* Qty & Price editable */}
         <div className="grid grid-cols-2 gap-6 mb-4">
           <div>
             <div className="flex items-center gap-2">
               <p className="text-sm text-gray-600">Jumlah Pemesanan</p>
-              <button
+              {/* <button
                 className="p-1 rounded border hover:bg-gray-100"
                 onClick={() => setEditQty((v) => !v)}
                 title="Edit Jumlah"
               >
                 <BiSolidEditAlt size={16} />
-              </button>
+              </button> */}
             </div>
             {editQty ? (
               <div className="flex items-center gap-2 mt-1">
@@ -251,13 +300,13 @@ const KonfirmasiPemesananJagungModal = ({
           <div>
             <div className="flex items-center gap-2 ">
               <p className="text-sm text-gray-600">Harga Beli / Kg</p>
-              <button
+              {/* <button
                 className="p-1 rounded border hover:bg-gray-100"
                 onClick={() => setEditPrice((v) => !v)}
                 title="Edit Harga"
               >
                 <BiSolidEditAlt size={16} />
-              </button>
+              </button> */}
             </div>
             {editPrice ? (
               <input
@@ -270,6 +319,10 @@ const KonfirmasiPemesananJagungModal = ({
               <p className="font-bold mt-1">{rupiah(pricePerKg)} / Kg</p>
             )}
           </div>
+        </div>
+        <div className="mb-3">
+          <p className="text-sm text-gray-600">Harga Total (auto)</p>
+          <p className="font-semibold text-xl">{rupiah(totalPrice)}</p>
         </div>
 
         {/* Tipe Pembayaran */}
@@ -318,7 +371,7 @@ const KonfirmasiPemesananJagungModal = ({
             <p className="font-semibold text-lg">Pembayaran</p>
             <button
               onClick={() => setShowPaymentModal(true)}
-              className="bg-yellow-400 hover:bg-yellow-500 px-4 py-2 rounded text-black cursor-pointer"
+              className="bg-orange-300 hover:bg-orange-500 px-4 py-2 rounded text-black cursor-pointer"
             >
               Pilih Pembayaran
             </button>
@@ -427,11 +480,15 @@ const KonfirmasiPemesananJagungModal = ({
 
             <label className="block mb-1 font-medium">Nominal Pembayaran</label>
             <input
-              type="number"
+              type="text"
+              inputMode="numeric"
               className="w-full border rounded p-2 mb-3"
               placeholder="Masukkan nominal"
-              value={nominal}
-              onChange={(e) => setNominal(e.target.value)}
+              value={formatThousand(nominal)}
+              onChange={(e) => {
+                const raw = onlyDigits(e.target.value);
+                setNominal(raw);
+              }}
             />
 
             <label className="text-sm text-gray-600">Metode Pembayaran</label>
