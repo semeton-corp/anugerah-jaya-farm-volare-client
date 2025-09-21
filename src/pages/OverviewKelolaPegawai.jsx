@@ -42,16 +42,6 @@ import { useEffect } from "react";
 import MonthYearSelector from "../components/MonthYearSelector";
 import { getLocations } from "../services/location";
 
-const kinerjaData = [
-  { day: "Minggu", value: 44 },
-  { day: "Senin", value: 52 },
-  { day: "Selasa", value: 30 },
-  { day: "Rabu", value: 48 },
-  { day: "Kamis", value: 52 },
-  { day: "Jumat", value: 39 },
-  { day: "Sabtu", value: 52 },
-];
-
 const MONTHS_ID = [
   "Januari",
   "Februari",
@@ -67,52 +57,6 @@ const MONTHS_ID = [
   "Desember",
 ];
 
-const kpiData = [
-  { date: "29 Mar", kpi: 40 },
-  { date: "30 Mar", kpi: 25 },
-  { date: "31 Mar", kpi: 50 },
-  { date: "01 Apr", kpi: 35 },
-  { date: "02 Apr", kpi: 25 },
-  { date: "03 Apr", kpi: 40 },
-  { date: "04 Apr", kpi: 65 },
-];
-
-const pegawaiHariIni = [
-  {
-    pegawai: {
-      nama: "Budi Santoso",
-      email: "budi.s@company.com",
-    },
-    jabatan: "Kepala Kandang",
-    status: "Hadir",
-    jamMasuk: "09.00",
-    jamPulang: "-",
-    jumlahLembur: "-",
-  },
-  {
-    pegawai: {
-      nama: "Gede Indra",
-      email: "Indra@company.com",
-    },
-    jabatan: "Pegawai Gudang",
-    status: "Hadir",
-    jamMasuk: "08.45",
-    jamPulang: "18.00",
-    jumlahLembur: "2 jam",
-  },
-  {
-    pegawai: {
-      nama: "Siti Rahayu",
-      email: "siti@company.com",
-    },
-    jabatan: "Pekerja Kandang",
-    status: "Hadir",
-    jamMasuk: "08.30",
-    jamPulang: "17.40",
-    jumlahLembur: "-",
-  },
-];
-
 const OverviewKelolaPegawai = () => {
   const userRole = localStorage.getItem("role");
   const userName = localStorage.getItem("userName");
@@ -121,6 +65,11 @@ const OverviewKelolaPegawai = () => {
 
   const [userPerformanceSummary, setUserPerformanceSummary] = useState([]);
   const [performaKpiChart, setPerformaKpiChart] = useState([]);
+  const sortedPerformaKpiChart = [...performaKpiChart].sort((a, b) => {
+    const numA = parseInt(a.key.replace("Minggu ", ""), 10);
+    const numB = parseInt(b.key.replace("Minggu ", ""), 10);
+    return numA - numB;
+  });
 
   const [siteOptions, setSiteOptions] = useState([]);
   const [selectedSite, setSelectedSite] = useState(
@@ -308,7 +257,7 @@ const OverviewKelolaPegawai = () => {
         <div className="w-5/5 bg-white rounded-lg py-6 ps-6 pe-9 border border-gray-300">
           <h2 className="text-lg font-semibold mb-4 ">Statistik KPI Pegawai</h2>
           <ResponsiveContainer width="100%" height={380}>
-            <LineChart data={performaKpiChart}>
+            <LineChart data={sortedPerformaKpiChart}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="key" />
               <YAxis
