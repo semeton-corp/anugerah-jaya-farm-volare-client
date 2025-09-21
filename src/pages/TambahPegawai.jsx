@@ -305,7 +305,7 @@ const TambahPegawai = () => {
           setSelectedSalaryInterval={setSelectedSalaryInterval}
         />
       )}
-      <button
+      {/* <button
         onClick={() => {
           const payload = {
             email: email,
@@ -327,7 +327,7 @@ const TambahPegawai = () => {
         className="bg-green-700"
       >
         CHECK
-      </button>
+      </button> */}
       {showPopup && (
         <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
           <div className="bg-white rounded-lg p-8 max-w-md w-full relative shadow-lg">

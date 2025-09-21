@@ -63,6 +63,21 @@ export const getStoreOverview = (
   });
 };
 
+export const getStoreCashflows = (month, year, category, page, storeId) => {
+  return api.get(`/stores/cashflows`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    params: {
+      month: month,
+      year: year,
+      category: category,
+      page: page,
+      storeId: storeId,
+    },
+  });
+};
+
 export const getListStoreSale = (date, paymentStatus, page, storeId) => {
   return api.get("/stores/sales", {
     headers: {

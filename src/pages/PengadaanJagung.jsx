@@ -89,7 +89,7 @@ const PengadaanJagung = () => {
       console.log("dataResponse: ", dataResponse);
       if (dataResponse.status === 200) {
         setDaftarJagungData(
-          dataResponse.data.data.WarehouseItemCornProcurements
+          dataResponse.data.data.warehouseItemCornProcurements
         );
         setTotaldata(dataResponse.data.data.totalData);
         setTotalPages(dataResponse.data.data.totalPage);
@@ -264,7 +264,7 @@ const PengadaanJagung = () => {
               </tr>
             </thead>
             <tbody>
-              {daftarJagungData.map((item, idx) => {
+              {daftarJagungData?.map((item, idx) => {
                 const paidDate = parseToDate(
                   item.paidDate ||
                     item.paymentPaidDate ||
@@ -365,7 +365,7 @@ const PengadaanJagung = () => {
                 );
               })}
 
-              {daftarJagungData.length === 0 && (
+              {daftarJagungData?.length === 0 && (
                 <tr>
                   <td
                     colSpan={8}
