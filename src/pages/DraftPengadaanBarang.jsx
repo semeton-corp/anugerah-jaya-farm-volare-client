@@ -48,6 +48,7 @@ const DraftPengadaanBarang = () => {
       if (draftResponse.status == 200) {
         setDraftData(draftResponse.data.data);
       }
+      console.log("draftResponse: ", draftResponse);
     } catch (error) {
       console.log("error :", error);
     }

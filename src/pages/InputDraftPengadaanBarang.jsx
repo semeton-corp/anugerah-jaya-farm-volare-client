@@ -298,13 +298,29 @@ export default function InputDraftPengadaanBarang() {
           </div>
         </div>
 
-        <div>
-          <p className="text-sm text-gray-600">Kebutuhan per-hari</p>
-          <p className="font-semibold">
-            {dailySpending
-              ? `${dailySpending.toLocaleString("id-ID")} ${item?.unit || "-"}`
-              : "-"}
-          </p>
+        <div className="flex gap-8">
+          <div>
+            <p className="text-sm text-gray-600">Kebutuhan per-hari</p>
+            <p className="font-semibold">
+              {dailySpending
+                ? `${dailySpending.toLocaleString("id-ID")} ${
+                    item?.unit || "-"
+                  }`
+                : "-"}
+            </p>
+          </div>
+          <div>
+            <p className="text-sm text-gray-600">
+              Rekomendasi minimum jumlah pembelian
+            </p>
+            <p className="font-semibold">
+              {dailySpending
+                ? `${(dailySpending * 3).toLocaleString("id-ID")} ${
+                    item?.unit || "-"
+                  }`
+                : "-"}
+            </p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
