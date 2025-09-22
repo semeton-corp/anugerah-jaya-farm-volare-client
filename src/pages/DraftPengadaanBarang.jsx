@@ -12,15 +12,26 @@ import { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import KonfirmasiPemesananBarangModal from "../components/KonfirmasiPemesananBarangModal";
 import { getSuppliers } from "../services/supplier";
+import { MdStore } from "react-icons/md";
+import { getCurrentUserWarehousePlacement } from "../services/placement";
 
 const toRupiah = (n) =>
   `Rp ${Number(n || 0).toLocaleString("id-ID", { maximumFractionDigits: 0 })}`;
 
 const DraftPengadaanBarang = () => {
+  const userRole = localStorage.getItem("role");
+
   const navigate = useNavigate();
   const location = useLocation();
 
   const [draftData, setDraftData] = useState([]);
+
+  const [selectedSite] = useState(
+    userRole === "Owner" ? 0 : localStorage.getItem("locationId")
+  );
+
+  const [warehouses, setWarehouses] = useState();
+  const [selectedWarehouse, setSelectedWarehouse] = useState();
 
   const [showBatalModal, setShowBatalModal] = useState(false);
   const [showOrderModal, setShowOrderModal] = useState(false);
@@ -44,7 +55,9 @@ const DraftPengadaanBarang = () => {
 
   const fetchDraftData = async () => {
     try {
-      const draftResponse = await getWarehouseItemProcurementDrafts();
+      const draftResponse = await getWarehouseItemProcurementDrafts(
+        selectedWarehouse
+      );
       if (draftResponse.status == 200) {
         setDraftData(draftResponse.data.data);
       }
@@ -60,6 +73,32 @@ const DraftPengadaanBarang = () => {
       console.log("supplierResponse: ", supplierResponse);
       if (supplierResponse.status == 200) {
         setSupplierOptions(supplierResponse.data.data);
+      }
+    } catch (error) {
+      console.log("error :", error);
+    }
+  };
+
+  const fetchWarehouseData = async () => {
+    try {
+      const warehouseResponse = await getWarehouses(selectedSite);
+      console.log("warehouseResponse: ", warehouseResponse);
+      if (warehouseResponse.status == 200) {
+        setWarehouses(warehouseResponse.data.data);
+        setSelectedWarehouse(warehouseResponse.data.data[0].id);
+        setCornCapacity(warehouseResponse.data.data[0].cornCapacity);
+      }
+    } catch (error) {
+      console.log("error :", error);
+    }
+  };
+
+  const fetchWarehousePlacement = async () => {
+    try {
+      const placementResponse = await getCurrentUserWarehousePlacement();
+      console.log("placementResponse: ", placementResponse);
+      if (placementResponse.status == 200) {
+        setSelectedWarehouse(placementResponse?.data?.data[0]?.warehouse?.id);
       }
     } catch (error) {
       console.log("error :", error);
@@ -112,13 +151,21 @@ const DraftPengadaanBarang = () => {
   };
 
   useEffect(() => {
-    fetchDraftData();
+    if (userRole == "Pekerja Gudang") {
+      fetchWarehousePlacement();
+    } else {
+      fetchWarehouseData();
+    }
     fetchSupplier();
+  }, []);
+
+  useEffect(() => {
+    fetchDraftData();
     if (location?.state?.refetch) {
       fetchDraftData();
       window.history.replaceState({}, document.title);
     }
-  }, [location]);
+  }, [selectedWarehouse, location]);
 
   if (isDetailPage) {
     return <Outlet />;
@@ -126,8 +173,32 @@ const DraftPengadaanBarang = () => {
 
   return (
     <div className="p-6">
-      <div className="mb-6">
+      <div className="mb-6 flex justify-between">
         <h2 className="text-3xl font-bold">Draft Pengadaan Barang</h2>
+        {(userRole === "Owner" || userRole === "Kepala Kandang") && (
+          <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+            <MdStore size={18} />
+            <select
+              value={selectedWarehouse}
+              onChange={(e) => {
+                const warehouseId = e.target.value;
+                setSelectedWarehouse(warehouseId);
+
+                const selected = warehouses?.find((w) => w.id == warehouseId);
+                if (selected) {
+                  setCornCapacity(selected.cornCapacity);
+                }
+              }}
+              className="ml-2 bg-transparent text-base font-medium outline-none"
+            >
+              {warehouses?.map((warehouse) => (
+                <option key={warehouse.id} value={warehouse.id}>
+                  {warehouse.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
       <div className="bg-white p-4 rounded border shadow">
         <div className="flex justify-end items-center mb-3 gap-4">

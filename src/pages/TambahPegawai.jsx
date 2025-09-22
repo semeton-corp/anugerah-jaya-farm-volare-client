@@ -51,7 +51,7 @@ const TambahPegawai = () => {
   const [address, setAddress] = useState("");
   const [salary, setSalary] = useState("");
   const [username, setUsername] = useState("");
-  const [photoProfile, setPhotoProfile] = useState("https://example.com");
+  const [photoProfile, setPhotoProfile] = useState("");
 
   const [showPopup, setShowPopup] = useState(false);
   const [password, setPassword] = useState("");

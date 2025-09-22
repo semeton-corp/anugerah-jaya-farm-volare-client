@@ -173,11 +173,12 @@ export const createWarehouseOrderItem = (payload) => {
   });
 };
 
-export const getWarehouseItemProcurementDrafts = () => {
+export const getWarehouseItemProcurementDrafts = (warehouseId) => {
   return api.get("/warehouses/items/procurements/drafts", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
+    params: { warehouseId: warehouseId },
   });
 };
 
