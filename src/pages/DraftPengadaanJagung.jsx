@@ -11,13 +11,25 @@ import {
   confirmationWarehouseItemCornProcurementDraft,
   deleteWarehouseItemCornProcurementDraft,
   getWarehouseItemCornProcurementDrafts,
+  getWarehouses,
 } from "../services/warehouses";
 import KonfirmasiPemesananJagungModal from "../components/KonfirmasiPemesananJagungModal";
 import { getSuppliers } from "../services/supplier";
+import { getCurrentUserWarehousePlacement } from "../services/placement";
+import { MdStore } from "react-icons/md";
 
 const DraftPengadaanJagung = () => {
+  const userRole = localStorage.getItem("role");
+
   const location = useLocation();
   const navigate = useNavigate();
+
+  const [selectedSite] = useState(
+    userRole === "Owner" ? 0 : localStorage.getItem("locationId")
+  );
+
+  const [warehouses, setWarehouses] = useState();
+  const [selectedWarehouse, setSelectedWarehouse] = useState();
 
   const [daftarDrafts, setDaftarDrafts] = useState([]);
   const [openModal, setOpenModal] = useState(false);
@@ -44,14 +56,41 @@ const DraftPengadaanJagung = () => {
 
   const fetchDraftsData = async () => {
     try {
-      const date = formatDateToDDMMYYYY(selectedDate);
-      const dataResponse = await getWarehouseItemCornProcurementDrafts(date);
+      const dataResponse = await getWarehouseItemCornProcurementDrafts(
+        selectedWarehouse
+      );
       console.log("draftResponse: ", dataResponse);
       if (dataResponse.status === 200) {
         setDaftarDrafts(dataResponse.data.data);
       }
     } catch (error) {
       console.error("Error fetching draft data:", error);
+    }
+  };
+
+  const fetchWarehouseData = async () => {
+    try {
+      const warehouseResponse = await getWarehouses(selectedSite);
+      console.log("warehouseResponse: ", warehouseResponse);
+      if (warehouseResponse.status == 200) {
+        setWarehouses(warehouseResponse.data.data);
+        setSelectedWarehouse(warehouseResponse.data.data[0].id);
+        setCornCapacity(warehouseResponse.data.data[0].cornCapacity);
+      }
+    } catch (error) {
+      console.log("error :", error);
+    }
+  };
+
+  const fetchWarehousePlacement = async () => {
+    try {
+      const placementResponse = await getCurrentUserWarehousePlacement();
+      console.log("placementResponse: ", placementResponse);
+      if (placementResponse.status == 200) {
+        setSelectedWarehouse(placementResponse?.data?.data[0]?.warehouse?.id);
+      }
+    } catch (error) {
+      console.log("error :", error);
     }
   };
 
@@ -135,11 +174,20 @@ const DraftPengadaanJagung = () => {
     fetchDraftsData();
     fetchSupplier();
 
+    if (userRole == "Pekerja Gudang") {
+      fetchWarehousePlacement();
+    } else {
+      fetchWarehouseData();
+    }
+  }, [selectedDate]);
+
+  useEffect(() => {
+    fetchDraftsData();
     if (location.state?.refetch) {
       fetchDraftsData();
       window.history.replaceState({}, document.title);
     }
-  }, [location, selectedDate]);
+  }, [selectedWarehouse]);
 
   if (isDetailPage) {
     return <Outlet />;
@@ -149,18 +197,30 @@ const DraftPengadaanJagung = () => {
     <div className="flex flex-col px-4 py-3 gap-6">
       <div className="flex justify-between items-center mb-2 flex-wrap gap-4">
         <h1 className="text-3xl font-bold">Draft Pengadaan Jagung</h1>
-        <div
-          className="flex items-center rounded-lg bg-orange-300 hover:bg-orange-500 cursor-pointer gap-2"
-          onClick={openDatePicker}
-        >
-          <input
-            ref={dateInputRef}
-            type="date"
-            value={selectedDate}
-            onChange={handleDateChange}
-            className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer gap-2"
-          />
-        </div>
+        {(userRole === "Owner" || userRole === "Kepala Kandang") && (
+          <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+            <MdStore size={18} />
+            <select
+              value={selectedWarehouse}
+              onChange={(e) => {
+                const warehouseId = e.target.value;
+                setSelectedWarehouse(warehouseId);
+
+                const selected = warehouses?.find((w) => w.id == warehouseId);
+                if (selected) {
+                  setCornCapacity(selected.cornCapacity);
+                }
+              }}
+              className="ml-2 bg-transparent text-base font-medium outline-none"
+            >
+              {warehouses?.map((warehouse) => (
+                <option key={warehouse.id} value={warehouse.id}>
+                  {warehouse.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
 
       <div className="bg-white p-4 border rounded-lg w-full border-black-6">
