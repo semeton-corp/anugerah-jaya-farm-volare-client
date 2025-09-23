@@ -13,48 +13,6 @@ import { IoIosArrowDown } from "react-icons/io";
 import { PiCalendarBlank } from "react-icons/pi";
 import profileAvatar from "../assets/profile_avatar.svg";
 
-const tugasTambahan = [
-  {
-    tanggal: "27 Maret 2025",
-    tugas: "Dekorasi kandang untuk 17 Agustus",
-    lokasi: "Kandang",
-    slotPekerja: 3,
-    status: "Belum diproses",
-  },
-  {
-    tanggal: "25 Maret 2025",
-    tugas: "Dekorasi toko untuk 17 Agustus",
-    lokasi: "Toko",
-    slotPekerja: 0,
-    status: "Dalam Proses",
-  },
-  {
-    tanggal: "19 Maret 2025",
-    tugas: "Perbaikan pintu gudang",
-    lokasi: "Gudang",
-    slotPekerja: 0,
-    status: "Selesai",
-  },
-];
-
-const tugasRutin = [
-  {
-    jabatan: "Kepala Kandang",
-    jumlahTugas: 30,
-    jumlahPekerja: 2,
-  },
-  {
-    jabatan: "Pekerja Toko",
-    jumlahTugas: 15,
-    jumlahPekerja: 3,
-  },
-  {
-    jabatan: "Pekerja Kandang",
-    jumlahTugas: 5,
-    jumlahPekerja: 10,
-  },
-];
-
 const TugasPegawai = () => {
   const userRole = localStorage.getItem("role");
   const location = useLocation();

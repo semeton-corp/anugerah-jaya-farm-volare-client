@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { login } from "../services/authServices";
 import LoadingScreen from "../components/LoadingScreen";
+import { getSelfCurrentUserPresence } from "../services/presence";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -27,8 +28,6 @@ const Login = () => {
       const response = await login(userName, password);
 
       if (response.status === 200) {
-        console.log("response: ", response);
-
         const { accessToken, role, photoProfile, name, location, id } =
           response.data.data;
         localStorage.setItem("token", accessToken);
@@ -40,7 +39,19 @@ const Login = () => {
         localStorage.setItem("userId", id);
 
         const rolePath = role.name.toLowerCase().replace(/\s+/g, "-");
-        navigate(`/${rolePath}`);
+
+        const presenceResponse = await getSelfCurrentUserPresence();
+        if (presenceResponse.status == 200) {
+          console.log(
+            "presenceResponse.data.data.status: ",
+            presenceResponse.data.data.status
+          );
+          if (presenceResponse.data.data.status === "Hadir") {
+            navigate(`/${rolePath}`);
+          } else {
+            navigate(`/${rolePath}/presensi`);
+          }
+        }
       }
     } catch (err) {
       console.error("Login error:", err);
