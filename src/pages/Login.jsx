@@ -40,17 +40,22 @@ const Login = () => {
 
         const rolePath = role.name.toLowerCase().replace(/\s+/g, "-");
 
-        const presenceResponse = await getSelfCurrentUserPresence();
-        if (presenceResponse.status == 200) {
-          console.log(
-            "presenceResponse.data.data.status: ",
-            presenceResponse.data.data.status
-          );
-          if (presenceResponse.data.data.status === "Hadir") {
-            navigate(`/${rolePath}`);
-          } else {
-            navigate(`/${rolePath}/presensi`);
+        if (role.name !== "Owner") {
+          const presenceResponse = await getSelfCurrentUserPresence();
+
+          if (presenceResponse.status == 200) {
+            console.log(
+              "presenceResponse.data.data.status: ",
+              presenceResponse.data.data.status
+            );
+            if (presenceResponse.data.data.status === "Hadir") {
+              navigate(`/${rolePath}`);
+            } else {
+              navigate(`/${rolePath}/presensi`);
+            }
           }
+        } else {
+          navigate(`/${rolePath}`);
         }
       }
     } catch (err) {
