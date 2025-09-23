@@ -732,7 +732,6 @@ const AppRouter = createBrowserRouter([
                         path: "detail-absensi/:userId",
                         element: <DetailAbsensi />,
                       },
-
                       {
                         path: "detail-penyelesaian-pekerjaan/:userId",
                         element: <DetailPenyelesaianPekerjaan />,
@@ -855,7 +854,10 @@ const AppRouter = createBrowserRouter([
             path: "profile",
             element: <Profile mode="MyProfile" />,
             children: [
-              { path: "detail-absensi", element: <DetailAbsensi /> },
+              {
+                path: "detail-absensi/:userId",
+                element: <DetailAbsensi />,
+              },
               {
                 path: "detail-penyelesaian-pekerjaan/:userId",
                 element: <DetailPenyelesaianPekerjaan />,
@@ -957,7 +959,10 @@ const AppRouter = createBrowserRouter([
             path: "profile",
             element: <Profile mode="MyProfile" />,
             children: [
-              { path: "detail-absensi", element: <DetailAbsensi /> },
+              {
+                path: "detail-absensi/:userId",
+                element: <DetailAbsensi />,
+              },
               {
                 path: "detail-penyelesaian-pekerjaan/:userId",
                 element: <DetailPenyelesaianPekerjaan />,
@@ -1015,7 +1020,10 @@ const AppRouter = createBrowserRouter([
             path: "profile",
             element: <Profile mode="MyProfile" />,
             children: [
-              { path: "detail-absensi", element: <DetailAbsensi /> },
+              {
+                path: "detail-absensi/:userId",
+                element: <DetailAbsensi />,
+              },
               {
                 path: "detail-penyelesaian-pekerjaan/:userId",
                 element: <DetailPenyelesaianPekerjaan />,
@@ -1127,7 +1135,10 @@ const AppRouter = createBrowserRouter([
             path: "profile",
             element: <Profile mode="MyProfile" />,
             children: [
-              { path: "detail-absensi", element: <DetailAbsensi /> },
+              {
+                path: "detail-absensi/:userId",
+                element: <DetailAbsensi />,
+              },
               {
                 path: "detail-penyelesaian-pekerjaan/:userId",
                 element: <DetailPenyelesaianPekerjaan />,
@@ -1583,7 +1594,10 @@ const AppRouter = createBrowserRouter([
             path: "profile",
             element: <Profile mode="MyProfile" />,
             children: [
-              { path: "detail-absensi", element: <DetailAbsensi /> },
+              {
+                path: "detail-absensi/:userId",
+                element: <DetailAbsensi />,
+              },
               {
                 path: "detail-penyelesaian-pekerjaan/:userId",
                 element: <DetailPenyelesaianPekerjaan />,
