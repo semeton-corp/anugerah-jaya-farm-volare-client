@@ -34,7 +34,7 @@ const getCurrentPlacementIds = async (userId, role) => {
           cageIds: undefined,
         };
     }
-    console.log("currentPlacementResponse", currentPlacementResponse);
+    // console.log("currentPlacementResponse", currentPlacementResponse);
     if (currentPlacementResponse?.status === 200) {
       const placementName =
         role === "Pekerja Telur" || role === "Pekerja Kandang"
@@ -128,7 +128,7 @@ const getManagedPlacementIds = async (userId, role) => {
         };
     }
   } catch (error) {
-    console.error("error getManagedPlacementIds:", error);
+    // console.error("error getManagedPlacementIds:", error);
     return {
       storeIds: undefined,
       warehouseIds: undefined,

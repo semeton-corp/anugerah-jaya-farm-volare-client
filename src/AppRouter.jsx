@@ -981,7 +981,16 @@ const AppRouter = createBrowserRouter([
               },
             ],
           },
-          { path: "tugas", element: <Tugas /> },
+          {
+            path: "tugas",
+            element: <Tugas />,
+            children: [
+              {
+                path: "detail-tugas-tambahan/:id",
+                element: <DetailTugasTambahan />,
+              },
+            ],
+          },
           { path: "presensi", element: <Presensi /> },
         ],
       },
@@ -1082,7 +1091,16 @@ const AppRouter = createBrowserRouter([
               },
             ],
           },
-          { path: "tugas", element: <Tugas /> },
+          {
+            path: "tugas",
+            element: <Tugas />,
+            children: [
+              {
+                path: "detail-tugas-tambahan/:id",
+                element: <DetailTugasTambahan />,
+              },
+            ],
+          },
           { path: "presensi", element: <Presensi /> },
         ],
       },
@@ -1531,7 +1549,16 @@ const AppRouter = createBrowserRouter([
               },
             ],
           },
-          { path: "tugas", element: <Tugas /> },
+          {
+            path: "tugas",
+            element: <Tugas />,
+            children: [
+              {
+                path: "detail-tugas-tambahan/:id",
+                element: <DetailTugasTambahan />,
+              },
+            ],
+          },
           { path: "presensi", element: <Presensi /> },
         ],
       },
@@ -1743,7 +1770,16 @@ const AppRouter = createBrowserRouter([
               },
             ],
           },
-          { path: "tugas", element: <Tugas /> },
+          {
+            path: "tugas",
+            element: <Tugas />,
+            children: [
+              {
+                path: "detail-tugas-tambahan/:id",
+                element: <DetailTugasTambahan />,
+              },
+            ],
+          },
           { path: "presensi", element: <Presensi /> },
         ],
       },

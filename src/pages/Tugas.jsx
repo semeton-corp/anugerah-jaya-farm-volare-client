@@ -32,7 +32,7 @@ const Tugas = () => {
   const fetchTugasTambahanData = async () => {
     try {
       const response = await getAdditionalWorks();
-      // console.log("response tugas tambahan: ", response);
+      console.log("response tugas tambahan: ", response);
 
       if (response.status == 200) {
         setTugasTambahanData(response.data.data);
@@ -188,9 +188,7 @@ const Tugas = () => {
           <tbody>
             {tugasTambahanData?.map((item, index) => (
               <tr key={index} className="border-b">
-                <td className="py-2 px-4">
-                  {translateDateToBahasa(item.date)}
-                </td>
+                <td className="py-2 px-4">{item.date}</td>
                 <td className="py-2 px-4">{item.description}</td>
                 <td className="py-2 px-4">{item.location}</td>
                 <td className="py-2 px-4">{item.remainingSlot}</td>
