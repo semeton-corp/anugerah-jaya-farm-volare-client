@@ -31,11 +31,11 @@ const Tugas = () => {
 
   const fetchTugasTambahanData = async () => {
     try {
-      const response = await getAdditionalWorks();
-      console.log("response tugas tambahan: ", response);
+      const tugasTambahanResponse = await getAdditionalWorks();
+      console.log("tugasTambahanResponse: ", tugasTambahanResponse);
 
-      if (response.status == 200) {
-        setTugasTambahanData(response.data.data);
+      if (tugasTambahanResponse.status == 200) {
+        setTugasTambahanData(tugasTambahanResponse.data.data);
       }
     } catch (error) {
       alert("Terjadi kesalahan saat memuat tugas rutin");
@@ -207,7 +207,7 @@ const Tugas = () => {
                   </span>
                 </td>
                 <td className="py-2 px-4 flex gap-2">
-                  {!item.IsTakenByCurrentUser && (
+                  {!item.IsTakenByCurrentUser && item.remainingSlot !== 0 && (
                     <button
                       onClick={() => {
                         takeAdditionalTaskHandle(item.id);
