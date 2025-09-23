@@ -5,6 +5,7 @@ import { getCage, getChickenCage } from "../services/cages";
 import { getSuppliers } from "../services/supplier";
 import { createChickenProcurementDraft } from "../services/chickenMonitorings";
 import { useNavigate } from "react-router-dom";
+import { formatThousand, onlyDigits } from "../utils/moneyFormat";
 
 const InputDraftPemesananDoc = () => {
   const navigate = useNavigate();
@@ -173,11 +174,15 @@ const InputDraftPemesananDoc = () => {
           <div>
             <label className="block mb-1">Total Harga</label>
             <input
-              type="number"
+              type="text"
+              inputMode="numeric"
               placeholder="Masukkan jumlah barang..."
               className="w-full border rounded px-4 py-2"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
+              value={formatThousand(price)}
+              onChange={(e) => {
+                const raw = onlyDigits(e.target.value);
+                setPrice(raw);
+              }}
             />
           </div>
 

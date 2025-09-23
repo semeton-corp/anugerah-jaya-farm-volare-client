@@ -155,11 +155,14 @@ const DraftPengadaanDoc = () => {
                         onClick={() => {
                           const localNumber = "081246087972";
                           const waNumber = localNumber.replace(/^0/, "62");
-                          const namaCustomer = item?.customer?.name || "";
-                          const namaBarang = item?.item?.name || "";
+
+                          const namaSupplier = item?.supplier.name || "";
+                          const namaBarang = item?.supplier?.supplierType || "";
                           const satuan = item?.item?.unit || "";
                           const jumlah = item?.quantity || "";
-                          const message = `Halo ${namaCustomer}, kami dari Anugerah Jaya Farm ingin mengonfirmasi pesanan Anda:%0A%0A🧺 Nama Barang: ${namaBarang}%0A📦 Jumlah: ${jumlah} ${satuan}%0A%0AApakah jadi untuk memesan?`;
+
+                          const message = `Halo ${namaSupplier}, kami dari Anugerah Jaya Farm ingin memastikan ketersediaan pesanan ayam:%0A%0A🐔 Nama Barang: ${namaBarang}%0A📦 Jumlah: ${jumlah} ${satuan}%0A%0AApakah ayam dengan jumlah tersebut tersedia dan siap dipesan?`;
+
                           const waURL = `https://wa.me/${waNumber}?text=${message}`;
                           window.open(waURL, "_blank");
                         }}
@@ -167,6 +170,7 @@ const DraftPengadaanDoc = () => {
                       >
                         <IoLogoWhatsapp />
                       </button>
+
                       <button
                         onClick={() => {
                           setSelectedItem(item);
