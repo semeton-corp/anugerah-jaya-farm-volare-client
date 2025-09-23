@@ -81,7 +81,7 @@ const PengadaanDoc = () => {
   const handleSubmitArrivalConfiramation = async (result) => {
     try {
       const payload = {
-        quantity: result.quantity,
+        quantity: parseInt(result.quantity),
         ...(result.catatan?.trim() ? { note: result.catatan } : {}),
       };
 
