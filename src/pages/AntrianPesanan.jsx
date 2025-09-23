@@ -109,6 +109,8 @@ const AntrianPesanan = () => {
         alert("❌ Terjadi kesalahan saat memuat data!");
         return;
       }
+
+      console.log("antrianResponse: ", antrianResponse);
       if (antrianResponse.status == 200) {
         setDataAntrianPesanan(antrianResponse.data.data);
       }
@@ -426,7 +428,9 @@ const AntrianPesanan = () => {
       } else if (msg === "customer already exist") {
         alert("❌Pelanggan sudah terdaftar, gunakan nomor telepon lain");
       } else if (msg === "stock item is insuficcient") {
-        alert("❌Stok gudang tidak mencukupi untuk pesanan ini");
+        alert(
+          "❌Stok tidak mencukupi untuk pesanan ini, silahkan check pada bagian atas halaman ini"
+        );
       } else {
         alert(
           "❌Gagal menyimpan data pesanan, periksa kembali data input anda"

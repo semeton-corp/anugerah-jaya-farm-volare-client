@@ -450,15 +450,12 @@ const AlokasiAntrianModal = ({
               onChange={(e) => setPmDate(e.target.value)}
             />
 
-            <label className="block mb-2 font-medium">
-              Bukti Pembayaran (URL or file name)
-            </label>
+            <label className="block mb-2 font-medium">Bukti Pembayaran</label>
             <input
-              type="text"
+              type="file"
               className="w-full border p-2 rounded mb-4"
-              placeholder="https://... or filename.jpg"
-              value={pmProof}
-              onChange={(e) => setPmProof(e.target.value)}
+              // value={pmProof}
+              // onChange={(e) => setPmProof(e.target.value)}
             />
 
             <div className="flex justify-end gap-2">
