@@ -46,7 +46,7 @@ const Tugas = () => {
   const fetchAllTugas = async () => {
     try {
       const response = await getDailyWorkUser();
-      // console.log("response fetch tugas: ", response);
+      console.log("response fetch tugas harian: ", response);
 
       if (response.status == 200) {
         setDailyWorks(response.data.data.dailyWorks);
@@ -66,11 +66,16 @@ const Tugas = () => {
       // console.log("takeResponse: ", takeResponse);
       if (takeResponse.status == 201) {
         alert(
-          "Berhasil mengambil tugas tambahan, tugas akan masuk ke tugas pegawai esok hari!"
+          "✅Berhasil mengambil tugas tambahan, tugas akan masuk ke tugas pegawai esok hari!"
         );
         fetchTugasTambahanData();
       }
     } catch (error) {
+      if (error.response.data.message == "additional work already full") {
+        alert("❌Tidak tersedia slot untuk anda, tugas ini sudah penuh!");
+      } else {
+        alert("❌Terjadi kesalahan: ", error);
+      }
       console.log("error :", error);
     }
   };
