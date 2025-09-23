@@ -116,7 +116,7 @@ const Profile = ({ mode }) => {
   }, [userId, year, month]);
 
   const detailAbsensiHandle = () => {
-    navigate(`${location.pathname}/detail-absensi`);
+    navigate(`${location.pathname}/detail-absensi/${userId}`);
   };
 
   const detailPenyelesaianPekerjaan = (userId) => {

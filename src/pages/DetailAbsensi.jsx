@@ -12,7 +12,7 @@ import MonthYearSelector from "../components/MonthYearSelector";
 import { useParams } from "react-router-dom";
 
 const DetailAbsensi = ({ mode }) => {
-  const { id } = useParams();
+  const { userId } = useParams();
 
   const [presenceId, setPresenceId] = useState(0);
   const [isPresence, setIsPresence] = useState(false);
@@ -48,7 +48,8 @@ const DetailAbsensi = ({ mode }) => {
 
   const getSelfAttandanceData = async () => {
     try {
-      const allPresenceResponse = await getSelfCurrentUserPresences(
+      const allPresenceResponse = await getUserPresences(
+        userId,
         monthName,
         year,
         page

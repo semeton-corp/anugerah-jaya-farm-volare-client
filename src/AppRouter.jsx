@@ -728,7 +728,11 @@ const AppRouter = createBrowserRouter([
                     path: "profile/:id",
                     element: <Profile mode="StaffDetail" />,
                     children: [
-                      { path: "detail-absensi", element: <DetailAbsensi /> },
+                      {
+                        path: "detail-absensi/:userId",
+                        element: <DetailAbsensi />,
+                      },
+
                       {
                         path: "detail-penyelesaian-pekerjaan/:userId",
                         element: <DetailPenyelesaianPekerjaan />,
