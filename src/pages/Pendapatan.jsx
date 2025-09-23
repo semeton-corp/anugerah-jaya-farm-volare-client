@@ -172,6 +172,7 @@ export default function Pendapatan() {
         monthName,
         year
       );
+      console.log("fetchIncomeResponse: ", fetchIncomeResponse);
       if (fetchIncomeResponse.status == 200) {
         setIncomeData(fetchIncomeResponse.data.data.incomes);
         setPieChartData(fetchIncomeResponse.data.data.incomePie);
