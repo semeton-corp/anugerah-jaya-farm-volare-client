@@ -5,6 +5,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import KonfirmasiPenjualanAyamModal from "../components/KonfirmasiPenjualanAyamModal";
 import {
   confirmationAfkirChickenSaleDraft,
+  deleteAfkirChickenSaleDraft,
   getAfkirChickenSaleDrafts,
 } from "../services/chickenMonitorings";
 import { useEffect } from "react";
@@ -50,8 +51,11 @@ const DraftPenjualanAyam = () => {
         fetchDraftData();
       }
     } catch (error) {
-      if(error?.response?.data?.message == "total sell chicken must be less than total chicken"){
-        alert("❌Jumlah penjualan melebihi jumlah ayam di kandang")
+      if (
+        error?.response?.data?.message ==
+        "total sell chicken must be less than total chicken"
+      ) {
+        alert("❌Jumlah penjualan melebihi jumlah ayam di kandang");
       }
       console.log("error :", error);
     }
@@ -63,6 +67,19 @@ const DraftPenjualanAyam = () => {
       console.log("draftResponse: ", draftResponse);
       if (draftResponse.status == 200) {
         setDraftSalesData(draftResponse.data.data);
+      }
+    } catch (error) {
+      console.log("error :", error);
+    }
+  };
+
+  const handleBatalDraft = async (id) => {
+    try {
+      const deleteResponse = await deleteAfkirChickenSaleDraft(id);
+      console.log("deleteResponse: ", deleteResponse);
+      if (deleteResponse.status == 204) {
+        alert("✅Data draft berhasil dihapus!");
+        fetchDraftData();
       }
     } catch (error) {
       console.log("error :", error);
@@ -154,7 +171,10 @@ const DraftPenjualanAyam = () => {
                       >
                         Konfirmasi
                       </button>
-                      <button className="px-3 py-1 bg-red-400 text-white rounded hover:bg-red-500 text-sm cursor-pointer">
+                      <button
+                        onClick={() => handleBatalDraft(item.id)}
+                        className="px-3 py-1 bg-red-400 text-white rounded hover:bg-red-500 text-sm cursor-pointer"
+                      >
                         Batalkan
                       </button>
                     </div>

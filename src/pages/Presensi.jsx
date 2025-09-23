@@ -138,6 +138,9 @@ const Presensi = () => {
           if (serverMessage === "location is not within the allowed radius") {
             customMessage =
               "Pastikan Anda berada di lokasi kerja! Presensi hanya bisa dilakukan di tempat kerja.";
+          } else if (serverMessage === "user presence not found") {
+            customMessage =
+              "❌Anda tidak bisa melakukan presensi hari ini, hubungi penanggung jawab terkait! Jika akun anda baru, presensi akan bisa dilakukan keesokan hari";
           }
 
           alert(customMessage);
@@ -187,7 +190,10 @@ const Presensi = () => {
 
           if (serverMessage === "location is not within the allowed radius") {
             customMessage =
-              "Pastikan Anda berada di lokasi kerja! Presensi hanya bisa dilakukan di tempat kerja.";
+              "❌Pastikan Anda berada di lokasi kerja! Presensi hanya bisa dilakukan di tempat kerja.";
+          } else if (serverMessage === "user presence not found") {
+            customMessage =
+              "❌Anda tidak bisa melakukan presensi hari ini, hubungi penanggung jawab terkait! Jika akun anda baru, presensi akan bisa dilakukan keesokan hari";
           }
 
           alert(customMessage);
@@ -252,6 +258,9 @@ const Presensi = () => {
           if (serverMessage === "location is not within the allowed radius") {
             customMessage =
               "Pastikan Anda berada di lokasi kerja! Presensi hanya bisa dilakukan di tempat kerja.";
+          } else if (serverMessage === "user presence not found") {
+            customMessage =
+              "❌Anda tidak bisa melakukan presensi hari ini, hubungi penanggung jawab terkait! Jika akun anda baru, presensi akan bisa dilakukan keesokan hari";
           }
 
           alert(customMessage);
@@ -305,6 +314,9 @@ const Presensi = () => {
           if (serverMessage === "location is not within the allowed radius") {
             customMessage =
               "Pastikan Anda berada di lokasi kerja! Presensi hanya bisa dilakukan di tempat kerja.";
+          } else if (serverMessage === "user presence not found") {
+            customMessage =
+              "❌Anda tidak bisa melakukan presensi hari ini, hubungi penanggung jawab terkait! Jika akun anda baru, presensi akan bisa dilakukan keesokan hari";
           }
 
           alert(customMessage);
