@@ -12,6 +12,7 @@ import {
 } from "../services/chickenMonitorings";
 import { convertToInputDateFormat, toYMD } from "../utils/dateFormat";
 import { GoAlertFill } from "react-icons/go";
+import { formatThousand, onlyDigits } from "../utils/moneyFormat";
 
 const rupiah = (n) => `Rp ${Number(n || 0).toLocaleString("id-ID")}`;
 const today = (() => {
@@ -431,11 +432,15 @@ export default function DetailPenjualanAyam() {
 
             <label className="block mb-1 font-medium">Nominal Pembayaran</label>
             <input
-              type="number"
+              type="text"
+              inputMode="numeric"
               className="w-full border rounded p-2 mb-3"
               placeholder="Masukkan nominal"
-              value={nominal}
-              onChange={(e) => setNominal(e.target.value)}
+              value={formatThousand(nominal)}
+              onChange={(e) => {
+                const raw = onlyDigits(e.target.value);
+                setNominal(raw);
+              }}
             />
 
             <label className="block mb-1 font-medium">Tanggal Bayar</label>

@@ -1,6 +1,7 @@
 import React, { useMemo, useRef, useState, useEffect } from "react";
 import { BiSolidEditAlt } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
+import { formatThousand, onlyDigits } from "../utils/moneyFormat";
 
 const toInputDate = (d) => {
   try {
@@ -219,10 +220,14 @@ const KonfirmasiPenjualanAyamModal = ({
             </div>
             {editPrice ? (
               <input
-                type="number"
+                type="text"
+                inputMode="numeric"
                 className="border rounded px-3 py-2 mt-1 w-full"
-                value={pricePerChicken}
-                onChange={(e) => setPricePerChicken(e.target.value)}
+                value={formatThousand(pricePerChicken)}
+                onChange={(e) => {
+                  const raw = onlyDigits(e.target.value);
+                  setPricePerChicken(raw);
+                }}
               />
             ) : (
               <p className="font-bold mt-1">{rupiah(pricePerChicken)} / Ekor</p>
@@ -371,11 +376,15 @@ const KonfirmasiPenjualanAyamModal = ({
 
             <label className="block mb-1 font-medium">Nominal Pembayaran</label>
             <input
-              type="number"
+              type="text"
+              inputMode="numeric"
               className="w-full border rounded p-2 mb-3"
               placeholder="Masukkan nominal"
-              value={nominal}
-              onChange={(e) => setNominal(e.target.value)}
+              value={formatThousand(nominal)}
+              onChange={(e) => {
+                const raw = onlyDigits(e.target.value);
+                setNominal(raw);
+              }}
             />
 
             <label className="text-sm text-gray-600">Metode Pembayaran</label>
