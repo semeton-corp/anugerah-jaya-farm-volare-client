@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   deleteItemPrice,
+  deleteItemPriceDiscount,
   getItemPrices,
   getItemPricesDiscount,
 } from "../services/item";
@@ -18,7 +19,8 @@ const DaftarHargaTelur = () => {
   const [hargaList, setHargaList] = useState([]);
   const [diskonList, setDiskonList] = useState([]);
 
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showDeleteModal, setShowDeleteHargaModal] = useState(false);
+  const [showDeleteDiskonModal, setShowDeleteDiskonModal] = useState(false);
   const [selectedDeleteId, setSelectedDeleteId] = useState();
 
   const detailPages = ["tambah-kategori-harga", "tambah-diskon"];
@@ -92,7 +94,21 @@ const DaftarHargaTelur = () => {
       alert("❌ Terjadi kesalahan: ", error.response.data.message);
       console.log("error :", error);
     } finally {
-      setShowDeleteModal(false);
+      setShowDeleteHargaModal(false);
+    }
+  };
+
+  const handleDeleteDiskon = async () => {
+    try {
+      const deleteHandle = await deleteItemPriceDiscount(selectedDeleteId);
+      if (deleteHandle.status == 204) {
+        fetchDiskon();
+      }
+    } catch (error) {
+      alert("❌ Terjadi kesalahan: ", error.response.data.message);
+      console.log("error :", error);
+    } finally {
+      setShowDeleteDiskonModal(false);
     }
   };
 
@@ -158,7 +174,7 @@ const DaftarHargaTelur = () => {
                     <button
                       className="bg-red-500 hover:bg-red-700 cursor-pointer text-white px-3 py-1 rounded"
                       onClick={() => {
-                        setShowDeleteModal(true);
+                        setShowDeleteHargaModal(true);
                         setSelectedDeleteId(row.id);
                       }}
                     >
@@ -199,14 +215,25 @@ const DaftarHargaTelur = () => {
                 <td className="px-3 py-2">{`${row.minimumTransactionUser} Kali`}</td>
                 <td className="px-3 py-2">{`${row.totalDiscount} %`}</td>
                 <td className="px-3 py-2">
-                  <button
-                    onClick={() => {
-                      editDiskonHandle(row.id);
-                    }}
-                    className="bg-green-700 hover:bg-green-900 text-white px-3 py-1 rounded text-sm"
-                  >
-                    Edit Diskon
-                  </button>
+                  <div className="flex gap-4">
+                    <button
+                      onClick={() => {
+                        editDiskonHandle(row.id);
+                      }}
+                      className="bg-green-700 hover:bg-green-900 text-white px-3 py-1 rounded text-sm"
+                    >
+                      Edit Diskon
+                    </button>
+                    <button
+                      className="bg-red-500 hover:bg-red-700 cursor-pointer text-white px-3 py-1 rounded"
+                      onClick={() => {
+                        setShowDeleteDiskonModal(true);
+                        setSelectedDeleteId(row.id);
+                      }}
+                    >
+                      Hapus
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -216,8 +243,16 @@ const DaftarHargaTelur = () => {
       {showDeleteModal && (
         <DeleteModal
           isOpen={showDeleteModal}
-          onCancel={() => setShowDeleteModal(false)}
+          onCancel={() => setShowDeleteHargaModal(false)}
           onConfirm={handleDeletePrice}
+        />
+      )}
+
+      {showDeleteDiskonModal && (
+        <DeleteModal
+          isOpen={showDeleteDiskonModal}
+          onCancel={() => setShowDeleteDiskonModal(false)}
+          onConfirm={handleDeleteDiskon}
         />
       )}
     </div>

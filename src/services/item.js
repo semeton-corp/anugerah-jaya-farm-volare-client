@@ -116,6 +116,15 @@ export const getItemPricesDiscount = () => {
   });
 };
 
+export const deleteItemPriceDiscount = (id) => {
+  return api.delete(`/items/prices/discounts/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/json",
+    },
+  });
+};
+
 export const getItemPricesDiscountById = (id) => {
   return api.get(`/items/prices/discounts/${id}`, {
     headers: {
