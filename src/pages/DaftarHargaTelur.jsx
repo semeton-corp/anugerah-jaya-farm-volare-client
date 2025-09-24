@@ -2,7 +2,14 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { getItemPrices, getItemPricesDiscount } from "../services/item";
+import {
+  deleteItemPrice,
+  getItemPrices,
+  getItemPricesDiscount,
+} from "../services/item";
+import { formatThousand } from "../utils/moneyFormat";
+import DeleteModal from "../components/DeleteModal";
+import { a } from "framer-motion/client";
 
 const DaftarHargaTelur = () => {
   const location = useLocation();
@@ -10,6 +17,9 @@ const DaftarHargaTelur = () => {
 
   const [hargaList, setHargaList] = useState([]);
   const [diskonList, setDiskonList] = useState([]);
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedDeleteId, setSelectedDeleteId] = useState();
 
   const detailPages = ["tambah-kategori-harga", "tambah-diskon"];
 
@@ -72,6 +82,20 @@ const DaftarHargaTelur = () => {
     }
   };
 
+  const handleDeletePrice = async () => {
+    try {
+      const deleteHandle = await deleteItemPrice(selectedDeleteId);
+      if (deleteHandle.status == 204) {
+        fetchHargaTelur();
+      }
+    } catch (error) {
+      alert("❌ Terjadi kesalahan: ", error.response.data.message);
+      console.log("error :", error);
+    } finally {
+      setShowDeleteModal(false);
+    }
+  };
+
   useEffect(() => {
     fetchHargaTelur();
     fetchDiskon();
@@ -118,16 +142,29 @@ const DaftarHargaTelur = () => {
                 <td className="px-3 py-2">{row.category}</td>
                 <td className="px-3 py-2">{row.item.name}</td>
                 <td className="px-3 py-2">{row.saleUnit}</td>
-                <td className="px-3 py-2">{`Rp ${row.price}`}</td>
+                <td className="px-3 py-2">{`Rp ${formatThousand(
+                  row.price
+                )}`}</td>
                 <td className="px-3 py-2">
-                  <button
-                    onClick={() => {
-                      editKategoriHargaHandle(row.id);
-                    }}
-                    className="bg-green-700 hover:bg-green-900 text-white px-3 py-1 rounded text-sm cursor-pointer"
-                  >
-                    Edit Harga
-                  </button>
+                  <div className="flex gap-4">
+                    <button
+                      onClick={() => {
+                        editKategoriHargaHandle(row.id);
+                      }}
+                      className="bg-green-700 hover:bg-green-900 text-white px-3 py-1 rounded text-sm cursor-pointer"
+                    >
+                      Edit Harga
+                    </button>
+                    <button
+                      className="bg-red-500 hover:bg-red-700 cursor-pointer text-white px-3 py-1 rounded"
+                      onClick={() => {
+                        setShowDeleteModal(true);
+                        setSelectedDeleteId(row.id);
+                      }}
+                    >
+                      Hapus
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -176,6 +213,13 @@ const DaftarHargaTelur = () => {
           </tbody>
         </table>
       </div>
+      {showDeleteModal && (
+        <DeleteModal
+          isOpen={showDeleteModal}
+          onCancel={() => setShowDeleteModal(false)}
+          onConfirm={handleDeletePrice}
+        />
+      )}
     </div>
   );
 };

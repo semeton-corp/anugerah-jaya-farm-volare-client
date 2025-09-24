@@ -61,6 +61,15 @@ export const createItemPrice = (payload) => {
   });
 };
 
+export const deleteItemPrice = (id) => {
+  return api.delete(`/items/prices/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/json",
+    },
+  });
+};
+
 export const getItemPrices = () => {
   return api.get("/items/prices", {
     headers: {

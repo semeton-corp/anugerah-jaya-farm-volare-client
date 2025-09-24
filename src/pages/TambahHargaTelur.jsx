@@ -7,6 +7,7 @@ import {
   updateItemPrice,
 } from "../services/item";
 import { useNavigate, useParams } from "react-router-dom";
+import { formatThousand, onlyDigits } from "../utils/moneyFormat";
 
 const TambahHargaTelur = () => {
   const navigate = useNavigate();
@@ -22,6 +23,11 @@ const TambahHargaTelur = () => {
   const { id } = useParams();
 
   const handleSubmit = async () => {
+    if (!kategori || !harga || !saleUnit || !barang) {
+      alert("❌ Mohon isi semua field dengan benar!");
+      return;
+    }
+
     const payload = {
       itemId: parseInt(barang),
       category: kategori,
@@ -37,6 +43,8 @@ const TambahHargaTelur = () => {
           navigate(-1, { state: { refetch: true } });
         }
       } catch (error) {
+        const errorMessage = error.response.data.message;
+        alert("error :", errorMessage);
         console.log("error :", error);
       }
     } else {
@@ -46,7 +54,12 @@ const TambahHargaTelur = () => {
           navigate(-1, { state: { refetch: true } });
         }
       } catch (error) {
-        console.alert("error :", error);
+        const errorMessage = error.response.data.message;
+        if (errorMessage == "Internal Server Error") {
+          alert(
+            `❌ Telur dengan satuan ini sudah memiliki harga! Silahkan edit harga! `
+          );
+        }
       }
       // console.log("Submitted:", payload);
     }
@@ -178,16 +191,20 @@ const TambahHargaTelur = () => {
         <div className="mb-4">
           <label className="block font-medium mb-1">Harga</label>
           <input
-            type="number"
+            type="text"
+            inputMode="numeric"
             className="w-full border rounded px-3 py-2 bg-gray-100"
             placeholder="Rp (Masukkan Harga Barang)"
-            value={harga}
-            onChange={(e) => setHarga(e.target.value)}
+            value={formatThousand(harga)}
+            onChange={(e) => {
+              const raw = onlyDigits(e.target.value);
+              setHarga(raw);
+            }}
           />
         </div>
 
         <div className="text-right">
-          <button
+          {/* <button
             onClick={() => {
               console.log("kategori: ", kategori);
               console.log("barang: ", barang);
@@ -198,7 +215,7 @@ const TambahHargaTelur = () => {
             className="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-900 cursor-pointer"
           >
             Check
-          </button>
+          </button> */}
 
           <button
             onClick={handleSubmit}
