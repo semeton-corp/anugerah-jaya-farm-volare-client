@@ -139,14 +139,12 @@ const Tugas = () => {
 
   const getStatusStyle = (status) => {
     switch (status) {
-      case "Belum Diproses":
+      case "Kurang Pekerja":
         return "bg-[#FF5E5E] text-[#640404]";
-      case "Sedang Diproses":
+      case "Pekerja Terpenuhi":
         return "bg-orange-200 text-krisis-text-color";
-      case "Selesai":
-        return "bg-[#87FF8B] text-[#066000]";
       default:
-        return "";
+        return "bg-[#87FF8B] text-[#066000]";
     }
   };
 
@@ -194,7 +192,7 @@ const Tugas = () => {
             {tugasTambahanData?.map((item, index) => (
               <tr key={index} className="border-b">
                 <td className="py-2 px-4">{item.date}</td>
-                <td className="py-2 px-4">{item.description}</td>
+                <td className="py-2 px-4">{item.name}</td>
                 <td className="py-2 px-4">{item.location}</td>
                 <td className="py-2 px-4">{item.remainingSlot}</td>
                 <td className="py-2 px-4">
@@ -241,7 +239,7 @@ const Tugas = () => {
           <h3 className="text-md font-semibold mb-2">Tugas Tambahan</h3>
           {additionalWorks.map((item, i) => (
             <div className="bg-gray-100 px-4 py-3 border-1 rounded-md flex justify-between items-center mb-2">
-              <p className="font-medium">{item.additionalWork.description}</p>
+              <p className="font-medium">{item.additionalWork.name}</p>
               <button
                 onClick={() => {
                   if (!item.isDone) {
