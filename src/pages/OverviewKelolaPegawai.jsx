@@ -65,11 +65,21 @@ const OverviewKelolaPegawai = () => {
 
   const [userPerformanceSummary, setUserPerformanceSummary] = useState([]);
   const [performaKpiChart, setPerformaKpiChart] = useState([]);
-  const sortedPerformaKpiChart = [...performaKpiChart].sort((a, b) => {
-    const numA = parseInt(a.key.replace("Minggu ", ""), 10);
-    const numB = parseInt(b.key.replace("Minggu ", ""), 10);
-    return numA - numB;
-  });
+  const sortedPerformaKpiChart = [...performaKpiChart]
+    .sort((a, b) => {
+      const numA = parseInt(a.key.replace("Minggu ", ""), 10);
+      const numB = parseInt(b.key.replace("Minggu ", ""), 10);
+      return numA - numB;
+    })
+    .map((item) => {
+      const num = parseInt(item.key.replace("Minggu ", ""), 10);
+      return {
+        ...item,
+        key: `Minggu ${num + 1}`,
+      };
+    });
+  console.log("performaKpiChart: ", performaKpiChart);
+  console.log("sortedPerformaKpiChart: ", sortedPerformaKpiChart);
 
   const [siteOptions, setSiteOptions] = useState([]);
   const [selectedSite, setSelectedSite] = useState(

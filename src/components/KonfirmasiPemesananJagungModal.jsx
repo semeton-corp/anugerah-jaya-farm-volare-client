@@ -174,7 +174,10 @@ const KonfirmasiPemesananJagungModal = ({
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/30">
-      <div className="bg-white w-[95%] max-w-4xl p-6 rounded shadow-lg">
+      <div
+        className="bg-white w-[95%] max-w-4xl p-6 rounded shadow-lg 
+                  max-h-[90vh] overflow-y-auto"
+      >
         <h2 className="text-2xl font-semibold mb-6">
           Konfirmasi Pemesanan Jagung
         </h2>
@@ -184,7 +187,7 @@ const KonfirmasiPemesananJagungModal = ({
           <p className="font-extrabold text-lg">Jagung</p>
         </div>
 
-        <div className="mb-4 grid grid-cols-2 gap-6">
+        <div className="mb-4 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
           <div>
             <p className="text-sm text-gray-600">Tanggal Pemesanan</p>
             <p className="font-semibold">
@@ -379,7 +382,7 @@ const KonfirmasiPemesananJagungModal = ({
 
           <div className="px-4 pb-4">
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full min-w-[600px] text-sm sm:text-base">
                 <thead className="bg-green-700 text-white">
                   <tr>
                     <th className="text-left px-3 py-2">Tanggal</th>
@@ -449,7 +452,7 @@ const KonfirmasiPemesananJagungModal = ({
         </div>
 
         {/* Aksi */}
-        <div className="flex justify-end gap-3 mt-6">
+        <div className="flex flex-col sm:flex-row justify-end gap-3 mt-6">
           <button
             onClick={onClose}
             className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800 cursor-pointer"

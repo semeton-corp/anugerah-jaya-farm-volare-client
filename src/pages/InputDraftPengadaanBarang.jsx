@@ -58,7 +58,7 @@ export default function InputDraftPengadaanBarang() {
   }, []);
 
   const saveDraft = async () => {
-    if (!warehouse || !item || !supplier || !pricePerUnit || !days) {
+    if (!warehouse || !item || !pricePerUnit || !days) {
       alert("❌ Mohon isi semua field dengan benar");
       return;
     }
@@ -85,9 +85,15 @@ export default function InputDraftPengadaanBarang() {
           navigate(-1, { state: { refetch: true } });
         }
       } catch (error) {
+        alert("❌ Terjadi kesalahan dalam mengirim data!");
         console.log("error :", error);
       }
     } else {
+      if (!supplier?.id) {
+        alert("❌ Mohon pilih supplier terlebih dahulu!");
+        return;
+      }
+
       try {
         const createResponse = await createWarehouseItemProcurementDraft(
           payload

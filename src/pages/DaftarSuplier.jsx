@@ -153,7 +153,7 @@ const DaftarSuplier = () => {
           </table>
 
           {/* footer */}
-          <div className="flex justify-between mt-16 px-6">
+          {/* <div className="flex justify-between mt-16 px-6">
             <p className="text-sm text-[#CCCCCC]">Menampilkan 1-7 data</p>
             <div className="flex gap-3">
               <div className="rounded-[4px] py-2 px-6 bg-green-100 flex items-center justify-center text-black text-base font-medium hover:bg-green-200 cursor-pointer">
@@ -163,7 +163,7 @@ const DaftarSuplier = () => {
                 <p>Next</p>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

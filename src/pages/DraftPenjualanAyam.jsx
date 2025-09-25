@@ -9,6 +9,7 @@ import {
   getAfkirChickenSaleDrafts,
 } from "../services/chickenMonitorings";
 import { useEffect } from "react";
+import DeleteModal from "../components/DeleteModal";
 
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat("id-ID", {
@@ -25,6 +26,9 @@ const DraftPenjualanAyam = () => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [draftSalesData, setDraftSalesData] = useState([]);
   const [selectedConfirmItem, setSelectedConfirmItem] = useState();
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedDeleteId, setSelectedDeleteId] = useState();
 
   const detailPages = ["input-draft-penjualan-ayam"];
   const isDetailPage = detailPages.some((segment) =>
@@ -73,9 +77,11 @@ const DraftPenjualanAyam = () => {
     }
   };
 
-  const handleBatalDraft = async (id) => {
+  const handleBatalDraft = async () => {
     try {
-      const deleteResponse = await deleteAfkirChickenSaleDraft(id);
+      const deleteResponse = await deleteAfkirChickenSaleDraft(
+        selectedDeleteId
+      );
       console.log("deleteResponse: ", deleteResponse);
       if (deleteResponse.status == 204) {
         alert("✅Data draft berhasil dihapus!");
@@ -172,7 +178,10 @@ const DraftPenjualanAyam = () => {
                         Konfirmasi
                       </button>
                       <button
-                        onClick={() => handleBatalDraft(item.id)}
+                        onClick={() => {
+                          setSelectedDeleteId(item.id);
+                          setShowDeleteModal(true);
+                        }}
                         className="px-3 py-1 bg-red-400 text-white rounded hover:bg-red-500 text-sm cursor-pointer"
                       >
                         Batalkan
@@ -197,6 +206,16 @@ const DraftPenjualanAyam = () => {
             totalSellChicken: selectedConfirmItem.totalSellChicken,
             pricePerChicken: selectedConfirmItem.pricePerChicken,
           }}
+        />
+      )}
+
+      {showDeleteModal && (
+        <DeleteModal
+          isOpen={showDeleteModal}
+          onCancel={() => {
+            setShowDeleteModal(false);
+          }}
+          onConfirm={handleBatalDraft}
         />
       )}
     </div>
