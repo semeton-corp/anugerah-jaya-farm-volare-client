@@ -159,7 +159,7 @@ const TambahHargaTelur = () => {
             onChange={(e) => setSaleUnit(e.target.value)}
           >
             <option value="">Pilih Satuan</option>
-            {barangName === "Telur Retak" || barangName === "Telur Bonyok" ? (
+            {barangName === "Telur Bonyok" ? (
               <>
                 <option value="Plastik">Plastik</option>
               </>

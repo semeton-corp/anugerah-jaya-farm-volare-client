@@ -234,6 +234,7 @@ export default function SalaryPayModal({ isOpen, onClose, salaryId, onSaved }) {
 
     if (!proofFile) {
       alert("❌ Mohon memasukkan bukti pembayaran!");
+      setSaving(false);
       return;
     }
 

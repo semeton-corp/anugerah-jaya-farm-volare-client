@@ -147,9 +147,7 @@ const DetailPenyelesaianPekerjaan = () => {
               additionalWorks.map((item, index) => (
                 <tr key={index} className="border-b">
                   <td className="py-2 px-4">{item.additionalWork.time}</td>
-                  <td className="py-2 px-4">
-                    {item.additionalWork.description}
-                  </td>
+                  <td className="py-2 px-4">{item.additionalWork.name}</td>
                   <td className="py-2 px-4">
                     <span
                       className={`px-3 py-1 rounded text-sm font-medium ${
