@@ -9,6 +9,7 @@ import { getItems } from "../services/item";
 import { useLocation, useNavigate } from "react-router-dom";
 import { use } from "react";
 import { getCurrentUserWarehousePlacement } from "../services/placement";
+import { formatThousand, onlyDigits } from "../utils/moneyFormat";
 
 const rupiah = (n) =>
   `Rp ${Number(n || 0).toLocaleString("id-ID", { maximumFractionDigits: 0 })}`;
@@ -360,10 +361,14 @@ export default function PerbandinganPakan() {
               <div className="relative">
                 <div className="flex items-center">
                   <input
-                    type="number"
+                    type="text"
+                    inputMode="numeric"
                     className="w-full px-3 py-2 rounded-md border border-gray-300"
-                    value={priceJagung}
-                    onChange={(e) => setPriceJagung(e.target.value)}
+                    value={formatThousand(priceJagung)}
+                    onChange={(e) => {
+                      const raw = onlyDigits(e.target.value);
+                      setPriceJagung(raw);
+                    }}
                   />
                   <span className="ml-2 text-gray-600">/ Kg</span>
                 </div>
@@ -422,10 +427,11 @@ export default function PerbandinganPakan() {
               </label>
               <div className="flex items-center">
                 <input
-                  type="number"
+                  type="text"
+                  inputMode="numeric"
                   className="w-full px-3 py-2 rounded-md border border-gray-300"
-                  value={priceDedak}
-                  onChange={(e) => setPriceDedak(e.target.value)}
+                  value={formatThousand(priceDedak)}
+                  onChange={(e) => setPriceDedak(onlyDigits(e.target.value))}
                 />
                 <span className="ml-2 text-gray-600">/ Kg</span>
               </div>
@@ -452,10 +458,13 @@ export default function PerbandinganPakan() {
               </label>
               <div className="flex items-center">
                 <input
-                  type="number"
+                  type="text"
+                  inputMode="numeric"
                   className="w-full px-3 py-2 rounded-md border border-gray-300"
-                  value={priceKonsentrat}
-                  onChange={(e) => setpriceKonsentrat(e.target.value)}
+                  value={formatThousand(priceKonsentrat)}
+                  onChange={(e) =>
+                    setpriceKonsentrat(onlyDigits(e.target.value))
+                  }
                 />
                 <span className="ml-2 text-gray-600">/ Kg</span>
               </div>
@@ -483,10 +492,11 @@ export default function PerbandinganPakan() {
               </label>
               <div className="flex items-center">
                 <input
-                  type="number"
+                  type="text"
+                  inputMode="numeric"
                   className="w-full px-3 py-2 rounded-md border border-gray-300"
-                  value={pricePremix}
-                  onChange={(e) => setPricePremix(e.target.value)}
+                  value={formatThousand(pricePremix)}
+                  onChange={(e) => setPricePremix(onlyDigits(e.target.value))}
                 />
                 <span className="ml-2 text-gray-600">/ Kg</span>
               </div>
@@ -500,7 +510,7 @@ export default function PerbandinganPakan() {
             </p>
             <button
               onClick={pesanAdukan}
-              className="mt-3 w-full bg-yellow-500 hover:bg-yellow-600 text-black font-medium px-4 py-2 rounded"
+              className="mt-3 w-full bg-yellow-500 hover:bg-yellow-600 text-black font-medium px-4 py-2 rounded cursor-pointer"
             >
               Pesan Pakan Adukan
             </button>

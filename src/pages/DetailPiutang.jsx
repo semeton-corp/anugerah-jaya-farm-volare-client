@@ -9,6 +9,7 @@ import { createStoreSalePayment } from "../services/stores";
 import { createAfkirChickenSalePayment } from "../services/chickenMonitorings";
 import { formatThousand, onlyDigits } from "../utils/moneyFormat";
 import { createWarehouseSalePayment } from "../services/warehouses";
+import { FaExclamationTriangle } from "react-icons/fa";
 
 // ===== Utils =====
 const rupiah = (n) => `Rp ${Number(n || 0).toLocaleString("id-ID")}`;
@@ -21,6 +22,17 @@ const toDDMMYYYY = (d) => {
   const mm = String(date.getMonth() + 1).padStart(2, "0");
   const yyyy = date.getFullYear();
   return `${dd}-${mm}-${yyyy}`;
+};
+
+const isOverdue = (deadline, remaining) => {
+  if (!deadline) return false;
+  const d = new Date(deadline);
+  if (Number.isNaN(d.getTime())) return false;
+  const stillOwe = Number(remaining || 0) > 0;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  d.setHours(0, 0, 0, 0);
+  return stillOwe && d < today;
 };
 
 const formatTanggalID = (dateLike) => {
@@ -173,6 +185,8 @@ export default function DetailPiutang() {
 
   const [showPaymentModal, setShowPaymentModal] = useState(false);
 
+  const overdue = isOverdue(data?.deadlinePaymentDate, data?.remainingPayment);
+
   const fetchDetail = async () => {
     try {
       setLoading(true);
@@ -302,11 +316,21 @@ export default function DetailPiutang() {
 
       {/* Header card */}
       <div className="rounded-md border border-gray-300 p-6">
+        <div className="mb-4">
+          <div className="text-gray-600">Tanggal :</div>
+          <div className="mt-1 font-extrabold">{formatTanggalID(date)}</div>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 md:gap-x-10">
           <div>
-            <div className="text-gray-600">Tanggal :</div>
-            <div className="mt-1 font-extrabold">{formatTanggalID(date)}</div>
+            <div className="text-gray-600"> Tanggal Tenggat Pembayaran :</div>
+            <div className="flex items-center gap-2 ">
+              {overdue && <FaExclamationTriangle className="text-red-500" />}
+              <span className={`${overdue && "text-red-500 font-bold"}`}>
+                {data?.deadlinePaymentDate}
+              </span>
+            </div>
           </div>
+
           <div>
             <div className="text-gray-600">Waktu :</div>
             <div className="mt-1 font-extrabold">{time || "-"}</div>
