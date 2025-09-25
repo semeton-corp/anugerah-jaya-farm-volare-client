@@ -60,10 +60,8 @@ const DaftarKandang = () => {
       console.log("kandangResponse: ", kandangResponse);
       if (kandangResponse.status === 200) {
         const allKandang = kandangResponse.data.data;
-
-        console.log("Filtered Kandang:", allKandang);
-        // Do something with filteredKandang, e.g., set state
         setKandangData(allKandang);
+        console.log("allKandang: ", allKandang);
       }
     } catch (error) {
       console.log("error :", error);
@@ -159,7 +157,7 @@ const DaftarKandang = () => {
                 </td>
                 <td className="px-4 py-2">{row.cage.name}</td>
                 <td className="px-4 py-2">{row.batchId}</td>
-                <td className="px-4 py-2">{row.cage.chickenCategory}</td>
+                <td className="px-4 py-2">{row.chickenCategory}</td>
                 <td className="px-4 py-2">{row.chickenAge}</td>
                 <td className="px-4 py-2">{row.cage.capacity}</td>
                 <td className="px-4 py-2">{row.chickenPic}</td>
