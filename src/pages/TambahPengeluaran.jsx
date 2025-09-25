@@ -187,6 +187,11 @@ export default function TambahPengeluaran() {
       const merged = [...stores, ...cages, ...warehouses];
       console.log("merged: ", merged);
       setLokasiOptions(merged);
+      setForm((f) => ({
+        ...f,
+        placeId: merged[0].placeId,
+        locationType: merged[0]?.locationType || "",
+      }));
     } catch (error) {
       console.error("error :", error);
     }

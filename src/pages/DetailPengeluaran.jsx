@@ -38,7 +38,9 @@ const formatTime = (isoOrHHmm) => {
 const Row = ({ label, value }) => (
   <div className="mb-4">
     <div className="text-sm text-gray-600">{label} :</div>
-    <div className="font-semibold mt-1">{value ?? "-"}</div>
+    <div className="font-semibold mt-1">
+      {!value || value == "00:00:00" ? "-" : value}
+    </div>
   </div>
 );
 

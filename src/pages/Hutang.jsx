@@ -254,7 +254,10 @@ export default function Hutang() {
                   r.remainingPayment
                 );
                 return (
-                  <tr key={`${r.category}-${r.id}`} className="align-top">
+                  <tr
+                    key={`${r.category}-${r.id}`}
+                    className={`align-top ${overdue && "bg-orange-400/15"}`}
+                  >
                     <td className="py-3 px-4 whitespace-nowrap">
                       <div className="flex items-center gap-2">
                         {overdue && (

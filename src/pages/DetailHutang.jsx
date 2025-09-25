@@ -19,8 +19,20 @@ import { BiSolidEditAlt } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import { EditPembayaranModal } from "../components/EditPembayaranModal";
 import { formatThousand, onlyDigits } from "../utils/moneyFormat";
+import { FaExclamationTriangle } from "react-icons/fa";
 
 const rupiah = (n) => `Rp ${Number(n || 0).toLocaleString("id-ID")}`;
+
+const isOverdue = (deadline, remaining) => {
+  if (!deadline) return false;
+  const d = new Date(deadline);
+  if (Number.isNaN(d.getTime())) return false;
+  const stillOwe = Number(remaining || 0) > 0;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  d.setHours(0, 0, 0, 0);
+  return stillOwe && d < today;
+};
 
 const formatTanggalID = (iso) => {
   if (!iso) return "-";
@@ -120,6 +132,7 @@ const TambahPembayaranModal = ({
         <input type="file" className="w-full border rounded p-2 mb-4" />
 
         <div className="flex justify-end gap-2">
+          Tangg
           <button
             onClick={onClose}
             className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded cursor-pointer"
@@ -226,6 +239,8 @@ export default function DetailHutang() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(null);
+
+  const overdue = isOverdue(data?.deadlinePaymentDate, data?.remainingPayment);
 
   const submitEditPayment = async ({
     paymentMethod,
@@ -408,16 +423,26 @@ export default function DetailHutang() {
     <div className="p-4 space-y-4">
       <h1 className="text-2xl font-bold">Detail Hutang</h1>
 
-      <div className="rounded border p-6">
+      <div className="rounded border p-6 ">
+        <div className="mb-4">
+          <div className="text-gray-600 "> Input :</div>
+          <div className="mt-1 font-extrabold">
+            {formatTanggalID(
+              data?.date || data?.transactionDate || data?.createdAt
+            )}
+          </div>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-10">
           <div>
-            <div className="text-gray-600">Tanggal :</div>
-            <div className="mt-1 font-extrabold">
-              {formatTanggalID(
-                data?.date || data?.transactionDate || data?.createdAt
-              )}
+            <div className="text-gray-600"> Tanggal Tenggat Pembayaran :</div>
+            <div className="flex items-center gap-2 ">
+              {overdue && <FaExclamationTriangle className="text-red-500" />}
+              <span className={`${overdue && "text-red-500 font-bold"}`}>
+                {data?.deadlinePaymentDate}
+              </span>
             </div>
           </div>
+
           <div>
             <div className="text-gray-600">Waktu :</div>
             <div className="mt-1 font-extrabold">
@@ -586,7 +611,7 @@ export default function DetailHutang() {
           <div className="flex items-center justify-between mt-4">
             <div />
             <div className="text-right">
-              <p className="text-sm">Sisa Cicilan</p>
+              <p className="">Sisa Cicilan</p>
               <p className="text-2xl font-extrabold">
                 {rupiah(data?.remainingPayment)}
               </p>
