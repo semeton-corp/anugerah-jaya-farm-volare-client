@@ -98,8 +98,10 @@ const Gudang = () => {
       console.log("warehouseResponse: ", warehouseResponse);
       if (warehouseResponse.status == 200) {
         setWarehouses(warehouseResponse.data.data);
-        setSelectedWarehouse(warehouseResponse.data.data[0].id);
-        setCornCapacity(warehouseResponse.data.data[0].cornCapacity);
+        if (!cornCapacity) {
+          setSelectedWarehouse(warehouseResponse.data.data[0].id);
+          setCornCapacity(warehouseResponse.data.data[0].cornCapacity);
+        }
       }
     } catch (error) {
       console.log("error :", error);
@@ -166,7 +168,9 @@ const Gudang = () => {
       if (updateResponse.status === 201) {
         setCornCapacity(newCornCapacity);
         setIsEditCapacityOpen(false);
-        fetchWarehouseData();
+        if (userRole != "Pekerja Gudang") {
+          fetchWarehouseData();
+        }
       }
     } catch (error) {
       console.log("Update error:", error);
