@@ -228,7 +228,9 @@ export default function Hutang() {
                 </th>
                 <th className="py-3 px-4 text-left">Kategori</th>
                 <th className="py-3 px-4 text-left">Lokasi Transaksi</th>
-                <th className="py-3 px-4 text-left">Nama Pelanggan</th>
+                <th className="py-3 px-4 text-left">
+                  Pemberi Hutang / Supplier
+                </th>
                 <th className="py-3 px-4 text-left">Nominal Transaksi</th>
                 <th className="py-3 px-4 text-left">Sisa Tagihan</th>
                 <th className="py-3 px-4 text-left">Status</th>
@@ -283,17 +285,16 @@ export default function Hutang() {
                         onClick={() => {
                           const localNumber = r.phoneNumber;
                           const waNumber = localNumber.replace(/^0/, "62");
-                          const message = `Halo ${r.name},
-                          
-                          Kami dari Anugerah Jaya Farm ingin mengingatkan mengenai tagihan Anda:
-                          
-                          📅 Tenggat: ${r.deadlinePaymentDate}
-                          🏷️ Kategori: ${r.category}
-                          📍 Lokasi: ${r.placeName}
-                          💰 Total: ${formatRupiah(r.nominal)}
-                          💵 Sisa Tagihan: ${formatRupiah(r.remainingPayment)}
-                          
-                          Mohon konfirmasi terkait pembayaran ini. Terima kasih 🙏`;
+
+                          const message = `Halo ${r.name},%0A%0A
+Kami dari *Anugerah Jaya Farm* ingin mengonfirmasi status pembayaran terkait tagihan berikut:%0A%0A
+📅 Tenggat: ${r.deadlinePaymentDate}%0A
+🏷️ Kategori: ${r.category}%0A
+📍 Lokasi: ${r.placeName}%0A
+💰 Total Tagihan: ${formatRupiah(formatThousand(r.nominal))}%0A
+💵 Sisa Pembayaran: ${formatRupiah(formatThousand(r.remainingPayment))}%0A%0A
+Mohon konfirmasi apakah tagihan ini sudah *lunas* atau masih terdapat sisa sebesar yang tertera di atas.%0A
+Terima kasih atas kerja samanya 🙏`;
 
                           const waURL = `https://wa.me/${waNumber}?text=${encodeURIComponent(
                             message

@@ -15,6 +15,7 @@ import { FaPlus, FaWhatsapp, FaExclamationTriangle } from "react-icons/fa";
 import { IoLogoWhatsapp } from "react-icons/io";
 import { useSelector } from "react-redux";
 import PageNotificationsSection from "../components/PageNotificationsSection";
+import { formatThousand } from "../utils/moneyFormat";
 
 // --- helpers ---
 const formatRupiah = (n = 0) =>
@@ -297,8 +298,12 @@ export default function Piutang() {
                           📅 Tenggat: ${r.deadlinePaymentDate}
                           🏷️ Kategori: ${r.category}
                           📍 Lokasi: ${r.placeName}
-                          💰 Total: ${formatRupiah(r.totalNominal)}
-                          💵 Sisa Tagihan: ${formatRupiah(r.remainingPayment)}
+                          💰 Total: ${formatRupiah(
+                            formatThousand(r.totalNominal)
+                          )}
+                          💵 Sisa Tagihan: ${formatRupiah(
+                            formatThousand(r.remainingPayment)
+                          )}
                           
                           Mohon konfirmasi terkait pembayaran ini. Terima kasih 🙏`;
 
