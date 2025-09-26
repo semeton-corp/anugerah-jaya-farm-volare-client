@@ -121,7 +121,7 @@ const DetailPengadaanBarang = () => {
       const payload = {
         nominal: nominal,
         paymentMethod: paymentMethod,
-        paymentDate: convertToInputDateFormat(toISO(paymentDate)), // -> dd-MM-yyyy
+        paymentDate: convertToInputDateFormat(toISO(paymentDate)),
         paymentProof: paymentProof,
       };
       const resp = await createWarehouseItemProcurementPayment(payload, id);
@@ -240,7 +240,7 @@ const DetailPengadaanBarang = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-2 gap-6 mb-6">
         <div>
           <p className="text-gray-600">Nama Barang</p>
           <p className="text-lg font-semibold">{data?.item?.name}</p>
@@ -257,7 +257,7 @@ const DetailPengadaanBarang = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-2 gap-6 mb-6">
         <div>
           <p className="text-gray-600">Harga Beli / Unit</p>
           <p className="text-lg font-semibold">{rupiah(data?.price)}</p>

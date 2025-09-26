@@ -37,6 +37,16 @@ const DetailKandang = () => {
         navigate(-1, { state: { refetch: true } });
       }
     } catch (error) {
+      if (
+        error.response.data.message ==
+        "cage is in used, please make cage empty first"
+      ) {
+        alert(
+          "❌ Tidak bisa menghapus kandang yang sedang menampung ayam! Silahkan pindahkan terlebih dahulu!"
+        );
+      } else {
+        alert("❌ Terjadi kesalahan saat menghapus data kandang!");
+      }
       console.log("error :", error);
     }
     setShowDeleteModal(false);
