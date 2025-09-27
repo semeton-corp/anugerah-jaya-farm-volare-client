@@ -336,26 +336,43 @@ export default function InputDraftPengadaanBarang() {
           >
             <div className="text-base font-medium ms-2 ">+ Tambah Supplier</div>
           </div>
-          {supplier && totalOrder && (
-            <button
-              onClick={() => {
-                const localNumber = "081246087972";
-                const waNumber = localNumber.replace(/^0/, "62");
-                const namaSupplier = supplier?.name || "";
-                const namaBarang = item?.name || "";
-                const unit = item?.unit || "";
-                const rencanaPembelian = `${totalOrder} ${item?.unit} `;
-                const message = `Halo ${namaSupplier}, kami dari Anugerah Jaya Farm ingin menanyakan harga barang PER ${unit} berikut:%0A%0A🧺 Nama Barang: ${namaBarang}%0A%0A🧺Rencana Pembelian: ${rencanaPembelian}%0A%0AMohon konfirmasi, terima kasih.`;
-                const waURL = `https://wa.me/${waNumber}?text=${message}`;
+          <button
+            onClick={() => {
+              const localNumber = "081246087972";
+              const waNumber = localNumber.replace(/^0/, "62");
+              const namaSupplier = supplier?.name || "";
+              const namaBarang = item?.name || "";
+              const unit = item?.unit || "";
+              const rencanaPembelian = `${totalOrder} ${item?.unit} `;
+              const rawMessage = `Halo ${namaSupplier} 🙏🙏🙏
 
-                window.open(waURL, "_blank");
-              }}
-              className="px-4 py-2 bg-green-700 rounded-[4px] text-white hover:bg-green-900 cursor-pointer flex gap-4"
-            >
-              <div className="text-base font-medium ms-2 ">Tanyakan Harga</div>
-              <IoLogoWhatsapp size={24} />
-            </button>
-          )}
+Kami dari *Anugerah Jaya Farm* ingin menanyakan harga barang *PER ${unit.toUpperCase()}* berikut:
+
+━━━━━━━━━━━━━━━
+📦 *Nama Barang*: ${namaBarang}
+📝 *Rencana Pembelian*: ${rencanaPembelian}
+━━━━━━━━━━━━━━━
+
+✅ Mohon konfirmasi, terima kasih.`;
+
+              const message = encodeURIComponent(rawMessage);
+
+              const urlApiWhats = `https://api.whatsapp.com/send/?phone=${waNumber}&text=${message}`;
+
+              if (supplier && totalOrder) {
+                window.open(urlApiWhats, "_blank");
+              }
+            }}
+            disabled={!supplier || !totalOrder}
+            className={`px-4 py-2 rounded-[4px] text-white flex gap-4 ${
+              !supplier || !totalOrder
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-green-700 hover:bg-green-900 cursor-pointer"
+            }`}
+          >
+            <div className="text-base font-medium ms-2">Tanyakan Harga</div>
+            <IoLogoWhatsapp size={24} />
+          </button>
         </div>
 
         <div className="flex gap-8">

@@ -86,7 +86,6 @@ const DraftPengadaanBarang = () => {
       if (warehouseResponse.status == 200) {
         setWarehouses(warehouseResponse.data.data);
         setSelectedWarehouse(warehouseResponse.data.data[0].id);
-        setCornCapacity(warehouseResponse.data.data[0].cornCapacity);
       }
     } catch (error) {
       console.log("error :", error);
@@ -160,10 +159,12 @@ const DraftPengadaanBarang = () => {
   }, []);
 
   useEffect(() => {
-    fetchDraftData();
-    if (location?.state?.refetch) {
+    if (selectedWarehouse) {
       fetchDraftData();
-      window.history.replaceState({}, document.title);
+      if (location?.state?.refetch) {
+        fetchDraftData();
+        window.history.replaceState({}, document.title);
+      }
     }
   }, [selectedWarehouse, location]);
 
