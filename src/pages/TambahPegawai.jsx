@@ -136,6 +136,45 @@ const TambahPegawai = () => {
     }
   };
 
+  const fetchPics = async () => {
+    if (!selectedRole || !locationId) return;
+
+    const roleName = roles.find((r) => r.id === parseInt(selectedRole))?.name;
+
+    const apiFn = roleToApiMap[roleName];
+    if (!apiFn) {
+      setPics([]);
+      setSelectedPic("");
+      return;
+    }
+
+    try {
+      const res = await apiFn(locationId);
+      console.log("pic res: ", res);
+      if (res.status === 200) {
+        const allData = res.data.data;
+        let filteredData;
+        console.log("selectedRole: ", selectedRole);
+        if (selectedRole == 1) {
+          filteredData = allData.filter((item) => item.eggPic == "");
+        } else if (selectedRole == 2) {
+          filteredData = allData.filter((item) => item.chickenPic == "");
+        } else {
+          filteredData = allData;
+        }
+        if (userId) {
+          setPics(allData);
+        } else {
+          setPics(filteredData);
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      setPics([]);
+      setSelectedPic("");
+    }
+  };
+
   useEffect(() => {
     fetchRoles();
     fetchLocationOptions();
@@ -145,45 +184,6 @@ const TambahPegawai = () => {
   }, []);
 
   useEffect(() => {
-    const fetchPics = async () => {
-      if (!selectedRole || !locationId) return;
-
-      const roleName = roles.find((r) => r.id === parseInt(selectedRole))?.name;
-
-      const apiFn = roleToApiMap[roleName];
-      if (!apiFn) {
-        setPics([]);
-        setSelectedPic("");
-        return;
-      }
-
-      try {
-        const res = await apiFn(locationId);
-        console.log("pic res: ", res);
-        if (res.status === 200) {
-          const allData = res.data.data;
-          let filteredData;
-          console.log("selectedRole: ", selectedRole);
-          if (selectedRole == 1) {
-            filteredData = allData.filter((item) => item.eggPic == "");
-          } else if (selectedRole == 2) {
-            filteredData = allData.filter((item) => item.chickenPic == "");
-          } else {
-            filteredData = allData;
-          }
-          if (userId) {
-            setPics(allData);
-          } else {
-            setPics(filteredData);
-          }
-        }
-      } catch (err) {
-        console.error(err);
-        setPics([]);
-        setSelectedPic("");
-      }
-    };
-
     fetchPics();
   }, [selectedRole, locationId, roles]);
 
@@ -223,14 +223,14 @@ const TambahPegawai = () => {
     } else {
       try {
         const signUpResponse = await signUp(payload);
-        if (signUpResponse.status == 201) {
+        if (signUpResponse.status == 201 || signUpResponse.status == 200) {
           setShowPopup(true);
         }
       } catch (error) {
         var customMessage = "❌Terjadi kesalahan dalam membuat akun!";
         if (error.response.data.message == "email already exists") {
           customMessage =
-            "Email sudah terdaftar, coba gunakan alamat email lain!";
+            "❌Email sudah terdaftar, coba gunakan alamat email lain!";
         }
         console.log("error: ", error);
         alert(customMessage);
@@ -551,6 +551,9 @@ function ProfilPegawaiForm({
                   setSelectedPic(options);
                 }}
               >
+                <option value="">
+                  <p className="text-gray-200">Pilih lokasi pic...</p>
+                </option>
                 {pics?.length === 0 && (
                   <option disabled>No PICs available</option>
                 )}

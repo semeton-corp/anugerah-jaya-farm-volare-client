@@ -112,7 +112,6 @@ const Tugas = () => {
 
     try {
       const updateResponse = await updateAdditionalWorkStaff(payload, taskId);
-      // console.log("updateResponse: ", updateResponse);
       if (updateResponse.status == 200) {
         fetchAllTugas();
       }
@@ -162,7 +161,6 @@ const Tugas = () => {
 
   return (
     <div className="p-4">
-      {/* header */}
       <div className="text-3xl font-bold mb-4">Tugas</div>
       {!isPresence && (
         <div className="bg-yellow-50 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6 rounded">
@@ -173,7 +171,6 @@ const Tugas = () => {
         </div>
       )}
 
-      {/* tugas tambahan  */}
       <div className="border p-4 border-black-6 rounded-lg bg-white">
         <h2 className="text-xl font-semibold mb-4">Tugas Tambahan</h2>
         <table className="w-full text-sm">
