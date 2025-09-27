@@ -69,6 +69,7 @@ const Tugas = () => {
           "✅Berhasil mengambil tugas tambahan, tugas akan masuk ke tugas pegawai esok hari!"
         );
         fetchTugasTambahanData();
+        fetchAllTugas();
       }
     } catch (error) {
       if (error.response.data.message == "additional work already full") {
