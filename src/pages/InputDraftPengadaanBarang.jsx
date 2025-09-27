@@ -10,6 +10,7 @@ import { getItems } from "../services/item";
 import { getSuppliers } from "../services/supplier";
 import { useNavigate, useParams } from "react-router-dom";
 import { formatThousand, onlyDigits } from "../utils/moneyFormat";
+import { IoLogoWhatsapp } from "react-icons/io5";
 
 const fmtIDR = (n) =>
   n == null || n === "" ? "-" : `Rp ${Number(n || 0).toLocaleString("id-ID")}`;
@@ -265,70 +266,6 @@ export default function InputDraftPengadaanBarang() {
           </select>
         </div>
 
-        <div>
-          <label className="text-sm text-gray-600 block mb-1">Supplier</label>
-          <select
-            className="w-full border rounded px-3 py-2 bg-gray-100"
-            value={supplier?.id || ""}
-            onChange={(e) =>
-              setSupplier(
-                supplierOptions.find((s) => s.id === Number(e.target.value))
-              )
-            }
-          >
-            <option value="" disabled>
-              Pilih suppplier...
-            </option>
-
-            {filteredSupplierOptions.length > 0 ? (
-              filteredSupplierOptions.map((b) => (
-                <option key={b.id} value={b.id}>
-                  {b.name}
-                </option>
-              ))
-            ) : (
-              <option value="" disabled>
-                Tidak ada supplier tersedia untuk barang yang dipilih
-              </option>
-            )}
-          </select>
-        </div>
-        <div className="flex items-center mb-4">
-          <div
-            onClick={() => {
-              tambahSupplierHandle();
-            }}
-            className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer"
-          >
-            <div className="text-base font-medium ms-2 ">+ Tambah Supplier</div>
-          </div>
-        </div>
-
-        <div className="flex gap-8">
-          <div>
-            <p className="text-sm text-gray-600">Kebutuhan per-hari</p>
-            <p className="font-semibold">
-              {dailySpending
-                ? `${dailySpending.toLocaleString("id-ID")} ${
-                    item?.unit || "-"
-                  }`
-                : "-"}
-            </p>
-          </div>
-          <div>
-            <p className="text-sm text-gray-600">
-              Rekomendasi minimum jumlah pembelian
-            </p>
-            <p className="font-semibold">
-              {dailySpending
-                ? `${(dailySpending * 3).toLocaleString("id-ID")} ${
-                    item?.unit || "-"
-                  }`
-                : "-"}
-            </p>
-          </div>
-        </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
           <div>
             <label className="text-sm text-gray-600 block mb-1">
@@ -353,10 +290,94 @@ export default function InputDraftPengadaanBarang() {
           </div>
 
           <div>
-            <p className="text-sm text-gray-600">Total Pesan</p>
-            <p className="font-semibold">
+            <p className=" text-gray-600">Total Pesan</p>
+            <p className="font-semibold text-lg">
               {totalOrder
                 ? `${totalOrder.toLocaleString("id-ID")} ${item?.unit || "-"}`
+                : "-"}
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label className="text-sm text-gray-600 block mb-1">Supplier</label>
+          <select
+            className="w-full border rounded px-3 py-2 bg-gray-100"
+            value={supplier?.id || ""}
+            onChange={(e) =>
+              setSupplier(
+                supplierOptions.find((s) => s.id === Number(e.target.value))
+              )
+            }
+          >
+            <option value="" disabled>
+              Pilih supplier...
+            </option>
+
+            {filteredSupplierOptions.length > 0 ? (
+              filteredSupplierOptions.map((b) => (
+                <option key={b.id} value={b.id}>
+                  {b.name}
+                </option>
+              ))
+            ) : (
+              <option value="" disabled>
+                Tidak ada supplier tersedia untuk barang yang dipilih
+              </option>
+            )}
+          </select>
+        </div>
+        <div className="flex items-center mb-8 gap-4">
+          <div
+            onClick={() => {
+              tambahSupplierHandle();
+            }}
+            className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer"
+          >
+            <div className="text-base font-medium ms-2 ">+ Tambah Supplier</div>
+          </div>
+          {supplier && totalOrder && (
+            <button
+              onClick={() => {
+                const localNumber = "081246087972";
+                const waNumber = localNumber.replace(/^0/, "62");
+                const namaSupplier = supplier?.name || "";
+                const namaBarang = item?.name || "";
+                const unit = item?.unit || "";
+                const rencanaPembelian = `${totalOrder} ${item?.unit} `;
+                const message = `Halo ${namaSupplier}, kami dari Anugerah Jaya Farm ingin menanyakan harga barang PER ${unit} berikut:%0A%0A🧺 Nama Barang: ${namaBarang}%0A%0A🧺Rencana Pembelian: ${rencanaPembelian}%0A%0AMohon konfirmasi, terima kasih.`;
+                const waURL = `https://wa.me/${waNumber}?text=${message}`;
+
+                window.open(waURL, "_blank");
+              }}
+              className="px-4 py-2 bg-green-700 rounded-[4px] text-white hover:bg-green-900 cursor-pointer flex gap-4"
+            >
+              <div className="text-base font-medium ms-2 ">Tanyakan Harga</div>
+              <IoLogoWhatsapp size={24} />
+            </button>
+          )}
+        </div>
+
+        <div className="flex gap-8">
+          <div>
+            <p className=" text-gray-600">Kebutuhan per-hari</p>
+            <p className="font-semibold text-lg">
+              {dailySpending
+                ? `${dailySpending.toLocaleString("id-ID")} ${
+                    item?.unit || "-"
+                  }`
+                : "-"}
+            </p>
+          </div>
+          <div>
+            <p className=" text-gray-600">
+              Rekomendasi minimum jumlah pembelian
+            </p>
+            <p className="font-semibold text-lg">
+              {dailySpending
+                ? `${(dailySpending * 3).toLocaleString("id-ID")} ${
+                    item?.unit || "-"
+                  }`
                 : "-"}
             </p>
           </div>
@@ -365,7 +386,7 @@ export default function InputDraftPengadaanBarang() {
         {/* Harga / unit & Total */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
           <div>
-            <label className="text-sm text-gray-600 block mb-1">
+            <label className=" text-gray-600 block mb-1">
               Harga Beli / Unit
             </label>
             <div className="flex items-center gap-2">
@@ -381,13 +402,13 @@ export default function InputDraftPengadaanBarang() {
                 }}
                 placeholder="Rp 0"
               />
-              <span className="font-medium">/ {item?.unit || "-"}</span>
+              <span className="text-lg font-medium">/ {item?.unit || "-"}</span>
             </div>
           </div>
 
           <div>
-            <p className="text-sm text-gray-600">Harga Beli Total</p>
-            <p className="font-semibold">
+            <p className=" text-gray-600">Harga Beli Total</p>
+            <p className="font-semibold text-lg">
               {totalPrice ? fmtIDR(totalPrice) : "Rp -"}
             </p>
           </div>
