@@ -390,11 +390,11 @@ const Penjualan = () => {
           </div>
 
           {/* keuntungan & penjualan*/}
-          <div className="flex flex-col lg:flex-row h-105 gap-6">
+          <div className="flex flex-col lg:flex-row h-120 gap-6">
             {/* Chart Section (1/2 width on large screens) */}
             <div className="w-full lg:w-1/2 bg-white rounded-lg p-6 border border-black-6">
               <h2 className="text-xl font-semibold mb-4">Keuntungan</h2>
-              <ResponsiveContainer width="100%" height={350}>
+              <ResponsiveContainer width="100%" height={380}>
                 <LineChart data={cashflowSaleGraph}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="key" />

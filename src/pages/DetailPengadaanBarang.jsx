@@ -108,6 +108,7 @@ const DetailPengadaanBarang = () => {
   const fetchDetailData = async () => {
     try {
       const res = await getWarehouseItemProcurement(id);
+      console.log("res: ", res);
       if (res.status === 200) {
         setData(res.data.data);
       }

@@ -132,6 +132,7 @@ const EditFormulaPakan = () => {
   const fetchItemList = async () => {
     try {
       const itemListResponse = await getItems();
+      console.log("itemListResponse: ", itemListResponse);
       if (itemListResponse.status == 200) {
         setAllItems(itemListResponse.data.data);
         // console.log("itemListResponse.data.data: ", itemListResponse.data.data);
@@ -148,12 +149,11 @@ const EditFormulaPakan = () => {
       selectedItem = items?.filter(
         (item) => item.category?.trim().toLowerCase() === "pakan jadi"
       );
-    } else if (type?.trim().toLowerCase() == "pakan adukan") {
-      selectedItem = items?.filter(
-        (item) => item.category?.trim().toLowerCase() === "bahan baku adukan"
+    } else if (type?.trim().toLowerCase() === "pakan adukan") {
+      selectedItem = items?.filter((item) =>
+        item.category?.trim().toLowerCase().includes("bahan baku adukan")
       );
     }
-
     setItemList(selectedItem);
   };
 
