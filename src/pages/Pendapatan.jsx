@@ -28,19 +28,11 @@ const MONTHS_ID = [
   "Desember",
 ];
 
-const CATEGORIES = [
-  "Penjualan Ayam",
+const CATEGORY_OPTIONS = [
   "Penjualan Telur Toko",
   "Penjualan Telur Gudang",
-];
-
-const CATEGORY_OPTIONS = [
-  "Operasional",
-  "Pengadaan Ayam DOC",
-  "Pengadaan Barang",
-  "Pengadaan Jagung",
-  "Lain-lain",
-  "Pegawai",
+  "Penjualan Ayam Afkir",
+  "Pembayaran Pinjaman Pegawai",
 ];
 
 const INCOME_CATEGORIES = [
@@ -59,12 +51,6 @@ const INCOME_COLORS = {
   "Penjualan Telur Toko": "#3b82f6",
   "Penjualan Telur Gudang": "#22c55e",
   "Penjualan Ayam Afkir": "#f59e0b",
-};
-
-const COLORS = {
-  "Penjualan Ayam": "#215963",
-  "Penjualan Telur Toko": "#E29901",
-  "Penjualan Telur Gudang": "#d97706",
 };
 
 const formatRupiah = (n = 0) =>
@@ -88,38 +74,7 @@ export default function Pendapatan() {
     })).filter((d) => d.value > 0);
   }, [pieChartData]);
 
-  const [rows] = useState([
-    {
-      id: 1,
-      date: "2025-08-22",
-      kategori: "Penjualan Ayam",
-      lokasi: "Kandang Sidodadi",
-      namaBarang: "Ayam Afkir",
-      jumlahBarang: "4000 Ekor",
-      pelanggan: "Pak Adi",
-      nominal: 20000000,
-    },
-    {
-      id: 2,
-      date: "2025-08-22",
-      kategori: "Penjualan Telur Toko",
-      lokasi: "Toko A",
-      namaBarang: "Telur Retak",
-      jumlahBarang: "10 Kg",
-      pelanggan: "Pak Tono",
-      nominal: 300000,
-    },
-    {
-      id: 3,
-      date: "2025-08-22",
-      kategori: "Penjualan Telur Gudang",
-      lokasi: "Gudang Pusat",
-      namaBarang: "Telur OK",
-      jumlahBarang: "20 Ikat",
-      pelanggan: "Yasin",
-      nominal: 5000000,
-    },
-  ]);
+  const [rows] = useState([]);
 
   const [category, setCategory] = useState("Semua");
   const [year, setYear] = useState(() => new Date().getFullYear());
@@ -204,7 +159,6 @@ export default function Pendapatan() {
                 onChange={(e) => setCategory(e.target.value)}
                 className="ml-2 bg-transparent text-base font-medium outline-none cursor-pointer"
               >
-                <option value="">Semua Kategori</option>
                 {CATEGORY_OPTIONS.map((c) => (
                   <option key={c} value={c}>
                     {c}

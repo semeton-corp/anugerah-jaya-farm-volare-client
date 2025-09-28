@@ -14,21 +14,6 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { getExpenseOverview } from "../services/cashflow";
 import { useEffect } from "react";
 
-const MONTHS_ID = [
-  "Januari",
-  "Februari",
-  "Maret",
-  "April",
-  "Mei",
-  "Juni",
-  "Juli",
-  "Agustus",
-  "September",
-  "Oktober",
-  "November",
-  "Desember",
-];
-
 const CATEGORY_OPTIONS = [
   "Operasional",
   "Pengadaan Ayam DOC",
@@ -86,8 +71,6 @@ export default function Pengeluaran() {
     new Intl.DateTimeFormat("id-ID", { month: "long" }).format(new Date())
   );
 
-  const [openCat, setOpenCat] = useState(false);
-
   const detailPages = ["tambah-pengeluaran", "detail-pengeluaran"];
   const isDetailPage = detailPages.some((segment) =>
     location.pathname.includes(segment)
@@ -134,11 +117,7 @@ export default function Pengeluaran() {
 
   useEffect(() => {
     fetchExpenseData();
-    if (location?.state?.refetch) {
-      fetchExpenseData();
-      window.history.replaceState({}, document.title);
-    }
-  }, [category, monthName, year, location]);
+  }, [category, monthName, year]);
 
   if (isDetailPage) {
     return <Outlet />;
@@ -158,7 +137,7 @@ export default function Pengeluaran() {
                 onChange={(e) => setCategory(e.target.value)}
                 className="ml-2 bg-transparent text-base font-medium outline-none cursor-pointer"
               >
-                <option value="">Semua Kategori</option>
+                <option value="Semua">Semua Kategori</option>
                 {CATEGORY_OPTIONS.map((c) => (
                   <option key={c} value={c}>
                     {c}
@@ -238,7 +217,10 @@ export default function Pengeluaran() {
             </thead>
             <tbody className="divide-y">
               {expenseData.map((item) => (
-                <tr key={item.id} className="align-top">
+                <tr
+                  key={`${item.category}-${item.date}-${item.id}`}
+                  className="align-top"
+                >
                   <td className="py-3 px-4">{item.date}</td>
                   <td className="py-3 px-4">{item.category}</td>
                   <td className="py-3 px-4">{item.name}</td>
@@ -294,15 +276,17 @@ export default function Pengeluaran() {
           </table>
         </div>
       </div>
-      {/* <button
+      <button
         onClick={() => {
+          console.log("expenseData: ", expenseData);
+          console.log("pieData: ", pieData);
           console.log("year: ", year);
           console.log("month: ", month);
           console.log("monthName: ", monthName);
         }}
       >
         CHECK
-      </button> */}
+      </button>
     </div>
   );
 }
