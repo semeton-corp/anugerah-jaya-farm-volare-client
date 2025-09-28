@@ -100,6 +100,7 @@ const PresensiLokasi = () => {
   const fetchTodayPresence = async () => {
     try {
       const todayPresenceResponse = await getUserPresenceWorkDetailSummaries(
+        locationItem.roleId,
         locationItem.placeType,
         locationItem.placeId
       );
@@ -112,6 +113,7 @@ const PresensiLokasi = () => {
   const fetchPresenceSummary = async () => {
     try {
       const summaryResponse = await getUserPresenceSummaries(
+        locationItem.roleId,
         locationItem.placeType,
         locationItem.placeId,
         monthName,

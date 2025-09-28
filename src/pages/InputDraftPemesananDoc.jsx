@@ -114,7 +114,7 @@ const InputDraftPemesananDoc = () => {
                 >
                   {cages.map((k) => (
                     <option key={k?.id} value={k?.id}>
-                      {k?.name}s
+                      {k?.name}
                     </option>
                   ))}
                 </select>
