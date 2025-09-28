@@ -64,7 +64,7 @@ export default function Pengeluaran() {
       .filter((d) => d.value > 0);
   }, [pieChartData]);
 
-  const [category, setCategory] = useState("Semua");
+  const [category, setCategory] = useState(CATEGORY_OPTIONS[0]);
   const [month, setMonth] = useState(new Date().getMonth());
   const [year, setYear] = useState(new Date().getFullYear());
   const [monthName, setMonthName] = useState(
@@ -137,7 +137,7 @@ export default function Pengeluaran() {
                 onChange={(e) => setCategory(e.target.value)}
                 className="ml-2 bg-transparent text-base font-medium outline-none cursor-pointer"
               >
-                <option value="Semua">Semua Kategori</option>
+                {/* <option value="Semua">Semua Kategori</option> */}
                 {CATEGORY_OPTIONS.map((c) => (
                   <option key={c} value={c}>
                     {c}

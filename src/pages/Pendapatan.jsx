@@ -74,9 +74,7 @@ export default function Pendapatan() {
     })).filter((d) => d.value > 0);
   }, [pieChartData]);
 
-  const [rows] = useState([]);
-
-  const [category, setCategory] = useState("Semua");
+  const [category, setCategory] = useState(CATEGORY_OPTIONS[0]);
   const [year, setYear] = useState(() => new Date().getFullYear());
   const [month, setMonth] = useState(() => new Date().getMonth());
   const [monthName, setMonthName] = useState(MONTHS_ID[month]);
@@ -87,13 +85,13 @@ export default function Pendapatan() {
   );
 
   const filtered = useMemo(() => {
-    return rows.filter((r) => {
+    return incomeData.filter((r) => {
       const d = new Date(r.date);
       const byMonth = d.getMonth() === month && d.getFullYear() === year;
-      const byCat = category === "Semua" ? true : r.kategori === category;
+      const byCat = category === "Semua" ? true : r.category === category;
       return byMonth && byCat;
     });
-  }, [rows, category, month, year]);
+  }, [incomeData, category, month, year]);
 
   const totalNominal = useMemo(
     () => filtered.reduce((sum, r) => sum + Number(r.nominal || 0), 0),
@@ -284,7 +282,7 @@ export default function Pendapatan() {
                   </tr>
                 ))}
 
-                {filtered.length === 0 && (
+                {incomeData.length === 0 && (
                   <tr>
                     <td
                       colSpan={8}
@@ -297,7 +295,7 @@ export default function Pendapatan() {
               </tbody>
 
               {/* Table footer total */}
-              {filtered.length > 0 && (
+              {incomeData.length > 0 && (
                 <tfoot>
                   <tr className="bg-gray-50">
                     <td className="py-3 px-4 font-semibold" colSpan={6}>
