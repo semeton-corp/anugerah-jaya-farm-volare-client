@@ -558,47 +558,6 @@ const InputDraftPengadaanJagung = () => {
           </select>
         </div>
 
-        <div>
-          <button
-            onClick={() => {
-              const selectedSupplier = supplierOptions.find(
-                (item) => item.id == formData.supplier
-              );
-              console.log("selectedSupplier: ", selectedSupplier);
-              const localNumber = "081246087972";
-              const waNumber = localNumber.replace(/^0/, "62");
-              const namaSupplier = selectedSupplier.name || "Supplier";
-              const namaBarang = "Jagung";
-              const unit = "Kg";
-              const rencanaPembelian = `${formData.quantity} ${unit}`;
-              const rawMessage = `Halo ${namaSupplier} 🙏🙏🙏
-
-Kami dari *Anugerah Jaya Farm* ingin menanyakan harga barang *PER ${unit.toUpperCase()}* berikut:
-
-━━━━━━━━━━━━━━━
-📦 *Nama Barang*: ${namaBarang}
-📝 *Rencana Pembelian*: ${rencanaPembelian}
-━━━━━━━━━━━━━━━
-
-✅ Mohon konfirmasi, terima kasih.`;
-
-              const message = encodeURIComponent(rawMessage);
-              const waURL = `https://api.whatsapp.com/send/?phone=${waNumber}&text=${message}`;
-
-              window.open(waURL, "_blank");
-            }}
-            disabled={!formData.supplier || !formData.quantity}
-            className={`px-4 py-2 rounded flex items-center gap-2 ${
-              !formData.supplier || !formData.quantity
-                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                : "bg-green-600 hover:bg-green-800 text-white"
-            }`}
-          >
-            <IoLogoWhatsapp size={20} />
-            Tanya Harga
-          </button>
-        </div>
-
         {/* Jumlah Pesan & Maksimum */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex flex-col gap-2">
@@ -640,6 +599,47 @@ Kami dari *Anugerah Jaya Farm* ingin menanyakan harga barang *PER ${unit.toUpper
               <span className="font-bold">{maxOrderQuantity} Kg</span>
             </div>
           </div>
+        </div>
+
+        <div>
+          <button
+            onClick={() => {
+              const selectedSupplier = supplierOptions.find(
+                (item) => item.id == formData.supplier
+              );
+              console.log("selectedSupplier: ", selectedSupplier);
+              const localNumber = "081246087972";
+              const waNumber = localNumber.replace(/^0/, "62");
+              const namaSupplier = selectedSupplier.name || "Supplier";
+              const namaBarang = "Jagung";
+              const unit = "Kg";
+              const rencanaPembelian = `${formData.quantity} ${unit}`;
+              const rawMessage = `Halo ${namaSupplier} 🙏🙏🙏
+
+Kami dari *Anugerah Jaya Farm* ingin menanyakan harga barang *PER ${unit.toUpperCase()}* berikut:
+
+━━━━━━━━━━━━━━━
+📦 *Nama Barang*: ${namaBarang}
+📝 *Rencana Pembelian*: ${rencanaPembelian}
+━━━━━━━━━━━━━━━
+
+✅ Mohon konfirmasi, terima kasih.`;
+
+              const message = encodeURIComponent(rawMessage);
+              const waURL = `https://api.whatsapp.com/send/?phone=${waNumber}&text=${message}`;
+
+              window.open(waURL, "_blank");
+            }}
+            disabled={!formData.supplier || !formData.quantity}
+            className={`px-4 py-2 rounded flex items-center gap-2 ${
+              !formData.supplier || !formData.quantity || isQuantityOverMax
+                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                : "bg-green-600 hover:bg-green-800 text-white"
+            }`}
+          >
+            <IoLogoWhatsapp size={20} />
+            Tanya Harga
+          </button>
         </div>
 
         {/* Hasil harga */}

@@ -53,6 +53,7 @@ import {
   updateWarehouseSalePayment,
 } from "../services/warehouses";
 import { formatThousand, onlyDigits } from "../utils/moneyFormat";
+import { IoLogoWhatsapp } from "react-icons/io5";
 
 const InputDataPesanan = () => {
   const location = useLocation();
@@ -782,6 +783,15 @@ const InputDataPesanan = () => {
   }, [customers]);
 
   useEffect(() => {
+    const totalitemPrice = itemPrice * quantity;
+    const totalDiscount = totalitemPrice * (discount / 100);
+
+    setItemTotalPrice(totalitemPrice);
+    setItemPriceDiscount(totalDiscount);
+    setTotal(totalitemPrice - totalDiscount);
+  }, [itemPrice]);
+
+  useEffect(() => {
     if (!selectedItem) return;
 
     const name = selectedItem.name;
@@ -1023,6 +1033,88 @@ const InputDataPesanan = () => {
             masuk antrian
           </p>
         )}
+
+        {!id && (
+          <div>
+            <button
+              onClick={() => {
+                const localNumber = "081246087972";
+                const waNumber = localNumber.replace(/^0/, "62");
+                const namaPelanggan = customerName;
+                const namaBarang = selectedItem.name;
+                console.log("selectedItem: ", selectedItem);
+                const unit = selectedItem.unit;
+                const rencanaPembelian = `${quantity} ${unit}`;
+                const hargaPerUnit = itemPrice;
+                const jumlahTransaksiTotal = transactionCount;
+                const diskon = `${discount}%`;
+                const hargaSemuaBarang = itemTotalPrice;
+                const potonganHarga = itemPriceDiscount;
+                const totalHarga = itemTotalPrice - itemPriceDiscount;
+
+                const rawMessage = `Halo ${namaPelanggan} 🙏🙏🙏
+Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toUpperCase()}* berikut:
+
+━━━━━━━━━━━━━━━
+📦 *Nama Barang*: ${namaBarang}
+━━━━━━━━━━━━━━━
+💵 *Harga Per ${unit}*: Rp ${formatThousand(hargaPerUnit)}
+🎁 *Rencana Pembelian*: ${rencanaPembelian}
+📝 *Jumlah Transaksi Total Anda*: ${jumlahTransaksiTotal} Kali Belanja
+🎀 *Persentase potongan harga berdasar jumlah Transaksi*: ${diskon} 
+━━━━━━━━━━━━━━━
+*Harga Semua Barang*: Rp ${formatThousand(hargaSemuaBarang)}
+*Potongan Harga*: - Rp ${formatThousand(potonganHarga)}
+*Total Harga Akhir*: Rp ${formatThousand(totalHarga)}
+
+✅ Mohon konfirmasi, terima kasih.`;
+
+                const message = encodeURIComponent(rawMessage);
+                const waURL = `https://api.whatsapp.com/send/?phone=${waNumber}&text=${message}`;
+
+                window.open(waURL, "_blank");
+              }}
+              disabled={
+                !customerName || !selectedItem || !quantity || isOutOfStock
+              }
+              className={`px-4 py-2 rounded flex items-center gap-2 ${
+                !customerName || !selectedItem || !quantity || isOutOfStock
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-green-600 hover:bg-green-800 text-white"
+              }`}
+            >
+              <IoLogoWhatsapp size={20} />
+              Tanya Harga
+            </button>
+          </div>
+        )}
+
+        <div>
+          <label
+            className={`block font-medium mt-4 ${
+              isOutOfStock && !id ? " text-gray-400/40" : "text-black"
+            }`}
+          >
+            {`Harga per ${unit}`}
+          </label>
+          {id ? (
+            <p className="text-lg font-bold">Rp {formatThousand(itemPrice)}</p>
+          ) : (
+            <input
+              disabled={isOutOfStock}
+              className={`w-full border bg-black-4  rounded p-2 mb-4 ${
+                isOutOfStock
+                  ? "bg-gray-400/10 cursor-not-allowed text-gray-400/20"
+                  : ""
+              }`}
+              type="number"
+              value={itemPrice}
+              onChange={(e) => {
+                setItemPrice(e.target.value);
+              }}
+            />
+          )}
+        </div>
 
         <div className="flex justify-between gap-4">
           <div className="w-full">

@@ -1,210 +1,245 @@
-import React, { useState, useEffect } from "react";
-import { FiMapPin, FiClock } from "react-icons/fi";
+import React, { useState } from "react";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import {
+  getUserPresenceSummaries,
+  getUserPresenceWorkDetailSummaries,
+} from "../services/presence";
+import MonthYearSelector from "../components/MonthYearSelector";
 
-// Utility function to format date into Indonesian (simulated from translateDateToBahasa)
-const translateDateToBahasa = (date) => {
-  const options = {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  };
-  return new Date(date).toLocaleDateString("id-ID", options);
-};
-
-// --- DUMMY DATA AND SIMULATED SERVICES ---
-
-// Mock storage key (to persist the dummy data across page refreshes)
-const STORAGE_KEY = "mock_presence_status";
-
-// Function to simulate fetching today's presence status
-const getMockPresenceStatus = () => {
-  const storedData = localStorage.getItem(STORAGE_KEY);
-  if (storedData) {
-    return JSON.parse(storedData);
-  }
-  // Default status: null (no presence recorded yet)
-  return null;
-};
-
-// Function to simulate saving presence status
-const saveMockPresenceStatus = (status) => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(status));
-};
-
-// --- PRESENSI LOKASI COMPONENT ---
+const MONTHS_ID = [
+  "Januari",
+  "Februari",
+  "Maret",
+  "April",
+  "Mei",
+  "Juni",
+  "Juli",
+  "Agustus",
+  "September",
+  "Oktober",
+  "November",
+  "Desember",
+];
 
 const PresensiLokasi = () => {
-  const [presenceStatus, setPresenceStatus] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isProcessing, setIsProcessing] = useState(false);
-  // Dummy Location
-  const [currentLocation] = useState("Kandang Sidodadi, Bali");
+  const { state } = useLocation();
+  const locationItem = state?.locationItem;
+  console.log("locationItem: ", locationItem);
 
-  // Function to fetch the user's current presence status
-  const fetchPresenceStatus = () => {
-    setIsLoading(true);
-    // Simulate API delay
-    setTimeout(() => {
-      const status = getMockPresenceStatus();
-      setPresenceStatus(status);
-      setIsLoading(false);
-    }, 500);
+  const now = new Date();
+  const [month, setMonth] = useState(now.getMonth());
+  const [year, setYear] = useState(now.getFullYear());
+  const [monthName, setMonthName] = useState(MONTHS_ID[now.getMonth()]);
+  const absensiHariIni = [
+    {
+      id: 1,
+      nama: "Budi Santoso",
+      email: "budi@company.com",
+      jabatan: "Pekerja Kandang",
+      status: "Hadir",
+      jamMasuk: "09.00 WIB",
+      jamPulang: "- WIB",
+      progres: 80,
+    },
+    {
+      id: 2,
+      nama: "Gede Indra",
+      email: "indra@company.com",
+      jabatan: "Pekerja Kandang",
+      status: "Hadir",
+      jamMasuk: "08.45 WIB",
+      jamPulang: "18.00 WIB",
+      progres: 100,
+    },
+    {
+      id: 3,
+      nama: "Siti Rahayu",
+      email: "siti@company.com",
+      jabatan: "Pekerja Kandang",
+      status: "Hadir",
+      jamMasuk: "08.30 WIB",
+      jamPulang: "- WIB",
+      progres: 0,
+    },
+  ];
+
+  const rangkumanPresensi = [
+    {
+      id: 1,
+      nama: "Budi Santoso",
+      email: "budi@company.com",
+      jabatan: "Pekerja Kandang",
+      hadir: 10,
+      sakit: 0,
+      izin: 1,
+      alpha: 0,
+    },
+    {
+      id: 2,
+      nama: "Gede Indra",
+      email: "indra@company.com",
+      jabatan: "Pekerja Kandang",
+      hadir: 10,
+      sakit: 1,
+      izin: 0,
+      alpha: 0,
+    },
+    {
+      id: 3,
+      nama: "Siti Rahayu",
+      email: "siti@company.com",
+      jabatan: "Pekerja Kandang",
+      hadir: 10,
+      sakit: 0,
+      izin: 0,
+      alpha: 0,
+    },
+  ];
+
+  const fetchTodayPresence = async () => {
+    try {
+      const todayPresenceResponse = await getUserPresenceWorkDetailSummaries(
+        locationItem.placeType,
+        locationItem.placeId
+      );
+      console.log("todayPresenceResponse: ", todayPresenceResponse);
+    } catch (error) {
+      console.log("error :", error);
+    }
   };
 
-  // Handler for clocking in (Presensi Masuk)
-  const handleCheckIn = () => {
-    if (isProcessing) return;
-    setIsProcessing(true);
-
-    // Simulate API delay and success
-    setTimeout(() => {
-      const now = new Date();
-      const newStatus = {
-        id: "presensi-" + now.getTime(),
-        status: "Hadir",
-        jamMasuk: now.toLocaleTimeString("id-ID", {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-        jamPulang: null,
-        tanggal: translateDateToBahasa(now),
-        lokasi: currentLocation,
-      };
-
-      saveMockPresenceStatus(newStatus);
-      setPresenceStatus(newStatus);
-      alert("✅ Presensi masuk berhasil dicatat!");
-      setIsProcessing(false);
-    }, 1000);
-  };
-
-  // Handler for clocking out (Presensi Pulang)
-  const handleCheckOut = () => {
-    if (isProcessing || !presenceStatus) return;
-    setIsProcessing(true);
-
-    // Simulate API delay and success
-    setTimeout(() => {
-      const now = new Date();
-      const updatedStatus = {
-        ...presenceStatus,
-        jamPulang: now.toLocaleTimeString("id-ID", {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-      };
-
-      saveMockPresenceStatus(updatedStatus);
-      setPresenceStatus(updatedStatus);
-      alert("✅ Presensi pulang berhasil dicatat!");
-      setIsProcessing(false);
-    }, 1000);
+  const fetchPresenceSummary = async () => {
+    try {
+      const summaryResponse = await getUserPresenceSummaries(
+        locationItem.placeType,
+        locationItem.placeId,
+        monthName,
+        year
+      );
+      console.log("summaryResponse: ", summaryResponse);
+    } catch (error) {
+      console.log("error :", error);
+    }
   };
 
   useEffect(() => {
-    // Check if the stored presence is from a previous day. If so, reset it.
-    const storedStatus = getMockPresenceStatus();
-    const today = translateDateToBahasa(new Date());
-
-    if (storedStatus && storedStatus.tanggal !== today) {
-      localStorage.removeItem(STORAGE_KEY);
-    }
-
-    fetchPresenceStatus();
+    fetchTodayPresence();
+    fetchPresenceSummary();
   }, []);
 
-  const today = translateDateToBahasa(new Date());
-
-  if (isLoading) {
-    return (
-      <div className="p-4 text-center text-lg text-gray-500">
-        Memuat status presensi...
-      </div>
-    );
-  }
-
   return (
-    <div className="p-4">
-      <h1 className="text-3xl font-bold mb-4">Presensi Harian</h1>
+    <div className="p-6">
+      <h1 className="text-xl font-bold mb-4">
+        {`Presensi ${locationItem.placeName}`}
+      </h1>
 
-      <div className="bg-white border p-6 rounded-lg shadow-md">
-        <div className="flex justify-between items-center mb-4 border-b pb-3">
-          <h2 className="text-xl font-semibold">{today}</h2>
-          <span className="text-sm font-medium text-gray-600 flex items-center">
-            <FiMapPin className="mr-1 text-red-500" /> **{currentLocation}**
-          </span>
+      {/* Absensi Hari Ini */}
+      <div className="bg-white shadow rounded-lg p-4 mb-6">
+        <h2 className="text-lg font-semibold mb-4">Absensi Hari Ini</h2>
+        <table className="w-full border-collapse">
+          <thead>
+            <tr className="bg-green-700 text-left text-sm font-medium text-white">
+              <th className="px-6 py-3">Pegawai</th>
+              <th className="px-6 py-3">Jabatan</th>
+              <th className="px-6 py-3">Status</th>
+              <th className="px-6 py-3">Jam Masuk</th>
+              <th className="px-6 py-3">Jam Pulang</th>
+              <th className="px-6 py-3">Penyelesaian Tugas</th>
+            </tr>
+          </thead>
+          <tbody className="text-sm divide-y divide-gray-200">
+            {absensiHariIni.map((row) => (
+              <tr key={row.id}>
+                <td className="px-6 py-4">
+                  <div className="flex items-center space-x-3">
+                    <img
+                      src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                        row.nama
+                      )}&background=random`}
+                      alt={row.nama}
+                      className="w-8 h-8 rounded-full"
+                    />
+                    <div>
+                      <p className="font-medium">{row.nama}</p>
+                      <p className="text-gray-500 text-xs">{row.email}</p>
+                    </div>
+                  </div>
+                </td>
+                <td className="px-6 py-4">{row.jabatan}</td>
+                <td className="px-6 py-4">
+                  <span className="inline-block px-3 py-1 text-xs font-medium rounded-full bg-green-100 text-green-700">
+                    {row.status}
+                  </span>
+                </td>
+                <td className="px-6 py-4">{row.jamMasuk}</td>
+                <td className="px-6 py-4">{row.jamPulang}</td>
+                <td className="px-6 py-4">
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      className="bg-green-500 h-2 rounded-full"
+                      style={{ width: `${row.progres}%` }}
+                    />
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">{row.progres}%</p>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Rangkuman Presensi */}
+      <div className="bg-white shadow rounded-lg p-4">
+        <div className="flex justify-between">
+          <h2 className="text-lg font-semibold mb-4">Rangkuman Presensi</h2>
+          <MonthYearSelector
+            month={month}
+            year={year}
+            setMonth={setMonth}
+            setMonthName={setMonthName}
+            setYear={setYear}
+          />
         </div>
 
-        {presenceStatus?.status === "Hadir" ? (
-          <div className="space-y-4">
-            <p className="text-lg font-medium text-green-700 p-2 bg-green-50 border-l-4 border-green-500 rounded">
-              Anda sudah berhasil **presensi masuk** hari ini.
-            </p>
-            <div className="flex justify-between items-center bg-gray-100 p-3 rounded">
-              <span className="font-medium text-gray-700">Jam Masuk:</span>
-              <span className="font-bold text-lg">
-                {presenceStatus.jamMasuk} WIB
-              </span>
-            </div>
-
-            {presenceStatus.jamPulang ? (
-              <div className="flex justify-between items-center bg-gray-100 p-3 rounded">
-                <span className="font-medium text-gray-700">Jam Pulang:</span>
-                <span className="font-bold text-lg text-blue-600">
-                  {presenceStatus.jamPulang} WIB
-                </span>
-              </div>
-            ) : (
-              <button
-                onClick={handleCheckOut}
-                disabled={isProcessing}
-                className="w-full bg-red-600 text-white font-semibold py-3 rounded-md hover:bg-red-700 transition duration-150 disabled:bg-red-300 flex items-center justify-center"
-              >
-                {isProcessing ? (
-                  "Memproses..."
-                ) : (
-                  <>
-                    <FiClock className="mr-2" /> Presensi Pulang
-                  </>
-                )}
-              </button>
-            )}
-
-            {/* Optional: Add a button to reset the dummy status for testing */}
-            {!isProcessing && presenceStatus.jamPulang && (
-              <button
-                onClick={() => {
-                  localStorage.removeItem(STORAGE_KEY);
-                  setPresenceStatus(null);
-                  alert("Status presensi direset!");
-                }}
-                className="w-full text-sm text-gray-500 mt-2 hover:text-red-500"
-              >
-                Reset Status (For Testing)
-              </button>
-            )}
-          </div>
-        ) : (
-          <div className="text-center">
-            <p className="text-lg mb-4 text-yellow-700 p-2 bg-yellow-50 border-l-4 border-yellow-500 rounded">
-              Anda **belum** melakukan presensi hari ini.
-            </p>
-            <button
-              onClick={handleCheckIn}
-              disabled={isProcessing}
-              className="w-full bg-green-600 text-white font-semibold py-3 rounded-md hover:bg-green-700 transition duration-150 disabled:bg-green-300 flex items-center justify-center"
-            >
-              {isProcessing ? (
-                "Memproses..."
-              ) : (
-                <>
-                  <FiClock className="mr-2" /> Presensi Masuk
-                </>
-              )}
-            </button>
-          </div>
-        )}
+        <table className="w-full border-collapse">
+          <thead>
+            <tr className="bg-green-700 text-left text-sm font-medium text-white">
+              <th className="px-6 py-3">Pegawai</th>
+              <th className="px-6 py-3">Jabatan</th>
+              <th className="px-6 py-3">Jumlah Hadir</th>
+              <th className="px-6 py-3">Jumlah Sakit</th>
+              <th className="px-6 py-3">Jumlah Izin</th>
+              <th className="px-6 py-3">Jumlah Alpha</th>
+            </tr>
+          </thead>
+          <tbody className="text-sm divide-y divide-gray-200">
+            {rangkumanPresensi.map((row) => (
+              <tr key={row.id}>
+                <td className="px-6 py-4">
+                  <div className="flex items-center space-x-3">
+                    <img
+                      src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                        row.nama
+                      )}&background=random`}
+                      alt={row.nama}
+                      className="w-8 h-8 rounded-full"
+                    />
+                    <div>
+                      <p className="font-medium">{row.nama}</p>
+                      <p className="text-gray-500 text-xs">{row.email}</p>
+                    </div>
+                  </div>
+                </td>
+                <td className="px-6 py-4">{row.jabatan}</td>
+                <td className="px-6 py-4">{row.hadir}</td>
+                <td className="px-6 py-4">{row.sakit}</td>
+                <td className="px-6 py-4">{row.izin}</td>
+                <td className="px-6 py-4">{row.alpha}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

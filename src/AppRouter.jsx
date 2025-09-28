@@ -119,6 +119,7 @@ import Hutang from "./pages/Hutang";
 import DetailHutang from "./pages/DetailHutang";
 import GajiPegawai from "./pages/GajiPegawai";
 import DetailGaji from "./pages/DetailGaji";
+import PresensiLokasi from "./pages/PresensiLokasi";
 
 const AppRouter = createBrowserRouter([
   {
@@ -714,6 +715,9 @@ const AppRouter = createBrowserRouter([
               {
                 path: "presensi",
                 element: <PresensiKelolaPegawai />,
+                children: [
+                  { path: "presensi-lokasi", element: <PresensiLokasi /> },
+                ],
               },
               {
                 path: "daftar-pegawai",

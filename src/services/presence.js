@@ -71,6 +71,30 @@ export const getUserPresences = (userId, month, year, page = 1) => {
   });
 };
 
+export const getUserPresenceWorkDetailSummaries = (placeType, placeId) => {
+  return api.get(`/presences/users/works/summaries`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    params: { placeType, placeType, placeId: placeId },
+  });
+};
+
+export const getUserPresenceSummaries = (placeType, placeId, month, year) => {
+  return api.get(`/presences/users/summaries`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    params: {
+      placeType,
+      placeType,
+      placeId: placeId,
+      month: month,
+      year: year,
+    },
+  });
+};
+
 export const getUserPresencePending = ({
   roleId,
   placeId,

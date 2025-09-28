@@ -28,35 +28,6 @@ import { downloadReport, getCashflowSaleOverview } from "../services/cashflow";
 import { formatRupiah } from "../utils/moneyFormat";
 import { useMemo } from "react";
 
-const salesData = [
-  {
-    tanggal: "20 Maret 2025",
-    namaBarang: "Telur OK",
-    kuantitas: "12 Ikat",
-    customer: "Pak Tono",
-    status: "Selesai",
-  },
-  {
-    tanggal: "22 Maret 2025",
-    namaBarang: "Telur retak",
-    kuantitas: "12 Karpet",
-    customer: "Pak Adi",
-    status: "Belum Terkirim",
-  },
-  {
-    tanggal: "22 Maret 2025",
-    namaBarang: "Telur pecah",
-    kuantitas: "10 Karpet",
-    customer: "Pak Yono",
-    status: "Belum Terkirim",
-  },
-];
-
-const pieData = [
-  { name: "Gudang", value: 30 },
-  { name: "Toko", value: 70 },
-];
-
 const COLORS = ["#2E7E8B", "#E8AD34"];
 
 const MONTHS_ID = [

@@ -5,6 +5,7 @@ import {
   getUserPresencePending,
 } from "../services/presence";
 import { getTodayDateInBahasa } from "../utils/dateFormat";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 const classNames = (...arr) => arr.filter(Boolean).join(" ");
 
@@ -77,6 +78,9 @@ function Modal({ open, title, onClose, footer, children }) {
 }
 
 export default function PresensiKelolaPegawai() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -88,6 +92,11 @@ export default function PresensiKelolaPegawai() {
   const [modalLoading, setModalLoading] = useState(false);
 
   const [submitting, setSubmitting] = useState(false);
+
+  const detailPages = ["presensi-lokasi"];
+  const isDetailPage = detailPages.some((segment) =>
+    location.pathname.includes(segment)
+  );
 
   const fetchSummary = async () => {
     try {
@@ -209,6 +218,12 @@ export default function PresensiKelolaPegawai() {
     }
   };
 
+  const handleLihatDetailLokasi = async (locationItem) => {
+    navigate(`${location.pathname}/presensi-lokasi`, {
+      state: { locationItem },
+    });
+  };
+
   const updateStatus = (newStatus) => {
     if (!activeModal) return;
     const { rowIndex, type } = activeModal;
@@ -235,6 +250,10 @@ export default function PresensiKelolaPegawai() {
     );
   }
 
+  if (isDetailPage) {
+    return <Outlet />;
+  }
+
   return (
     <div className="mx-auto w-full p-6">
       <div className="mb-4 flex items-center justify-between">
@@ -246,6 +265,9 @@ export default function PresensiKelolaPegawai() {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-green-700">
             <tr>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-white">
+                Aksi
+              </th>
               <th className="px-6 py-4 text-left text-sm font-semibold text-white">
                 Jabatan
               </th>
@@ -285,6 +307,16 @@ export default function PresensiKelolaPegawai() {
             ) : (
               rows.map((row, idx) => (
                 <tr key={idx} className="hover:bg-gray-50/60">
+                  <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                    <button
+                      onClick={() => handleLihatDetailLokasi(row)}
+                      className="rounded-md py-1.5 px-3 bg-green-700 text-white text-sm font-medium hover:bg-green-900 cursor-pointer whitespace-nowrap"
+                    >
+                      <span className="hidden sm:inline">Lihat Detail</span>
+                      <span className="sm:hidden">Detail</span>
+                    </button>
+                  </td>
+
                   <td className="px-6 py-4 text-sm font-medium text-gray-900">
                     {row.roleName}
                   </td>

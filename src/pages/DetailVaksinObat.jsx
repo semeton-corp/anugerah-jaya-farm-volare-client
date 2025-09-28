@@ -133,7 +133,7 @@ const DetailVaksinObat = () => {
         <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 text-yellow-800 flex items-center rounded">
           <AlertTriangle className="w-5 h-5 mr-2" />
           <span>
-            Lakukan vaksin DOC, umur ayam sudah mencapai ketentuan vaksin
+            {`Lakukan vaksin ${chickenCage.chickenCategory}, umur ayam sudah mencapai ketentuan vaksin`}
           </span>
         </div>
       )}

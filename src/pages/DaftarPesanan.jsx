@@ -371,7 +371,7 @@ const DaftarPesanan = () => {
                     <tr key={index} className="border-b">
                       <td className="py-2 px-4">{item.orderDate}</td>
                       <td className="py-2 px-4">{item.item.name}</td>
-                      <td className="py-2 px-4">{item.item.unit}</td>
+                      <td className="py-2 px-4">{item.saleUnit}</td>
                       <td className="py-2 px-4">{item.quantity}</td>
                       <td className="py-2 px-4">{item.customer.name}</td>
                       <td className="py-2 px-4">{item.sentDate}</td>
