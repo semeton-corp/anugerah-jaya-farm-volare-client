@@ -72,9 +72,6 @@ const Penjualan = () => {
     ];
   }, [locationPieChart]);
 
-  console.log("pieData: ", pieData);
-  console.log("locationPieChart: ", locationPieChart);
-
   const [siteOptions, setSiteOptions] = useState([]);
   const [selectedSite, setSelectedSite] = useState(
     userRole === "Owner" ? 0 : localStorage.getItem("locationId")
@@ -112,8 +109,10 @@ const Penjualan = () => {
     try {
       const res = await getItems("Telur");
       if (res.status === 200) {
-        console.log("res: ", res);
-        setItemOptions(res.data.data);
+        const filteredData = res.data.data.filter(
+          (item) => item.name != "Telur Reject"
+        );
+        setItemOptions(filteredData);
         setSelectedItem(res.data.data[0].id);
       }
     } catch (err) {
@@ -395,13 +394,19 @@ const Penjualan = () => {
             {/* Chart Section (1/2 width on large screens) */}
             <div className="w-full lg:w-1/2 bg-white rounded-lg p-6 border border-black-6">
               <h2 className="text-xl font-semibold mb-4">Keuntungan</h2>
-              <ResponsiveContainer width="100%" height="90%">
+              <ResponsiveContainer width="100%" height={350}>
                 <LineChart data={cashflowSaleGraph}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="key" />
                   <YAxis
-                    domain={["auto", "auto"]}
-                    tickFormatter={(value) => `${value / 1000000} juta`}
+                    domain={[
+                      (dataMin) => dataMin * 2,
+                      (dataMax) => dataMax * 1.5,
+                    ]}
+                    tickFormatter={(value) =>
+                      `${parseInt(value / 1000000)} juta`
+                    }
+                    padding={{ top: 20, bottom: 25 }}
                   />
                   <Tooltip />
                   <Legend verticalAlign="top" align="right" />
@@ -410,7 +415,7 @@ const Penjualan = () => {
                     type="monotone"
                     dataKey="income"
                     stroke="#22c55e"
-                    name="Pendapatan"
+                    name="Pendapatan: "
                     strokeWidth={2}
                     dot={{ r: 4 }}
                   />
@@ -543,6 +548,17 @@ const Penjualan = () => {
                       />
                     ))}
                   </Pie>
+                  <Tooltip
+                    formatter={(value, name, props) => {
+                      const total =
+                        props.payload.payload.__total ||
+                        props.payload.payload.total ||
+                        pieData.reduce((sum, entry) => sum + entry.value, 0);
+
+                      const percent = ((value / total) * 100).toFixed(1);
+                      return [`${percent}%`, name];
+                    }}
+                  />
                   <Legend
                     verticalAlign="middle"
                     align="right"

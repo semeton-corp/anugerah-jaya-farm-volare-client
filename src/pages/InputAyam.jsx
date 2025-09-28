@@ -26,11 +26,6 @@ const InputAyam = () => {
   const isCageEmpty =
     (selectedChickenCage?.cage && !selectedChickenCage.cage.isUsed) ||
     selectedChickenCage?.totalChicken == 0;
-  console.log("isCageEmpty: ", isCageEmpty);
-  console.log(
-    "selectedChickenCage?.totalChicken: ",
-    selectedChickenCage?.totalChicken
-  );
   const isAssignToCage = chickenCages.length > 0;
 
   const [loading, setLoading] = useState(true);
@@ -72,10 +67,9 @@ const InputAyam = () => {
         }
 
         if (id) {
-          // console.log("THERE IS AN ID: ", id);
           const updateResponse = await getChickenMonitoringById(id);
           const data = updateResponse.data.data;
-          // console.log("THERE IS DATA: ", data);
+          console.log("THERE IS DATA: ", data);
           setSelectedChickenCage(data.chickenCage);
           setTotalSickChicken(data.totalSickChicken);
           setTotalDeathChicken(data.totalDeathChicken);

@@ -237,7 +237,7 @@ const DetailAyam = () => {
                   <td className="py-2 px-4">{row.totalFeed}</td>
                   <td className="py-2 px-4">
                     <div className="flex gap-2 justify-center">
-                      <p>{row.mortalityRate}</p>
+                      <p>{Number(row.mortalityRate).toFixed(2)}</p>
                       <p>%</p>
                     </div>
                   </td>

@@ -22,6 +22,7 @@ import { GiBirdCage } from "react-icons/gi";
 import { use } from "react";
 import { FaCalendarAlt } from "react-icons/fa";
 import { getEggOverview } from "../services/eggs";
+import { getTodayDateInBahasa } from "../utils/dateFormat";
 
 const ProduksiTelur = () => {
   const userRole = localStorage.getItem("role");
@@ -168,10 +169,17 @@ const ProduksiTelur = () => {
         <div className="flex flex-col px-4 py-3 gap-4 ">
           {/* header section */}
           <div className="flex justify-between mb-2 flex-wrap gap-4">
-            <h1 className="text-3xl font-bold">
-              {userRole == "Owner" ? "Ringkasan Produksi" : "Ringkasan"}
-            </h1>
-            <div className="flex gap-4">
+            <div className="flex gap-4 items-center">
+              <h1 className="text-3xl font-bold">
+                {userRole == "Owner"
+                  ? "Ringkasan Produksi Hari Ini"
+                  : "Ringkasan Hari ini"}
+              </h1>
+            </div>
+
+            <div className="flex gap-4 items-center">
+              <p>({getTodayDateInBahasa()})</p>
+
               {userRole == "Owner" && (
                 <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
                   <MdStore size={18} />

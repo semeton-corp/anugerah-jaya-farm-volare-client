@@ -10,6 +10,7 @@ import CalculatorInput from "../components/CalculatorInput";
 import { Joystick } from "lucide-react";
 import DeleteModal from "../components/DeleteModal";
 import { useMemo } from "react";
+import { getTodayDateInBahasa } from "../utils/dateFormat";
 
 const InputTelur = () => {
   const userRole = localStorage.getItem("role");
@@ -167,6 +168,8 @@ const InputTelur = () => {
 
         if (response.status === 200) {
           console.log("Data berhasil Diupdate:", response.data);
+          alert("✅Berhasil mengupdate data monitoring ayam!");
+
           navigate(-1, { state: { refetch: true } });
         } else {
           console.log("status bukan 200:", response.data);
@@ -185,6 +188,8 @@ const InputTelur = () => {
         const response = await inputTelur(payload);
         if (response.status === 201) {
           console.log("Data berhasil dikirim:", response.data);
+          alert("✅Berhasil menambahkan data monitoring ayam!");
+
           navigate(-1, { state: { refetch: true } });
         } else {
           console.log("status bukan 200:", response.data);
@@ -206,6 +211,7 @@ const InputTelur = () => {
     try {
       const response = await deleteEggData(id);
       if (response.status == 204) {
+        alert("✅Berhasil menghapus data monitoring ayam!");
         navigate(-1, { state: { refetch: true } });
       }
       // console.log("response: ", response);
@@ -221,7 +227,7 @@ const InputTelur = () => {
       <div className="w-full mx-auto p-6 bg-white shadow rounded border">
         <div className="flex justify-between">
           <h2 className="text-lg font-semibold mb-1">Input data harian</h2>
-          <p className="text-sm mb-6">20 Maret 2025</p>
+          <p className="text-sm mb-6">{getTodayDateInBahasa()}</p>
         </div>
         {/* Pilih kandang */}
         <label className="block font-medium mb-1">Kandang</label>

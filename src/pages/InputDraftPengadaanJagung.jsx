@@ -603,11 +603,11 @@ const InputDraftPengadaanJagung = () => {
 
         <div>
           <button
+            type="button"
             onClick={() => {
               const selectedSupplier = supplierOptions.find(
                 (item) => item.id == formData.supplier
               );
-              console.log("selectedSupplier: ", selectedSupplier);
               const localNumber = "081246087972";
               const waNumber = localNumber.replace(/^0/, "62");
               const namaSupplier = selectedSupplier.name || "Supplier";
