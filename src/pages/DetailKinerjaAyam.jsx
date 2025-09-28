@@ -9,69 +9,11 @@ import { FiMaximize2 } from "react-icons/fi";
 import { useState } from "react";
 import { useLocation, useNavigate, Outlet } from "react-router-dom";
 
-import {
-  GiBirdCage,
-  GiHealthDecrease,
-  GiChicken,
-  GiDeathSkull,
-} from "react-icons/gi";
-import { FaPercentage } from "react-icons/fa";
-
 const COLORS = ["#06b6d4", "#facc15", "#f97316", "#10b981", "#ef4444"];
 
-import {
-  LineChart,
-  Line,
-  PieChart,
-  Pie,
-  Cell,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  CartesianGrid,
-} from "recharts";
 import { getChickenPerformances } from "../services/chickenMonitorings";
 import { useEffect } from "react";
 import { formatDate, formatDateToDDMMYYYY } from "../utils/dateFormat";
-
-const kinerjaData = [
-  { day: "Minggu", value: 44 },
-  { day: "Senin", value: 52 },
-  { day: "Selasa", value: 30 },
-  { day: "Rabu", value: 48 },
-  { day: "Kamis", value: 52 },
-  { day: "Jumat", value: 39 },
-  { day: "Sabtu", value: 52 },
-];
-
-const kinerjaAyamData = [
-  {
-    kandang: "Kandang A1",
-    usia: 49,
-    jumlah: 4000,
-    produksi: 50,
-    konsumsi: 50,
-    beratTelur: 10,
-    fcr: 10,
-    hdp: "10%",
-    produktivitas: "Produktif",
-  },
-  {
-    kandang: "Kandang A2",
-    usia: 49,
-    jumlah: 1200,
-    produksi: 20,
-    konsumsi: 20,
-    beratTelur: 12,
-    fcr: 10,
-    hdp: "10%",
-    produktivitas: "Periksa",
-  },
-];
 
 const DetailKinerjaAyam = () => {
   const location = useLocation();

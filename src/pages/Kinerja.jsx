@@ -345,7 +345,10 @@ const Kinerja = () => {
               <div className="p-4 border border-black-6 rounded-lg">
                 <h2 className="text-lg font-bold mb-4">Distribusi Usia Ayam</h2>
                 <ResponsiveContainer width="100%" height={400}>
-                  <BarChart data={ageDistributionData}>
+                  <BarChart
+                    data={ageDistributionData}
+                    margin={{ top: 20, left: 15 }}
+                  >
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="stage" />
                     <YAxis tickFormatter={(v) => v.toLocaleString("id-ID")} />
@@ -396,14 +399,14 @@ const Kinerja = () => {
             </div>
           </div>
 
-          <div className="p-4 border border-black-6 rounded-lg mt-3">
+          <div className="p-6 border border-black-6 rounded-lg mt-3">
             <h2 className="text-lg font-bold mb-4">
               Grafik Pendapatan vs Pengeluaran
             </h2>
             <ResponsiveContainer width="100%" height={400}>
               <LineChart
                 data={incomeAndExpensePerformanceBarCharts}
-                margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                margin={{ top: 20, right: 30, left: 60, bottom: 0 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="key" />

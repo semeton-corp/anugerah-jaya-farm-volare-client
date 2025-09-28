@@ -25,44 +25,14 @@ const MONTHS_ID = [
 const PresensiLokasi = () => {
   const { state } = useLocation();
   const locationItem = state?.locationItem;
-  console.log("locationItem: ", locationItem);
 
   const now = new Date();
   const [month, setMonth] = useState(now.getMonth());
   const [year, setYear] = useState(now.getFullYear());
   const [monthName, setMonthName] = useState(MONTHS_ID[now.getMonth()]);
-  const absensiHariIni = [
-    {
-      id: 1,
-      nama: "Budi Santoso",
-      email: "budi@company.com",
-      jabatan: "Pekerja Kandang",
-      status: "Hadir",
-      jamMasuk: "09.00 WIB",
-      jamPulang: "- WIB",
-      progres: 80,
-    },
-    {
-      id: 2,
-      nama: "Gede Indra",
-      email: "indra@company.com",
-      jabatan: "Pekerja Kandang",
-      status: "Hadir",
-      jamMasuk: "08.45 WIB",
-      jamPulang: "18.00 WIB",
-      progres: 100,
-    },
-    {
-      id: 3,
-      nama: "Siti Rahayu",
-      email: "siti@company.com",
-      jabatan: "Pekerja Kandang",
-      status: "Hadir",
-      jamMasuk: "08.30 WIB",
-      jamPulang: "- WIB",
-      progres: 0,
-    },
-  ];
+
+  const [todayPresences, setTodayPresences] = useState([]);
+  const [presenceSummaries, setPresenceSummaries] = useState([]);
 
   const rangkumanPresensi = [
     {
@@ -104,7 +74,12 @@ const PresensiLokasi = () => {
         locationItem.placeType,
         locationItem.placeId
       );
+
       console.log("todayPresenceResponse: ", todayPresenceResponse);
+
+      if (todayPresenceResponse.status == 200) {
+        setTodayPresences(todayPresenceResponse.data.data);
+      }
     } catch (error) {
       console.log("error :", error);
     }
@@ -119,6 +94,9 @@ const PresensiLokasi = () => {
         monthName,
         year
       );
+      if (summaryResponse.status == 200) {
+        setPresenceSummaries(summaryResponse.data.data);
+      }
       console.log("summaryResponse: ", summaryResponse);
     } catch (error) {
       console.log("error :", error);
@@ -128,7 +106,7 @@ const PresensiLokasi = () => {
   useEffect(() => {
     fetchTodayPresence();
     fetchPresenceSummary();
-  }, []);
+  }, [monthName, year]);
 
   return (
     <div className="p-6">
@@ -137,7 +115,7 @@ const PresensiLokasi = () => {
       </h1>
 
       {/* Absensi Hari Ini */}
-      <div className="bg-white shadow rounded-lg p-4 mb-6">
+      <div className="bg-white border border-black-6 rounded p-4 mb-6">
         <h2 className="text-lg font-semibold mb-4">Absensi Hari Ini</h2>
         <table className="w-full border-collapse">
           <thead>
@@ -150,40 +128,49 @@ const PresensiLokasi = () => {
               <th className="px-6 py-3">Penyelesaian Tugas</th>
             </tr>
           </thead>
-          <tbody className="text-sm divide-y divide-gray-200">
-            {absensiHariIni.map((row) => (
+          <tbody className="divide-y divide-gray-200">
+            {todayPresences.map((row) => (
               <tr key={row.id}>
                 <td className="px-6 py-4">
                   <div className="flex items-center space-x-3">
                     <img
-                      src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-                        row.nama
-                      )}&background=random`}
-                      alt={row.nama}
-                      className="w-8 h-8 rounded-full"
+                      src={`${row.photoProfile}`}
+                      className="w-12 h-12 rounded-full"
                     />
                     <div>
                       <p className="font-medium">{row.nama}</p>
-                      <p className="text-gray-500 text-xs">{row.email}</p>
+                      <p className="text-gray-500 ">{row.email}</p>
                     </div>
                   </div>
                 </td>
-                <td className="px-6 py-4">{row.jabatan}</td>
+                <td className="px-6 py-4">{row.roleName}</td>
                 <td className="px-6 py-4">
-                  <span className="inline-block px-3 py-1 text-xs font-medium rounded-full bg-green-100 text-green-700">
+                  <span
+                    className={`inline-block px-3 py-1  font-medium rounded ${
+                      row.status == "Alpha"
+                        ? "bg-kritis-box-surface-color text-kritis-text-color"
+                        : row.status == "Hadir"
+                        ? "bg-aman-box-surface-color text-aman-text-color"
+                        : row.status == "Sakit"
+                        ? "bg-orange-400 text-orange-900"
+                        : "bg-green-300 text-orange-8000"
+                    }`}
+                  >
                     {row.status}
                   </span>
                 </td>
-                <td className="px-6 py-4">{row.jamMasuk}</td>
-                <td className="px-6 py-4">{row.jamPulang}</td>
+                <td className="px-6 py-4">{row.arrivedTime}</td>
+                <td className="px-6 py-4">{row.departureTime}</td>
                 <td className="px-6 py-4">
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <div
                       className="bg-green-500 h-2 rounded-full"
-                      style={{ width: `${row.progres}%` }}
+                      style={{ width: `${row.workDonePercentage}%` }}
                     />
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">{row.progres}%</p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {row.workDonePercentage}%
+                  </p>
                 </td>
               </tr>
             ))}
@@ -192,7 +179,7 @@ const PresensiLokasi = () => {
       </div>
 
       {/* Rangkuman Presensi */}
-      <div className="bg-white shadow rounded-lg p-4">
+      <div className="bg-white border border-black-6 rounded p-4">
         <div className="flex justify-between">
           <h2 className="text-lg font-semibold mb-4">Rangkuman Presensi</h2>
           <MonthYearSelector
@@ -216,28 +203,41 @@ const PresensiLokasi = () => {
             </tr>
           </thead>
           <tbody className="text-sm divide-y divide-gray-200">
-            {rangkumanPresensi.map((row) => (
+            {presenceSummaries.map((row) => (
               <tr key={row.id}>
                 <td className="px-6 py-4">
                   <div className="flex items-center space-x-3">
                     <img
-                      src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-                        row.nama
-                      )}&background=random`}
-                      alt={row.nama}
-                      className="w-8 h-8 rounded-full"
+                      src={`${row.photoProfile}`}
+                      className="w-12 h-12 rounded-full"
                     />
                     <div>
                       <p className="font-medium">{row.nama}</p>
-                      <p className="text-gray-500 text-xs">{row.email}</p>
+                      <p className="text-gray-500 ">{row.email}</p>
                     </div>
                   </div>
                 </td>
-                <td className="px-6 py-4">{row.jabatan}</td>
-                <td className="px-6 py-4">{row.hadir}</td>
-                <td className="px-6 py-4">{row.sakit}</td>
-                <td className="px-6 py-4">{row.izin}</td>
-                <td className="px-6 py-4">{row.alpha}</td>
+                <td className="px-6 py-4">{row.roleName}</td>
+                <td className="px-6 py-4">
+                  <span className="px-3 py-1 rounded-lg font-semibold bg-aman-box-surface-color text-green-700">
+                    {row.totalPresentUser}
+                  </span>
+                </td>
+                <td className="px-6 py-4">
+                  <span className="px-3 py-1 rounded-lg font-semibold bg-orange-100 text-yellow-700">
+                    {row.totalSickUser}
+                  </span>
+                </td>
+                <td className="px-6 py-4">
+                  <span className="px-3 py-1 rounded-lg font-semibold bg-green-100 text-green-700">
+                    {row.totalPermissionUser}
+                  </span>
+                </td>
+                <td className="px-6 py-4">
+                  <span className="px-3 py-1 rounded-lg  font-semibold bg-kritis-box-surface-color text-kritis-text-color">
+                    {row.totalAlphaUser}
+                  </span>
+                </td>
               </tr>
             ))}
           </tbody>
