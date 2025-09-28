@@ -6,6 +6,7 @@ import {
   getUserPresenceWorkDetailSummaries,
 } from "../services/presence";
 import MonthYearSelector from "../components/MonthYearSelector";
+import { formatDate, formatDateToDDMMYYYY } from "../utils/dateFormat";
 
 const MONTHS_ID = [
   "Januari",
@@ -69,10 +70,13 @@ const PresensiLokasi = () => {
 
   const fetchTodayPresence = async () => {
     try {
+      const date = formatDateToDDMMYYYY(formatDate(new Date()));
+      console.log("date: ", date);
       const todayPresenceResponse = await getUserPresenceWorkDetailSummaries(
         locationItem.roleId,
         locationItem.placeType,
-        locationItem.placeId
+        locationItem.placeId,
+        date
       );
 
       console.log("todayPresenceResponse: ", todayPresenceResponse);

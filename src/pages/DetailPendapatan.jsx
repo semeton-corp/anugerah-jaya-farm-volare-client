@@ -49,8 +49,23 @@ const mapIncomeCategory = (apiCat) => {
 
 const Field = ({ label, value, className = "" }) => (
   <div className={className}>
-    <div className="text-gray-600">{label}</div>
-    <div className="mt-1 font-extrabold">{value ?? "-"}</div>
+    <div className={`text-gray-600`}>{label}</div>
+    <div
+      className={`mt-1 font-extrabold ${
+        label == "Nominal Pemasukan"
+          ? "text-aman-text-color"
+          : label == "Sisa Pembayaran"
+          ? "text-kritis-text-color"
+          : "text-gray-600"
+      }`}
+    >
+      {label == "Nominal Pemasukan"
+        ? "+"
+        : label == "Sisa Pembayaran"
+        ? "-"
+        : ""}
+      {value ?? "-"}
+    </div>
   </div>
 );
 
@@ -131,7 +146,7 @@ export default function DetailPendapatan() {
 
         const totalDiscount = totalitemPrice - transactionData.totalPrice;
         setItemPriceDiscount(totalDiscount);
-
+        setPaymentHistory(transactionData.payments);
         setRemaining(transactionData.remainingPayment);
       }
     } catch (error) {
@@ -206,6 +221,7 @@ export default function DetailPendapatan() {
             value={formatRupiah(data.nominalPemasukan)}
           />
           <div />
+          <Field label="Sisa Pembayaran" value={formatRupiah(remaining)} />
         </div>
 
         {/* Actions */}

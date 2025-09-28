@@ -74,13 +74,20 @@ export const getUserPresences = (userId, month, year, page = 1) => {
 export const getUserPresenceWorkDetailSummaries = (
   roleId,
   placeType,
-  placeId
+  placeId,
+  date
 ) => {
   return api.get(`/presences/users/works/summaries`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-    params: { roleId: roleId, placeType, placeType, placeId: placeId },
+    params: {
+      roleId: roleId,
+      placeType,
+      placeType,
+      placeId: placeId,
+      date: date,
+    },
   });
 };
 
