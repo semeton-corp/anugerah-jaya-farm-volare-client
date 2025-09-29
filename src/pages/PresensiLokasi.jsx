@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   getUserPresenceSummaries,
   getUserPresenceWorkDetailSummaries,
@@ -24,6 +24,9 @@ const MONTHS_ID = [
 ];
 
 const PresensiLokasi = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const { state } = useLocation();
   const locationItem = state?.locationItem;
 
@@ -35,38 +38,10 @@ const PresensiLokasi = () => {
   const [todayPresences, setTodayPresences] = useState([]);
   const [presenceSummaries, setPresenceSummaries] = useState([]);
 
-  const rangkumanPresensi = [
-    {
-      id: 1,
-      nama: "Budi Santoso",
-      email: "budi@company.com",
-      jabatan: "Pekerja Kandang",
-      hadir: 10,
-      sakit: 0,
-      izin: 1,
-      alpha: 0,
-    },
-    {
-      id: 2,
-      nama: "Gede Indra",
-      email: "indra@company.com",
-      jabatan: "Pekerja Kandang",
-      hadir: 10,
-      sakit: 1,
-      izin: 0,
-      alpha: 0,
-    },
-    {
-      id: 3,
-      nama: "Siti Rahayu",
-      email: "siti@company.com",
-      jabatan: "Pekerja Kandang",
-      hadir: 10,
-      sakit: 0,
-      izin: 0,
-      alpha: 0,
-    },
-  ];
+  const detailPages = ["tambah-pegawai", "profile"];
+  const isDetailPage = detailPages.some((segment) =>
+    location.pathname.includes(segment)
+  );
 
   const fetchTodayPresence = async () => {
     try {
@@ -107,15 +82,23 @@ const PresensiLokasi = () => {
     }
   };
 
+  const handleDetail = (userId) => {
+    navigate(`${location.pathname}/profile/${userId}`);
+  };
+
   useEffect(() => {
     fetchTodayPresence();
     fetchPresenceSummary();
   }, [monthName, year]);
 
+  if (isDetailPage) {
+    return <Outlet />;
+  }
+
   return (
     <div className="p-6">
       <h1 className="text-xl font-bold mb-4">
-        {`Presensi ${locationItem.placeName}`}
+        {`Presensi ${locationItem?.placeName}`}
       </h1>
 
       {/* Absensi Hari Ini */}
@@ -124,6 +107,7 @@ const PresensiLokasi = () => {
         <table className="w-full border-collapse">
           <thead>
             <tr className="bg-green-700 text-left text-sm font-medium text-white">
+              <th className="px-6 py-3">Aksi</th>
               <th className="px-6 py-3">Pegawai</th>
               <th className="px-6 py-3">Jabatan</th>
               <th className="px-6 py-3">Status</th>
@@ -135,6 +119,14 @@ const PresensiLokasi = () => {
           <tbody className="divide-y divide-gray-200">
             {todayPresences.map((row) => (
               <tr key={row.id}>
+                <td
+                  onClick={() => {
+                    handleDetail(row.id);
+                  }}
+                  className="py-2 px-4 underline text-black hover:text-black-6 cursor-pointer"
+                >
+                  Detail
+                </td>
                 <td className="px-6 py-4">
                   <div className="flex items-center space-x-3">
                     <img
@@ -198,6 +190,7 @@ const PresensiLokasi = () => {
         <table className="w-full border-collapse">
           <thead>
             <tr className="bg-green-700 text-left text-sm font-medium text-white">
+              <th className="px-6 py-3">Aksi</th>
               <th className="px-6 py-3">Pegawai</th>
               <th className="px-6 py-3">Jabatan</th>
               <th className="px-6 py-3">Jumlah Hadir</th>
@@ -209,6 +202,14 @@ const PresensiLokasi = () => {
           <tbody className="text-sm divide-y divide-gray-200">
             {presenceSummaries.map((row) => (
               <tr key={row.id}>
+                <td
+                  onClick={() => {
+                    handleDetail(row.id);
+                  }}
+                  className="py-2 px-4 underline text-black hover:text-black-6 cursor-pointer"
+                >
+                  Detail
+                </td>
                 <td className="px-6 py-4">
                   <div className="flex items-center space-x-3">
                     <img

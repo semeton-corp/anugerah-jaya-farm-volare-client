@@ -243,29 +243,37 @@ const Profile = ({ mode }) => {
           <div className="mt-4 w-full">
             <div className="flex mt-2 w-full gap-3">
               {mode === "StaffDetail" && (
-                <>
+                <div className="flex flex-col sm:flex-row gap-3 w-full sm:justify-center">
                   <button
                     onClick={handleEditPegawai}
-                    className="w-full rounded-[4px] cursor-pointer h-[40px] bg-orange-200 hover:bg-orange-500 flex items-center justify-center"
+                    className="flex items-center justify-center gap-2 px-4 py-2 
+                 rounded-md cursor-pointer 
+                 bg-orange-200 hover:bg-orange-500 
+                 w-full sm:w-auto sm:min-w-[180px]"
                   >
-                    <div className="flex gap-4">
-                      <RiEdit2Fill size={24} />
-                      <p className="text-lg font-medium">Edit Pegawai</p>
-                    </div>
+                    <RiEdit2Fill size={20} />
+                    <span className="text-base sm:text-lg font-medium">
+                      Edit Pegawai
+                    </span>
                   </button>
 
                   <button
                     onClick={() => setShowDelete(true)}
-                    className="w-full rounded-[4px] h-[40px] bg-red-600 text-red-100 hover:bg-red-300 cursor-pointer hover:text-white flex items-center justify-center gap-2"
+                    className="flex items-center justify-center gap-2 px-4 py-2 
+                 rounded-md cursor-pointer 
+                 bg-red-600 text-red-100 hover:bg-red-300 hover:text-white
+                 w-full sm:w-auto sm:min-w-[180px]"
                   >
                     <RiDeleteBin6Line size={20} />
-                    <span className="text-lg font-medium">Hapus Pegawai</span>
+                    <span className="text-base sm:text-lg font-medium">
+                      Hapus Pegawai
+                    </span>
                   </button>
-                </>
+                </div>
               )}
             </div>
           </div>
-          <button
+          {/* <button
             onClick={() => {
               console.log("myData: ", userData);
               console.log("userInformation: ", userInformation);
@@ -277,7 +285,7 @@ const Profile = ({ mode }) => {
             }}
           >
             CHECK
-          </button>
+          </button> */}
         </div>
 
         {showSection && (

@@ -121,6 +121,7 @@ const DetailPengadaanBarang = () => {
     try {
       const payload = {
         nominal: nominal,
+        
         paymentMethod: paymentMethod,
         paymentDate: convertToInputDateFormat(toISO(paymentDate)),
         paymentProof: paymentProof,

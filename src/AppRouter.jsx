@@ -716,7 +716,31 @@ const AppRouter = createBrowserRouter([
                 path: "presensi",
                 element: <PresensiKelolaPegawai />,
                 children: [
-                  { path: "presensi-lokasi", element: <PresensiLokasi /> },
+                  {
+                    path: "presensi-lokasi",
+                    element: <PresensiLokasi />,
+                    children: [
+                      { path: "tambah-pegawai", element: <TambahPegawai /> },
+                      {
+                        path: "tambah-pegawai/:userId",
+                        element: <TambahPegawai />,
+                      },
+                      {
+                        path: "profile/:id",
+                        element: <Profile mode="StaffDetail" />,
+                        children: [
+                          {
+                            path: "detail-absensi/:userId",
+                            element: <DetailAbsensi />,
+                          },
+                          {
+                            path: "detail-penyelesaian-pekerjaan/:userId",
+                            element: <DetailPenyelesaianPekerjaan />,
+                          },
+                        ],
+                      },
+                    ],
+                  },
                 ],
               },
               {
