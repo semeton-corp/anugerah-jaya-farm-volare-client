@@ -263,30 +263,23 @@ const InputTelur = () => {
           </div>
         )}
 
-        <div className="flex justify-between pr-16 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           <div>
             <label className="block font-medium mb-1">ID Batch</label>
             <p className="text-lg font-bold">
-              {selectedChickenCage?.batchId != ""
-                ? selectedChickenCage?.batchId
-                : "-"}
+              {selectedChickenCage?.batchId || "-"}
             </p>
           </div>
           <div>
-            <label className="block font-medium mb-1">Kategori ayam</label>
+            <label className="block font-medium mb-1">Kategori Ayam</label>
             <p className="text-lg font-bold">
-              {selectedChickenCage?.chickenCategory
-                ? selectedChickenCage?.chickenCategory
-                : "-"}
+              {selectedChickenCage?.chickenCategory || "-"}
             </p>
           </div>
           <div>
-            <label className="block font-medium mb-1">Usia ayam (Minggu)</label>
+            <label className="block font-medium mb-1">Usia Ayam (Minggu)</label>
             <p className="text-lg font-bold">
-              {selectedChickenCage?.chickenAge !== null &&
-              selectedChickenCage?.chickenAge !== undefined
-                ? selectedChickenCage?.chickenAge
-                : "-"}
+              {selectedChickenCage?.chickenAge ?? "-"}
             </p>
           </div>
         </div>
@@ -333,7 +326,7 @@ const InputTelur = () => {
           {isEditMode ? (
             <div>
               <CalculatorInput
-                label="Jumlah Telur Butir Sisa (Butir)"
+                label="Jumlah Telur Butir Sisa "
                 value={totalRemainingGoodEgg}
                 onChange={(val) => setTotalRemainingGoodEgg(val)}
               />
@@ -513,55 +506,6 @@ const InputTelur = () => {
           </div>
         </div>
       </div>
-
-      <button
-        onClick={() => {
-          // const payload = {
-          //   chickenCageId: selectedChickenCage.cage.id,
-          //   warehouseId: selectedWarehouse,
-          //   totalKarpetGoodEgg: parseInt(totalKarpetGoodEgg),
-          //   totalRemainingGoodEgg: parseInt(totalRemainingGoodEgg),
-          //   totalWeightGoodEgg: parseInt(totalWeightGoodEgg),
-          //   totalKarpetCrackedEgg: parseInt(totalKarpetCrackedEgg),
-          //   totalRemainingCrackedEgg: parseInt(totalRemainingCrackedEgg),
-          //   totalWeightCrackedEgg: parseInt(totalWeightCrackedEgg),
-          //   totalKarpetRejectEgg: parseInt(totalKarpetRejectEgg),
-          //   totalRemainingRejectEgg: parseInt(totalRemainingRejectEgg),
-          // };
-          // console.log("selectedWarehouse: ", selectedWarehouse);
-          // console.log("isEditMode: ", isEditMode);
-          // console.log("batchId: ", selectedChickenCage.batchId);
-          // console.log("chickenCageId: ", selectedChickenCage);
-          // console.log("payload: ", payload);
-          // console.log("id: ", id);
-          // console.log("chickenCages: ", chickenCages);
-          // console.log("selectedChickenCage: ", selectedChickenCage);
-
-          // console.log("filteredWarehouses: ", filteredWarehouses);
-          // console.log("selectedWarehouse: ", selectedWarehouse);
-          // console.log("selectedChickenCage: ", selectedChickenCage);
-          // console.log("warehouses: ", warehouses);
-
-          // const payload = {
-          //   chickenCageId: selectedChickenCage.id,
-          //   warehouseId: selectedWarehouse.id,
-          //   totalKarpetGoodEgg: parseInt(totalKarpetGoodEgg),
-          //   totalRemainingGoodEgg: parseInt(totalRemainingGoodEgg),
-          //   totalWeightGoodEgg: parseInt(totalWeightGoodEgg),
-          //   totalKarpetCrackedEgg: parseInt(totalKarpetCrackedEgg),
-          //   totalRemainingCrackedEgg: parseInt(totalRemainingCrackedEgg),
-          //   totalWeightCrackedEgg: parseInt(totalWeightCrackedEgg),
-          //   totalKarpetRejectEgg: parseInt(totalKarpetRejectEgg),
-          //   totalRemainingRejectEgg: parseInt(totalRemainingRejectEgg),
-          // };
-          // console.log("payload: ", payload);
-          console.log("chickenCages: ", chickenCages);
-          console.log("selectedChickenCage: ", selectedChickenCage);
-          console.log("warehouses: ", warehouses);
-        }}
-      >
-        Check
-      </button>
 
       <DeleteModal
         isOpen={showDeleteModal}

@@ -117,16 +117,17 @@ const DetailProduksi = () => {
   return (
     <div className="flex flex-col px-4 py-3 gap-4">
       {/* Header */}
-      <div className="flex justify-between items-center mb-2 flex-wrap gap-4">
-        <h1 className="text-3xl font-bold">Data Produksi Telur</h1>
-        <div className="flex gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2 gap-4">
+        <h1 className="text-2xl sm:text-3xl font-bold">Data Produksi Telur</h1>
+
+        <div className="flex flex-wrap gap-2 sm:gap-4">
           {userRole == "Owner" && (
-            <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+            <div className="flex items-center rounded-lg px-3 sm:px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
               <MdStore size={18} />
               <select
                 value={selectedSite}
                 onChange={(e) => setSelectedSite(e.target.value)}
-                className="ml-2 bg-transparent text-base font-medium outline-none"
+                className="ml-2 bg-transparent text-sm sm:text-base font-medium outline-none"
               >
                 <option value="">Semua Site</option>
                 {siteOptions.map((site) => (
@@ -139,7 +140,7 @@ const DetailProduksi = () => {
           )}
 
           <div
-            className="flex items-center rounded-lg bg-orange-300 hover:bg-orange-500 cursor-pointer gap-2"
+            className="flex items-center rounded-lg bg-orange-300 hover:bg-orange-500 cursor-pointer"
             onClick={openDatePicker}
           >
             <input
@@ -147,7 +148,7 @@ const DetailProduksi = () => {
               type="date"
               value={selectedDate}
               onChange={handleDateChange}
-              className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer gap-2"
+              className="px-3 sm:px-4 py-2 rounded-lg bg-orange-300 hover:bg-orange-500 cursor-pointer text-sm sm:text-base"
             />
           </div>
         </div>
@@ -155,93 +156,95 @@ const DetailProduksi = () => {
 
       <PageNotificationsSection pageNotifications={pageNotifications} />
 
-      <div className=" flex gap-4">
-        <div className=" w-full bg-white px-8 py-6 rounded-lg border border-black-6">
+      <div className="flex gap-4">
+        <div className="w-full bg-white px-4 sm:px-8 py-6 rounded-lg border border-black-6">
           {userRole != "Pekerja Gudang" && (
             <div className="flex justify-end items-start mb-4">
               <div
                 onClick={inputTelurHandle}
-                className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer"
+                className="flex items-center rounded-lg px-3 sm:px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer"
               >
-                <div className="text-base font-medium ms-2 text-black">
+                <div className="text-sm sm:text-base font-medium ms-2 text-black">
                   + Input Data Harian
                 </div>
               </div>
             </div>
           )}
 
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="bg-green-700 text-white text-center">
-                <th className="py-2 px-4">Kandang</th>
-                <th className="py-2 px-4">Total (butir)</th>
-                <th className="py-2 px-4">OK (butir)</th>
-                <th className="py-2 px-4">Berat Telur Ok (Gr/butir)</th>
-                <th className="py-2 px-4">Retak (butir)</th>
-                <th className="py-2 px-4">Reject (butir)</th>
-                <th className="py-2 px-4">Abnormality (%)</th>
-                <th className="py-2 px-4">Status</th>
-                {isSelectedDateToday(selectedDate) && (
-                  <th className="py-2 px-4">Aksi</th>
-                )}
-              </tr>
-            </thead>
-            <tbody className="text-center">
-              {produksiDetail.map((item, i) => (
-                <tr key={i} className="border-b">
-                  <td className="py-2 px-4">{item?.chickenCage.cage?.name}</td>
-                  <td className="py-2 px-4">{item?.totalAllEgg}</td>
-                  <td className="py-2 px-4">{item?.totalGoodEgg}</td>
-                  <td className="py-2 px-4">{item?.averageWeight}</td>
-                  <td className="py-2 px-4">{item?.totalCrackedEgg}</td>
-                  <td className="py-2 px-4">{item?.totalRejectEgg}</td>
-                  <td className="py-2 px-4">
-                    {item?.abnormalityRate !== undefined &&
-                    item?.abnormalityRate !== null
-                      ? parseFloat(item.abnormalityRate).toFixed(2)
-                      : "-"}
-                  </td>
-                  <td className="py-2 px-4 flex justify-center">
-                    <span
-                      className={`w-24 py-1 flex justify-center rounded text-sm font-semibold ${
-                        item.status === "Aman"
-                          ? "bg-aman-box-surface-color text-aman-text-color"
-                          : item.status === "Periksa"
-                          ? "bg-update-icon-color text-orange-900"
-                          : "bg-kritis-box-surface-color text-kritis-text-color"
-                      }`}
-                    >
-                      {item.status}
-                    </span>
-                  </td>
-
-                  {isSelectedDateToday(selectedDate) &&
-                    (item.chickenCage.eggPic === userName ||
-                      userRole === "Owner" ||
-                      userRole === "Kepala Kandang") && (
-                      <td className="py-1 px-4  text-center">
-                        <span
-                          onClick={() => editDataHandle(item.id)}
-                          className="py-1 px-5 flex justify-center rounded-[4px] bg-green-700 hover:bg-green-900 cursor-pointer  text-white "
-                        >
-                          Lihat Detail
-                        </span>
-                      </td>
-                    )}
+          {/* Responsive Table */}
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs sm:text-sm">
+              <thead>
+                <tr className="bg-green-700 text-white text-center">
+                  <th className="py-2 px-2 sm:px-4">Kandang</th>
+                  <th className="py-2 px-2 sm:px-4">Total (butir)</th>
+                  <th className="py-2 px-2 sm:px-4">OK (butir)</th>
+                  <th className="py-2 px-2 sm:px-4">
+                    Berat Telur Ok (Gr/butir)
+                  </th>
+                  <th className="py-2 px-2 sm:px-4">Retak (butir)</th>
+                  <th className="py-2 px-2 sm:px-4">Reject (butir)</th>
+                  <th className="py-2 px-2 sm:px-4">Abnormality (%)</th>
+                  <th className="py-2 px-2 sm:px-4">Status</th>
+                  {isSelectedDateToday(selectedDate) && (
+                    <th className="py-2 px-2 sm:px-4">Aksi</th>
+                  )}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="text-center">
+                {produksiDetail.map((item, i) => (
+                  <tr key={i} className="border-b">
+                    <td className="py-2 px-2 sm:px-4">
+                      {item?.chickenCage.cage?.name}
+                    </td>
+                    <td className="py-2 px-2 sm:px-4">{item?.totalAllEgg}</td>
+                    <td className="py-2 px-2 sm:px-4">{item?.totalGoodEgg}</td>
+                    <td className="py-2 px-2 sm:px-4">{item?.averageWeight}</td>
+                    <td className="py-2 px-2 sm:px-4">
+                      {item?.totalCrackedEgg}
+                    </td>
+                    <td className="py-2 px-2 sm:px-4">
+                      {item?.totalRejectEgg}
+                    </td>
+                    <td className="py-2 px-2 sm:px-4">
+                      {item?.abnormalityRate !== undefined &&
+                      item?.abnormalityRate !== null
+                        ? parseFloat(item.abnormalityRate).toFixed(2)
+                        : "-"}
+                    </td>
+                    <td className="py-2 px-2 sm:px-4 flex justify-center">
+                      <span
+                        className={`w-20 sm:w-24 py-1 flex justify-center rounded text-xs sm:text-sm font-semibold ${
+                          item.status === "Aman"
+                            ? "bg-aman-box-surface-color text-aman-text-color"
+                            : item.status === "Periksa"
+                            ? "bg-update-icon-color text-orange-900"
+                            : "bg-kritis-box-surface-color text-kritis-text-color"
+                        }`}
+                      >
+                        {item.status}
+                      </span>
+                    </td>
+                    {isSelectedDateToday(selectedDate) &&
+                      (item.chickenCage.eggPic === userName ||
+                        userRole === "Owner" ||
+                        userRole === "Kepala Kandang") && (
+                        <td className="py-1 px-2 sm:px-4 text-center">
+                          <span
+                            onClick={() => editDataHandle(item.id)}
+                            className="py-1 px-3 sm:px-5 flex justify-center rounded-[4px] bg-green-700 hover:bg-green-900 cursor-pointer text-white text-xs sm:text-sm"
+                          >
+                            Lihat Detail
+                          </span>
+                        </td>
+                      )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-
-      {/* <p>User ID: {userId ?? "Not set"}</p>
-      <button onClick={() => dispatch(setUserId("12345"))}>Set User</button>
-
-      <p>Selected Store: {selectedStore ?? "None"}</p>
-      <button onClick={() => dispatch(setSelectedStore("Store A"))}>
-        Select Store
-      </button> */}
     </div>
   );
 };

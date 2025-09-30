@@ -104,11 +104,13 @@ const DetailVaksinObat = () => {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-6">
       {/* Informasi Ayam */}
       <div className="border border-black-6 rounded p-4 bg-white">
-        <h2 className="text-xl font-bold mb-4">Informasi ayam saat ini</h2>
-        <div className="grid grid-cols-2 gap-4 text-sm md:text-base">
+        <h2 className="text-lg sm:text-xl font-bold mb-4">
+          Informasi ayam saat ini
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm sm:text-base">
           <div>
             <p className="text-gray-600">ID Ayam</p>
             <p className="font-bold">{chickenCage?.batchId}</p>
@@ -130,8 +132,8 @@ const DetailVaksinObat = () => {
 
       {/* Alert */}
       {chickenCage?.isNeedRoutineVaccine && (
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 text-yellow-800 flex items-center rounded">
-          <AlertTriangle className="w-5 h-5 mr-2" />
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 text-yellow-800 flex items-start sm:items-center rounded text-sm sm:text-base">
+          <AlertTriangle className="w-5 h-5 mr-2 flex-shrink-0" />
           <span>
             {`Lakukan vaksin ${chickenCage.chickenCategory}, umur ayam sudah mencapai ketentuan vaksin`}
           </span>
@@ -140,27 +142,29 @@ const DetailVaksinObat = () => {
 
       {/* Riwayat Vaksin & Obat */}
       <div className="bg-white border border-black-6 rounded">
-        <div className="flex justify-between items-center px-6 pt-6">
-          <h3 className="text-xl font-bold">Riwayat Vaksin & Obat</h3>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 px-4 sm:px-6 pt-6">
+          <h3 className="text-lg sm:text-xl font-bold">
+            Riwayat Vaksin & Obat
+          </h3>
           <button
             onClick={inputHandle}
-            className="bg-orange-400 hover:bg-orange-500 text-black text-sm font-semibold py-2 px-4 rounded cursor-pointer"
+            className="bg-orange-400 hover:bg-orange-500 text-black text-sm font-semibold py-2 px-4 rounded cursor-pointer w-full sm:w-auto"
           >
             + Input Data Vaksin/obat
           </button>
         </div>
-        <div className="overflow-x-auto px-6 py-4">
-          <table className="min-w-full text-sm text-left">
+        <div className="overflow-x-auto px-4 sm:px-6 py-4">
+          <table className="min-w-full text-xs sm:text-sm text-left">
             <thead>
               <tr className="bg-green-700 text-white">
-                <th className="py-2 px-4">Tanggal</th>
-                <th className="py-2 px-4">Kategori ayam</th>
-                <th className="py-2 px-4">Usia (minggu)</th>
-                <th className="py-2 px-4">Jenis</th>
-                <th className="py-2 px-4">Nama Vaksin / Obat</th>
-                <th className="py-2 px-4">Dosis</th>
-                <th className="py-2 px-4">Penyakit</th>
-                <th className="py-2 px-4">Aksi</th>
+                <th className="py-2 px-3 sm:px-4">Tanggal</th>
+                <th className="py-2 px-3 sm:px-4">Kategori ayam</th>
+                <th className="py-2 px-3 sm:px-4">Usia (minggu)</th>
+                <th className="py-2 px-3 sm:px-4">Jenis</th>
+                <th className="py-2 px-3 sm:px-4">Nama Vaksin / Obat</th>
+                <th className="py-2 px-3 sm:px-4">Dosis</th>
+                <th className="py-2 px-3 sm:px-4">Penyakit</th>
+                <th className="py-2 px-3 sm:px-4">Aksi</th>
               </tr>
             </thead>
             <tbody>
@@ -169,24 +173,24 @@ const DetailVaksinObat = () => {
                   key={index}
                   className="border-t hover:bg-black-3 transition-all"
                 >
-                  <td className="py-2 px-4">
+                  <td className="py-2 px-3 sm:px-4">
                     {row.createdAt == "" ? "-" : row.createdAt}
                   </td>
-                  <td className="py-2 px-4">{row.chickenCategory}</td>
-                  <td className="py-2 px-4">{row.chickenAge}</td>
-                  <td className="py-2 px-4">{row.type}</td>
-                  <td className="py-2 px-4">{row.healthItemName}</td>
-                  <td className="py-2 px-4">{`${row.dose} ${row.unit}`}</td>
-                  <td className="py-2 px-4">
+                  <td className="py-2 px-3 sm:px-4">{row.chickenCategory}</td>
+                  <td className="py-2 px-3 sm:px-4">{row.chickenAge}</td>
+                  <td className="py-2 px-3 sm:px-4">{row.type}</td>
+                  <td className="py-2 px-3 sm:px-4">{row.healthItemName}</td>
+                  <td className="py-2 px-3 sm:px-4">{`${row.dose} ${row.unit}`}</td>
+                  <td className="py-2 px-3 sm:px-4">
                     {row.disease == "" ? "-" : row.disease}
                   </td>
-                  <td className="py-2 px-4 flex items-center space-x-2">
+                  <td className="py-2 px-3 sm:px-4 flex items-center space-x-2">
                     <button>
                       <MdEdit
                         onClick={() => {
                           editHealthHandle(row.id);
                         }}
-                        size={28}
+                        size={22}
                         className="text-gray-700 hover:text-black cursor-pointer"
                       />
                     </button>
@@ -196,7 +200,7 @@ const DetailVaksinObat = () => {
                           setDeleteItem(row);
                           setShowDeleteModal(true);
                         }}
-                        size={28}
+                        size={22}
                         className="text-red-500 hover:text-red-700 cursor-pointer"
                       />
                     </button>
@@ -207,31 +211,33 @@ const DetailVaksinObat = () => {
           </table>
 
           {/* Footer Pagination Dummy */}
-          <div className="flex justify-between items-center mt-4 text-sm text-gray-600">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-4 text-xs sm:text-sm text-gray-600 gap-2">
             <p>Menampilkan 1–5 dari 10 riwayat</p>
-            <div className="space-x-2">
+            <div className="flex gap-2 w-full sm:w-auto">
               <button
                 disabled
-                className="bg-gray-200 text-gray-400 px-4 py-3 rounded cursor-not-allowed"
+                className="flex-1 sm:flex-none bg-gray-200 text-gray-400 px-3 py-2 rounded cursor-not-allowed"
               >
                 Sebelumnya
               </button>
-              <button className="bg-green-700 text-white px-4 py-3 rounded hover:bg-green-900 cursor-pointer">
+              <button className="flex-1 sm:flex-none bg-green-700 text-white px-3 py-2 rounded hover:bg-green-900 cursor-pointer">
                 Selanjutnya
               </button>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Modal */}
       {showDeleteModal && (
-        <div className="fixed inset-0 bg-black/15 flex justify-center items-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-sm w-full shadow-lg relative">
+        <div className="fixed inset-0 bg-black/20 flex justify-center items-center z-50 p-4">
+          <div className="bg-white rounded-lg p-6 w-full max-w-sm shadow-lg relative">
             <div className="flex flex-col items-center text-center gap-4">
               <Trash2 size={48} />
-              <h2 className="text-lg font-semibold">
+              <h2 className="text-base sm:text-lg font-semibold">
                 Apakah anda yakin untuk menghapus data ini?
               </h2>
-              <div className="flex gap-4 mt-4">
+              <div className="flex flex-col sm:flex-row gap-3 w-full mt-4">
                 <button
                   onClick={() => setShowDeleteModal(false)}
                   className="bg-gray-300 px-4 py-2 rounded w-full hover:bg-gray-400 text-black cursor-pointer"
@@ -250,13 +256,6 @@ const DetailVaksinObat = () => {
           </div>
         </div>
       )}
-      <button
-        onClick={() => {
-          console.log("chickenCage: ", chickenCage);
-        }}
-      >
-        CHECK
-      </button>
     </div>
   );
 };

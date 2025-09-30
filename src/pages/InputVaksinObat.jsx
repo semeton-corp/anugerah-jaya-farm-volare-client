@@ -148,8 +148,10 @@ const InputVaksinObat = () => {
     <div className="border border-black-6 rounded p-8 m-4 bg-white w-full  mx-auto">
       {/* Header */}
       <div className="flex justify-between items-start mb-6">
-        <h2 className="text-2xl font-bold">Input data vaksin / obat</h2>
-        <p className="text-lg font-medium text-gray-500">
+        <h2 className="text-xl sm:text-2xl font-bold">
+          Input data vaksin / obat
+        </h2>
+        <p className="text-sm sm:text-base font-medium text-gray-500">
           {getTodayDateInBahasa()}
         </p>
       </div>

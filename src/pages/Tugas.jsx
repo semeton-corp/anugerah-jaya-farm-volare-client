@@ -161,63 +161,65 @@ const Tugas = () => {
   }
 
   return (
-    <div className="p-4">
-      <div className="text-3xl font-bold mb-4">Tugas</div>
+    <div className="p-4 sm:p-6 space-y-6">
+      <div className="text-2xl sm:text-3xl font-bold mb-4">Tugas</div>
+
       {!isPresence && (
-        <div className="bg-yellow-50 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6 rounded">
-          <p className="flex items-center">
+        <div className="bg-yellow-50 border-l-4 border-yellow-500 text-yellow-700 p-3 sm:p-4 mb-6 rounded text-sm sm:text-base">
+          <p className="flex items-start sm:items-center">
             <span className="mr-2 text-lg">⚠️</span>
             Lakukan presensi harian untuk melihat tugas hari ini
           </p>
         </div>
       )}
 
-      <div className="border p-4 border-black-6 rounded-lg bg-white">
-        <h2 className="text-xl font-semibold mb-4">Tugas Tambahan</h2>
-        <table className="w-full text-sm">
+      {/* Tugas Tambahan */}
+      <div className="border p-4 sm:p-6 border-black-6 rounded-lg bg-white overflow-x-auto">
+        <h2 className="text-lg sm:text-xl font-semibold mb-4">
+          Tugas Tambahan
+        </h2>
+        <table className="min-w-[600px] w-full text-xs sm:text-sm">
           <thead>
             <tr className="bg-green-700 text-white text-left">
-              <th className="py-2 px-4">Tanggal</th>
-              <th className="py-2 px-4">Tugas Tambahan</th>
-              <th className="py-2 px-4">Lokasi</th>
-              <th className="py-2 px-4">Sisa Slot</th>
-              <th className="py-2 px-4">Status</th>
-              <th className="py-2 px-4">Status</th>
-              <th className="py-2 px-4"></th>
+              <th className="py-2 px-3 sm:px-4">Tanggal</th>
+              <th className="py-2 px-3 sm:px-4">Tugas Tambahan</th>
+              <th className="py-2 px-3 sm:px-4">Lokasi</th>
+              <th className="py-2 px-3 sm:px-4">Sisa Slot</th>
+              <th className="py-2 px-3 sm:px-4">Status</th>
+              <th className="py-2 px-3 sm:px-4">Aksi</th>
+              <th className="py-2 px-3 sm:px-4"></th>
             </tr>
           </thead>
           <tbody>
             {tugasTambahanData?.map((item, index) => (
               <tr key={index} className="border-b">
-                <td className="py-2 px-4">{item.date}</td>
-                <td className="py-2 px-4">{item.name}</td>
-                <td className="py-2 px-4">{item.location}</td>
-                <td className="py-2 px-4">{item.remainingSlot}</td>
-                <td className="py-2 px-4">
+                <td className="py-2 px-3 sm:px-4">{item.date}</td>
+                <td className="py-2 px-3 sm:px-4">{item.name}</td>
+                <td className="py-2 px-3 sm:px-4">{item.location}</td>
+                <td className="py-2 px-3 sm:px-4">{item.remainingSlot}</td>
+                <td className="py-2 px-3 sm:px-4">
                   <span
-                    className={`px-3 py-1 rounded text-sm font-medium ${getStatusStyle(
+                    className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium ${getStatusStyle(
                       item.status
                     )}`}
                   >
                     {item.status}
                   </span>
                 </td>
-                <td className="py-2 px-4 flex gap-2">
+                <td className="py-2 px-3 sm:px-4">
                   {!item.IsTakenByCurrentUser && item.remainingSlot !== 0 && (
                     <button
-                      onClick={() => {
-                        takeAdditionalTaskHandle(item.id);
-                      }}
-                      className="cursor-pointer bg-green-700 text-white text-sm font-semibold px-4 py-1 rounded hover:bg-green-900"
+                      onClick={() => takeAdditionalTaskHandle(item.id)}
+                      className="cursor-pointer bg-green-700 text-white text-xs sm:text-sm font-semibold px-3 sm:px-4 py-1 rounded hover:bg-green-900 w-full sm:w-auto"
                     >
                       Ambil
                     </button>
                   )}
                 </td>
-                <td>
+                <td className="py-2 px-3 sm:px-4">
                   <button
                     onClick={() => detailTugasHandle(item.id)}
-                    className=" text-black text-sm underline font-medium cursor-pointer"
+                    className="text-black text-xs sm:text-sm underline font-medium cursor-pointer"
                   >
                     Details
                   </button>
@@ -228,24 +230,26 @@ const Tugas = () => {
         </table>
       </div>
 
-      {/* Tugas hari ini */}
-      <div className="border p-4 rounded-lg bg-white border-black-6 mt-6">
-        <h2 className="text-xl font-semibold mb-4">Tugas hari ini</h2>
+      {/* Tugas Hari Ini */}
+      <div className="border p-4 sm:p-6 rounded-lg bg-white border-black-6">
+        <h2 className="text-lg sm:text-xl font-semibold mb-4">
+          Tugas hari ini
+        </h2>
 
         {/* Tugas Tambahan */}
         <div className="pb-2 mb-4">
           <h3 className="text-md font-semibold mb-2">Tugas Tambahan</h3>
           {additionalWorks.map((item, i) => (
-            <div className="bg-gray-100 px-4 py-3 border-1 rounded-md flex justify-between items-center mb-2">
+            <div
+              key={i}
+              className="bg-gray-100 px-3 sm:px-4 py-2 sm:py-3 border rounded-md flex justify-between items-center mb-2 text-sm"
+            >
               <p className="font-medium">{item.additionalWork.name}</p>
               <button
                 onClick={() => {
-                  if (!item.isDone) {
-                    finishAdditionalTask(item.id);
-                    // console.log("item: ", item);
-                  }
+                  if (!item.isDone) finishAdditionalTask(item.id);
                 }}
-                className={`w-8 h-8 rounded-md flex justify-center items-center cursor-pointer ${
+                className={`w-7 h-7 sm:w-8 sm:h-8 rounded-md flex justify-center items-center cursor-pointer ${
                   item.isDone
                     ? "bg-[#87FF8B] text-black hover:bg-[#4d8e4f]"
                     : "bg-gray-200 hover:bg-gray-400"
@@ -264,15 +268,19 @@ const Tugas = () => {
             {dailyWorks.map((item, i) => (
               <div
                 key={i}
-                className="border-1 bg-gray-100 px-4 py-3 rounded-md flex justify-between items-center"
+                className="border bg-gray-100 px-3 sm:px-4 py-2 sm:py-3 rounded-md flex justify-between items-center text-sm"
               >
-                <div>
-                  <p className="font-medium">{item.dailyWork.description}</p>
-                  <p className="text-sm text-gray-600">{item.waktu}</p>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs sm:text-sm font-medium ">
+                    {item.dailyWork.description}
+                  </p>
+                  <p className="text-xs sm:text-sm text-gray-600">
+                    {item.dailyWork.startTime}
+                  </p>
                 </div>
                 <button
                   onClick={() => finishDailyTask(item.id)}
-                  className={`w-8 h-8 rounded-md flex justify-center items-center cursor-pointer  ${
+                  className={`flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 ml-2 rounded-md flex justify-center items-center cursor-pointer ${
                     item.isDone
                       ? "bg-[#87FF8B] text-black hover:bg-[#4d8e4f]"
                       : "bg-gray-200 hover:bg-gray-400"
@@ -285,14 +293,6 @@ const Tugas = () => {
           </div>
         </div>
       </div>
-      {/* <button
-        onClick={() => {
-          console.log("tugasTambahanData: ", tugasTambahanData);
-          console.log("additionalWorks: ", additionalWorks);
-        }}
-      >
-        check
-      </button> */}
     </div>
   );
 };

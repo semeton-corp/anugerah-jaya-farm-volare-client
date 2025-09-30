@@ -334,18 +334,21 @@ const Presensi = () => {
   }, [isPresence, isGoHome, monthName]);
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Presensi</h1>
+    <div className="p-2 sm:p-4">
+      <h1 className="text-xl sm:text-2xl font-bold mb-4">Presensi</h1>
 
       {/* Presensi Harian */}
-      <div className="bg-white rounded border border-black-6 p-6 mb-6">
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="font-semibold text-lg">Presensi Harian</h2>
-          <p className="text-sm">{getTodayDateInBahasa()}</p>
+      <div className="bg-white rounded border border-black-6 p-4 sm:p-6 mb-6">
+        <div className="flex items-center justify-between mb-2 flex-wrap gap-2">
+          <h2 className="font-semibold text-md sm:text-lg">Presensi Harian</h2>
+          <p className="text-xs sm:text-sm">{getTodayDateInBahasa()}</p>
         </div>
+
         <div
-          className={`grid gap-6 ${
-            isGoHome || isPresence ? "grid-cols-1" : "grid-cols-3"
+          className={`grid gap-4 sm:gap-6 ${
+            isGoHome || isPresence
+              ? "grid-cols-1"
+              : "grid-cols-1 sm:grid-cols-3"
           }`}
         >
           {/* Hadir / Pulang / Info */}
@@ -357,7 +360,7 @@ const Presensi = () => {
                 ? departureHandlePresence
                 : arrivalHandlePresence
             }
-            className={`text-center py-2 rounded text-lg font-semibold ${
+            className={`text-center py-2 rounded text-base sm:text-lg font-semibold ${
               isGoHome
                 ? "bg-black-5 text-black-8"
                 : isPresence
@@ -376,26 +379,26 @@ const Presensi = () => {
             <>
               <div
                 onClick={handleSakit}
-                className="text-center py-2 rounded text-lg font-semibold bg-kritis-box-surface-color hover:bg-[#C34747] text-kritis-text-color cursor-pointer hover:text-white"
+                className="text-center py-2 rounded text-base sm:text-lg font-semibold bg-kritis-box-surface-color hover:bg-[#C34747] text-kritis-text-color cursor-pointer hover:text-white"
               >
                 Sakit
               </div>
               <div
                 onClick={handleIzin}
-                className="text-center py-2 rounded text-lg font-semibold bg-orange-300 hover:bg-orange-500 text-warning-text-color cursor-pointer hover:text-white"
+                className="text-center py-2 rounded text-base sm:text-lg font-semibold bg-orange-300 hover:bg-orange-500 text-warning-text-color cursor-pointer hover:text-white"
               >
                 Izin
               </div>
             </>
           )}
         </div>
-        <p className="pt-4">
-          *Presensi hanya bisa dilakukan di tempat bekerja{" "}
+        <p className="pt-4 text-xs sm:text-sm">
+          *Presensi hanya bisa dilakukan di tempat bekerja
         </p>
       </div>
 
       {/* Tabel Presensi */}
-      <div className="bg-white rounded border border-black-6 p-6">
+      <div className="bg-white rounded border border-black-6 p-4 sm:p-6">
         <div className="flex justify-between items-center mb-2 flex-wrap gap-4">
           <div></div>
           <MonthYearSelector
@@ -407,57 +410,61 @@ const Presensi = () => {
           />
         </div>
 
-        <table className="w-full border-collapse ">
-          <thead className="bg-green-700 text-white text-sm">
-            <tr>
-              <th className="p-2 text-left">Tanggal</th>
-              <th className="p-2 text-left">Jam masuk</th>
-              <th className="p-2 text-left">Jam pulang</th>
-              <th className="p-2 text-left">Jumlah Lembur</th>
-              <th className="p-2 text-left">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {attendanceData.map((row, i) => (
-              <tr key={i} className="border-b">
-                <td className="p-2">{row.date}</td>
-                <td className="p-2">{row.startTime}</td>
-                <td className="p-2">{row.endTime}</td>
-                <td className="p-2">{row.overTime}</td>
-                <td className="p-2">
-                  <span
-                    className={`px-3 py-1 rounded ${
-                      row.startTime !== ""
-                        ? "bg-aman-box-surface-color text-aman-text-color"
-                        : "bg-kritis-box-surface-color text-kritis-text-color"
-                    }`}
-                  >
-                    {row.startTime !== "" ? "Hadir" : "Tidak hadir"}
-                  </span>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse text-xs sm:text-base">
+            <thead className="bg-green-700 text-white">
+              <tr>
+                <th className="p-2 text-left">Tanggal</th>
+                <th className="p-2 text-left">Jam masuk</th>
+                <th className="p-2 text-left">Jam pulang</th>
+                <th className="p-2 text-left">Jumlah Lembur</th>
+                <th className="p-2 text-left">Status</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {attendanceData.map((row, i) => (
+                <tr key={i} className="border-b">
+                  <td className="p-2">{row.date}</td>
+                  <td className="p-2">{row.startTime}</td>
+                  <td className="p-2">{row.endTime}</td>
+                  <td className="p-2">{row.overTime}</td>
+                  <td className="p-2">
+                    <span
+                      className={`inline-block px-2 sm:px-3 py-0.5 sm:py-1 rounded text-xs sm:text-sm font-medium ${
+                        row.startTime !== ""
+                          ? "bg-aman-box-surface-color text-aman-text-color"
+                          : "bg-kritis-box-surface-color text-kritis-text-color"
+                      }`}
+                    >
+                      {row.startTime !== "" ? "Hadir" : "Tidak hadir"}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
+
+      {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/15 bg-opacity-50 z-50">
-          <div className="bg-white rounded-lg p-6 max-w-lg w-full relative">
+        <div className="fixed inset-0 flex items-center justify-center bg-black/30 z-50">
+          <div className="bg-white rounded-lg p-4 sm:p-6 max-w-lg w-full relative mx-2">
             <button
               onClick={() => setShowModal(false)}
-              className="absolute top-2 right-3 text-xl"
+              className="absolute top-2 right-3 text-lg sm:text-xl"
             >
               ✖
             </button>
 
-            <h2 className="text-xl font-bold mb-4">
+            <h2 className="text-lg sm:text-xl font-bold mb-4">
               Pengajuan {modalType === "sakit" ? "Sakit" : "Izin"}
             </h2>
 
             <div className="mb-4">
               <label className="block mb-1">Keterangan</label>
               <textarea
-                className="w-full border rounded px-2 py-1"
+                className="w-full border rounded px-2 py-1 text-sm"
                 placeholder="Tuliskan alasan sakit / izin"
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
@@ -473,7 +480,7 @@ const Presensi = () => {
                 onChange={(e) => {
                   console.log(e.target.files[0]);
                 }}
-                className="w-full border rounded px-2 py-1"
+                className="w-full border rounded px-2 py-1 text-sm"
               />
             </div>
 
@@ -486,7 +493,7 @@ const Presensi = () => {
                     handleSubmitIzin();
                   }
                 }}
-                className="bg-green-700 hover:bg-green-900 cursor-pointer text-white px-4 py-2 rounded"
+                className="bg-green-700 hover:bg-green-900 cursor-pointer text-white px-4 py-2 rounded text-sm sm:text-base"
               >
                 Ajukan
               </button>
@@ -494,14 +501,6 @@ const Presensi = () => {
           </div>
         </div>
       )}
-      <button
-        onClick={() => {
-          console.log("isGoHome: ", isGoHome);
-          console.log("isPresence: ", isPresence);
-        }}
-      >
-        CHECK
-      </button>
     </div>
   );
 };
