@@ -188,37 +188,38 @@ const Ayam = () => {
       {isDetailPage ? (
         <Outlet />
       ) : (
-        <div className="flex flex-col px-4 py-3 gap-4 ">
+        <div className="flex flex-col px-3 py-3 gap-4">
           {/* header section */}
-          <div className="flex justify-between mb-2 flex-wrap gap-4">
-            <h1 className="text-3xl font-bold">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-2">
+            <h1 className="text-2xl sm:text-3xl font-bold">
               {userRole == "Pekerja Kandang" ? "Ringkasan" : "Ringkasan Ayam"}
             </h1>
-            <div className="flex gap-4">
-              {userRole == "Owner" ||
-                (userRole == "Kepala Kandang" && (
-                  <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
-                    <MdStore size={18} />
-                    <select
-                      value={selectedSite}
-                      onChange={(e) => setSelectedSite(e.target.value)}
-                      className="ml-2 bg-transparent text-base font-medium outline-none"
-                    >
-                      <option value="">Semua Site</option>
-                      {siteOptions.map((site) => (
-                        <option key={site.id} value={site.id}>
-                          {site.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                ))}
-              <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+
+            <div className="flex flex-wrap gap-3">
+              {(userRole == "Owner" || userRole == "Kepala Kandang") && (
+                <div className="flex items-center rounded-lg px-3 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer w-full sm:w-auto">
+                  <MdStore size={18} />
+                  <select
+                    value={selectedSite}
+                    onChange={(e) => setSelectedSite(e.target.value)}
+                    className="ml-2 bg-transparent text-sm sm:text-base font-medium outline-none w-full sm:w-auto"
+                  >
+                    <option value="">Semua Site</option>
+                    {siteOptions.map((site) => (
+                      <option key={site.id} value={site.id}>
+                        {site.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              <div className="flex items-center rounded-lg px-3 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer w-full sm:w-auto">
                 <GiBirdCage size={18} />
                 <select
                   value={selectedChickenCage}
                   onChange={(e) => setSelectedChickenCage(e.target.value)}
-                  className="ml-2 bg-transparent text-base font-medium outline-none"
+                  className="ml-2 bg-transparent text-sm sm:text-base font-medium outline-none w-full sm:w-auto"
                 >
                   <option value="">Semua Kandang</option>
                   {chickenCageOptions.map((chickenCage) => (
@@ -231,109 +232,88 @@ const Ayam = () => {
             </div>
           </div>
 
-          {/* Telur  ok, retak, pecah, reject*/}
-          <div className="flex md:grid-cols-2 gap-4 justify-between">
-            {/* telur OK */}
-            <div className="p-4 w-full rounded-md bg-green-100">
+          {/* Stats cards (grid instead of flex for responsiveness) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Total Populasi */}
+            <div className="p-4 rounded-md bg-green-100">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold">Total Populasi</h2>
+                <h2 className="text-base sm:text-lg font-semibold">
+                  Total Populasi
+                </h2>
                 <div className="p-2 rounded-xl bg-green-700">
                   <GiChicken size={24} color="white" />
                 </div>
               </div>
-
-              <div className="flex flex-wrap gap-4">
-                <div>
-                  {/* popuasl */}
-                  <p className="text-3xl font-semibold">
-                    {chickenDetail?.totalLiveChicken ?? "-"}
-                  </p>
-                </div>
-              </div>
+              <p className="text-2xl sm:text-3xl font-semibold">
+                {chickenDetail?.totalLiveChicken ?? "-"}
+              </p>
             </div>
 
-            {/* ayam sakit */}
-            <div className="p-4 w-full rounded-md bg-green-100">
+            {/* Ayam Sakit */}
+            <div className="p-4 rounded-md bg-green-100">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold">Ayam Sakit</h2>
+                <h2 className="text-base sm:text-lg font-semibold">
+                  Ayam Sakit
+                </h2>
                 <div className="p-2 rounded-xl bg-green-700">
                   <GiHealthDecrease size={24} color="white" />
                 </div>
               </div>
-
-              <div className="flex  flex-wrap gap-4">
-                <div className="flex flex-wrap gap-4">
-                  <div>
-                    {/* popuasl */}
-                    <p className="text-3xl font-semibold">
-                      {chickenDetail?.totalSickChicken ?? "-"}
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <p className="text-2xl sm:text-3xl font-semibold">
+                {chickenDetail?.totalSickChicken ?? "-"}
+              </p>
             </div>
-            {/* penjualan telur */}
-            <div className="p-4 w-full rounded-md bg-green-100">
+
+            {/* Ayam Mati */}
+            <div className="p-4 rounded-md bg-green-100">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold">Ayam Mati</h2>
+                <h2 className="text-base sm:text-lg font-semibold">
+                  Ayam Mati
+                </h2>
                 <div className="p-2 rounded-xl bg-green-700">
                   <GiDeathSkull size={24} color="white" />
                 </div>
               </div>
-
-              <div className="flex flex-wrap gap-4">
-                {/* item butir */}
-                <div className="flex flex-wrap gap-4">
-                  <div>
-                    {/* popuasl */}
-                    <p className="text-3xl font-semibold">
-                      {chickenDetail?.totalDeathChicken ?? "-"}
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <p className="text-2xl sm:text-3xl font-semibold">
+                {chickenDetail?.totalDeathChicken ?? "-"}
+              </p>
             </div>
-            {/* penjualan telur */}
-            <div className="p-4 w-full rounded-md bg-green-100">
+
+            {/* KPI Ayam */}
+            <div className="p-4 rounded-md bg-green-100">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold">KPI Ayam</h2>
+                <h2 className="text-base sm:text-lg font-semibold">KPI Ayam</h2>
                 <div className="p-2 rounded-xl bg-green-700">
                   <FaPercentage size={24} color="white" />
                 </div>
               </div>
-
-              <div className="flex flex-wrap gap-4">
-                <div className="flex flex-wrap gap-4">
-                  <div className="flex">
-                    <p className="text-3xl font-semibold pe-2">
-                      {chickenDetail?.totalKPIPerformance != null
-                        ? new Intl.NumberFormat("en-US", {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          }).format(Number(chickenDetail.totalKPIPerformance))
-                        : "-"}
-                    </p>
-                    <p className="text-3xl font-semibold">%</p>
-                  </div>
-                </div>
+              <div className="flex items-center">
+                <p className="text-2xl sm:text-3xl font-semibold pe-2">
+                  {chickenDetail?.totalKPIPerformance != null
+                    ? new Intl.NumberFormat("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      }).format(Number(chickenDetail.totalKPIPerformance))
+                    : "-"}
+                </p>
+                <p className="text-2xl sm:text-3xl font-semibold">%</p>
               </div>
             </div>
           </div>
 
-          {/* chart, incomes, and history section */}
-          <div className="flex flex-col lg:flex-row h-90 gap-6">
-            {/* Chart Section (3/4 width on large screens) */}
-            <div className="w-full bg-white rounded-lg p-6 border border-black-6 mb-2">
-              <div className="flex justify-between">
-                <h2 className="text-xl font-semibold mb-4">
+          {/* Chart section */}
+          <div className="flex flex-col lg:flex-row gap-6">
+            <div className="w-full bg-white rounded-lg p-4 sm:p-6 border border-gray-200">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4">
+                <h2 className="text-lg sm:text-xl font-semibold">
                   Ayam Mati & Ayam Sakit
                 </h2>
-                <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+                <div className="flex items-center rounded-lg px-3 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer w-full sm:w-auto">
                   <FaCalendarAlt size={18} />
                   <select
                     value={graphFilter}
                     onChange={(e) => setGraphFilter(e.target.value)}
-                    className="ml-2 bg-transparent text-base font-medium outline-none"
+                    className="ml-2 bg-transparent text-sm sm:text-base font-medium outline-none w-full sm:w-auto"
                   >
                     {graphFilterOptions.map((choice, index) => (
                       <option key={index} value={choice}>
@@ -344,31 +324,34 @@ const Ayam = () => {
                 </div>
               </div>
 
-              <ResponsiveContainer width="100%" height="90%">
-                <LineChart data={ayamChartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis domain={[0, 50]} />
-                  <Tooltip />
-                  <Legend verticalAlign="top" align="center" />
-                  <Line
-                    type="monotone"
-                    dataKey="ayamMati"
-                    stroke="#ef4444"
-                    name="Ayam Mati"
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="ayamSakit"
-                    stroke="#facc15"
-                    name="Ayam Sakit"
-                  />
-                </LineChart>
-              </ResponsiveContainer>
+              <div className="w-full h-64 sm:h-80">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={ayamChartData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="date" />
+                    <YAxis domain={[0, 50]} />
+                    <Tooltip />
+                    <Legend verticalAlign="top" align="center" />
+                    <Line
+                      type="monotone"
+                      dataKey="ayamMati"
+                      stroke="#ef4444"
+                      name="Ayam Mati"
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="ayamSakit"
+                      stroke="#facc15"
+                      name="Ayam Sakit"
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </div>
 
-          <div className="bg-white border rounded shadow p-4 border-black-6">
+          {/* Distribusi Usia Ayam */}
+          <div className="bg-white border rounded-lg shadow p-4 sm:p-6 border-gray-200">
             <h2 className="text-lg font-semibold mb-4">Distribusi Usia Ayam</h2>
             <div className="w-full h-64">
               <ResponsiveContainer width="100%" height="100%">
@@ -377,20 +360,22 @@ const Ayam = () => {
                   <XAxis dataKey="age" />
                   <YAxis />
                   <Tooltip />
-                  <Bar dataKey="value" fill="#4b9ea5" barSize={40} />
+                  <Bar dataKey="value" fill="#4b9ea5" barSize={30} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
           </div>
-          <button
+
+          {/* <button
             onClick={() => {
               console.log("selectedSite: ", selectedSite);
               console.log("selectedChickenCage: ", selectedChickenCage);
               console.log("graphFilter: ", graphFilter);
             }}
+            className="px-4 py-2 bg-blue-500 text-white rounded-md w-full sm:w-auto"
           >
             CHECK
-          </button>
+          </button> */}
         </div>
       )}
     </>
