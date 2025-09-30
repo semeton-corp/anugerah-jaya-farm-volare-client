@@ -257,60 +257,47 @@ const Gudang = () => {
 
           <PageNotificationsSection pageNotifications={pageNotifications} />
 
-          <div className="flex md:grid-cols-2 gap-4 justify-between">
-            <div className="p-4 w-full rounded-md bg-green-100">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="p-4 rounded-md bg-green-100">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold">Stok Aman</h2>
+                <h2 className="text-base sm:text-lg font-semibold">
+                  Stok Aman
+                </h2>
                 <div className="p-2 rounded-xl bg-green-700">
-                  <FaCheck size={24} color="white" />
+                  <FaCheck size={20} className="text-white" />
                 </div>
               </div>
-
-              <div className="flex  flex-wrap gap-4">
-                <div className="flex flex-wrap gap-4">
-                  <div>
-                    <p className="text-3xl font-semibold">
-                      {totalSafeStock ?? 0}
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <p className="text-2xl sm:text-3xl font-semibold">
+                {totalSafeStock ?? 0}
+              </p>
             </div>
-            <div className="p-4 w-full rounded-md bg-green-100">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold">Stok Kritis</h2>
-                <div className="p-2 rounded-xl bg-green-700">
-                  <HiMiniExclamationTriangle size={24} color="white" />
-                </div>
-              </div>
 
-              <div className="flex flex-wrap gap-4">
-                <div className="flex flex-wrap gap-4">
-                  <div>
-                    <p className="text-3xl font-semibold">
-                      {totalDangerStock ?? 0}
-                    </p>
-                  </div>
+            <div className="p-4 rounded-md bg-green-100">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-base sm:text-lg font-semibold">
+                  Stok Kritis
+                </h2>
+                <div className="p-2 rounded-xl bg-green-700">
+                  <HiMiniExclamationTriangle size={20} className="text-white" />
                 </div>
               </div>
+              <p className="text-2xl sm:text-3xl font-semibold">
+                {totalDangerStock ?? 0}
+              </p>
             </div>
-            <div className="p-4 w-full rounded-md bg-green-100">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold">Dalam Pesanan</h2>
-                <div className="p-2 rounded-xl bg-green-700">
-                  <FaTruck size={24} color="white" />
-                </div>
-              </div>
 
-              <div className="flex flex-wrap gap-4">
-                <div className="flex flex-wrap gap-4">
-                  <div className="flex">
-                    <p className="text-3xl font-semibold pe-2">
-                      {totalItemInOrder ?? 0}
-                    </p>
-                  </div>
+            <div className="p-4 rounded-md bg-green-100">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-base sm:text-lg font-semibold">
+                  Dalam Pesanan
+                </h2>
+                <div className="p-2 rounded-xl bg-green-700">
+                  <FaTruck size={20} className="text-white" />
                 </div>
               </div>
+              <p className="text-2xl sm:text-3xl font-semibold">
+                {totalItemInOrder ?? 0}
+              </p>
             </div>
           </div>
 
@@ -320,7 +307,7 @@ const Gudang = () => {
                 <h2 className="text-lg font-semibold">Stok Telur</h2>
               </div>
               <div className="overflow-x-auto">
-                <table className="w-full text-base">
+                <table className="w-full  text-base text-xs">
                   <thead>
                     <tr className="bg-green-700 font-medium text-white text-center">
                       <th className="py-2 px-4">Nama Barang</th>
@@ -336,13 +323,15 @@ const Gudang = () => {
                         <td className="py-2 px-4">{item.quantity}</td>
                         <td className="py-2 px-4">{item.item.unit}</td>
 
-                        <td className="py-2 px-4 justify-center gap-4">
-                          <span
-                            onClick={() => editStokTelurHandle(item)}
-                            className="py-1 px-4 rounded bg-green-700 hover:bg-green-900 text-white cursor-pointer"
-                          >
-                            Edit Stok
-                          </span>
+                        <td className="py-2 px-4">
+                          <div className="flex justify-center gap-4">
+                            <span
+                              onClick={() => editStokTelurHandle(item)}
+                              className="py-1 px-4 rounded bg-green-700 hover:bg-green-900 text-white cursor-pointer"
+                            >
+                              Edit Stok
+                            </span>
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -352,12 +341,14 @@ const Gudang = () => {
             </div>
           </div>
           <div className="bg-white p-4 rounded-lg border border-gray-300">
-            <div className="flex justify-between items-start mb-4">
+            <div className="flex flex-col sm:flex-row justify-between items-start mb-4">
               <h2 className="text-lg font-semibold">Stok Jagung</h2>
-              <div className="flex gap-4 items-center">
-                <span className="flex gap-3">
-                  Kapasitas Maksimum Gudang : <p>{`${cornCapacity} Kg`}</p>
-                </span>
+
+              <div className="flex flex-col sm:flex-row  gap-4 items-center">
+                <div className="flex gap-2 items-center text-sm sm:text-base">
+                  <span>Kapasitas Maksimum Gudang :</span>
+                  <span className="font-semibold">{cornCapacity} Kg</span>
+                </div>
 
                 <div
                   onClick={() => {
@@ -366,14 +357,15 @@ const Gudang = () => {
                   }}
                   className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer"
                 >
-                  <div className="text-base font-medium ms-2 text-black">
+                  <span className="text-base font-medium text-black">
                     Edit Kapasitas Maksimum
-                  </div>
+                  </span>
                 </div>
               </div>
             </div>
+
             <div className="overflow-x-auto">
-              <table className="w-full text-base">
+              <table className="w-full text-xs sm:text-sm">
                 <thead>
                   <tr className="bg-green-700 text-white font-medium text-center">
                     <th className="py-2 px-4">Nama barang</th>
@@ -393,16 +385,18 @@ const Gudang = () => {
                       <td className="py-2 px-4">{item.quantity}</td>
                       <td className="py-2 px-4">{item.item.unit}</td>
                       <td className="py-2 px-4">{item.expiredAt}</td>
-                      <td className="py-2 px-4 justify-center gap-4">
-                        <span
-                          onClick={() => {
-                            console.log("item: ", item);
-                            editStokBarangHandle(item);
-                          }}
-                          className="py-1 px-4 rounded bg-green-700 hover:bg-green-900  text-white cursor-pointer"
-                        >
-                          Edit Stok
-                        </span>
+                      <td className="py-2 px-4">
+                        <div className="flex justify-center gap-4">
+                          <span
+                            onClick={() => {
+                              console.log("item: ", item);
+                              editStokBarangHandle(item);
+                            }}
+                            className="py-1 px-4 rounded bg-green-700 hover:bg-green-900  text-white cursor-pointer"
+                          >
+                            Edit Stok
+                          </span>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -412,12 +406,12 @@ const Gudang = () => {
           </div>
 
           {/* detail penjualan */}
-          <div className="bg-white p-4 rounded-lg border border-gray-300">
+          <div className="bg-white p-4 rounded-lg border border-gray-300 ">
             <div className="flex justify-between items-start mb-4">
               <h2 className="text-lg font-semibold">Stok Barang</h2>
             </div>
             <div className="overflow-x-auto">
-              <table className="w-full text-base">
+              <table className="w-full  text-xs sm:text-sm">
                 <thead>
                   <tr className="bg-green-700 text-white font-medium text-center">
                     <th className="py-2 px-4">Nama barang</th>
@@ -477,15 +471,15 @@ const Gudang = () => {
                         </div>
                       </td>
 
-                      <td className="py-2 px-4 justify-center gap-4">
-                        <span
-                          onClick={() => {
-                            editStokBarangHandle(item);
-                          }}
-                          className="py-1 px-4 rounded bg-green-700 hover:bg-green-900  text-white cursor-pointer"
-                        >
-                          Edit Stok
-                        </span>
+                      <td className="py-2 px-4">
+                        <div className="flex justify-center gap-4">
+                          <span
+                            onClick={() => editStokBarangHandle(item)}
+                            className="py-1 px-4 rounded bg-green-700 hover:bg-green-900 text-white cursor-pointer"
+                          >
+                            Edit Stok
+                          </span>
+                        </div>
                       </td>
                     </tr>
                   ))}

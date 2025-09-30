@@ -251,7 +251,7 @@ const OverviewOwner = () => {
         </div>
       </div>
 
-      <div className="flex gap-4 h-65">
+      <div className="flex flex-col md:flex-row gap-4 md:h-65">
         <div className="bg-white flex-1 p-4 border border-black-6 rounded-lg">
           <div className="flex justify-between items-center mb-2">
             <h2 className="text-lg font-semibold">Total ayam</h2>
