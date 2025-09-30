@@ -189,17 +189,17 @@ const Penjualan = () => {
         <Outlet />
       ) : (
         <div className="flex flex-col px-4 py-3 gap-4 ">
-          {/* header section */}
           <div className="flex justify-between mb-2 flex-wrap gap-4">
             <h1 className="text-3xl font-bold">Penjualan</h1>
-            <div className="flex gap-2">
-              {userRole == "Owner" && (
-                <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto">
+              {userRole === "Owner" && (
+                <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer shrink-0 w-full sm:w-auto">
                   <MdStore size={18} />
                   <select
                     value={selectedSite}
                     onChange={(e) => setSelectedSite(e.target.value)}
-                    className="ml-2 bg-transparent text-base font-medium outline-none"
+                    className="ml-2 bg-transparent text-base font-medium outline-none w-full sm:w-auto"
                   >
                     <option value="">Semua Site</option>
                     {siteOptions.map((site) => (
@@ -210,16 +210,20 @@ const Penjualan = () => {
                   </select>
                 </div>
               )}
-              <MonthYearSelector
-                month={month}
-                year={year}
-                setMonth={setMonth}
-                setMonthName={setMonthName}
-                setYear={setYear}
-              />
+
+              <div className="w-full">
+                <MonthYearSelector
+                  month={month}
+                  year={year}
+                  setMonth={setMonth}
+                  setMonthName={setMonthName}
+                  setYear={setYear}
+                />
+              </div>
+
               <div
                 onClick={handleDownloadReport}
-                className="flex items-center rounded-lg px-4 py-2 bg-green-700 hover:bg-green-900 cursor-pointer"
+                className="flex items-center justify-center rounded-lg px-4 py-2 bg-green-700 hover:bg-green-900 cursor-pointer shrink-0 w-full sm:w-auto"
               >
                 <IoMdDownload size={18} color="White" />
                 <div className="text-base font-medium pl-2 text-white">
@@ -390,18 +394,18 @@ const Penjualan = () => {
           </div>
 
           {/* keuntungan & penjualan*/}
-          <div className="flex flex-col lg:flex-row h-120 gap-6">
+          <div className="flex flex-col lg:flex-row h-auto lg:h-120 gap-6">
             {/* Chart Section (1/2 width on large screens) */}
             <div className="w-full lg:w-1/2 bg-white rounded-lg p-6 border border-black-6">
               <h2 className="text-xl font-semibold mb-4">Keuntungan</h2>
-              <ResponsiveContainer width="100%" height={380}>
+              <ResponsiveContainer width="100%" height={250}>
                 <LineChart data={cashflowSaleGraph}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="key" />
                   <YAxis
                     domain={[
-                      (dataMin) => dataMin * 2,
-                      (dataMax) => dataMax * 1.5,
+                      (dataMin) => dataMin * 3,
+                      (dataMax) => dataMax * 2,
                     ]}
                     tickFormatter={(value) =>
                       `${parseInt(value / 1000000)} juta`
@@ -442,7 +446,7 @@ const Penjualan = () => {
             </div>
 
             {/* Chart Section (1/2 width on large screens) */}
-            <div className="w-full lg:w-1/2 bg-white rounded-lg p-6 border border-black-6">
+            <div className="w-full lg:w-1/2 bg-white rounded-lg p-6 border border-black-6 h-auto ">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold mb-4">Penjualan Telur</h2>
 
@@ -462,7 +466,11 @@ const Penjualan = () => {
                   </div>
                 )}
               </div>
-              <ResponsiveContainer width="100%" height="90%">
+              <ResponsiveContainer
+                width="100%"
+                height={250}
+                className="sm:h-[380px]"
+              >
                 <LineChart data={eggSaleGraphs}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="key" />
@@ -484,22 +492,16 @@ const Penjualan = () => {
           </div>
 
           {/* detail penjualan, presentase penjualan*/}
-          <div className="flex w-full gap-6">
+          <div className="flex flex-col lg:flex-row w-full gap-6">
             {/* Left: Tabel Penjualan */}
-            <div className="w-2/3 bg-white px-8 py-6 rounded-lg border border-black-6">
+            <div className="w-full lg:w-2/3 bg-white px-4 sm:px-8 py-6 rounded-lg border border-black-6 overflow-x-auto">
               <div className="flex justify-between items-start mb-4">
                 <h2 className="text-lg font-semibold">
                   Pendapatan Tiap Lokasi
                 </h2>
-                {/* <div
-                  onClick={detailPenjualanHandle}
-                  className="p-2 rounded-full hover:bg-black-4 cursor-pointer"
-                >
-                  <FiMaximize2 size={24} color="" />
-                </div> */}
               </div>
 
-              <table className="w-full text-sm">
+              <table className="w-full text-sm min-w-[400px]">
                 <thead>
                   <tr className="bg-green-700 text-white text-center">
                     <th className="py-2 px-4">Lokasi Penjualan</th>
@@ -526,11 +528,15 @@ const Penjualan = () => {
             </div>
 
             {/* Right: Pie Chart */}
-            <div className="w-1/3 bg-white p-4 rounded-lg border border-black-6">
+            <div className="w-full lg:w-1/3 bg-white p-4 rounded-lg border border-black-6">
               <h2 className="text-lg font-semibold mb-4">
                 Presentase Penjualan
               </h2>
-              <ResponsiveContainer width="100%" height={250}>
+              <ResponsiveContainer
+                width="100%"
+                height={250}
+                className="sm:h-[380px]"
+              >
                 <PieChart>
                   <Pie
                     data={pieData}
