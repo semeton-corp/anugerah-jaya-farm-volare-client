@@ -163,7 +163,7 @@ const InputAyam = () => {
   return (
     <div className="flex flex-col px-4 py-3 gap-4">
       <div className="flex justify-between items-center mb-2 flex-wrap gap-4">
-        <h1 className="text-3xl font-bold">
+        <h1 className="text-xl sm:text-3xl font-bold">
           {userRole === "Pekerja Kandang" ? "Data Ayam" : "Detail Ayam"}
         </h1>
       </div>
@@ -171,7 +171,7 @@ const InputAyam = () => {
       <div className="w-full mx-auto p-6 bg-white shadow rounded border border-black-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold mb-1">Input data harian</h2>
-          <p className="text-lg ">{getTodayDateInBahasa()}</p>
+          <p className="text-sm sm:text-base ">{getTodayDateInBahasa()}</p>
         </div>
         <label className="block font-medium  mb-1">Pilih kandang</label>
         {isEditMode ? (

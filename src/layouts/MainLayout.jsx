@@ -87,7 +87,7 @@ const MainLayout = ({ role }) => {
         </div>
 
         <main
-          className={`mt-4 me-6 transition-all duration-300 ease-in-out ml-0 ${
+          className={`mt-4 me-2 transition-all duration-300 ease-in-out ml-0 ${
             isExpanded ? "md:ml-[17rem]" : "md:ml-[7rem]"
           }`}
         >

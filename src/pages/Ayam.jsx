@@ -324,45 +324,57 @@ const Ayam = () => {
                 </div>
               </div>
 
-              <div className="w-full h-64 sm:h-80">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={ayamChartData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="date" />
-                    <YAxis domain={[0, 50]} />
-                    <Tooltip />
-                    <Legend verticalAlign="top" align="center" />
-                    <Line
-                      type="monotone"
-                      dataKey="ayamMati"
-                      stroke="#ef4444"
-                      name="Ayam Mati"
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="ayamSakit"
-                      stroke="#facc15"
-                      name="Ayam Sakit"
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
+              <div className="w-full h-64 sm:h-80 overflow-x-auto">
+                <div className="min-w-[800px] h-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={ayamChartData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="date" />
+                      <YAxis domain={[0, 50]} />
+                      <Tooltip />
+                      <Legend verticalAlign="top" align="center" />
+                      <Line
+                        type="monotone"
+                        dataKey="ayamMati"
+                        stroke="#ef4444"
+                        name="Ayam Mati"
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="ayamSakit"
+                        stroke="#facc15"
+                        name="Ayam Sakit"
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Distribusi Usia Ayam */}
           <div className="bg-white border rounded-lg shadow p-4 sm:p-6 border-gray-200">
             <h2 className="text-lg font-semibold mb-4">Distribusi Usia Ayam</h2>
-            <div className="w-full h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chickenAgeData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="age" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="value" fill="#4b9ea5" barSize={30} />
-                </BarChart>
-              </ResponsiveContainer>
+            <div className="w-full h-64 sm:h-80 overflow-x-auto">
+              <div
+                className="sm:w-full"
+                style={{
+                  width:
+                    window.innerWidth < 640
+                      ? `${chickenAgeData.length * 100}px`
+                      : "100%",
+                  height: "100%",
+                }}
+              >
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={chickenAgeData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="age" />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar dataKey="value" fill="#4b9ea5" barSize={30} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </div>
 

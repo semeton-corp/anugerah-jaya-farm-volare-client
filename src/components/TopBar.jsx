@@ -138,13 +138,20 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
   };
 
   useEffect(() => {
-    getNotificationsState();
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOptionExpanded(false);
+      }
 
-    const interval = setInterval(() => {
-      getNotificationsState();
-    }, 5000);
+      if (notifRef.current && !notifRef.current.contains(event.target)) {
+        setIsNotifOpen(false);
+      }
+    };
 
-    return () => clearInterval(interval);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   return (
@@ -160,7 +167,7 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
                   ? setIsMobileOpen((s) => !s)
                   : null
               }
-              className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-md shadow-sm bg-white ring-1 ring-black/5"
+              className="md:hidden inline-flex items-center justify-center w-8 h-8 rounded-md shadow-sm bg-white ring-1 ring-black/5"
             >
               {isMobileOpen ? (
                 <svg
@@ -176,8 +183,8 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
                 </svg>
               ) : (
                 <svg
-                  className="w-6 h-6"
-                  viewBox="0 0 24 24"
+                  className="w-4 h-4"
+                  viewBox="0 0 20 20"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
@@ -192,7 +199,7 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
             <img
               src={logo}
               alt="AJF Logo"
-              className="w-12 h-12 sm:w-14 sm:h-14"
+              className="w-8 h-8 sm:w-14 sm:h-14"
             />
             <div className="hidden sm:block">
               <h1 className="text-base sm:text-lg font-bold whitespace-nowrap">
@@ -207,26 +214,27 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
           <div className="flex items-center gap-4">
             <div className="relative">
               <IoIosNotificationsOutline
-                size={28}
-                className="text-black cursor-pointer"
+                size={24}
+                className="text-black cursor-pointer sm:size-8"
                 onClick={() => setIsNotifOpen((prev) => !prev)}
               />
+
               {notifications?.filter((n) => !n.isMarked).length > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center">
                   {notifications.filter((n) => !n.isMarked).length}
                 </span>
               )}
+
               {isNotifOpen && (
                 <div
                   ref={notifRef}
-                  className="absolute right-0 mt-2 w-96 bg-white shadow-xl rounded-lg z-50 border border-gray-200"
+                  className="absolute -right-33 sm:right-auto sm:left-1/2 sm:-translate-x-1/2 mt-2 w-[90vw] max-w-sm sm:w-96 bg-white shadow-xl rounded-lg z-50 border border-gray-200"
                 >
                   <div className="flex justify-between items-center p-4 border-b">
                     <h3 className="font-semibold text-gray-800">Notifikasi</h3>
                     <button
                       onClick={() => {
                         dispatch(markAllNotificationsDone());
-
                         setTimeout(() => {
                           dispatch(clearAllNotifications());
                           handleMarkAllNotification();
@@ -297,7 +305,6 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
                                 checked={notif.isMarked}
                                 onChange={() => {
                                   dispatch(markNotificationDone(notif.id));
-
                                   setTimeout(() => {
                                     dispatch(removeNotification(notif.id));
                                     handleMarkNotification(notif.id);
@@ -314,10 +321,11 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
                 </div>
               )}
             </div>
+
             <div className="h-6 w-[1px] bg-gray-400 rounded-full" />
 
-            <div className="flex items-center gap-6 relative" ref={dropdownRef}>
-              <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-full overflow-hidden">
+            <div className="flex items-center gap-6 relative">
+              <div className="h-8 w-8 sm:h-14 sm:w-14 rounded-full overflow-hidden">
                 <img
                   src={photoProfile || profileAvatar}
                   alt="Profile Avatar"
@@ -333,7 +341,7 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
               <div>
                 <div
                   onClick={profileHandle}
-                  className="h-8 w-8 border border-gray-300 rounded-full flex justify-center items-center hover:bg-gray-200 cursor-pointer"
+                  className="h-6 sm:h-8 w-6 sm:w-8 border border-gray-300 rounded-full flex justify-center items-center hover:bg-gray-200 cursor-pointer"
                   role="button"
                   aria-haspopup="true"
                   aria-expanded={isOptionExpanded}
@@ -343,7 +351,10 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
               </div>
 
               {isOptionExpanded && (
-                <div className="absolute right-0 top-full mt-3 z-50">
+                <div
+                  ref={dropdownRef}
+                  className="absolute right-0 top-full mt-3 z-50"
+                >
                   <div className="absolute -top-2 right-4">
                     <div className="w-0 h-0 border-l-8 border-r-8 border-b-8 border-transparent border-b-white"></div>
                   </div>
