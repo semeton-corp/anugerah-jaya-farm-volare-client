@@ -171,7 +171,6 @@ const DraftPenjualanAyam = () => {
                         onClick={() => {
                           setShowConfirmModal(true);
                           setSelectedConfirmItem(item);
-                          console.log("item: ", item);
                         }}
                         className="px-3 py-1 bg-green-700 text-white rounded hover:bg-green-900 text-sm cursor-pointer"
                       >

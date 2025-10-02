@@ -22,7 +22,7 @@ const Badge = ({ tone = "neutral", children }) => {
   const tones = {
     neutral: "bg-gray-200 text-gray-800",
     success: "bg-green-200 text-green-900",
-    warning: "bg-yellow-200 text-yellow-900",
+    warning: "bg-orange-200 text-orange-900",
     danger: "bg-red-200 text-red-900",
   };
   return <span className={`px-3 py-1 rounded ${tones[tone]}`}>{children}</span>;
@@ -245,7 +245,7 @@ export default function DetailPelangganAfkir() {
                         <td className="px-4 py-3">
                           <button
                             onClick={() => goToSaleDetail(saleId)}
-                            className="bg-slate-600 text-white px-3 py-1 rounded hover:bg-slate-700"
+                            className="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-900 cursor-pointer"
                           >
                             Detail
                           </button>

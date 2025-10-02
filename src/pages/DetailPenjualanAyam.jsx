@@ -218,71 +218,80 @@ export default function DetailPenjualanAyam() {
 
   return (
     <div className="p-6">
-      <h2 className="text-3xl font-bold mb-4">Detail Penjualan Ayam</h2>
+      <h2 className="text-2xl sm:text-3xl font-bold mb-4">
+        Detail Penjualan Ayam
+      </h2>
 
-      <div className="border rounded p-6">
+      <div className="border rounded p-4 sm:p-6">
         {/* Ringkasan atas */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-6">
           <div>
             <p className="text-sm text-gray-600">Tanggal Penjualan</p>
-            <p className="font-semibold text-lg">{sale.sellDate}</p>
+            <p className="font-semibold text-base sm:text-lg">
+              {sale.sellDate}
+            </p>
           </div>
           <div>
             <p className="text-sm text-gray-600">Umur Ayam</p>
-            <p className="font-semibold text-lg">{sale.chickenAge} Minggu</p>
+            <p className="font-semibold text-base sm:text-lg">
+              {sale.chickenAge} Minggu
+            </p>
           </div>
           <div>
             <p className="text-sm text-gray-600">Kandang</p>
-            <p className="font-semibold text-lg">
+            <p className="font-semibold text-base sm:text-lg">
               {sale.chickenCage?.cage?.name}
             </p>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-6">
           <div>
             <p className="text-sm text-gray-600">Nama Pelanggan</p>
-            <p className="font-semibold text-lg">
+            <p className="font-semibold text-base sm:text-lg">
               {sale.afkirChickenCustomer?.name}
             </p>
           </div>
           <div>
             <p className="text-sm text-gray-600">Nomor Telepon</p>
-            <p className="font-semibold text-lg">
+            <p className="font-semibold text-base sm:text-lg">
               {sale.afkirChickenCustomer?.phoneNumber}
             </p>
           </div>
-          <div className="md:col-span-2">
+          <div className="sm:col-span-2">
             <p className="text-sm text-gray-600">Alamat</p>
-            <p className="font-semibold text-lg">
+            <p className="font-semibold text-base sm:text-lg">
               {sale.afkirChickenCustomer?.address}
             </p>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-6">
           <div>
             <p className="text-sm text-gray-600">Jumlah Ayam Terjual</p>
-            <p className="font-semibold text-lg">
+            <p className="font-semibold text-base sm:text-lg">
               {sale.totalSellChicken} Ekor
             </p>
           </div>
           <div>
             <p className="text-sm text-gray-600">Harga Jual / Ekor</p>
-            <p className="font-semibold text-lg">
+            <p className="font-semibold text-base sm:text-lg">
               {rupiah(sale.pricePerChicken)} / Ekor
             </p>
           </div>
           <div>
             <p className="text-sm text-gray-600">Harga Jual Total</p>
-            <p className="font-semibold text-lg">{rupiah(totalPrice)}</p>
+            <p className="font-semibold text-base sm:text-lg">
+              {rupiah(totalPrice)}
+            </p>
           </div>
         </div>
 
-        <div className="mt-8">
+        {/* Payment Deadline */}
+        <div className="pt-6 mt-6 border-t">
           <h2 className="text-lg font-bold mb-2">Payment Deadline</h2>
           <p
-            className={`flex text-lg items-center gap-2 font-semibold ${
+            className={`flex text-base sm:text-lg items-center gap-2 font-semibold ${
               isMoreThanDeadlinePaymentDate ? "text-red-600" : "text-black"
             }`}
           >
@@ -297,9 +306,9 @@ export default function DetailPenjualanAyam() {
 
         {/* Pembayaran */}
         <div className="border rounded mt-6">
-          <div className="flex items-center justify-between p-4">
+          <div className="flex flex-col sm:flex-row  justify-between p-4">
             <p className="font-semibold text-lg">Pembayaran</p>
-            {sale.remainingPayment != 0 && (
+            {sale.remainingPayment !== 0 && (
               <button
                 onClick={() => setShowPaymentModal(true)}
                 className="bg-orange-300 hover:bg-orange-500 px-4 py-2 rounded text-black cursor-pointer"
@@ -388,14 +397,14 @@ export default function DetailPenjualanAyam() {
               </table>
             </div>
 
-            <div className="flex items-center justify-between mt-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-4 gap-2 sm:gap-0">
               <div className="flex items-center gap-3">
                 <span className="font-semibold">Status Pembayaran :</span>
                 <Badge tone={payStatus === "Lunas" ? "success" : "warning"}>
                   {payStatus}
                 </Badge>
               </div>
-              <div className="text-right">
+              <div className="text-left sm:text-right">
                 <p className="font-medium">
                   Sisa Bayar : {rupiah(finalRemaining)}
                 </p>

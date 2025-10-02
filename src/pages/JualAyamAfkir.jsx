@@ -87,16 +87,17 @@ const JualAyamAfkir = () => {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
+      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
-        <h2 className="text-2xl sm:text-3xl font-bold">Jual Ayam Afkir</h2>
+        <h2 className="text-xl sm:text-3xl font-bold">Jual Ayam Afkir</h2>
 
         <div className="flex items-center rounded-lg px-3 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer w-full sm:w-auto">
           <FaMoneyBillWave size={18} />
           <select
             value={paymentStatus}
             onChange={(e) => setPaymentStatus(e.target.value)}
-            className="ml-2 bg-transparent text-base font-medium outline-none w-full sm:w-auto"
+            className="ml-2 bg-transparent text-sm sm:text-base font-medium outline-none w-full sm:w-auto"
           >
             <option value="">Semua Status Pembayaran</option>
             {paymentStatusOptions.map((opt) => (
@@ -110,55 +111,59 @@ const JualAyamAfkir = () => {
 
       <PageNotificationsSection pageNotifications={pageNotifications} />
 
+      {/* Card utama */}
       <div className="bg-white p-4 rounded shadow border">
-        <div className="flex justify-end items-center mb-3">
-          <div className="flex gap-2">
-            <button
-              onClick={draftPelangganAyamHandle}
-              className="bg-orange-300 hover:bg-orange-500 cursor-pointer px-3 py-2 rounded text-sm font-medium"
-            >
-              Daftar Pelanggan Ayam
-            </button>
-            <button
-              onClick={draftPenjualanAyamHandle}
-              className="bg-orange-300 hover:bg-orange-500 cursor-pointer px-3 py-2 rounded text-sm font-medium"
-            >
-              Draft Penjualan Ayam
-            </button>
-          </div>
+        {/* Tombol Aksi */}
+        <div className="flex flex-col sm:flex-row justify-end items-stretch sm:items-center mb-3 gap-2">
+          <button
+            onClick={draftPelangganAyamHandle}
+            className="bg-orange-300 hover:bg-orange-500 cursor-pointer px-3 py-2 rounded text-sm font-medium w-full sm:w-auto"
+          >
+            Daftar Pelanggan Ayam
+          </button>
+          <button
+            onClick={draftPenjualanAyamHandle}
+            className="bg-orange-300 hover:bg-orange-500 cursor-pointer px-3 py-2 rounded text-sm font-medium w-full sm:w-auto"
+          >
+            Draft Penjualan Ayam
+          </button>
         </div>
+
+        {/* Tabel */}
         <div className="overflow-x-auto">
-          <table className="min-w-full table-auto border-collapse">
+          <table className="min-w-full table-auto border-collapse text-sm sm:text-base">
             <thead>
               <tr className="bg-green-700 text-white text-left">
-                <th className="p-3">Tanggal Jual</th>
-                <th className="p-3">Pelanggan</th>
-                <th className="p-3">Jumlah</th>
-                <th className="p-3">Status Pembayaran</th>
-                <th className="p-3">Aksi</th>
+                <th className="p-2 sm:p-3">Tanggal Jual</th>
+                <th className="p-2 sm:p-3">Pelanggan</th>
+                <th className="p-2 sm:p-3">Jumlah</th>
+                <th className="p-2 sm:p-3">Status Pembayaran</th>
+                <th className="p-2 sm:p-3">Aksi</th>
               </tr>
             </thead>
             <tbody>
               {salesData.map((item, index) => (
                 <tr key={index} className="border-t">
-                  <td className="p-3">{item.sellDate}</td>
-                  <td className="p-3">{item.afkirChickenCustomer.name}</td>
-                  <td className="p-3">{`${item.totalSellChicken} Ekor`}</td>
-                  <td className="p-3">
+                  <td className="p-2 sm:p-3">{item.sellDate}</td>
+                  <td className="p-2 sm:p-3">
+                    {item.afkirChickenCustomer.name}
+                  </td>
+                  <td className="p-2 sm:p-3">{`${item.totalSellChicken} Ekor`}</td>
+                  <td className="p-2 sm:p-3">
                     <span
-                      className={`text-sm px-3 py-1 rounded font-medium ${getStatusColor(
+                      className={`text-xs sm:text-sm px-2 sm:px-3 py-1 rounded font-medium ${getStatusColor(
                         item.paymentStatus
                       )}`}
                     >
                       {item.paymentStatus}
                     </span>
                   </td>
-                  <td className="p-3">
+                  <td className="p-2 sm:p-3">
                     <button
                       onClick={() =>
                         navigate(`detail-penjualan-ayam/${item.id}`)
                       }
-                      className="bg-green-700 hover:bg-green-900 cursor-pointer text-white px-3 py-1 rounded text-sm"
+                      className="bg-green-700 hover:bg-green-900 cursor-pointer text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm"
                     >
                       Lihat Detail
                     </button>
@@ -169,35 +174,37 @@ const JualAyamAfkir = () => {
           </table>
         </div>
 
-        {/* footer */}
-        <div className="flex justify-between mt-16 px-6">
+        {/* Footer Pagination */}
+        <div className="flex flex-col sm:flex-row justify-between mt-8 sm:mt-16 gap-3 sm:gap-0 px-2 sm:px-6">
           {salesData?.length > 0 ? (
-            <p className="text-sm text-[#CCCCCC]">{`Menampilkan halaman ${page} dari ${totalPages} halaman. Total ${totalData} data riwayat`}</p>
+            <p className="text-xs sm:text-sm text-[#999999]">
+              {`Menampilkan halaman ${page} dari ${totalPages} halaman. Total ${totalData} data riwayat`}
+            </p>
           ) : (
             <p></p>
           )}
-          <div className="flex gap-3">
+          <div className="flex gap-2 sm:gap-3">
             <div
-              className={`rounded-[4px] py-2 px-6 ${
+              className={`rounded py-1 sm:py-2 px-4 sm:px-6 ${
                 page <= 1 || totalPages <= 0
                   ? "bg-gray-200 cursor-not-allowed"
                   : "bg-green-100 hover:bg-green-200 cursor-pointer"
-              } flex items-center justify-center text-black text-base font-medium `}
+              } flex items-center justify-center text-black text-xs sm:text-base font-medium`}
               onClick={() => page > 1 && totalPages > 0 && setPage(page - 1)}
             >
-              <p>Previous</p>
+              Previous
             </div>
             <div
-              className={`rounded-[4px] py-2 px-6 ${
+              className={`rounded py-1 sm:py-2 px-4 sm:px-6 ${
                 page >= totalPages || totalPages <= 0
                   ? "bg-gray-200 cursor-not-allowed"
                   : "bg-green-700 hover:bg-green-800 cursor-pointer"
-              } flex items-center justify-center text-white text-base font-medium `}
+              } flex items-center justify-center text-white text-xs sm:text-base font-medium`}
               onClick={() =>
                 page < totalPages && totalPages > 0 && setPage(page + 1)
               }
             >
-              <p>Next</p>
+              Next
             </div>
           </div>
         </div>
