@@ -167,10 +167,7 @@ export default function DetailPengadaanDoc() {
   const submitDeletePayment = async () => {
     if (!selectedPayment?.id) return;
     try {
-      const res = await deleteChickenProcurementPayment(
-        id,
-        selectedPayment.id
-      );
+      const res = await deleteChickenProcurementPayment(id, selectedPayment.id);
       console.log("res: ", res);
       if (res?.status === 200 || res?.status === 204) {
         alert("✅ Pembayaran berhasil dihapus");
@@ -205,46 +202,58 @@ export default function DetailPengadaanDoc() {
 
   return (
     <div className="border rounded p-6 m-4">
-      <h2 className="text-2xl font-semibold mb-4">Detail Pengadaan DOC</h2>
-      <div className="grid grid-cols-2 md:grid-cols-2 gap-6 mb-2">
+      <h2 className="text-xl sm:text font-semibold mb-4">
+        Detail Pengadaan DOC
+      </h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-2 text-sm">
         <div>
-          <p className=" text-gray-600">Tanggal Pemesanan</p>
-          <p className="text-lg font-semibold">{data?.orderDate}</p>
+          <p className="text-gray-600">Tanggal Pemesanan</p>
+          <p className="text-base sm:text-lg font-semibold">
+            {data?.orderDate}
+          </p>
         </div>
-        <div></div>
         <div>
-          <p className=" text-gray-600">Status Pengiriman</p>
+          <p className="text-gray-600">Status Pengiriman</p>
           <Badge tone={shipTone}>{data?.procurementStatus}</Badge>
         </div>
         <div>
-          <p className=" text-gray-600">Estimasi Tiba</p>
-          <p className="text-lg font-semibold">{data?.estimationArrivalDate}</p>
+          <p className="text-gray-600">Estimasi Tiba</p>
+          <p className="text-base sm:text-lg font-semibold">
+            {data?.estimationArrivalDate}
+          </p>
         </div>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <div>
-          <p className=" text-gray-600">Supplier</p>
-          <p className="text-lg  font-semibold">{data?.supplier?.name}</p>
+          <p className="text-gray-600">Supplier</p>
+          <p className="text-base sm:text-lg font-semibold">
+            {data?.supplier?.name}
+          </p>
         </div>
         <div>
-          <p className=" text-gray-600">Kandang</p>
-          <p className=" text-lg font-semibold">{data?.cage?.name}</p>
+          <p className="text-gray-600">Kandang</p>
+          <p className="text-base sm:text-lg font-semibold">
+            {data?.cage?.name}
+          </p>
         </div>
         <div>
-          <p className=" text-gray-600">Jumlah Pemesanan</p>
-          <p className="text-lg font-semibold">{data?.quantity}</p>
+          <p className="text-gray-600">Jumlah Pemesanan</p>
+          <p className="text-base sm:text-lg font-semibold">{data?.quantity}</p>
         </div>
         <div>
-          <p className=" text-gray-600">Harga</p>
-          <p className="text-lg font-semibold">{rupiah(data?.totalPrice)}</p>
+          <p className="text-gray-600">Harga</p>
+          <p className="text-base sm:text-lg font-semibold">
+            {rupiah(data?.totalPrice)}
+          </p>
         </div>
       </div>
       <div className="border rounded mt-3">
-        <div className="flex items-center justify-between p-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 gap-3">
           <p className="font-semibold text-lg">Pembayaran</p>
           <button
             onClick={() => setShowPaymentModal(true)}
-            className="bg-orange-300 hover:bg-orange-500 px-4 py-2 rounded text-black cursor-pointer"
+            className="bg-orange-300 hover:bg-orange-500 px-4 py-2 rounded text-black cursor-pointer w-full sm:w-auto"
           >
             Tambah Pembayaran
           </button>
@@ -271,7 +280,7 @@ export default function DetailPengadaanDoc() {
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full min-w-[600px] text-sm sm:text-base">
               <thead className="bg-green-700 text-white">
                 <tr>
                   <th className="text-left px-3 py-2">Tanggal</th>
@@ -334,27 +343,19 @@ export default function DetailPengadaanDoc() {
             </table>
           </div>
 
-          <div className="flex items-center justify-between mt-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-4 gap-3">
             <div className="flex items-center gap-3">
               <span className="font-semibold">Status Pembayaran :</span>
               <Badge tone={payStatus === "Lunas" ? "success" : "warning"}>
                 {payStatus}
               </Badge>
             </div>
-            <div className="text-right">
-              <p className="text-sm">Sisa Bayar : {rupiah(finalRemaining)}</p>
+            <div className="text-sm sm:text-right w-full sm:w-auto">
+              <p>Sisa Bayar : {rupiah(finalRemaining)}</p>
             </div>
           </div>
         </div>
       </div>
-
-      <button
-        onClick={() => {
-          console.log("data: ", data);
-        }}
-      >
-        CHECK
-      </button>
 
       {showPaymentModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
