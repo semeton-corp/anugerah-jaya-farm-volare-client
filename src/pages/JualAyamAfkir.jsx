@@ -88,14 +88,15 @@ const JualAyamAfkir = () => {
 
   return (
     <div className="p-6">
-      <div className="flex justify-between items-center mb-2">
-        <h2 className="text-3xl font-bold mb-6">Jual Ayam Afkir</h2>
-        <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
+        <h2 className="text-2xl sm:text-3xl font-bold">Jual Ayam Afkir</h2>
+
+        <div className="flex items-center rounded-lg px-3 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer w-full sm:w-auto">
           <FaMoneyBillWave size={18} />
           <select
             value={paymentStatus}
             onChange={(e) => setPaymentStatus(e.target.value)}
-            className="ml-2 bg-transparent text-base font-medium outline-none"
+            className="ml-2 bg-transparent text-base font-medium outline-none w-full sm:w-auto"
           >
             <option value="">Semua Status Pembayaran</option>
             {paymentStatusOptions.map((opt) => (
