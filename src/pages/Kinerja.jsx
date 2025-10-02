@@ -147,8 +147,8 @@ const Kinerja = () => {
     try {
       const year = getTodayYear();
       const performanceResponse = await getChickenAndCompanyPerformanceOverview(
-        selectedSite,
-        selectedChickenCage,
+        selectedSite === 0 ? undefined : selectedSite,
+        selectedChickenCage === 0 ? undefined : selectedChickenCage,
         year
       );
       console.log("performanceResponse: ", performanceResponse);
@@ -158,11 +158,6 @@ const Kinerja = () => {
           performanceResponse.data.data.chickenPerformanceSummary
         );
         setIncomeAndExpensePerformanceBarCharts(
-          performanceResponse.data.data.incomeAndExpensePerformanceBarCharts
-        );
-
-        console.log(
-          "performanceResponse.data.data.incomeAndExpensePerformanceBarCharts: ",
           performanceResponse.data.data.incomeAndExpensePerformanceBarCharts
         );
 
@@ -191,53 +186,54 @@ const Kinerja = () => {
       ) : (
         <div className="flex flex-col px-4 py-3 gap-4 ">
           {/* header section */}
-          <div className="flex justify-between mb-2 flex-wrap gap-4">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-2 gap-4">
             <h1 className="text-3xl font-bold">Kinerja</h1>
-            <div className="flex gap-2">
-              {userRole == "Owner" && (
-                <>
-                  <div className="flex items-center rounded-lg px-4 py-2 bg-[#BFBFBF]">
-                    {getTodayDateInBahasa()}
-                  </div>
-                  <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
-                    <MdStore size={18} />
-                    <select
-                      value={selectedSite}
-                      onChange={(e) => setSelectedSite(e.target.value)}
-                      className="ml-2 bg-transparent text-base font-medium outline-none"
-                    >
-                      <option value="">Semua Site</option>
-                      {siteOptions.map((site) => (
-                        <option key={site.id} value={site.id}>
-                          {site.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
-                    <GiBirdCage size={18} />
-                    <select
-                      value={selectedChickenCage}
-                      onChange={(e) => setSelectedChickenCage(e.target.value)}
-                      className="ml-2 bg-transparent text-base font-medium outline-none"
-                    >
-                      <option value="">Semua Kandang</option>
-                      {chickenCageOptions.map((chickenCage) => (
-                        <option
-                          key={chickenCage.id}
-                          value={chickenCage.cage.id}
-                        >
-                          {chickenCage.cage.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </>
-              )}
-            </div>
+
+            {userRole === "Owner" && (
+              <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                {/* Tanggal */}
+                <div className="flex items-center rounded-lg px-4 py-2 bg-[#BFBFBF] w-full sm:w-auto justify-center sm:justify-start">
+                  {getTodayDateInBahasa()}
+                </div>
+
+                {/* Site Select */}
+                <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer w-full sm:w-auto">
+                  <MdStore size={18} />
+                  <select
+                    value={selectedSite}
+                    onChange={(e) => setSelectedSite(e.target.value)}
+                    className="ml-2 bg-transparent text-base font-medium outline-none w-full sm:w-auto"
+                  >
+                    <option value="">Semua Site</option>
+                    {siteOptions.map((site) => (
+                      <option key={site.id} value={site.id}>
+                        {site.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Chicken Cage Select */}
+                <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer w-full sm:w-auto">
+                  <GiBirdCage size={18} />
+                  <select
+                    value={selectedChickenCage}
+                    onChange={(e) => setSelectedChickenCage(e.target.value)}
+                    className="ml-2 bg-transparent text-base font-medium outline-none w-full sm:w-auto"
+                  >
+                    <option value="">Semua Kandang</option>
+                    {chickenCageOptions.map((chickenCage) => (
+                      <option key={chickenCage.id} value={chickenCage.cage.id}>
+                        {chickenCage.cage.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            )}
           </div>
 
-          <div className="flex md:grid-cols-2 gap-4 justify-between">
+          <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-5 gap-4">
             <div className="p-4 w-full rounded-md bg-green-100">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-semibold">Konsumsi pakan</h2>
@@ -340,26 +336,35 @@ const Kinerja = () => {
               </div>
             </div>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <div className="lg:col-span-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {/* Chart Section */}
+            <div className="sm:col-span-2">
               <div className="p-4 border border-black-6 rounded-lg">
                 <h2 className="text-lg font-bold mb-4">Distribusi Usia Ayam</h2>
-                <ResponsiveContainer width="100%" height={400}>
-                  <BarChart
-                    data={ageDistributionData}
-                    margin={{ top: 20, left: 15 }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="stage" />
-                    <YAxis tickFormatter={(v) => v.toLocaleString("id-ID")} />
-                    <Tooltip formatter={(v) => v.toLocaleString("id-ID")} />
-                    <Bar dataKey="value" fill="#5A9EA7" barSize={40} />
-                  </BarChart>
-                </ResponsiveContainer>
+
+                <div className="min-h-[300px] overflow-x-auto">
+                  <div className="min-w-[600px]">
+                    <ResponsiveContainer width="100%" height={400}>
+                      <BarChart
+                        data={ageDistributionData}
+                        margin={{ top: 20, left: 15 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="stage" />
+                        <YAxis
+                          tickFormatter={(v) => v.toLocaleString("id-ID")}
+                        />
+                        <Tooltip formatter={(v) => v.toLocaleString("id-ID")} />
+                        <Bar dataKey="value" fill="#5A9EA7" barSize={40} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className=" p-4 border border-black-6 rounded-lg">
+            {/* Stats Section */}
+            <div className="p-4 border border-black-6 rounded-lg">
               <div className="space-y-4 mt-3">
                 <div className="flex justify-end">
                   <span className="inline-block rounded bg-gray-300 px-4 py-1 font-semibold text-gray-800 shadow">
@@ -373,7 +378,7 @@ const Kinerja = () => {
                   </p>
                   <p className="text-4xl font-extrabold">
                     {Number(bepGoodEgg).toFixed(2)}
-                    <span className="font-bold">Kg</span>
+                    <span className="font-bold"> Kg</span>
                   </p>
                 </div>
 
@@ -403,34 +408,40 @@ const Kinerja = () => {
             <h2 className="text-lg font-bold mb-4">
               Grafik Pendapatan vs Pengeluaran
             </h2>
-            <ResponsiveContainer width="100%" height={400}>
-              <LineChart
-                data={incomeAndExpensePerformanceBarCharts}
-                margin={{ top: 20, right: 30, left: 60, bottom: 0 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="key" />
-                <YAxis tickFormatter={(v) => v.toLocaleString("id-ID")} />
-                <Tooltip formatter={(v) => v.toLocaleString("id-ID")} />
-                <Legend />
-                <Line
-                  type="monotone"
-                  dataKey="income"
-                  stroke="#10b981"
-                  strokeWidth={2}
-                  dot={false}
-                  name="Pendapatan"
-                />
-                <Line
-                  type="monotone"
-                  dataKey="expense"
-                  stroke="#ef4444"
-                  strokeWidth={2}
-                  dot={false}
-                  name="Pengeluaran"
-                />
-              </LineChart>
-            </ResponsiveContainer>
+
+            {/* Wrapper scrollable */}
+            <div className="overflow-x-auto">
+              <div className="min-w-[600px]">
+                <ResponsiveContainer width="100%" height={400}>
+                  <LineChart
+                    data={incomeAndExpensePerformanceBarCharts}
+                    margin={{ top: 20, right: 30, left: 60, bottom: 0 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="key" />
+                    <YAxis tickFormatter={(v) => v.toLocaleString("id-ID")} />
+                    <Tooltip formatter={(v) => v.toLocaleString("id-ID")} />
+                    <Legend />
+                    <Line
+                      type="monotone"
+                      dataKey="income"
+                      stroke="#10b981"
+                      strokeWidth={2}
+                      dot={false}
+                      name="Pendapatan"
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="expense"
+                      stroke="#ef4444"
+                      strokeWidth={2}
+                      dot={false}
+                      name="Pengeluaran"
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
           </div>
         </div>
       )}

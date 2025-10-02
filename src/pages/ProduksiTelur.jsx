@@ -217,7 +217,7 @@ const ProduksiTelur = () => {
           </div>
 
           {/* Egg Summary Section */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-4">
             {/* Telur OK */}
             <div className="p-4 rounded-md border-2 border-black-6">
               <div className="flex justify-between items-center mb-4">
