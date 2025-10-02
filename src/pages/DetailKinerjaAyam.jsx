@@ -86,11 +86,11 @@ const DetailKinerjaAyam = () => {
         <Outlet />
       ) : (
         <div className="flex flex-col px-4 py-3 gap-4 ">
-          <div className="flex justify-between mb-2 flex-wrap gap-4">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-2 gap-4">
             <h1 className="text-3xl font-bold">Detail Kinerja Ayam</h1>
 
             <div
-              className="flex items-center rounded-lg bg-orange-300 hover:bg-orange-500 cursor-pointer gap-2"
+              className="flex items-center rounded-lg bg-orange-300 hover:bg-orange-500 cursor-pointer gap-2 w-full sm:w-auto"
               onClick={openDatePicker}
             >
               <input
@@ -98,31 +98,33 @@ const DetailKinerjaAyam = () => {
                 type="date"
                 value={selectedDate}
                 onChange={handleDateChange}
-                className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer gap-2"
+                className="w-full sm:w-auto px-4 py-2 bg-transparent font-medium outline-none cursor-pointer"
               />
             </div>
           </div>
 
           <div className="bg-white p-4 rounded-lg border border-gray-300">
             <div className="flex justify-end items-center mb-4">
-              <div className="flex gap-3">
+              <div className="flex justify-end flex-col sm:flex-row gap-3 w-full">
                 <div
                   onClick={handlePindahAyam}
-                  className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer"
+                  className="flex items-center justify-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer w-full sm:w-auto"
                 >
-                  <div className="text-base font-medium ">Pindah Ayam</div>
+                  <div className="text-base font-medium">Pindah Ayam</div>
                 </div>
+
                 <div
                   onClick={handlePengadaanDoc}
-                  className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer"
+                  className="flex items-center justify-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer w-full sm:w-auto"
                 >
-                  <div className="text-base font-medium ">Pengadaan DOC</div>
+                  <div className="text-base font-medium">Pengadaan DOC</div>
                 </div>
+
                 <div
                   onClick={handleJualAyamAfkir}
-                  className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer"
+                  className="flex items-center justify-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer w-full sm:w-auto"
                 >
-                  <div className="text-base font-medium ">Jual Ayam Afkir</div>
+                  <div className="text-base font-medium">Jual Ayam Afkir</div>
                 </div>
               </div>
             </div>
