@@ -105,8 +105,9 @@ const PindahAyam = () => {
   return (
     <div className="p-4 space-y-4">
       <h2 className="text-xl font-semibold">Pindah Ayam</h2>
-      <div className="flex gap-4">
-        <div className="w-1/2 p-4 border rounded space-y-2">
+      <div className="flex flex-col lg:flex-row gap-y-4 lg:gap-x-4">
+        {/* Kandang Asal */}
+        <div className="w-full lg:w-1/2 p-4 border rounded space-y-2">
           <div className="flex justify-between items-center">
             <h3 className="font-bold text-lg">Kandang Asal</h3>
             {asal && (
@@ -120,7 +121,7 @@ const PindahAyam = () => {
           </div>
           {!asal ? (
             <button
-              className="bg-green-700 hover:bg-green-900 cursor-pointer text-white px-4 py-2 rounded"
+              className="bg-green-700 hover:bg-green-900 cursor-pointer text-white px-4 py-2 rounded w-full"
               onClick={() => setShowAsalModal(true)}
             >
               Pilih Kandang
@@ -165,7 +166,8 @@ const PindahAyam = () => {
           )}
         </div>
 
-        <div className="flex-1 space-y-2">
+        {/* Kandang Tujuan */}
+        <div className="w-full lg:flex-1 space-y-2">
           <div className="flex items-center justify-between">
             <h3 className="font-bold text-lg">Kandang Tujuan</h3>
             <button
@@ -173,18 +175,15 @@ const PindahAyam = () => {
               onClick={() => {
                 if (!asal || sisaAyam < 1) {
                   setShowAlert(true);
-                  // console.log("sisaAyam: ", sisaAyam);
-                  // console.log("asal: ", asal);
                 } else {
                   setShowTujuanModal(true);
-                  // console.log("sisaAyam: ", sisaAyam);
-                  // console.log("asal: ", asal);
                 }
               }}
             >
               Tambah kandang tujuan
             </button>
           </div>
+
           {tujuan.map((k, i) => (
             <div key={i} className="p-4 border rounded space-y-2">
               <div className="flex justify-between items-center">
@@ -218,19 +217,21 @@ const PindahAyam = () => {
               />
             </div>
           ))}
+
           {sisaAyam < 0 && (
             <div className="bg-orange-100 text-red-600 px-4 py-2 rounded flex items-center gap-4 text-base">
               <GoAlertFill size={36} />
               Alokasi melebihi kapasitas maksimum kandang
             </div>
           )}
+
           {tujuan.length !== 0 && sisaAyam >= 0 && (
             <div className="flex justify-end">
               <button
                 className="bg-green-700 hover:bg-green-900 cursor-pointer text-white px-4 py-2 rounded"
                 onClick={() => setShowPindahModal(true)}
               >
-                Kofirmasi pemindahan ayam
+                Konfirmasi pemindahan ayam
               </button>
             </div>
           )}
@@ -240,7 +241,7 @@ const PindahAyam = () => {
       {/* Modals */}
       {showAsalModal && (
         <div className="fixed inset-0 bg-black/20 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg w-3/4 p-6">
+          <div className="bg-white rounded-lg w-[95%] md:w-3/4 max-h-[90vh] p-6 overflow-y-auto">
             <div className="flex justify-between mb-4">
               <h3 className="text-lg font-bold">Daftar Kandang</h3>
               <button
@@ -250,88 +251,96 @@ const PindahAyam = () => {
                 ✕
               </button>
             </div>
-            <table className="min-w-full table-auto border-gray-200">
-              <thead className="bg-green-700 text-white">
-                <tr>
-                  <th className="px-4 py-2 text-left">Kandang</th>
-                  <th className="px-4 py-2 text-left">ID Batch</th>
-                  <th className="px-4 py-2 text-left">Kategori</th>
-                  <th className="px-4 py-2 text-left">Usia Ayam</th>
-                  <th className="px-4 py-2 text-left">Jumlah Ayam</th>
-                  <th className="px-4 py-2 text-left">Aksi</th>
-                </tr>
-              </thead>
-              <tbody>
-                {kandangOptions.map((k, i) => (
-                  <tr key={i} className="border-t">
-                    <td className="px-4 py-2">{k?.cage?.name}</td>
-                    <td className="px-4 py-2">{k.batchId}</td>
-                    <td className="px-4 py-2">{k.chickenCategory}</td>
-                    <td className="px-4 py-2">{k.chickenAge}</td>
-                    <td className="px-4 py-2">{k.totalChicken}</td>
-                    <td className="px-4 py-2">
-                      {k.batchId && (
-                        <button
-                          onClick={() => handlePilihAsal(k)}
-                          className="bg-orange-300 hover:bg-orange-500 px-3 py-1 rounded cursor-pointer"
-                        >
-                          Pilih Kandang
-                        </button>
-                      )}
-                    </td>
+
+            {/* Wrapper scroll horizontal */}
+            <div className="overflow-x-auto">
+              <table className="min-w-full table-auto border-gray-200">
+                <thead className="bg-green-700 text-white">
+                  <tr>
+                    <th className="px-4 py-2 text-left">Kandang</th>
+                    <th className="px-4 py-2 text-left">ID Batch</th>
+                    <th className="px-4 py-2 text-left">Kategori</th>
+                    <th className="px-4 py-2 text-left">Usia Ayam</th>
+                    <th className="px-4 py-2 text-left">Jumlah Ayam</th>
+                    <th className="px-4 py-2 text-left">Aksi</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {kandangOptions.map((k, i) => (
+                    <tr key={i} className="border-t">
+                      <td className="px-4 py-2">{k?.cage?.name}</td>
+                      <td className="px-4 py-2">{k.batchId}</td>
+                      <td className="px-4 py-2">{k.chickenCategory}</td>
+                      <td className="px-4 py-2">{k.chickenAge}</td>
+                      <td className="px-4 py-2">{k.totalChicken}</td>
+                      <td className="px-4 py-2">
+                        {k.batchId && (
+                          <button
+                            onClick={() => handlePilihAsal(k)}
+                            className="bg-orange-300 hover:bg-orange-500 px-3 py-1 rounded cursor-pointer"
+                          >
+                            Pilih Kandang
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}
 
       {showTujuanModal && (
         <div className="fixed inset-0 bg-black/20 bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg w-3/4 p-6">
+          <div className="bg-white rounded-lg w-[95%] md:w-3/4 max-h-[90vh] p-6 overflow-y-auto">
             <div className="flex justify-between mb-4">
               <h3 className="text-lg font-bold">Daftar Kandang Tujuan</h3>
               <button
                 onClick={() => setShowTujuanModal(false)}
-                className="text-lg font-bold"
+                className="text-lg font-bold hover:text-gray-500"
               >
                 ✕
               </button>
             </div>
-            <table className="min-w-full table-auto border-gray-200">
-              <thead className="bg-green-700 text-white">
-                <tr>
-                  <th className="px-4 py-2 text-left">Kandang</th>
-                  <th className="px-4 py-2 text-left">ID Batch</th>
-                  <th className="px-4 py-2 text-left">Kategori</th>
-                  <th className="px-4 py-2 text-left">Usia Ayam</th>
-                  <th className="px-4 py-2 text-left">Kapasitas</th>
-                  <th className="px-4 py-2 text-left">Aksi</th>
-                </tr>
-              </thead>
-              <tbody>
-                {tujuanOptions.map((k, i) => (
-                  <tr key={i} className="border-t">
-                    <td className="px-4 py-2">{k?.cage?.name}</td>
-                    <td className="px-4 py-2">{k.batchId}</td>
-                    <td className="px-4 py-2">{k.chickenCategory}</td>
-                    <td className="px-4 py-2">{k.chickenAge}</td>
-                    <td className="px-4 py-2">{k.totalChicken}</td>
-                    <td className="px-4 py-2">
-                      {!k.cage.isUsed && k.totalChicken == 0 && (
-                        <button
-                          onClick={() => handlePilihTujuan(k)}
-                          className="bg-orange-300 hover:bg-orange-500 px-3 py-1 rounded cursor-pointer"
-                        >
-                          Pilih Kandang
-                        </button>
-                      )}
-                    </td>
+
+            {/* Wrapper scroll horizontal */}
+            <div className="overflow-x-auto">
+              <table className="min-w-full table-auto border-gray-200">
+                <thead className="bg-green-700 text-white">
+                  <tr>
+                    <th className="px-4 py-2 text-left">Kandang</th>
+                    <th className="px-4 py-2 text-left">ID Batch</th>
+                    <th className="px-4 py-2 text-left">Kategori</th>
+                    <th className="px-4 py-2 text-left">Usia Ayam</th>
+                    <th className="px-4 py-2 text-left">Kapasitas</th>
+                    <th className="px-4 py-2 text-left">Aksi</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {tujuanOptions.map((k, i) => (
+                    <tr key={i} className="border-t">
+                      <td className="px-4 py-2">{k?.cage?.name}</td>
+                      <td className="px-4 py-2">{k.batchId}</td>
+                      <td className="px-4 py-2">{k.chickenCategory}</td>
+                      <td className="px-4 py-2">{k.chickenAge}</td>
+                      <td className="px-4 py-2">{k.totalChicken}</td>
+                      <td className="px-4 py-2">
+                        {!k.cage.isUsed && k.totalChicken === 0 && (
+                          <button
+                            onClick={() => handlePilihTujuan(k)}
+                            className="bg-orange-300 hover:bg-orange-500 px-3 py-1 rounded cursor-pointer"
+                          >
+                            Pilih Kandang
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}
@@ -362,7 +371,7 @@ const PindahAyam = () => {
         onConfirm={handleConfirmPindah}
       />
 
-      <button
+      {/* <button
         onClick={() => {
           const payload = {
             sourceCageId: asal.cage.id,
@@ -377,7 +386,7 @@ const PindahAyam = () => {
         }}
       >
         CHECK
-      </button>
+      </button> */}
     </div>
   );
 };
