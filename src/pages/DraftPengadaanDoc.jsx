@@ -114,83 +114,83 @@ const DraftPengadaanDoc = () => {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
       <div className="mb-6">
-        <h2 className="text-3xl font-bold">Draft Pengadaan DOC</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold">Draft Pengadaan DOC</h2>
       </div>
-      <div className="bg-white p-4 rounded border shadow">
+      <div className="bg-white p-4 rounded-lg border shadow">
         <div className="flex justify-end items-center mb-3">
           <button
             onClick={inputDraftPesanDocHandle}
-            className="bg-orange-300 hover:bg-yellow-500 py-2 px-4 rounded-lg cursor-pointer"
+            className="bg-orange-300 hover:bg-yellow-500 py-2 px-4 rounded-lg cursor-pointer text-sm sm:text-base"
           >
             + Draft Pemesanan DOC
           </button>
         </div>
+
+        {/* Responsive Table */}
         <div className="overflow-x-auto">
-          <table className="min-w-full table-auto border-collapse">
+          <table className="min-w-full table-auto border-collapse text-sm sm:text-base">
             <thead>
               <tr className="bg-green-700 text-white text-left">
-                <th className="p-3">Tanggal Input</th>
-                <th className="p-3">Kandang</th>
-                <th className="p-3">Suplier</th>
-                <th className="p-3">Jumlah</th>
-                <th className="p-3">Harga</th>
-                <th className="p-3">Aksi</th>
+                <th className="p-2 sm:p-3">Tanggal Input</th>
+                <th className="p-2 sm:p-3">Kandang</th>
+                <th className="p-2 sm:p-3">Suplier</th>
+                <th className="p-2 sm:p-3">Jumlah</th>
+                <th className="p-2 sm:p-3">Harga</th>
+                <th className="p-2 sm:p-3">Aksi</th>
               </tr>
             </thead>
             <tbody>
               {draftData.map((item, index) => (
                 <tr key={index} className="border-t">
-                  <td className="p-3">{item.inputDate}</td>
-                  <td className="p-3">{item.cage.name}</td>
-                  <td className="p-3">{item.supplier.name}</td>
-                  <td className="p-3">{`${item.quantity} Ekor`}</td>
-                  <td className="p-3">
+                  <td className="p-2 sm:p-3">{item.inputDate}</td>
+                  <td className="p-2 sm:p-3">{item.cage.name}</td>
+                  <td className="p-2 sm:p-3">{item.supplier.name}</td>
+                  <td className="p-2 sm:p-3">{`${item.quantity} Ekor`}</td>
+                  <td className="p-2 sm:p-3">
                     {`Rp ${Number(item.totalPrice).toLocaleString("id-ID")}`}
                   </td>
-                  <td className="p-3 flex items-center gap-2">
-                    <div className="flex gap-3 justify-center">
-                      <button
-                        onClick={() => {
-                          const localNumber = "081246087972";
-                          const waNumber = localNumber.replace(/^0/, "62");
+                  <td className="p-2 sm:p-3 flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                    <button
+                      onClick={() => {
+                        const localNumber = "081246087972";
+                        const waNumber = localNumber.replace(/^0/, "62");
 
-                          const namaSupplier = item?.supplier.name || "";
-                          const namaBarang = item?.supplier?.supplierType || "";
-                          const satuan = item?.item?.unit || "";
-                          const jumlah = item?.quantity || "";
+                        const namaSupplier = item?.supplier.name || "";
+                        const namaBarang = item?.supplier?.supplierType || "";
+                        const satuan = item?.item?.unit || "";
+                        const jumlah = item?.quantity || "";
 
-                          const message = `Halo ${namaSupplier}, kami dari Anugerah Jaya Farm ingin memastikan ketersediaan pesanan ayam:%0A%0A🐔 Nama Barang: ${namaBarang}%0A📦 Jumlah: ${jumlah} ${satuan}%0A%0AApakah ayam dengan jumlah tersebut tersedia dan siap dipesan?`;
+                        const message = `Halo ${namaSupplier}, kami dari Anugerah Jaya Farm ingin memastikan ketersediaan pesanan ayam:%0A%0A🐔 Nama Barang: ${namaBarang}%0A📦 Jumlah: ${jumlah} ${satuan}%0A%0AApakah ayam dengan jumlah tersebut tersedia dan siap dipesan?`;
 
-                          const waURL = `https://wa.me/${waNumber}?text=${message}`;
-                          window.open(waURL, "_blank");
-                        }}
-                        className="px-3 py-1 bg-green-700 rounded-[4px] text-white hover:bg-green-900 cursor-pointer"
-                      >
-                        <IoLogoWhatsapp />
-                      </button>
+                        const waURL = `https://wa.me/${waNumber}?text=${message}`;
+                        window.open(waURL, "_blank");
+                      }}
+                      className="px-3 py-1 bg-green-700 rounded text-white hover:bg-green-900 cursor-pointer flex items-center justify-center"
+                    >
+                      <IoLogoWhatsapp size={18} />
+                    </button>
 
-                      <button
-                        onClick={() => {
-                          setSelectedItem(item);
-                          // console.log("item: ", item);
-                          setShowAlokasiModal(true);
-                        }}
-                        className="px-3 py-1 bg-green-700 rounded-[4px] text-white hover:bg-green-900 cursor-pointer"
-                      >
-                        Konfirmasi
-                      </button>
-                      <button
-                        onClick={() => {
-                          setSelectedItem(item);
-                          setShowBatalModal(true);
-                        }}
-                        className="px-3 py-1 bg-kritis-box-surface-color rounded-[4px] text-white hover:bg-kritis-text-color cursor-pointer"
-                      >
-                        Batalkan
-                      </button>
-                    </div>
+                    <button
+                      onClick={() => {
+                        setSelectedItem(item);
+                        setShowAlokasiModal(true);
+                      }}
+                      className="px-3 py-1 bg-green-700 rounded text-white hover:bg-green-900 cursor-pointer"
+                    >
+                      Konfirmasi
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setSelectedItem(item);
+                        setShowBatalModal(true);
+                      }}
+                      className="px-3 py-1 bg-kritis-box-surface-color rounded text-white hover:bg-kritis-text-color cursor-pointer"
+                    >
+                      Batalkan
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -198,6 +198,7 @@ const DraftPengadaanDoc = () => {
           </table>
         </div>
       </div>
+
       {showBatalModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
           <div className="bg-white rounded-2xl shadow-md px-8 py-6 max-w-md text-center">

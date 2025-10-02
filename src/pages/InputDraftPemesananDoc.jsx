@@ -89,18 +89,24 @@ const InputDraftPemesananDoc = () => {
   }, []);
 
   return (
-    <div className="p-6">
-      <h2 className="text-3xl font-bold mb-6">Input Draft Pemesanan DOC</h2>
+    <div className="p-4 sm:p-6">
+      <h2 className="text-2xl sm:text-3xl font-bold mb-6">
+        Input Draft Pemesanan DOC
+      </h2>
 
-      <div className="bg-white p-6 rounded border">
+      <div className="bg-white p-4 sm:p-6 rounded-lg border shadow">
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="mb-4">
-            <label className="block text-gray-600">Tanggal Input</label>
+          {/* Tanggal Input */}
+          <div>
+            <label className="block text-gray-600 text-sm sm:text-base">
+              Tanggal Input
+            </label>
             <p className="font-semibold mt-1">{getTodayDateInBahasa()}</p>
           </div>
 
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex-1">
+          {/* Kandang & Kapasitas */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
               <label className="block mb-2">Kandang</label>
               {cages && cages.length > 0 ? (
                 <select
@@ -112,6 +118,7 @@ const InputDraftPemesananDoc = () => {
                     )
                   }
                 >
+                  <option value="">Pilih kandang</option>
                   {cages.map((k) => (
                     <option key={k?.id} value={k?.id}>
                       {k?.name}
@@ -120,17 +127,20 @@ const InputDraftPemesananDoc = () => {
                 </select>
               ) : (
                 <div className="px-4 py-2 bg-orange-100 text-yellow-800 rounded border border-orange-300">
-                  ⚠️ Tidak ada Kandang Doc yang tersedia
+                  ⚠️ Tidak ada Kandang DOC yang tersedia
                 </div>
               )}
             </div>
 
-            <div className="w-1/2 text-left flex flex-col justify-center">
-              <p className=" text-gray-600 mb-2">Kapasitas Maksimum Kandang</p>
+            <div className="flex flex-col justify-center">
+              <p className="text-gray-600 mb-2 text-sm sm:text-base">
+                Kapasitas Maksimum Kandang
+              </p>
               <p className="font-bold">{selectedCage?.capacity ?? "-"} ekor</p>
             </div>
           </div>
 
+          {/* Supplier */}
           <div>
             <label className="block mb-1">Supplier DOC</label>
             <select
@@ -143,7 +153,7 @@ const InputDraftPemesananDoc = () => {
                 setSelectedSupplier(selectedSupplier);
               }}
             >
-              <option value="">Pilih nama suplier</option>
+              <option value="">Pilih nama supplier</option>
               {suppliers?.map((supplier) => (
                 <option key={supplier?.id} value={supplier?.id}>
                   {supplier?.name}
@@ -152,58 +162,54 @@ const InputDraftPemesananDoc = () => {
             </select>
           </div>
 
-          <div>
-            <label className="block mb-1">Jumlah Pemesanan</label>
-            <input
-              type="number"
-              placeholder="Masukkan jumlah barang..."
-              className="w-full border rounded px-4 py-2"
-              value={quantity}
-              onChange={(e) => {
-                const val = Number(e.target.value);
-                if (selectedCage?.capacity && val > selectedCage.capacity) {
-                  setQuantity(selectedCage.capacity);
-                } else {
-                  setQuantity(val);
-                }
-              }}
-              min={0}
-            />
+          {/* Jumlah & Harga */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block mb-1">Jumlah Pemesanan</label>
+              <input
+                type="number"
+                placeholder="Masukkan jumlah barang..."
+                className="w-full border rounded px-4 py-2"
+                value={quantity}
+                onChange={(e) => {
+                  const val = Number(e.target.value);
+                  if (selectedCage?.capacity && val > selectedCage.capacity) {
+                    setQuantity(selectedCage.capacity);
+                  } else {
+                    setQuantity(val);
+                  }
+                }}
+                min={0}
+              />
+            </div>
+
+            <div>
+              <label className="block mb-1">Total Harga</label>
+              <input
+                type="text"
+                inputMode="numeric"
+                placeholder="Masukkan total harga..."
+                className="w-full border rounded px-4 py-2"
+                value={formatThousand(price)}
+                onChange={(e) => {
+                  const raw = onlyDigits(e.target.value);
+                  setPrice(raw);
+                }}
+              />
+            </div>
           </div>
 
-          <div>
-            <label className="block mb-1">Total Harga</label>
-            <input
-              type="text"
-              inputMode="numeric"
-              placeholder="Masukkan jumlah barang..."
-              className="w-full border rounded px-4 py-2"
-              value={formatThousand(price)}
-              onChange={(e) => {
-                const raw = onlyDigits(e.target.value);
-                setPrice(raw);
-              }}
-            />
-          </div>
-
+          {/* Button */}
           <div className="text-right">
             <button
-              // onClick={handleSubmit}
-              className="bg-green-700 text-white px-6 py-2 rounded hover:bg-green-900 cursor-pointer"
+              type="submit"
+              className="bg-green-700 text-white px-6 py-2 rounded hover:bg-green-900 cursor-pointer text-sm sm:text-base"
             >
               Simpan
             </button>
           </div>
         </form>
       </div>
-
-      {/* <button
-        onClick={() => {
-          console.log("selectedSupplier: ", selectedSupplier);
-        }}
-      >
-        CHECK
-      </button> */}
     </div>
   );
 };
