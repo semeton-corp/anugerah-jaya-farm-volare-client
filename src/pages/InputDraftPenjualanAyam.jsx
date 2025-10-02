@@ -108,11 +108,14 @@ const InputDraftPenjualanAyam = () => {
       <h2 className="text-2xl font-bold mb-4">Tambah Draft Penjualan Ayam</h2>
 
       <div className="bg-white border rounded p-6 space-y-6">
+        {/* Tanggal Input */}
         <div>
           <p className="text-sm text-gray-600">Tanggal Input</p>
           <p className="font-semibold">20 Maret 2025</p>
         </div>
-        <div className="grid grid-cols-3 gap-6">
+
+        {/* Info Kandang */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
             <label className="text-sm text-gray-600 block mb-1">Kandang</label>
             <select
@@ -154,6 +157,8 @@ const InputDraftPenjualanAyam = () => {
             </p>
           </div>
         </div>
+
+        {/* Pilih Pelanggan */}
         <div>
           <label className="text-sm text-gray-600 block mb-1">Pelanggan</label>
           {!selectedCustomer ? (
@@ -166,12 +171,12 @@ const InputDraftPenjualanAyam = () => {
               Pilih Pelanggan
             </button>
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
               <input
                 type="text"
                 readOnly
                 value={selectedCustomer?.name ?? ""}
-                className="flex-1 border rounded px-3 py-2 bg-gray-100 text-sm"
+                className="flex-1 border rounded px-3 py-2 bg-gray-100 text-sm w-full"
               />
               <button
                 onClick={clearCustomer}
@@ -184,7 +189,8 @@ const InputDraftPenjualanAyam = () => {
           )}
         </div>
 
-        <div className="grid grid-cols-2 gap-6 items-end">
+        {/* Jumlah Ayam */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
           <div>
             <label className="text-sm text-gray-600 block mb-1">
               Jumlah Ayam Terjual
@@ -208,8 +214,9 @@ const InputDraftPenjualanAyam = () => {
             </div>
           </div>
         </div>
+
+        {/* Harga */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-          {/* Harga Jual / Ekor */}
           <div>
             <label className="text-sm text-gray-600 block mb-1">
               Harga Jual / Ekor
@@ -224,8 +231,6 @@ const InputDraftPenjualanAyam = () => {
               />
             </div>
           </div>
-
-          {/* Harga Jual Total */}
           <div>
             <label className="text-sm text-gray-600 block mb-1">
               Harga Jual Total
@@ -235,6 +240,8 @@ const InputDraftPenjualanAyam = () => {
             </div>
           </div>
         </div>
+
+        {/* Tombol Simpan */}
         <div className="flex justify-end">
           <button
             onClick={handleSubmit}
@@ -244,15 +251,6 @@ const InputDraftPenjualanAyam = () => {
           </button>
         </div>
       </div>
-      <button
-        onClick={() => {
-          console.log("selectedCustomer: ", selectedCustomer);
-          console.log("jumlahTerjual: ", totalSellChicken);
-          console.log("hargaPerEkor: ", pricePerChicken);
-        }}
-      >
-        CHECK
-      </button>
     </div>
   );
 };

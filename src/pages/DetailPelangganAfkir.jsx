@@ -1,4 +1,3 @@
-// DetailPelangganAfkir.jsx
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate, Outlet, useLocation } from "react-router-dom";
 import {
@@ -19,7 +18,6 @@ const fmtDate = (d) => {
       });
 };
 
-// Small badge
 const Badge = ({ tone = "neutral", children }) => {
   const tones = {
     neutral: "bg-gray-200 text-gray-800",
@@ -30,7 +28,6 @@ const Badge = ({ tone = "neutral", children }) => {
   return <span className={`px-3 py-1 rounded ${tones[tone]}`}>{children}</span>;
 };
 
-// Helper to read different backend keys safely
 const pick = (obj, keys, fallback = undefined) =>
   keys.reduce((v, k) => (v !== undefined ? v : obj?.[k]), undefined) ??
   fallback;
@@ -51,6 +48,7 @@ export default function DetailPelangganAfkir() {
     getAfkirCustomer(id)
       .then((res) => {
         if (!live) return;
+        console.log("res: ", res);
         setCust(res?.data?.data || null);
         setErr("");
       })
@@ -94,7 +92,6 @@ export default function DetailPelangganAfkir() {
   };
 
   const goToSaleDetail = (saleId) => {
-    // TODO: ganti sesuai rute detail penjualan
     navigate(`/owner/kinerja/jual-ayam-afkir/penjualan/${saleId}`);
   };
 
@@ -141,7 +138,6 @@ export default function DetailPelangganAfkir() {
       <h1 className="text-2xl font-bold mb-4">Detail Pelanggan</h1>
 
       <div className="border rounded-lg p-6 bg-white">
-        {/* Header info */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <p className="text-sm text-gray-600">Nama Pelanggan</p>
@@ -178,10 +174,8 @@ export default function DetailPelangganAfkir() {
           </button>
         </div>
 
-        {/* Sales history */}
         <div className="mt-8 border rounded-lg p-4">
           <h3 className="font-semibold mb-4 text-lg">Riwayat Penjualan Ayam</h3>
-
           <div className="overflow-x-auto">
             <table className="min-w-full table-auto border-collapse">
               <thead>
@@ -207,7 +201,6 @@ export default function DetailPelangganAfkir() {
                   </tr>
                 ) : (
                   sales.map((s) => {
-                    // try multiple key names safely
                     const saleId = s.id ?? s.saleId;
                     const soldAt = pick(s, ["date", "soldAt", "createdAt"]);
                     const ageWeeks = pick(

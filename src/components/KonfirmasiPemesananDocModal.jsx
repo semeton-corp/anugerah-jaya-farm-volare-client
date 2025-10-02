@@ -131,11 +131,13 @@ const KonfirmasiPemesananDocModal = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-      <div className="bg-white w-[95%] max-w-3xl p-6 rounded shadow-lg">
+      <div className="bg-white w-[95%] max-w-3xl p-6 rounded shadow-lg overflow-y-auto max-h-[90vh]">
         <h2 className="text-2xl font-semibold mb-6">
           Konfirmasi Pemesanan DOC
         </h2>
-        <div className="mb-4 grid grid-cols-2 gap-4">
+
+        {/* Info utama */}
+        <div className="mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <p className="text-sm text-gray-600">Tanggal Pemesanan</p>
             <p className="font-semibold">{order.orderDate}</p>
@@ -145,7 +147,10 @@ const KonfirmasiPemesananDocModal = ({
             <p className="font-semibold">{order.supplier}</p>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-4">
+
+        {/* Detail kandang, harga, jumlah, estimasi tiba */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Kandang */}
           <div className="mb-4">
             <div className="flex items-center gap-2">
               <p className="text-sm text-gray-600">Kandang</p>
@@ -171,6 +176,8 @@ const KonfirmasiPemesananDocModal = ({
               <p className="font-bold mt-1">{kandang.name}</p>
             )}
           </div>
+
+          {/* Harga */}
           <div className="mb-4">
             <div className="flex items-center gap-2">
               <p className="text-sm text-gray-600">Harga</p>
@@ -198,6 +205,7 @@ const KonfirmasiPemesananDocModal = ({
             )}
           </div>
 
+          {/* Jumlah Pemesanan */}
           <div className="mb-4">
             <div className="flex items-center gap-2">
               <p className="text-sm text-gray-600">Jumlah Pemesanan</p>
@@ -233,20 +241,20 @@ const KonfirmasiPemesananDocModal = ({
             )}
           </div>
 
+          {/* Estimasi tiba */}
           <div className="mb-4">
             <p className="text-sm text-gray-600">Tanggal Estimasi Tiba</p>
-            <div className="relative mt-1">
-              <input
-                type="date"
-                value={estimationArrivalDate || ""}
-                onChange={(e) => setEtaDate(e.target.value)}
-                className="border rounded px-3 py-2 w-full"
-                style={{ appearance: "auto" }}
-              />
-            </div>
+            <input
+              type="date"
+              value={estimationArrivalDate || ""}
+              onChange={(e) => setEtaDate(e.target.value)}
+              className="border rounded px-3 py-2 mt-1 w-full"
+              style={{ appearance: "auto" }}
+            />
           </div>
         </div>
 
+        {/* Tipe pembayaran */}
         <div className="flex flex-col mb-4">
           <label className="text-sm">Tipe Pembayaran</label>
           <select
@@ -259,28 +267,27 @@ const KonfirmasiPemesananDocModal = ({
           </select>
         </div>
 
-        {paymentType != "Penuh" && (
+        {/* Tenggat bayar */}
+        {paymentType !== "Penuh" && (
           <div className="mb-4">
             <p className="text-sm text-gray-600">Tenggat Pembayaran</p>
-            <div className="relative mt-1">
-              <input
-                type="date"
-                value={deadlinePaymentDate || ""}
-                onChange={(e) => setDeadlinePaymentDate(e.target.value)}
-                className="border rounded px-3 py-2 w-full"
-                style={{ appearance: "auto" }}
-              />
-            </div>
+            <input
+              type="date"
+              value={deadlinePaymentDate || ""}
+              onChange={(e) => setDeadlinePaymentDate(e.target.value)}
+              className="border rounded px-3 py-2 mt-1 w-full"
+              style={{ appearance: "auto" }}
+            />
           </div>
         )}
 
-        {/* Pembayaran */}
+        {/* Tabel pembayaran */}
         <div className="border rounded mt-3">
-          <div className="flex items-center justify-between p-4">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between p-4 gap-2">
             <p className="font-semibold text-lg">Pembayaran</p>
             <button
               onClick={() => setShowPaymentModal(true)}
-              className="bg-yellow-400 hover:bg-yellow-500 px-4 py-2 rounded text-black cursor-pointer"
+              className="bg-orange-300 hover:bg-orange-500 px-4 py-2 rounded text-black cursor-pointer w-full md:w-auto"
             >
               Pilih Pembayaran
             </button>
@@ -288,14 +295,14 @@ const KonfirmasiPemesananDocModal = ({
 
           <div className="px-4 pb-4">
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full text-sm">
                 <thead className="bg-green-700 text-white">
                   <tr>
                     <th className="text-left px-3 py-2">Tanggal</th>
-                    <th className="text-left px-3 py-2">Metode Pembayaran</th>
-                    <th className="text-left px-3 py-2">Nominal Pembayaran</th>
+                    <th className="text-left px-3 py-2">Metode</th>
+                    <th className="text-left px-3 py-2">Nominal</th>
                     <th className="text-left px-3 py-2">Sisa Bayar</th>
-                    <th className="text-left px-3 py-2">Bukti Pembayaran</th>
+                    <th className="text-left px-3 py-2">Bukti</th>
                     <th className="px-3 py-2"></th>
                   </tr>
                 </thead>
@@ -337,9 +344,10 @@ const KonfirmasiPemesananDocModal = ({
               </table>
             </div>
 
-            <div className="flex items-center justify-between mt-4">
+            {/* Status */}
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between mt-4 gap-2">
               <div className="flex items-center gap-3">
-                <span className="font-semibold">Status Pembayaran :</span>
+                <span className="font-semibold">Status :</span>
                 <span
                   className={`px-3 py-1 rounded ${
                     paymentStatus === "Lunas"
@@ -350,30 +358,31 @@ const KonfirmasiPemesananDocModal = ({
                   {paymentStatus}
                 </span>
               </div>
-              <div className="text-right">
-                <p className="text-sm">Sisa Bayar : {rupiah(remaining)}</p>
+              <div className="text-left md:text-right">
+                <p className="text-lg sm:text-xl font-bold">
+                  Sisa Bayar : {rupiah(remaining)}
+                </p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Footer buttons */}
-        <div className="flex justify-end gap-3 mt-6">
+        <div className="flex flex-col sm:flex-row justify-end gap-3 mt-6">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800 cursor-pointer"
+            className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800 cursor-pointer w-full sm:w-auto"
           >
             Batal
           </button>
           <button
             onClick={confirmOrder}
-            className="px-4 py-2 rounded bg-green-700 hover:bg-green-900 text-white cursor-pointer"
+            className="px-4 py-2 rounded bg-green-700 hover:bg-green-900 text-white cursor-pointer w-full sm:w-auto"
           >
             Konfirmasi
           </button>
         </div>
       </div>
-
       {showPaymentModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="bg-white w-full max-w-lg p-6 rounded shadow-xl">

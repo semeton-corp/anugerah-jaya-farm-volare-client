@@ -3,6 +3,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { getAfkirCustomers } from "../services/chickenMonitorings";
 import { useEffect } from "react";
 import { useState } from "react";
+import { formatThousand } from "../utils/moneyFormat";
 
 const PilihPembeliAyam = ({ mode }) => {
   const navigate = useNavigate();
@@ -64,53 +65,56 @@ const PilihPembeliAyam = ({ mode }) => {
         <div className="flex justify-end mb-2">
           <button
             onClick={handleTambahPelanggan}
-            className="bg-orange-300  px-4 py-2 rounded hover:bg-orange-500 cursor-pointer"
+            className="bg-orange-300 px-4 py-2 rounded hover:bg-orange-500 cursor-pointer"
           >
             + Pelanggan Baru
           </button>
         </div>
-        <table className="min-w-full table-auto border-collapse">
-          <thead>
-            <tr className="bg-green-700 text-white text-left">
-              <th className="px-4 py-2">Nama Pelanggan</th>
-              <th className="px-4 py-2">Nomor Telepon</th>
-              <th className="px-4 py-2">Alamat</th>
-              <th className="px-4 py-2">Harga Ayam Terakhir (Ekor)</th>
-              <th className="px-4 py-2">Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            {customerList.map((customer) => (
-              <tr key={customer.id} className="border-t">
-                <td className="px-4 py-2">{customer?.name}</td>
-                <td className="px-4 py-2">{customer?.phoneNumber}</td>
-                <td className="px-4 py-2">{customer?.address}</td>
-                <td className="px-4 py-2">{customer?.latestPrice}</td>
 
-                <td className="px-4 py-2">
-                  {mode === "pilih" && (
-                    <button
-                      onClick={() => handlePilih(customer)}
-                      className="bg-orange-300 px-4 py-2 rounded hover:bg-orange-500 cursor-pointer"
-                    >
-                      Pilih
-                    </button>
-                  )}
-                  {mode === "detail" && (
-                    <button
-                      onClick={() => {
-                        handleDetailPelanggan(customer?.id);
-                      }}
-                      className="bg-green-700 px-4 py-2 text-white rounded hover:bg-green-900 cursor-pointer"
-                    >
-                      Detail
-                    </button>
-                  )}
-                </td>
+        {/* Tambah overflow-x-auto biar bisa scroll di HP */}
+        <div className="overflow-x-auto">
+          <table className="min-w-full table-auto border-collapse">
+            <thead>
+              <tr className="bg-green-700 text-white text-left text-sm sm:text-base">
+                <th className="px-4 py-2">Nama Pelanggan</th>
+                <th className="px-4 py-2">Nomor Telepon</th>
+                <th className="px-4 py-2">Alamat</th>
+                <th className="px-4 py-2">Harga Ayam Terakhir (Ekor)</th>
+                <th className="px-4 py-2">Aksi</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {customerList.map((customer) => (
+                <tr key={customer.id} className="border-t text-sm sm:text-base">
+                  <td className="px-4 py-2">{customer?.name}</td>
+                  <td className="px-4 py-2">{customer?.phoneNumber}</td>
+                  <td className="px-4 py-2">{customer?.address}</td>
+                  <td className="px-4 py-2">{`Rp ${formatThousand(
+                    customer?.latestPrice
+                  )}`}</td>
+                  <td className="px-4 py-2">
+                    {mode === "pilih" && (
+                      <button
+                        onClick={() => handlePilih(customer)}
+                        className="bg-orange-300 px-3 py-1 rounded hover:bg-orange-500 cursor-pointer text-sm"
+                      >
+                        Pilih
+                      </button>
+                    )}
+                    {mode === "detail" && (
+                      <button
+                        onClick={() => handleDetailPelanggan(customer?.id)}
+                        className="bg-green-700 px-3 py-1 text-white rounded hover:bg-green-900 cursor-pointer text-sm"
+                      >
+                        Detail
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
