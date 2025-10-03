@@ -195,7 +195,7 @@ const JualAyamAfkir = () => {
               Previous
             </div>
             <div
-              className={`rounded py-1 sm:py-2 px-4 sm:px-6 ${
+              className={`rounded py-2 sm:py-4 px-4 sm:px-6 ${
                 page >= totalPages || totalPages <= 0
                   ? "bg-gray-200 cursor-not-allowed"
                   : "bg-green-700 hover:bg-green-800 cursor-pointer"
