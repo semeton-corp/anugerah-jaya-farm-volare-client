@@ -70,7 +70,11 @@ const DetailTugasTambahan = () => {
           </div>
           <div>
             <div className="font-medium">Lokasi</div>
-            <div className="font-bold">{detailData.locationType}</div>
+            <div className="font-bold">
+              {detailData.locationType == "NULL"
+                ? "-"
+                : detailData.locationType}
+            </div>
           </div>
           <div>
             <div className="font-medium">Lokasi Spesifik</div>

@@ -74,8 +74,6 @@ const TambahTugasTambahan = () => {
     if (
       !taskName ||
       !site ||
-      !location ||
-      !specificLocation ||
       !date ||
       !time ||
       !slot ||
@@ -94,7 +92,7 @@ const TambahTugasTambahan = () => {
     const payload = {
       name: taskName,
       locationId: parseInt(site),
-      locationType: location,
+      locationType: location == "" ? undefined : location,
       placeId: parseInt(specificLocation),
       workDate: `${formatDateToDDMMYYYY(date)} ${time}`,
       slot: parseInt(slot),
@@ -122,6 +120,7 @@ const TambahTugasTambahan = () => {
       // console.log("siteResponse: ", siteResponse);
       if (siteResponse.status == 200) {
         setSiteOptions(siteResponse.data.data);
+        setSite(siteResponse.data.data[0].id);
       }
     } catch (error) {
       console.log("error :", error);
@@ -359,7 +358,6 @@ const TambahTugasTambahan = () => {
             value={site}
             onChange={(e) => setSite(e.target.value)}
           >
-            <option value="">Pilih Site</option>
             {siteOptions?.map((site, index) => (
               <option key={index} value={site.id}>
                 {site.name}
@@ -511,7 +509,7 @@ const TambahTugasTambahan = () => {
           Simpan
         </button>
       </div>
-      <button
+      {/* <button
         onClick={() => {
           // console.log("taskName:", taskName);
           // console.log("site:", site);
@@ -539,7 +537,7 @@ const TambahTugasTambahan = () => {
         }}
       >
         CHECK
-      </button>
+      </button> */}
     </div>
   );
 };
