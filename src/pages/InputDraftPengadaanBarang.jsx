@@ -99,6 +99,7 @@ export default function InputDraftPengadaanBarang() {
         const createResponse = await createWarehouseItemProcurementDraft(
           payload
         );
+        console.log("createResponse: ", createResponse);
         if (createResponse.status == 201) {
           navigate(-1, { state: { refetch: true } });
         }

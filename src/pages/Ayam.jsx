@@ -146,7 +146,7 @@ const Ayam = () => {
         selectedChickenCage,
         graphFilter
       );
-      console.log("overviewResponse: ", overviewResponse);
+    console.log("overviewResponse: ", overviewResponse);
       if (overviewResponse.status == 200) {
         const data = overviewResponse.data.data;
         setChickenDetail(data.chickenDetail);
@@ -192,7 +192,9 @@ const Ayam = () => {
           {/* header section */}
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-2">
             <h1 className="text-2xl sm:text-3xl font-bold">
-              {userRole == "Pekerja Kandang" ? "Ringkasan" : "Ringkasan Ayam"}
+              {userRole == "Pekerja Kandang"
+                ? "Ringkasan Hari Ini"
+                : "Ringkasan Ayam Hari Ini"}
             </h1>
 
             <div className="flex flex-wrap gap-3">

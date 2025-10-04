@@ -168,7 +168,7 @@ const InputTelur = () => {
 
         if (response.status === 200) {
           console.log("Data berhasil Diupdate:", response.data);
-          alert("✅Berhasil mengupdate data monitoring ayam!");
+          alert("✅Berhasil mengupdate data monitoring telur!");
 
           navigate(-1, { state: { refetch: true } });
         } else {
@@ -188,7 +188,7 @@ const InputTelur = () => {
         const response = await inputTelur(payload);
         if (response.status === 201) {
           console.log("Data berhasil dikirim:", response.data);
-          alert("✅Berhasil menambahkan data monitoring ayam!");
+          alert("✅Berhasil menambahkan data monitoring telur!");
 
           navigate(-1, { state: { refetch: true } });
         } else {

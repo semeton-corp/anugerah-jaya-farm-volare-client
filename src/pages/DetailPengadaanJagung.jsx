@@ -376,7 +376,7 @@ export default function DetailPengadaanJagung() {
       </div>
 
       {/* Ringkasan utama */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <div>
           <p className="text-gray-600">Supplier</p>
           <p className="text-lg font-semibold">{supplier?.name || "-"}</p>
@@ -394,7 +394,7 @@ export default function DetailPengadaanJagung() {
       </div>
 
       {/* Kualitas & Oven */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <div>
           <p className="text-gray-600">Kadar Air</p>
           <p className="text-lg font-semibold">
@@ -418,7 +418,7 @@ export default function DetailPengadaanJagung() {
       </div>
 
       {/* Harga */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <div>
           <p className="text-gray-600">Harga Normal / Kg</p>
           <p className="text-lg font-semibold">{rupiah(priceNumber)}</p>

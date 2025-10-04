@@ -45,6 +45,25 @@ const MONTHS_ID = [
   "Desember",
 ];
 
+const generateTicks = (min, max) => {
+  const range = max - min;
+  let step;
+
+  if (range <= 10_000_000) {
+    step = 2_000_000;
+  } else if (range <= 100_000_000) {
+    step = 20_000_000;
+  } else {
+    step = 50_000_000;
+  }
+
+  const ticks = [];
+  for (let i = Math.floor(min / step) * step; i <= max + step; i += step) {
+    ticks.push(i);
+  }
+  return ticks;
+};
+
 const Penjualan = () => {
   const userRole = localStorage.getItem("role");
   const userName = localStorage.getItem("userName");
@@ -394,60 +413,93 @@ const Penjualan = () => {
           </div>
 
           {/* keuntungan & penjualan*/}
-          <div className="flex flex-col lg:flex-row h-auto lg:h-120 gap-6">
+          <div className="flex flex-col lg:flex-row h-auto lg:h-95 gap-6">
             {/* Chart Section (1/2 width on large screens) */}
-            <div className="w-full lg:w-1/2 bg-white rounded-lg p-6 border border-black-6">
-              <h2 className="text-xl font-semibold mb-4">Keuntungan</h2>
-              <ResponsiveContainer width="100%" height={250}>
-                <LineChart data={cashflowSaleGraph}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="key" />
-                  <YAxis
-                    domain={[
-                      (dataMin) => dataMin * 3,
-                      (dataMax) => dataMax * 2,
-                    ]}
-                    tickFormatter={(value) =>
-                      `${parseInt(value / 1000000)} juta`
-                    }
-                    padding={{ top: 20, bottom: 25 }}
-                  />
-                  <Tooltip />
-                  <Legend verticalAlign="top" align="right" />
+            <div className="w-full lg:w-1/2 bg-white rounded-lg py-6 px-4 sm:px-6 border border-black-6">
+              <h2 className="text-lg sm:text-xl font-semibold mb-4 text-center sm:text-left">
+                Keuntungan
+              </h2>
 
-                  <Line
-                    type="monotone"
-                    dataKey="income"
-                    stroke="#22c55e"
-                    name="Pendapatan: "
-                    strokeWidth={2}
-                    dot={{ r: 4 }}
-                  />
-
-                  <Line
-                    type="monotone"
-                    dataKey="expense"
-                    stroke="#ef4444"
-                    name="Pengeluaran"
-                    strokeWidth={2}
-                    dot={{ r: 4 }}
-                  />
-
-                  <Line
-                    type="monotone"
-                    dataKey="profit"
-                    stroke="#E8AD34"
-                    name="Laba"
-                    strokeWidth={2}
-                    dot={{ r: 4 }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
+              {/* Wrapper scrollable khusus mobile */}
+              <div className="w-full overflow-x-auto">
+                <div className="min-w-[600px] sm:min-w-0">
+                  <ResponsiveContainer
+                    width="100%"
+                    height={300}
+                    className="sm:!h-[380px] lg:!h-[450px]"
+                  >
+                    <LineChart
+                      data={cashflowSaleGraph}
+                      margin={{ top: 20, right: 20, left: 0, bottom: 20 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="key" tickMargin={8} />
+                      <YAxis
+                        ticks={generateTicks(
+                          Math.min(
+                            ...cashflowSaleGraph.map((d) =>
+                              Math.min(d.income, d.expense, d.profit)
+                            )
+                          ),
+                          Math.max(
+                            ...cashflowSaleGraph.map((d) =>
+                              Math.max(d.income, d.expense, d.profit)
+                            )
+                          )
+                        )}
+                        tick={{ fontSize: 12 }}
+                        tickFormatter={(value) =>
+                          `${parseInt(value / 1000000)} juta`
+                        }
+                        padding={{ top: 20, bottom: 25 }}
+                      />
+                      <Tooltip
+                        formatter={(value) =>
+                          new Intl.NumberFormat("id-ID", {
+                            style: "currency",
+                            currency: "IDR",
+                            minimumFractionDigits: 0,
+                          }).format(value)
+                        }
+                      />
+                      <Legend
+                        verticalAlign="top"
+                        align="right"
+                        wrapperStyle={{ fontSize: 12 }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="income"
+                        stroke="#22c55e"
+                        strokeWidth={2}
+                        dot={{ r: 3 }}
+                        name="Pendapatan"
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="expense"
+                        stroke="#ef4444"
+                        strokeWidth={2}
+                        dot={{ r: 3 }}
+                        name="Pengeluaran"
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="profit"
+                        stroke="#E8AD34"
+                        strokeWidth={2}
+                        dot={{ r: 3 }}
+                        name="Laba"
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
             </div>
 
             {/* Chart Section (1/2 width on large screens) */}
-            <div className="w-full lg:w-1/2 bg-white rounded-lg p-6 border border-black-6 h-auto ">
-              <div className="flex justify-between items-center mb-4">
+            <div className="w-full lg:w-1/2 bg-white rounded-lg p-6 border border-black-6 h-auto">
+              <div className="sm:flex sm:justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold mb-4">Penjualan Telur</h2>
 
                 {userRole == "Owner" && (
@@ -455,7 +507,7 @@ const Penjualan = () => {
                     <select
                       value={selectedItem}
                       onChange={(e) => setSelectedItem(e.target.value)}
-                      className=" bg-transparent text-base font-medium outline-none"
+                      className="bg-transparent text-base font-medium outline-none"
                     >
                       {itemOptions.map((item) => (
                         <option key={item.id} value={item.id}>
@@ -466,28 +518,34 @@ const Penjualan = () => {
                   </div>
                 )}
               </div>
-              <ResponsiveContainer
-                width="100%"
-                height={250}
-                className="sm:h-[380px]"
-              >
-                <LineChart data={eggSaleGraphs}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="key" />
-                  <YAxis domain={[0, 50]} />
-                  <Tooltip />
-                  <Legend verticalAlign="top" align="right" />
 
-                  <Line
-                    type="monotone"
-                    dataKey="value"
-                    stroke="#ef4444"
-                    name="Penjualan Telur"
-                    strokeWidth={2}
-                    dot={{ r: 4 }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
+              {/* Scrollable wrapper */}
+              <div className="w-full overflow-x-auto">
+                <div className="min-w-[600px] sm:min-w-0">
+                  <ResponsiveContainer
+                    width="100%"
+                    height={280}
+                    className="sm:!h-[400px]"
+                  >
+                    <LineChart data={eggSaleGraphs}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="key" />
+                      <YAxis domain={[0, 50]} />
+                      <Tooltip />
+                      <Legend verticalAlign="top" align="right" />
+
+                      <Line
+                        type="monotone"
+                        dataKey="value"
+                        stroke="#ef4444"
+                        name="Penjualan Telur"
+                        strokeWidth={2}
+                        dot={{ r: 4 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
             </div>
           </div>
 
