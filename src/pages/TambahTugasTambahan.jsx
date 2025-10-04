@@ -133,12 +133,13 @@ const TambahTugasTambahan = () => {
   ) => {
     try {
       let response;
+      console.log("siteId: ", siteId);
       if (locationType === "Kandang") {
-        response = await getCage({ locationId: siteId });
+        response = await getCage(siteId);
       } else if (locationType === "Gudang") {
-        response = await getWarehouses({ locationId: siteId });
+        response = await getWarehouses(siteId);
       } else if (locationType === "Toko") {
-        response = await getStores({ locationId: siteId });
+        response = await getStores(siteId);
       }
 
       if (response?.status === 200) {

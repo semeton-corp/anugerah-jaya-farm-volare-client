@@ -31,34 +31,6 @@ const TugasPegawai = () => {
     location.pathname.includes(segment)
   );
 
-  const fetchTugasRutinData = async () => {
-    try {
-      const response = await getListDailyWorks();
-      // console.log("response fetch tugas rutin data: ", response);
-
-      if (response.status == 200) {
-        setTugasRutinData(response.data.data);
-      }
-    } catch (error) {
-      alert("Terjadi kesalahan saat memuat tugas rutin");
-      console.log("Error: ", error);
-    }
-  };
-
-  const fetchTugasTambahanData = async () => {
-    try {
-      const response = await getAdditionalWorks();
-      console.log("response fetch tugas tambahan data: ", response);
-
-      if (response.status == 200) {
-        setTugasTambahanData(response.data.data);
-      }
-    } catch (error) {
-      alert("Terjadi kesalahan saat memuat tugas rutin");
-      console.log("Error: ", error);
-    }
-  };
-
   const fetchOverviewData = async () => {
     try {
       const overviewResponse = await getWorkOverview();
@@ -144,7 +116,7 @@ const TugasPegawai = () => {
                 tugasTambahanData.map((item, index) => (
                   <tr key={index} className="border-b border-black-6">
                     <td className="py-2 px-4">{item.date}</td>
-                    <td className="py-2 px-4">{item.description}</td>
+                    <td className="py-2 px-4">{item.name}</td>
                     <td className="py-2 px-4">{item.location}</td>
                     <td className="py-2 px-4">{item.remainingSlot}</td>
                     <td className="py-3 px-4">

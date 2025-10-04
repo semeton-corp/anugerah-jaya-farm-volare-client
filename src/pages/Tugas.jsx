@@ -11,15 +11,24 @@ import { useState, useEffect } from "react";
 import { translateDateToBahasa } from "../utils/dateFormat";
 import { getSelfCurrentUserPresence } from "../services/presence";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import {
+  getCurrentUserCagePlacement,
+  getCurrentUserStorePlacement,
+  getCurrentUserWarehousePlacement,
+} from "../services/placement";
 
 const Tugas = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const locationId = localStorage.getItem("locationId");
+  const userRole = localStorage.getItem("role");
+
   const [tugasTambahanData, setTugasTambahanData] = useState([]);
 
   const [dailyWorks, setDailyWorks] = useState([]);
   const [additionalWorks, setAdditionalWorks] = useState([]);
+  const [placeIds, setPlaceIds] = useState([]);
 
   const [isPresence, setIsPresence] = useState(false);
 
@@ -29,9 +38,52 @@ const Tugas = () => {
     location.pathname.includes(segment)
   );
 
+  const fetchPlacement = async () => {
+    try {
+      let placementResponse;
+      let placementName;
+      if (userRole == "Pekerja Kandang" || userRole == "Pekerja Telur") {
+        placementResponse = await getCurrentUserCagePlacement();
+      } else if (userRole == "Pekerja Gudang" || userRole == "Kepala Kandang") {
+        placementResponse = await getCurrentUserWarehousePlacement();
+      } else {
+        placementResponse = await getCurrentUserStorePlacement();
+      }
+
+      if (placementResponse.status == 200) {
+        const placeIds = (placementResponse.data?.data ?? [])
+          .map((item) => {
+            const obj = item.cage ?? item.warehouse ?? item.store;
+            return (
+              obj?.id ??
+              obj?._id ??
+              (typeof obj === "string" || typeof obj === "number" ? obj : null)
+            );
+          })
+          .filter((id) => id != null);
+        setPlaceIds(placeIds);
+      }
+    } catch (error) {
+      console.log("error :", error);
+    }
+  };
+
   const fetchTugasTambahanData = async () => {
     try {
-      const tugasTambahanResponse = await getAdditionalWorks();
+      let locationType;
+      if (userRole == "Pekerja Kandang" || userRole == "Pekerja Telur") {
+        locationType = "Kandang";
+      } else if (userRole == "Pekerja Gudang" || userRole == "Kepala Kandang") {
+        locationType = "Gudang";
+      } else {
+        locationType = "Toko";
+      }
+      const tugasTambahanResponse = await getAdditionalWorks(
+        "Available",
+        locationId,
+        locationType,
+        placeIds
+      );
       console.log("tugasTambahanResponse: ", tugasTambahanResponse);
 
       if (tugasTambahanResponse.status == 200) {
@@ -93,7 +145,7 @@ const Tugas = () => {
         // setIsPresence(presenceResponse.data.data.isPresent);
         if (presenceResponse.data.data.status === "Hadir") {
           setIsPresence(true);
-          fetchTugasTambahanData();
+          // fetchTugasTambahanData();
           fetchAllTugas();
         }
       }
@@ -150,11 +202,15 @@ const Tugas = () => {
 
   useEffect(() => {
     getTodayPresence();
-    if (isPresence) {
-      fetchTugasTambahanData();
-      fetchAllTugas();
-    }
+    fetchPlacement();
   }, []);
+
+  useEffect(() => {
+    if (isPresence) {
+      fetchAllTugas();
+      fetchTugasTambahanData();
+    }
+  }, [placeIds]);
 
   if (isDetailPage) {
     return <Outlet />;

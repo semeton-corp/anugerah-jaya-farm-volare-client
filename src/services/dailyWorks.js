@@ -19,11 +19,22 @@ export const getListDailyWorks = () => {
   });
 };
 
-export const getAdditionalWorks = () => {
+export const getAdditionalWorks = (
+  status,
+  locationId,
+  locationType,
+  placeIds
+) => {
   return api.get("/works/additionals", {
     headers: {
       Authorization: `Bearer ${token}`,
       Accept: "application/json",
+    },
+    params: {
+      status,
+      locationId,
+      locationType,
+      placeIds,
     },
   });
 };
