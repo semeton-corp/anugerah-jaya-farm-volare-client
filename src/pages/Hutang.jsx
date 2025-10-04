@@ -33,6 +33,12 @@ const toWA = (phone) => {
   return `https://wa.me/${withCc}`;
 };
 
+const CATEGORY_OPTIONS = [
+  "Pengadaan Ayam DOC",
+  "Pengadaan Gudang",
+  "Pengadaan Jagung",
+];
+
 export default function Hutang() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -48,7 +54,7 @@ export default function Hutang() {
     item.notificationContexts?.includes("Hutang")
   );
 
-  const category = "Semua";
+  const [category, setCategory] = useState(CATEGORY_OPTIONS[0]);
 
   const [payables, setDebts] = useState([]);
   const [pie, setPie] = useState(null);
@@ -97,7 +103,7 @@ export default function Hutang() {
 
   useEffect(() => {
     fetchOverview();
-  }, [monthName, year]);
+  }, [monthName, year, category]);
 
   const pieData = useMemo(() => {
     if (!pie) return [];
@@ -160,13 +166,32 @@ export default function Hutang() {
     <div className="p-4 space-y-4">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Hutang</h1>
-        <MonthYearSelector
-          month={month}
-          year={year}
-          setMonth={setMonth}
-          setMonthName={setMonthName}
-          setYear={setYear}
-        />
+
+        <div className="flex gap-4">
+          <div className="">
+            <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="ml-2 bg-transparent text-base font-medium outline-none cursor-pointer"
+              >
+                {/* <option value="Semua">Semua Kategori</option> */}
+                {CATEGORY_OPTIONS.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <MonthYearSelector
+            month={month}
+            year={year}
+            setMonth={setMonth}
+            setMonthName={setMonthName}
+            setYear={setYear}
+          />{" "}
+        </div>
       </div>
 
       {/* Banner peringatan */}

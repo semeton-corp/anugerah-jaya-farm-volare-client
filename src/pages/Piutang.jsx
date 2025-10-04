@@ -59,7 +59,7 @@ export default function Piutang() {
     item.notificationContexts?.includes("Piutang")
   );
 
-  const [category, setCategory] = useState("Semua");
+  const [category, setCategory] = useState(CATEGORY_OPTIONS[0]);
 
   const [receivables, setReceivables] = useState([]);
   const [pie, setPie] = useState(null);
@@ -165,6 +165,22 @@ export default function Piutang() {
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Piutang</h1>
         <div className="flex gap-4">
+          <div className="">
+            <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="ml-2 bg-transparent text-base font-medium outline-none cursor-pointer"
+              >
+                {/* <option value="Semua">Semua Kategori</option> */}
+                {CATEGORY_OPTIONS.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
           <MonthYearSelector
             month={month}
             year={year}

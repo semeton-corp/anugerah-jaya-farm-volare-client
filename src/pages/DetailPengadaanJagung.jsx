@@ -360,15 +360,15 @@ export default function DetailPengadaanJagung() {
           </p>
         </div>
         <div>
-          <p className="text-gray-600">Status Pengiriman</p>
+        <p className="text-gray-600">Status Pengiriman</p>
           <Badge tone={shipTone}>{procurementStatus || "-"}</Badge>
         </div>
-        <div>
+        {/* <div>
           <p className="text-gray-600">Estimasi Tiba</p>
           <p className="text-lg font-semibold">
             {estimationArrivalDate || "-"}
           </p>
-        </div>
+        </div> */}
         <div>
           <p className="text-gray-600">Gudang</p>
           <p className="text-lg font-semibold">{warehouse?.name || "-"}</p>
