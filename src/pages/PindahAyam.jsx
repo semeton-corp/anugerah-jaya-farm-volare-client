@@ -198,7 +198,7 @@ const PindahAyam = () => {
               <p className="font-medium">Nama Kandang</p>
               <p className="text-lg font-bold">{k.cage.name}</p>
               <p className="font-medium">Kapasitas maksimum</p>
-              <p className="text-lg font-bold">{k.kapasitas} Ekor</p>
+              <p className="text-lg font-bold">{k.cage.capacity} Ekor</p>
               <label className="block mt-2 font-medium">
                 Alokasi di Kandang ini
               </label>
@@ -325,7 +325,7 @@ const PindahAyam = () => {
                       <td className="px-4 py-2">{k.batchId}</td>
                       <td className="px-4 py-2">{k.chickenCategory}</td>
                       <td className="px-4 py-2">{k.chickenAge}</td>
-                      <td className="px-4 py-2">{k.totalChicken}</td>
+                      <td className="px-4 py-2">{k.cage.capacity}</td>
                       <td className="px-4 py-2">
                         {!k.cage.isUsed && k.totalChicken === 0 && (
                           <button

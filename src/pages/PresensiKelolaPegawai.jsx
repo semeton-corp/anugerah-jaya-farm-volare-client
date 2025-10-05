@@ -491,13 +491,13 @@ function ApprovalModal({
               </div>
             </div>
           ))}
-          <button
+          {/* <button
             onClick={() => {
               console.log("requests: ", requests);
             }}
           >
             CHECK
-          </button>
+          </button> */}
         </div>
       )}
     </Modal>
@@ -505,7 +505,6 @@ function ApprovalModal({
 }
 
 function formatDateID(iso) {
-  // Simple local date formatter for ID
   try {
     const d = new Date(iso);
     return d.toLocaleDateString("id-ID", {

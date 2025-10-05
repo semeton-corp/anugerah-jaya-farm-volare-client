@@ -111,6 +111,7 @@ const PresensiLokasi = () => {
               <th className="px-6 py-3">Pegawai</th>
               <th className="px-6 py-3">Jabatan</th>
               <th className="px-6 py-3">Status</th>
+              <th className="px-6 py-3">Status Pengajuan</th>
               <th className="px-6 py-3">Jam Masuk</th>
               <th className="px-6 py-3">Jam Pulang</th>
               <th className="px-6 py-3">Penyelesaian Tugas</th>
@@ -155,6 +156,7 @@ const PresensiLokasi = () => {
                     {row.status}
                   </span>
                 </td>
+                <td className="px-6 py-4">{row.submissionPresenceStatus}</td>
                 <td className="px-6 py-4">{row.arrivedTime}</td>
                 <td className="px-6 py-4">{row.departureTime}</td>
                 <td className="px-6 py-4">

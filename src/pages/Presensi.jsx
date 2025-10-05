@@ -301,7 +301,7 @@ const Presensi = () => {
           if (res.status == 200) {
             getTodayPresence();
             alert(
-              "Berhasil melakukan pengajuan izin, mohon tunggu persetujuan"
+              "✅Berhasil melakukan pengajuan izin, mohon tunggu persetujuan"
             );
             setShowModal(false);
           }
