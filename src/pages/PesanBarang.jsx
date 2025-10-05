@@ -19,7 +19,8 @@ const PesanBarang = () => {
 
   const [stok, setStok] = useState([]);
 
-  const [warehouses, setWarehouses] = useState([]);
+  const [allWarehouses, setAllWarehouses] = useState([]);
+  const [filteredWarehouses, setFilteredWarehouses] = useState([]);
   const [selectedWarehouse, setSelectedWarehouse] = useState("");
 
   const [stores, setStores] = useState([]);
@@ -50,7 +51,7 @@ const PesanBarang = () => {
       itemId: selectedWarehouseItem.id,
       warehouseId: parseInt(selectedWarehouse),
       quantity: parseInt(jumlah),
-      storeId: parseInt(selectedStore),
+      storeId: parseInt(selectedStore.id),
     };
     try {
       const pesanResponse = await createStoreRequestItem(payload);
@@ -73,7 +74,7 @@ const PesanBarang = () => {
       const warehousesReponse = await getWarehousesByLocation(selectedSite);
       // console.log("warehousesReponse: ", warehousesReponse);
       if (warehousesReponse.status == 200) {
-        setWarehouses(warehousesReponse.data.data);
+        setAllWarehouses(warehousesReponse.data.data);
         setSelectedWarehouse(warehousesReponse.data.data[0].id);
       }
     } catch (error) {
@@ -124,7 +125,7 @@ const PesanBarang = () => {
       const response = await getStores(selectedSite);
       if (response.status == 200) {
         setStores(response.data.data);
-        setSelectedStore(response.data.data[0].id);
+        setSelectedStore(response.data.data[0]);
       }
     } catch (error) {
       alert("Gagal memuat data toko: ", error);
@@ -143,6 +144,15 @@ const PesanBarang = () => {
     }
   };
 
+  const setWarehouseOptions = () => {
+    console.log("selectedStore: ", selectedStore);
+    const filteredWarehouse = allWarehouses.filter(
+      (item) => item.location.id == selectedStore.location.id
+    );
+    console.log("filteredWarehouse: ", filteredWarehouse);
+    setFilteredWarehouses(filteredWarehouse);
+  };
+
   useEffect(() => {
     fetchWarehouses();
     fetchWarehouseItem();
@@ -158,6 +168,10 @@ const PesanBarang = () => {
       fetchStok();
     }
   }, [selectedWarehouse]);
+
+  useEffect(() => {
+    setWarehouseOptions();
+  }, [selectedStore]);
 
   return (
     <div className="p-6 space-y-6">
@@ -206,7 +220,7 @@ const PesanBarang = () => {
             className="w-full border bg-gray-100 p-2 rounded"
           >
             <option value="">Pilih gudang tempat pemesanan</option>
-            {warehouses?.map((warehouse, index) => (
+            {filteredWarehouses?.map((warehouse, index) => (
               <option key={index} value={warehouse.id}>
                 {warehouse.name}
               </option>
@@ -218,8 +232,13 @@ const PesanBarang = () => {
           <div>
             <label className="block text-sm mb-1">Toko Pemesan</label>
             <select
-              value={selectedStore}
-              onChange={(e) => setSelectedStore(e.target.value)}
+              value={selectedStore.id}
+              onChange={(e) => {
+                const selectedStore = stores.find(
+                  (item) => item.id == e.target.value
+                );
+                setSelectedStore(selectedStore);
+              }}
               className="w-full border bg-gray-100 p-2 rounded"
             >
               <option value="">Pilih toko pemesan</option>

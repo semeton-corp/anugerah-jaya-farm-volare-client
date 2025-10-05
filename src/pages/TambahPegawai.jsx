@@ -188,6 +188,23 @@ const TambahPegawai = () => {
   }, [selectedRole, locationId, roles]);
 
   const handleSave = async () => {
+    const isValid =
+      email &&
+      name &&
+      username &&
+      password &&
+      selectedRole &&
+      locationId &&
+      selectedPic?.length > 0 &&
+      address &&
+      phone &&
+      salary &&
+      selectedSalaryInterval;
+
+    if (!isValid) {
+      alert("❌Mohon isi semua field dengan benar");
+      return;
+    }
     const payload = {
       email: email,
       name: name,

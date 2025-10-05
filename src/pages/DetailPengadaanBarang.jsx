@@ -121,7 +121,7 @@ const DetailPengadaanBarang = () => {
     try {
       const payload = {
         nominal: nominal,
-        
+
         paymentMethod: paymentMethod,
         paymentDate: convertToInputDateFormat(toISO(paymentDate)),
         paymentProof: paymentProof,
@@ -254,7 +254,7 @@ const DetailPengadaanBarang = () => {
         <div>
           <p className="text-gray-600">Jumlah Pemesanan</p>
           <p className="text-lg font-semibold">
-            {data?.quantity} {data?.unit || "Kg"}
+            {data?.quantity} {data?.item?.unit || "Kg"}
           </p>
         </div>
       </div>
