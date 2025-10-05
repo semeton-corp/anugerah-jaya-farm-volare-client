@@ -6,6 +6,7 @@ import { getSuppliers } from "../services/supplier";
 import { createChickenProcurementDraft } from "../services/chickenMonitorings";
 import { useNavigate } from "react-router-dom";
 import { formatThousand, onlyDigits } from "../utils/moneyFormat";
+import { IoLogoWhatsapp } from "react-icons/io5";
 
 const InputDraftPemesananDoc = () => {
   const navigate = useNavigate();
@@ -166,6 +167,7 @@ const InputDraftPemesananDoc = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block mb-1">Jumlah Pemesanan</label>
+              <div className="flex gap-"> </div>
               <input
                 type="number"
                 placeholder="Masukkan jumlah barang..."
@@ -182,21 +184,57 @@ const InputDraftPemesananDoc = () => {
                 min={0}
               />
             </div>
+          </div>
 
-            <div>
-              <label className="block mb-1">Total Harga</label>
-              <input
-                type="text"
-                inputMode="numeric"
-                placeholder="Masukkan total harga..."
-                className="w-full border rounded px-4 py-2"
-                value={formatThousand(price)}
-                onChange={(e) => {
-                  const raw = onlyDigits(e.target.value);
-                  setPrice(raw);
-                }}
-              />
-            </div>
+          <button
+            type="button"
+            onClick={() => {
+              if (!selectedSupplier || !quantity) {
+                alert("Mohon isi semua field dengan benar");
+                return;
+              }
+
+              const localNumber = selectedSupplier.phoneNumber;
+              const waNumber = localNumber.replace(/^0/, "62");
+              const namaSupplier = selectedSupplier.name || "Supplier";
+              const namaBarang = "Ayam DOC";
+              const unit = "ekor";
+              const rencanaPembelian = `${quantity} ${unit}`;
+              const rawMessage = `Halo ${namaSupplier} 🙏🙏🙏
+
+Kami dari *Anugerah Jaya Farm* ingin menanyakan harga berikut:
+
+━━━━━━━━━━━━━━━
+📦 *Nama Barang*: ${namaBarang}
+📝 *Rencana Pembelian*: ${rencanaPembelian}
+━━━━━━━━━━━━━━━
+
+✅ Mohon konfirmasi harga, terima kasih.`;
+
+              const message = encodeURIComponent(rawMessage);
+              const waURL = `https://api.whatsapp.com/send/?phone=${waNumber}&text=${message}`;
+
+              window.open(waURL, "_blank");
+            }}
+            className="flex items-center gap-2 bg-green-700 text-white px-4 py-2 rounded hover:bg-green-900"
+          >
+            <IoLogoWhatsapp size={20} />
+            Tanya Harga
+          </button>
+
+          <div>
+            <label className="block mb-1">Total Harga</label>
+            <input
+              type="text"
+              inputMode="numeric"
+              placeholder="Masukkan total harga..."
+              className="w-full border rounded px-4 py-2"
+              value={formatThousand(price)}
+              onChange={(e) => {
+                const raw = onlyDigits(e.target.value);
+                setPrice(raw);
+              }}
+            />
           </div>
 
           {/* Button */}

@@ -637,21 +637,36 @@ const AntrianPesanan = () => {
                         <div className="flex gap-3 justify-center">
                           <button
                             onClick={() => {
-                              const localNumber = "081246087972"; // nanti bisa ganti ke item?.customer?.phone
+                              const localNumber =
+                                item?.customer?.phone || "081246087972";
                               const waNumber = localNumber.replace(/^0/, "62");
 
-                              const namaCustomer = item?.customer?.name || "";
-                              const namaBarang = item?.item?.name || "";
-                              const satuan = item?.item?.unit || "";
-                              const jumlah = item?.quantity || "";
-                              const message = `Halo ${namaCustomer}, kami dari Anugerah Jaya Farm ingin mengonfirmasi pesanan Anda:%0A%0A🧺 Nama Barang: ${namaBarang}%0A📦 Jumlah: ${jumlah} ${satuan}%0A%0AApakah jadi untuk memesan?`;
-                              const waURL = `https://wa.me/${waNumber}?text=${message}`;
+                              const namaCustomer =
+                                item?.customer?.name || "Pelanggan";
+                              const namaBarang = item?.item?.name || "-";
+                              const satuan = item?.saleUnit || "-";
+                              const jumlah = item?.quantity || "-";
+
+                              const rawMessage = `Halo ${namaCustomer} 👋
+
+Kami dari *Anugerah Jaya Farm* ingin mengonfirmasi pesanan Anda:
+
+━━━━━━━━━━━━━━━
+🧺 *Nama Barang*: ${namaBarang}
+📦 *Jumlah*: ${jumlah} ${satuan}
+━━━━━━━━━━━━━━━
+
+Apakah pesanan ini *jadi* untuk dipesan? 🙏`;
+
+                              const message = encodeURIComponent(rawMessage);
+                              const waURL = `https://api.whatsapp.com/send/?phone=${waNumber}&text=${message}`;
 
                               window.open(waURL, "_blank");
                             }}
-                            className="px-3 py-1 bg-green-700 rounded-[4px] text-white hover:bg-green-900 cursor-pointer"
+                            className="px-3 py-1 bg-green-700 rounded-[4px] text-white hover:bg-green-900 cursor-pointer flex items-center gap-1"
                           >
-                            <IoLogoWhatsapp />
+                            <IoLogoWhatsapp size={18} />
+                            Konfirmasi
                           </button>
                           <button
                             onClick={() => {
