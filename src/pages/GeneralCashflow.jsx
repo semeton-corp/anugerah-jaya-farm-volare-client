@@ -34,6 +34,25 @@ const formatRupiah = (n = 0) =>
     .toFixed(0)
     .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
+const generateTicks = (min, max) => {
+  const range = max - min;
+  let step;
+
+  if (range <= 10_000_000) {
+    step = 2_000_000;
+  } else if (range <= 100_000_000) {
+    step = 20_000_000;
+  } else {
+    step = 50_000_000;
+  }
+
+  const ticks = [];
+  for (let i = Math.floor(min / step) * step; i <= max + step; i += step) {
+    ticks.push(i);
+  }
+  return ticks;
+};
+
 const SummaryCard = ({ title, value, yoy = null, isIncrease = null }) => {
   const isPos = isIncrease === true;
   const isNeg = isIncrease === false;
@@ -76,7 +95,7 @@ const ChartCard = ({ title, children }) => (
     <div className="px-6 py-6">
       <h3 className="font-semibold text-gray-800">{title}</h3>
     </div>
-    <div className="px-2 pb-3">{children}</div>
+    <div className="px-2 pb-3 overflow-x-auto">{children}</div>
   </div>
 );
 
@@ -176,11 +195,28 @@ export default function GeneralCashflow() {
         <ResponsiveContainer width="100%" height={300}>
           <LineChart
             data={cashflowGraphs}
-            margin={{ top: 12, right: 24, bottom: 8, left: 8 }}
+            margin={{ top: 12, right: 24, bottom: 8, left: 24 }}
           >
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
             <XAxis dataKey="Key" tickMargin={8} />
-            <YAxis width={100} tickFormatter={currency} />
+            <YAxis
+              width={70}
+              ticks={generateTicks(
+                Math.min(
+                  ...cashflowGraphs.map((d) =>
+                    Math.min(d.income, d.expense, d.profit)
+                  )
+                ),
+                Math.max(
+                  ...cashflowGraphs.map((d) =>
+                    Math.max(d.income, d.expense, d.profit)
+                  )
+                )
+              )}
+              tick={{ fontSize: 12 }}
+              tickFormatter={(value) => `${parseInt(value / 1000000)} juta`}
+              padding={{ top: 20, bottom: 25 }}
+            />
             <Tooltip content={<CustomTooltip />} />
             <Legend verticalAlign="top" height={28} iconType="circle" />
 
@@ -232,7 +268,10 @@ export default function GeneralCashflow() {
           >
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
             <XAxis dataKey="key" tickMargin={8} />
-            <YAxis width={80} tickFormatter={currency} />
+            <YAxis
+              width={80}
+              tickFormatter={(value) => `${parseInt(value / 1000000)} juta`}
+            />
             <Tooltip content={<CustomTooltip />} />
             <Legend verticalAlign="top" height={28} iconType="circle" />
 
@@ -272,7 +311,10 @@ export default function GeneralCashflow() {
           >
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
             <XAxis dataKey="Key" tickMargin={8} />
-            <YAxis width={80} tickFormatter={currency} />
+            <YAxis
+              width={80}
+              tickFormatter={(value) => `${parseInt(value / 1000000)} juta`}
+            />
             <Tooltip content={<CustomTooltip />} />
             <Legend verticalAlign="top" height={28} iconType="circle" />
 
