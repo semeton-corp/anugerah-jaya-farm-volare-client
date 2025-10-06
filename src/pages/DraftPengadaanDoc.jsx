@@ -157,14 +157,25 @@ const DraftPengadaanDoc = () => {
                         const localNumber = "081246087972";
                         const waNumber = localNumber.replace(/^0/, "62");
 
-                        const namaSupplier = item?.supplier.name || "";
-                        const namaBarang = item?.supplier?.supplierType || "";
-                        const satuan = item?.item?.unit || "";
+                        const namaSupplier = item?.supplier?.name || "";
+                        const namaBarang =
+                          item?.item?.name ||
+                          item?.supplier?.supplierType ||
+                          "";
+
                         const jumlah = item?.quantity || "";
 
-                        const message = `Halo ${namaSupplier}, kami dari Anugerah Jaya Farm ingin memastikan ketersediaan pesanan ayam:%0A%0A🐔 Nama Barang: ${namaBarang}%0A📦 Jumlah: ${jumlah} ${satuan}%0A%0AApakah ayam dengan jumlah tersebut tersedia dan siap dipesan?`;
+                        const rawMessage = `
+Halo ${namaSupplier}, kami dari *Anugerah Jaya Farm* ingin memastikan ketersediaan pesanan ayam berikut:
 
-                        const waURL = `https://wa.me/${waNumber}?text=${message}`;
+🐔 *Nama Barang:* ${namaBarang}
+📦 *Jumlah:* ${jumlah} ekor
+
+Apakah ayam dengan jumlah tersebut tersedia dan siap dipesan?
+`;
+
+                        const message = encodeURIComponent(rawMessage.trim());
+                        const waURL = `https://api.whatsapp.com/send?phone=${waNumber}&text=${message}`;
                         window.open(waURL, "_blank");
                       }}
                       className="px-3 py-1 bg-green-700 rounded text-white hover:bg-green-900 cursor-pointer flex items-center justify-center"

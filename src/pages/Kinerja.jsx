@@ -419,8 +419,19 @@ const Kinerja = () => {
                   >
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="key" />
-                    <YAxis tickFormatter={(v) => v.toLocaleString("id-ID")} />
-                    <Tooltip formatter={(v) => v.toLocaleString("id-ID")} />
+                    <YAxis
+                      domain={[0, "auto"]}
+                      tickFormatter={(v) => v.toLocaleString("id-ID")}
+                    />
+                    <Tooltip
+                      formatter={(v) =>
+                        new Intl.NumberFormat("id-ID", {
+                          style: "currency",
+                          currency: "IDR",
+                          maximumFractionDigits: 0,
+                        }).format(v)
+                      }
+                    />
                     <Legend />
                     <Line
                       type="monotone"

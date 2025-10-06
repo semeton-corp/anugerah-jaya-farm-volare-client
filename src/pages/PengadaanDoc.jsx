@@ -251,7 +251,7 @@ const PengadaanDoc = () => {
                           order.IsArrived
                         )}`}
                       >
-                        {order.IsArrived ? "Selesai" : "Sedang Dikirim"}
+                        {order.procurementStatus}
                       </span>
                     </td>
 
@@ -321,6 +321,7 @@ const PengadaanDoc = () => {
             kandang: selectedItem?.cage?.name || "-",
             namaBarang: "Ayam DOC",
             supplier: selectedItem?.supplier?.name || "-",
+            supplierPhone: selectedItem?.supplier?.phoneNumber || "-",
             jumlah: selectedItem?.quantity || 0,
           }}
           onClose={() => setShowBarangSampaiModal(false)}

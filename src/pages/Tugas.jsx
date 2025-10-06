@@ -118,7 +118,7 @@ const Tugas = () => {
       // console.log("takeResponse: ", takeResponse);
       if (takeResponse.status == 201) {
         alert(
-          "✅Berhasil mengambil tugas tambahan, tugas akan masuk ke tugas pegawai esok hari!"
+          "✅Berhasil mengambil tugas tambahan, tugas akan masuk ke tugas pegawai saat slot pekerja terpenuhi!"
         );
         fetchTugasTambahanData();
         fetchAllTugas();

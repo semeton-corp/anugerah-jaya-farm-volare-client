@@ -247,6 +247,20 @@ export default function DetailPengadaanDoc() {
             {rupiah(data?.totalPrice)}
           </p>
         </div>
+        {data?.receiveQuantity && (
+          <div>
+            <p className="text-gray-600">Jumlah Diterima</p>
+            <p
+              className={`text-base sm:text-lg font-semibold ${
+                data?.receiveQuantity < data?.quantity
+                  ? "text-kritis-box-surface-color"
+                  : "text-aman-text-color"
+              }`}
+            >
+              {data?.receiveQuantity}
+            </p>
+          </div>
+        )}
       </div>
       <div className="border rounded mt-3">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 gap-3">
