@@ -20,8 +20,8 @@ const RiwayatStok = () => {
   const [storeItemHistories, setStoreItemHistories] = useState([]);
 
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
+  
   const [page, setPage] = useState(1);
-
   const [totalPages, setTotalPages] = useState(1);
   const [totalData, setTotalData] = useState(0);
 

@@ -431,7 +431,7 @@ const InputDataPesanan = () => {
         : { warehouseId: parseInt(selectedPlace.id) }),
       quantity,
       price: itemPrice.toString(),
-      discount,
+      discount: parseInt(discount),
       sendDate: formatDateToDDMMYYYY(sendDate),
       paymentType,
       payments: payments.map((p) => ({
@@ -458,7 +458,11 @@ const InputDataPesanan = () => {
       }
 
       if (submitResponse.status == 201) {
-        navigate(-1, { state: { refetch: true } });
+        const previousUrl =
+          location.pathname.replace(/\/input-data-pesanan(\/.*)?$/, "") || "/";
+        navigate(previousUrl, {
+          state: { selectedPlace },
+        });
       }
     } catch (error) {
       console.log("error: ", error);
@@ -529,13 +533,12 @@ const InputDataPesanan = () => {
         return;
       }
 
-      // console.log("queueResponse: ", queueResponse);
       if (queueResponse.status === 201) {
         const newPath = location.pathname.replace(
           "daftar-pesanan/input-data-pesanan",
           "antrian-pesanan"
         );
-        navigate(newPath);
+        navigate(newPath, { state: { selectedPlace } });
       }
     } catch (error) {
       if (error.response.data.message == "customer id is required") {
@@ -578,6 +581,7 @@ const InputDataPesanan = () => {
   const handleDelete = async () => {
     try {
       let deleteResponse;
+
       if (state?.selectedPlace.type == "store") {
         console.log("MASUK A:");
         deleteResponse = await deleteStoreSale(id);
@@ -1137,7 +1141,7 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
             {`Diskon (%)`}
           </label>
           {id ? (
-            <p className="text-lg font-bold">Rp {formatThousand(discount)}</p>
+            <p className="text-lg font-bold">{discount}%</p>
           ) : (
             <input
               disabled={isOutOfStock}

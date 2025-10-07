@@ -36,6 +36,10 @@ const DaftarPesanan = () => {
     userRole === "Owner" ? 0 : localStorage.getItem("locationId")
   );
 
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalData, setTotalData] = useState(0);
+
   const [dataAntrianPesanan, setDataAntrianPesanan] = useState([]);
   const [showSendModal, setShowSendModal] = useState(false);
   const [selectedSendId, setSelectedSendId] = useState("");
@@ -52,7 +56,6 @@ const DaftarPesanan = () => {
   );
   console.log("pageNotifications: ", pageNotifications);
 
-  const [page, setPage] = useState(1);
   const [paymentStatus, setPaymentStatus] = useState("");
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
 
@@ -212,8 +215,12 @@ const DaftarPesanan = () => {
       if (antrianResponse.status == 200) {
         if (selectedPlace.type == "store") {
           setDataAntrianPesanan(antrianResponse.data.data.storeSales);
+          setTotalData(antrianResponse.data.data.totalData);
+          setTotalPages(antrianResponse.data.data.totalPage);
         } else if (selectedPlace.type == "warehouse") {
           setDataAntrianPesanan(antrianResponse.data.data.warehouseSales);
+          setTotalData(antrianResponse.data.data.totalData);
+          setTotalPages(antrianResponse.data.data.totalPage);
         }
       }
     } catch (error) {
@@ -247,11 +254,17 @@ const DaftarPesanan = () => {
   }, []);
 
   useEffect(() => {
+    if (location?.state?.selectedPlace) {
+      setSelectedPlace(location.state.selectedPlace);
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
+
+  useEffect(() => {
     if (selectedPlace.type) {
       fetchDataAntrianPesanan();
-      if (location?.state?.refetch) {
-        fetchDataAntrianPesanan();
-        window.history.replaceState({}, document.title);
+      if (location?.state?.selectedPlace) {
+        setSelectedPlace(location?.state?.selectedPlace);
       }
     }
   }, [selectedPlace, location]);
@@ -427,6 +440,39 @@ const DaftarPesanan = () => {
                   ))}
                 </tbody>
               </table>
+              <div className="flex justify-between mt-16 px-6">
+                {dataAntrianPesanan?.length > 0 ? (
+                  <p className="text-sm text-[#CCCCCC]">{`Menampilkan halaman ${page} dari ${totalPages} halaman. Total ${totalData} data riwayat`}</p>
+                ) : (
+                  <p></p>
+                )}
+                <div className="flex gap-3">
+                  <div
+                    className={`rounded-[4px] py-2 px-6 ${
+                      page <= 1 || totalPages <= 0
+                        ? "bg-gray-200 cursor-not-allowed"
+                        : "bg-green-100 hover:bg-green-200 cursor-pointer"
+                    } flex items-center justify-center text-black text-base font-medium `}
+                    onClick={() =>
+                      page > 1 && totalPages > 0 && setPage(page - 1)
+                    }
+                  >
+                    <p>Previous</p>
+                  </div>
+                  <div
+                    className={`rounded-[4px] py-2 px-6 ${
+                      page >= totalPages || totalPages <= 0
+                        ? "bg-gray-200 cursor-not-allowed"
+                        : "bg-green-700 hover:bg-green-800 cursor-pointer"
+                    } flex items-center justify-center text-white text-base font-medium `}
+                    onClick={() =>
+                      page < totalPages && totalPages > 0 && setPage(page + 1)
+                    }
+                  >
+                    <p>Next</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           {showSendModal && (

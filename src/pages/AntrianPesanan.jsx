@@ -143,7 +143,10 @@ const AntrianPesanan = () => {
         ];
 
         setPlaceOptions(options);
-        if (options.length > 0) {
+        if (location?.state?.selectedPlace) {
+          setSelectedPlace(location.state.selectedPlace);
+          window.history.replaceState({}, document.title);
+        } else {
           setSelectedPlace(options[0]);
         }
       }
@@ -165,7 +168,12 @@ const AntrianPesanan = () => {
           })),
         ];
         setPlaceOptions(options);
-        setSelectedPlace(options[0]);
+        if (location?.state?.selectedPlace) {
+          setSelectedPlace(location.state.selectedPlace);
+          window.history.replaceState({}, document.title);
+        } else {
+          setSelectedPlace(options[0]);
+        }
       }
     } catch (error) {
       alert("Gagal memuat data gudang: ", error);
@@ -183,7 +191,12 @@ const AntrianPesanan = () => {
           name: store.name,
           type: "store",
         };
-        setSelectedPlace(selectedStore);
+        if (location?.state?.selectedPlace) {
+          setSelectedPlace(location.state.selectedPlace);
+          window.history.replaceState({}, document.title);
+        } else {
+          setSelectedPlace(selectedStore);
+        }
       }
     } catch (error) {
       console.log("error :", error);
@@ -201,7 +214,12 @@ const AntrianPesanan = () => {
           name: warehouse.name,
           type: "warehouse",
         };
-        setSelectedPlace(selectedWarehouse);
+        if (location?.state?.selectedPlace) {
+          setSelectedPlace(location.state.selectedPlace);
+          window.history.replaceState({}, document.title);
+        } else {
+          setSelectedPlace(selectedWarehouse);
+        }
       }
     } catch (error) {
       console.log("error :", error);
