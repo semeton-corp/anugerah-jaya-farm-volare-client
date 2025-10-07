@@ -79,7 +79,6 @@ const DetailPenyelesaianPekerjaan = () => {
       console.log("response.data.data.dailyWorks: ", response);
       if (response.status == 200) {
         setDailyWorks(response.data.data.dailyWorkUsers);
-        setAdditionalWorks(response.data.data.additionalWorks);
         setMaxPageDaily(response.data.data.totalPage);
       }
     } catch (error) {
@@ -131,7 +130,8 @@ const DetailPenyelesaianPekerjaan = () => {
         <table className="w-full text-sm">
           <thead>
             <tr className="bg-green-700 text-white text-left">
-              <th className="py-2 px-4">Waktu</th>
+              <th className="py-2 px-4">Tanggal Mengambil Pekerjaan</th>
+              <th className="py-2 px-4">Waktu Mengambil Pekerjaan</th>
               <th className="py-2 px-4">Nama Pekerjaan</th>
               <th className="py-2 px-4">Keterangan</th>
             </tr>
@@ -146,7 +146,8 @@ const DetailPenyelesaianPekerjaan = () => {
             ) : (
               additionalWorks.map((item, index) => (
                 <tr key={index} className="border-b">
-                  <td className="py-2 px-4">{item.additionalWork.time}</td>
+                  <td className="py-2 px-4">{item.takenDate}</td>
+                  <td className="py-2 px-4">{item.takenTime}</td>
                   <td className="py-2 px-4">{item.additionalWork.name}</td>
                   <td className="py-2 px-4">
                     <span

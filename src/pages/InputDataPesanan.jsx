@@ -53,7 +53,7 @@ import {
   updateWarehouseSalePayment,
 } from "../services/warehouses";
 import { formatThousand, onlyDigits } from "../utils/moneyFormat";
-import { IoLogoWhatsapp } from "react-icons/io5";
+import { IoInformationCircleOutline, IoLogoWhatsapp } from "react-icons/io5";
 
 const InputDataPesanan = () => {
   const location = useLocation();
@@ -789,7 +789,7 @@ const InputDataPesanan = () => {
     setItemTotalPrice(totalitemPrice);
     setItemPriceDiscount(totalDiscount);
     setTotal(totalitemPrice - totalDiscount);
-  }, [itemPrice]);
+  }, [itemPrice, discount]);
 
   useEffect(() => {
     if (!selectedItem) return;
@@ -1084,7 +1084,7 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
               }`}
             >
               <IoLogoWhatsapp size={20} />
-              Tanya Harga
+              Tawarkan Harga
             </button>
           </div>
         )}
@@ -1107,10 +1107,50 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
                   ? "bg-gray-400/10 cursor-not-allowed text-gray-400/20"
                   : ""
               }`}
-              type="number"
-              value={itemPrice}
+              type="text"
+              inputMode="numeric"
+              value={formatThousand(itemPrice)}
               onChange={(e) => {
-                setItemPrice(e.target.value);
+                const raw = onlyDigits(e.target.value);
+                setItemPrice(raw);
+              }}
+            />
+          )}
+        </div>
+
+        <div>
+          <label
+            className={`block font-medium mt-4 flex items-center gap-1 ${
+              isOutOfStock && !id ? "text-gray-400/40" : "text-black"
+            }`}
+          >
+            <div className="relative group">
+              <IoInformationCircleOutline
+                size={24}
+                className="text-gray-500 cursor-pointer"
+              />
+              <div className="absolute left-6 top-1/2 -translate-y-1/2 hidden group-hover:block bg-gray-800 text-white text-md rounded-md px-2 py-1 w-56 shadow-md z-10">
+                Persentase diskon dihitung berdasarkan total pembelian pelanggan
+                dari toko ini.
+              </div>
+            </div>
+            {`Diskon (%)`}
+          </label>
+          {id ? (
+            <p className="text-lg font-bold">Rp {formatThousand(discount)}</p>
+          ) : (
+            <input
+              disabled={isOutOfStock}
+              className={`w-full border bg-black-4  rounded p-2 mb-4 ${
+                isOutOfStock
+                  ? "bg-gray-400/10 cursor-not-allowed text-gray-400/20"
+                  : ""
+              }`}
+              type="text"
+              inputMode="numeric"
+              value={discount}
+              onChange={(e) => {
+                setDiscount(e.target.value);
               }}
             />
           )}
