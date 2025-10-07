@@ -212,7 +212,8 @@ const DetailPenyelesaianPekerjaan = () => {
         <table className="w-full text-sm">
           <thead>
             <tr className="bg-green-700 text-white text-left">
-              <th className="py-2 px-4">Waktu</th>
+              <th className="py-2 px-4">Tanggal Selesai</th>
+              <th className="py-2 px-4">Waktu Selesai</th>
               <th className="py-2 px-4">Nama Pekerjaan</th>
               <th className="py-2 px-4">Keterangan</th>
             </tr>
@@ -227,7 +228,8 @@ const DetailPenyelesaianPekerjaan = () => {
             ) : (
               dailyWorks.map((item, index) => (
                 <tr key={index} className="border-b">
-                  <td className="py-2 px-4">{item.dailyWork.endTime}</td>
+                  <td className="py-2 px-4">{item.finishedDate}</td>
+                  <td className="py-2 px-4">{item.finishedTime}</td>
                   <td className="py-2 px-4">{item.dailyWork.description}</td>
                   <td className="py-2 px-4">
                     <span

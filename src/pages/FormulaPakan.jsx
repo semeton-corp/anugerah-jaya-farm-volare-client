@@ -102,7 +102,7 @@ const FormulaPakan = () => {
                     {item.feedType}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap  text-gray-600">
-                    {item.totalFeed}
+                    {`${item.totalFeed} gr/ekor`}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-gray-600">
                     {item.cageFeedDetails && item.cageFeedDetails.length > 0 ? (

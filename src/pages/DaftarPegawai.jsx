@@ -16,7 +16,9 @@ const DaftarPegawai = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const userRole = localStorage.getItem("role");
-  const [query, setQuery] = useState("");
+
+  const [keyword, setQuery] = useState("");
+  const [debouncedKeyword, setDebouncedKeyword] = useState("");
 
   const [siteOptions, setSiteOptions] = useState([]);
   const [selectedSite, setSelectedSite] = useState(
@@ -40,7 +42,13 @@ const DaftarPegawai = () => {
 
   const fetchPegawaiAktifData = async () => {
     try {
-      const fetchResponse = await getUserOverviewList(page, query, roleId);
+      const filteredRoleId = !roleId ? undefined : roleId;
+      const filteredKeyword = !keyword ? undefined : keyword;
+      const fetchResponse = await getUserOverviewList(
+        page,
+        filteredKeyword,
+        filteredRoleId
+      );
       console.log("fetchResponse:", fetchResponse);
       if (fetchResponse.status == 200) {
         const {
@@ -101,8 +109,18 @@ const DaftarPegawai = () => {
   }, [location]);
 
   useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedKeyword(keyword);
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [keyword]);
+
+  useEffect(() => {
     fetchPegawaiAktifData();
-  }, [query, roleId, page]);
+  }, [debouncedKeyword, roleId, page]);
 
   if (isDetailPage) {
     return <Outlet />;
@@ -133,7 +151,7 @@ const DaftarPegawai = () => {
               <input
                 type="text"
                 placeholder="Cari Pegawai...."
-                value={query}
+                value={keyword}
                 onChange={(e) => setQuery(e.target.value)}
                 className="w-full focus:outline-none"
               />

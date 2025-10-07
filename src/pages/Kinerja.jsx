@@ -73,6 +73,20 @@ const Kinerja = () => {
     setIncomeAndExpensePerformanceBarCharts,
   ] = useState([]);
 
+  const yDomain = useMemo(() => {
+    if (!incomeAndExpensePerformanceBarCharts?.length) return [0, "auto"];
+    const allValues = incomeAndExpensePerformanceBarCharts.flatMap((d) => [
+      d.income || 0,
+      d.expense || 0,
+    ]);
+    const maxValue = Math.max(...allValues);
+    const minValue = Math.min(...allValues);
+    const padding = (maxValue - minValue) * 0.1;
+    return [Math.max(0, minValue - padding), maxValue + padding];
+  }, [incomeAndExpensePerformanceBarCharts]);
+
+  const [tickFontSize, setTickFontSize] = useState(16);
+
   const ageDistributionData = useMemo(() => {
     const src = chickenBarCharts || {};
     const pick = (k) => Number(src?.[k] ?? 0);
@@ -179,6 +193,17 @@ const Kinerja = () => {
     fetchPerformanceOverview();
   }, [selectedChickenCage, selectedSite]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) setTickFontSize(16);
+      else if (window.innerWidth < 1024) setTickFontSize(18);
+      else setTickFontSize(18);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   return (
     <>
       {isDetailPage ? (
@@ -411,17 +436,18 @@ const Kinerja = () => {
 
             {/* Wrapper scrollable */}
             <div className="overflow-x-auto">
-              <div className="min-w-[600px]">
+              <div className="min-w-[1300px]">
                 <ResponsiveContainer width="100%" height={400}>
                   <LineChart
                     data={incomeAndExpensePerformanceBarCharts}
                     margin={{ top: 20, right: 30, left: 60, bottom: 0 }}
                   >
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="key" />
+                    <XAxis dataKey="key" tick={{ fontSize: tickFontSize }} />
                     <YAxis
-                      domain={[0, "auto"]}
-                      tickFormatter={(v) => v.toLocaleString("id-ID")}
+                      domain={yDomain}
+                      padding={{ bottom: 4 }}
+                      tickFormatter={(v) => `${(v / 1_000_000).toFixed(1)} jt`}
                     />
                     <Tooltip
                       formatter={(v) =>
