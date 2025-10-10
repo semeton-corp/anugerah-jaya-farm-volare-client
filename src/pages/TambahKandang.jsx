@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { getLocations } from "../services/location";
 import { createCage } from "../services/cages";
 import { useNavigate } from "react-router-dom";
+import { formatThousand, onlyDigits } from "../utils/moneyFormat";
 
 const TambahKandang = () => {
   const navigate = useNavigate();
@@ -24,7 +25,17 @@ const TambahKandang = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // Convert locationId and capacity to integers
+    if (name === "capacity") {
+      const raw = onlyDigits(value);
+
+      setForm((prev) => ({
+        ...prev,
+        capacity: parseInt(raw),
+      }));
+
+      return;
+    }
+
     const newValue =
       name === "locationId" || name === "capacity"
         ? parseInt(value, 10) || 0
@@ -142,9 +153,10 @@ const TambahKandang = () => {
             Kapasitas Maksimum Kandang (Ekor)
           </label>
           <input
-            type="number"
+            type="text"
+            inputMode="numeric"
             name="capacity"
-            value={form.capacity}
+            value={formatThousand(form.capacity)}
             onChange={handleChange}
             placeholder="Masukkan jumlah kapasitas maksimum kandang"
             className="w-full border rounded px-4 py-2 bg-gray-100"
@@ -160,13 +172,6 @@ const TambahKandang = () => {
           </button>
         </div>
       </form>
-      <button
-        onClick={() => {
-          console.log("form: ", form);
-        }}
-      >
-        CHECK
-      </button>
     </div>
   );
 };
