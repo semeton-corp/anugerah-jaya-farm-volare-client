@@ -15,6 +15,7 @@ import {
 } from "../utils/dateFormat";
 import { EditPembayaranModal } from "../components/EditPembayaranModal";
 import { deleteWarehouseItemCornProcurementPayment } from "../services/warehouses";
+import ImagePopUp from "../components/ImagePopUp";
 
 const rupiah = (n) => `Rp ${Number(n || 0).toLocaleString("id-ID")}`;
 
@@ -69,6 +70,8 @@ export default function DetailPengadaanDoc() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(null);
+
+  const [popupImage, setPopupImage] = useState(null);
 
   const priceTotal = Number(data?.totalPrice || 0);
   const rows = useMemo(() => {
@@ -157,6 +160,10 @@ export default function DetailPengadaanDoc() {
       console.error(e);
       if (e?.response?.data?.message == "nominal is to high") {
         alert("❌Nominal pembayaran melebihi sisa pembayaran.");
+      } else if (
+        e?.response?.data?.message == "chicken procurement is already paid"
+      ) {
+        alert("❌Tidak bisa memperbaharui pembayaran yang sudah lunas");
       } else {
         alert("❌Gagal memperbarui pembayaran.");
       }
@@ -322,8 +329,17 @@ export default function DetailPengadaanDoc() {
                       <td className="px-3 py-2">{p.paymentMethod}</td>
                       <td className="px-3 py-2">{rupiah(p.nominalNum)}</td>
                       <td className="px-3 py-2">{rupiah(p.remainingNum)}</td>
-                      <td className="px-3 py-2 underline cursor-pointer">
-                        {p.proof}
+                      <td className="px-3 py-2">
+                        {p.paymentProof ? (
+                          <td
+                            className="px-3 py-2 underline text-green-700 hover:text-green-900 cursor-pointer text-center"
+                            onClick={() => setPopupImage(p.paymentProof)}
+                          >
+                            {p.paymentProof ? "Bukti Pembayaran" : "-"}
+                          </td>
+                        ) : (
+                          "-"
+                        )}
                       </td>
                       <td className="w-full px-4 py-2 flex gap-3">
                         <BiSolidEditAlt
@@ -334,7 +350,7 @@ export default function DetailPengadaanDoc() {
                               paymentMethod: p.paymentMethod,
                               nominal: p.nominalNum,
                               paymentDate: p.date,
-                              paymentProof: p.proof,
+                              paymentProof: p.paymentProof,
                             });
                             setShowEditModal(true);
                           }}
@@ -473,6 +489,10 @@ export default function DetailPengadaanDoc() {
             </div>
           </div>
         </div>
+      )}
+
+      {popupImage && (
+        <ImagePopUp imageUrl={popupImage} onClose={() => setPopupImage(null)} />
       )}
     </div>
   );

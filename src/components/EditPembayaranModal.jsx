@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { toISODate } from "../utils/dateFormat";
+import { uploadFile } from "../services/file";
+import { formatThousand, onlyDigits } from "../utils/moneyFormat";
 
 export const EditPembayaranModal = ({
   open,
@@ -16,6 +18,7 @@ export const EditPembayaranModal = ({
     new Date().toISOString().slice(0, 10)
   );
   const [paymentProof, setPaymentProof] = useState("https://example.com");
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     if (!open) return;
@@ -28,7 +31,7 @@ export const EditPembayaranModal = ({
       const isoLike = toISODate(initialValues.paymentDate);
       setPaymentDate(isoLike);
 
-      setPaymentProof(initialValues.paymentProof || "https://example.com");
+      setPaymentProof(initialValues.paymentProof);
     } else {
       setPaymentMethod(defaultMethod);
       setNominal("");
@@ -56,11 +59,15 @@ export const EditPembayaranModal = ({
 
         <label className="block mb-1 font-medium">Nominal Pembayaran</label>
         <input
-          type="number"
+          type="text"
+          inputMode="numeric"
           className="w-full border rounded p-2 mb-3"
           placeholder="Masukkan nominal"
-          value={nominal}
-          onChange={(e) => setNominal(e.target.value)}
+          value={formatThousand(nominal)}
+          onChange={(e) => {
+            const raw = onlyDigits(e.target.value);
+            setNominal(raw);
+          }}
           min={0}
         />
 
@@ -72,13 +79,26 @@ export const EditPembayaranModal = ({
           onChange={(e) => setPaymentDate(e.target.value)}
         />
 
-        <label className="block mb-1 font-medium">Bukti Pembayaran (URL)</label>
+        <label className="block mb-1 font-medium">Bukti Pembayaran</label>
         <input
-          type="text"
+          type="file"
+          accept="image/*"
           className="w-full border rounded p-2 mb-4"
-          placeholder="https://contoh.com/bukti"
-          value={paymentProof}
-          onChange={(e) => setPaymentProof(e.target.value)}
+          onChange={async (e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+
+            setIsUploading(true);
+
+            try {
+              const fileUrl = await uploadFile(file);
+              setPaymentProof(fileUrl);
+            } catch (err) {
+              console.error(err);
+            } finally {
+              setIsUploading(false);
+            }
+          }}
         />
 
         <div className="flex justify-end gap-2">
@@ -97,9 +117,14 @@ export const EditPembayaranModal = ({
                 paymentProof,
               })
             }
-            className="px-4 py-2 bg-green-700 hover:bg-green-900 text-white rounded cursor-pointer"
+            disabled={isUploading}
+            className={`px-4 py-2 rounded text-white ${
+              isUploading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-green-700 hover:bg-green-900 cursor-pointer"
+            }`}
           >
-            Simpan
+            {isUploading ? "Mengunggah..." : "Simpan"}
           </button>
         </div>
       </div>
