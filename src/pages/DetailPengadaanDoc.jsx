@@ -16,6 +16,8 @@ import {
 import { EditPembayaranModal } from "../components/EditPembayaranModal";
 import { deleteWarehouseItemCornProcurementPayment } from "../services/warehouses";
 import ImagePopUp from "../components/ImagePopUp";
+import { uploadFile } from "../services/file";
+import { formatThousand, onlyDigits } from "../utils/moneyFormat";
 
 const rupiah = (n) => `Rp ${Number(n || 0).toLocaleString("id-ID")}`;
 
@@ -65,13 +67,14 @@ export default function DetailPengadaanDoc() {
   const [paymentMethod, setPaymentMethod] = useState("Tunai");
   const [paymentDate, setPaymentDate] = useState(today);
   const [nominal, setNominal] = useState("");
-  const [paymentProof, setPaymentProof] = useState("https://example.com");
+  const [paymentProof, setPaymentProof] = useState();
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(null);
 
   const [popupImage, setPopupImage] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const priceTotal = Number(data?.totalPrice || 0);
   const rows = useMemo(() => {
@@ -97,6 +100,23 @@ export default function DetailPengadaanDoc() {
     data?.procurementStatus == "Sedang Dikirim" ? "warning" : "success";
 
   const addPayment = async () => {
+    let errorMessage = "";
+
+    if (!paymentDate) {
+      errorMessage = "Tanggal pembayaran belum diisi.";
+    } else if (!paymentMethod) {
+      errorMessage = "Metode pembayaran belum dipilih.";
+    } else if (nominal <= 0) {
+      errorMessage = "Nominal pembayaran harus lebih dari 0.";
+    } else if (!paymentProof) {
+      errorMessage = "Bukti pembayaran wajib diunggah!";
+    }
+
+    if (errorMessage) {
+      alert(`⚠️ ${errorMessage}`);
+      return;
+    }
+
     try {
       const payload = {
         nominal: nominal,
@@ -122,6 +142,11 @@ export default function DetailPengadaanDoc() {
       }
     } catch (error) {
       console.log("error :", error);
+      if (
+        error?.response?.data?.message == "chicken procurement is already paid"
+      ) {
+        alert("❌Tidak bisa menambah pembayaran yang sudah lunas");
+      }
     }
   };
 
@@ -200,6 +225,23 @@ export default function DetailPengadaanDoc() {
       }
     } catch (error) {
       console.error("Error fetching procurement details:", error);
+    }
+  };
+
+  const handleInputFile = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+
+    try {
+      const fileUrl = await uploadFile(file);
+      console.log("Uploaded file URL:", fileUrl);
+      setPaymentProof(fileUrl);
+    } catch (err) {
+      alert("Upload failed!");
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -404,11 +446,15 @@ export default function DetailPengadaanDoc() {
 
             <label className="block mb-1 font-medium">Nominal Pembayaran</label>
             <input
-              type="number"
+              type="text"
+              inputMode="numeric"
               className="w-full border rounded p-2 mb-3"
               placeholder="Masukkan nominal"
-              value={nominal}
-              onChange={(e) => setNominal(e.target.value)}
+              value={formatThousand(nominal)}
+              onChange={(e) => {
+                const raw = onlyDigits(e.target.value);
+                setNominal(raw);
+              }}
             />
 
             <label className="block mb-1 font-medium">Tanggal Bayar</label>
@@ -420,7 +466,11 @@ export default function DetailPengadaanDoc() {
             />
 
             <label className="block mb-1 font-medium">Bukti Pembayaran</label>
-            <input type="file" className="w-full border rounded p-2 mb-4" />
+            <input
+              type="file"
+              className="w-full border rounded p-2 mb-4"
+              onChange={handleInputFile}
+            />
 
             <div className="flex justify-end gap-2">
               <button
@@ -436,16 +486,20 @@ export default function DetailPengadaanDoc() {
               </button>
               <button
                 onClick={addPayment}
-                className="px-4 py-2 bg-green-700 hover:bg-green-900 text-white rounded cursor-pointer"
+                disabled={isUploading}
+                className={`px-4 py-2 rounded text-white ${
+                  isUploading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-green-700 hover:bg-green-900 cursor-pointer"
+                }`}
               >
-                Simpan
+                {isUploading ? "Mengunggah..." : "Simpan"}
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* EDIT modal */}
       <EditPembayaranModal
         open={showEditModal}
         onClose={() => {

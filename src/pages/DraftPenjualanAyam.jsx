@@ -193,6 +193,7 @@ const DraftPenjualanAyam = () => {
           </table>
         </div>
       </div>
+
       {showConfirmModal && (
         <KonfirmasiPenjualanAyamModal
           onClose={() => setShowConfirmModal(false)}

@@ -13,6 +13,7 @@ import {
 import { convertToInputDateFormat, toYMD } from "../utils/dateFormat";
 import { GoAlertFill } from "react-icons/go";
 import { formatThousand, onlyDigits } from "../utils/moneyFormat";
+import ImagePopUp from "../components/ImagePopUp";
 
 const rupiah = (n) => `Rp ${Number(n || 0).toLocaleString("id-ID")}`;
 const today = (() => {
@@ -80,6 +81,9 @@ export default function DetailPenjualanAyam() {
   const [isMoreThanDeadlinePaymentDate, setIsMoreThanDeadlinePaymentDate] =
     useState(false);
   const [deadlinePaymentDate, setDeadlinePaymentDate] = useState("");
+
+  const [popupImage, setPopupImage] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const totalPrice = useMemo(
     () =>
@@ -360,8 +364,17 @@ export default function DetailPenjualanAyam() {
                         <td className="px-3 py-2">{p.paymentMethod}</td>
                         <td className="px-3 py-2">{rupiah(p.nominalNum)}</td>
                         <td className="px-3 py-2">{rupiah(p.remainingNum)}</td>
-                        <td className="px-3 py-2 underline cursor-pointer">
-                          {p.proof}
+                        <td className="px-3 py-2">
+                          {p.paymentProof ? (
+                            <td
+                              className="px-3 py-2 underline text-green-700 hover:text-green-900 cursor-pointer text-center"
+                              onClick={() => setPopupImage(p.paymentProof)}
+                            >
+                              {p.paymentProof ? "Bukti Pembayaran" : "-"}
+                            </td>
+                          ) : (
+                            "-"
+                          )}
                         </td>
                         <td className="px-3 py-2">
                           <div className="flex items-center gap-3">
@@ -586,6 +599,10 @@ export default function DetailPenjualanAyam() {
             </div>
           </div>
         </div>
+      )}
+
+      {popupImage && (
+        <ImagePopUp imageUrl={popupImage} onClose={() => setPopupImage(null)} />
       )}
     </div>
   );
