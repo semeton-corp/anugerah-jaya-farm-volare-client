@@ -14,6 +14,8 @@ import { convertToInputDateFormat, toYMD } from "../utils/dateFormat";
 import { GoAlertFill } from "react-icons/go";
 import { formatThousand, onlyDigits } from "../utils/moneyFormat";
 import ImagePopUp from "../components/ImagePopUp";
+import { EditPembayaranModal } from "../components/EditPembayaranModal";
+import { uploadFile } from "../services/file";
 
 const rupiah = (n) => `Rp ${Number(n || 0).toLocaleString("id-ID")}`;
 const today = (() => {
@@ -44,34 +46,13 @@ const Badge = ({ tone = "neutral", children }) => {
 export default function DetailPenjualanAyam() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [sale, setSale] = useState({
-    saleDate: "20 Maret 2025",
-    cage: { id: 1, name: "Sidodadi 04" },
-    chickenAgeWeeks: 30,
-    customer: {
-      id: 11,
-      name: "Pelanggan 01",
-      phoneNumber: "08123456789",
-      address: "Jalan Pelanggan 01",
-    },
-    totalSellChicken: 4000,
-    pricePerChicken: 15000,
-    payments: [
-      {
-        id: 1,
-        paymentDate: "2025-03-27",
-        paymentMethod: "Tunai",
-        nominal: 100000,
-        proof: "Bukti Pembayaran",
-      },
-    ],
-  });
+  const [sale, setSale] = useState({});
 
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("Tunai");
   const [paymentDate, setPaymentDate] = useState(today);
   const [nominal, setNominal] = useState("");
-  const [paymentProof, setPaymentProof] = useState("https://example.com");
+  const [paymentProof, setPaymentProof] = useState();
 
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [selectedDeletePayment, setSelectedDeletePayment] = useState();
@@ -137,28 +118,35 @@ export default function DetailPenjualanAyam() {
       console.log("error :", error);
     }
   };
-  const openEdit = (payment) => {
-    setSelectedEditPayment({
-      ...payment,
-      nominal: String(payment.nominal ?? ""),
-      paymentDate: toYMD(payment.paymentDate),
-    });
-    setShowEditModal(true);
-  };
 
   const saveEdit = async () => {
+    let errorMessage = "";
+
+    if (!selectedEditPayment.paymentDate) {
+      errorMessage = "Tanggal pembayaran belum diisi.";
+    } else if (!selectedEditPayment.paymentMethod) {
+      errorMessage = "Metode pembayaran belum dipilih.";
+    } else if (selectedEditPayment.nominal <= 0) {
+      errorMessage = "Nominal pembayaran harus lebih dari 0.";
+    } else if (!paymentProof) {
+      errorMessage = "Bukti pembayaran wajib diunggah!";
+    }
+
+    if (errorMessage) {
+      alert(`⚠️ ${errorMessage}`);
+      return;
+    }
     try {
-      //FIX THE PAYMENT PROOF
       const payload = {
         paymentMethod: selectedEditPayment.paymentMethod,
         paymentProof: paymentProof,
-        paymentDate: convertToInputDateFormat(selectedEditPayment.paymentDate),
-        nominal: selectedEditPayment.nominal,
+        paymentDate: selectedEditPayment.paymentDate,
+        nominal: selectedEditPayment.nominal.toString(),
       };
       const updatePaymentResponse = await updateAfkirChickenSalePayment(
         payload,
-        id,
-        selectedEditPayment.id
+        selectedEditPayment.id,
+        id
       );
       if (updatePaymentResponse.status == 200) {
         alert("✅ Update data pembayaran berhasil!");
@@ -216,6 +204,24 @@ export default function DetailPenjualanAyam() {
       console.log("error :", error);
     }
   };
+
+  const handleInputFile = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+
+    try {
+      const fileUrl = await uploadFile(file);
+      console.log("Uploaded file URL:", fileUrl);
+      setPaymentProof(fileUrl);
+    } catch (err) {
+      alert("Upload failed!");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   useEffect(() => {
     fetchSalesData();
   }, []);
@@ -317,7 +323,7 @@ export default function DetailPenjualanAyam() {
                 onClick={() => setShowPaymentModal(true)}
                 className="bg-orange-300 hover:bg-orange-500 px-4 py-2 rounded text-black cursor-pointer"
               >
-                Pilih Pembayaran
+                Tambah Pembayaran
               </button>
             )}
           </div>
@@ -381,7 +387,17 @@ export default function DetailPenjualanAyam() {
                             <button
                               className="p-1 rounded hover:bg-gray-100"
                               title="Edit"
-                              onClick={() => openEdit(p)}
+                              onClick={() => {
+                                setSelectedEditPayment({
+                                  id: p.id,
+                                  paymentMethod: p.paymentMethod,
+                                  nominal: p.nominalNum,
+                                  paymentDate: p.date,
+                                  paymentProof: p.paymentProof,
+                                });
+                                console.log("p: ", p);
+                                setShowEditModal(true);
+                              }}
                             >
                               <BiSolidEditAlt
                                 size={24}
@@ -474,7 +490,11 @@ export default function DetailPenjualanAyam() {
             />
 
             <label className="block mb-1 font-medium">Bukti Pembayaran</label>
-            <input type="file" className="w-full border rounded p-2 mb-4" />
+            <input
+              type="file"
+              className="w-full border rounded p-2 mb-4"
+              onChange={handleInputFile}
+            />
 
             <div className="flex justify-end gap-2">
               <button
@@ -490,93 +510,38 @@ export default function DetailPenjualanAyam() {
               </button>
               <button
                 onClick={addPayment}
-                className="px-4 py-2 bg-green-700 hover:bg-green-900 text-white rounded cursor-pointer"
+                disabled={isUploading}
+                className={`px-4 py-2 rounded text-white ${
+                  isUploading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-green-700 hover:bg-green-900 cursor-pointer"
+                }`}
               >
-                Simpan
+                {isUploading ? "Mengunggah..." : "Simpan"}
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {showEditModal && selectedEditPayment && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white w-full max-w-lg p-6 rounded shadow-xl">
-            <h3 className="text-lg font-bold mb-4">Edit Pembayaran</h3>
+      <EditPembayaranModal
+        open={showEditModal}
+        onClose={() => {
+          setShowEditModal(false);
+          setSelectedEditPayment(null);
+        }}
+        onSave={saveEdit}
+        title="Edit Pembayaran"
+        initialValues={
+          selectedEditPayment && {
+            paymentMethod: selectedEditPayment.paymentMethod,
+            nominal: selectedEditPayment.nominal,
+            paymentDate: selectedEditPayment.paymentDate,
+            paymentProof: selectedEditPayment.paymentProof,
+          }
+        }
+      />
 
-            <label className="block mb-1 font-medium">Metode Pembayaran</label>
-            <select
-              className="w-full border rounded p-2 mb-3"
-              value={selectedEditPayment.paymentMethod}
-              onChange={(e) =>
-                setSelectedEditPayment((p) => ({
-                  ...p,
-                  paymentMethod: e.target.value,
-                }))
-              }
-            >
-              <option value="Tunai">Tunai</option>
-              <option value="Non Tunai">Non Tunai</option>
-            </select>
-
-            <label className="block mb-1 font-medium">Nominal Pembayaran</label>
-            <input
-              type="number"
-              className="w-full border rounded p-2 mb-3"
-              placeholder="Masukkan nominal"
-              value={selectedEditPayment.nominal}
-              onChange={(e) =>
-                setSelectedEditPayment((p) => ({
-                  ...p,
-                  nominal: e.target.value,
-                }))
-              }
-            />
-
-            <label className="block mb-1 font-medium">Tanggal Bayar</label>
-            <input
-              type="date"
-              className="w-full border rounded p-2 mb-3"
-              value={selectedEditPayment.paymentDate}
-              onChange={(e) =>
-                setSelectedEditPayment((p) => ({
-                  ...p,
-                  paymentDate: e.target.value,
-                }))
-              }
-            />
-
-            <label className="block mb-1 font-medium">Bukti Pembayaran</label>
-            <input
-              type="text"
-              className="w-full border rounded p-2 mb-4"
-              placeholder="Link / nama file"
-              value={selectedEditPayment.proof ?? ""}
-              onChange={(e) =>
-                setSelectedEditPayment((p) => ({ ...p, proof: e.target.value }))
-              }
-            />
-
-            <div className="flex justify-end gap-2">
-              <button
-                onClick={() => {
-                  setShowEditModal(false);
-                  setSelectedEditPayment(null);
-                }}
-                className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded cursor-pointer"
-              >
-                Batal
-              </button>
-              <button
-                onClick={saveEdit}
-                className="px-4 py-2 bg-green-700 hover:bg-green-900 text-white rounded cursor-pointer"
-              >
-                Simpan
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
       {showConfirmDelete && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/10 bg-opacity-40 z-50">
           <div className="bg-white rounded-xl p-6 w-[350px] shadow-lg text-center">

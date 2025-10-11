@@ -40,24 +40,7 @@ const Badge = ({ children, tone = "neutral" }) => {
 };
 
 export default function DetailPengadaanDoc() {
-  const [data, setData] = useState({
-    orderDate: "-",
-    estimationDate: "-",
-    statusShipping: "-",
-    supplierName: "-",
-    cageName: "-",
-    quantity: 0,
-    totalPrice: 0,
-    payments: [
-      {
-        id: 1,
-        paymentDate: "27 Maret 2025",
-        paymentMethod: "Tunai",
-        nominal: 2500000,
-        proof: "Bukti Pembayaran",
-      },
-    ],
-  });
+  const [data, setData] = useState();
 
   const { id } = useParams();
 
