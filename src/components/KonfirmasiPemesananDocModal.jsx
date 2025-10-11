@@ -5,6 +5,8 @@ import { BiSolidEditAlt } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import { convertToInputDateFormat } from "../utils/dateFormat";
 import { formatThousand, onlyDigits } from "../utils/moneyFormat";
+import { uploadFile } from "../services/file";
+import ImagePopUp from "./ImagePopUp";
 
 const rupiah = (n) => `Rp ${Number(n || 0).toLocaleString("id-ID")}`;
 
@@ -53,6 +55,9 @@ const KonfirmasiPemesananDocModal = ({
 
   const [draftPayments, setDraftPayments] = useState([]);
 
+  const [popupImage, setPopupImage] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+
   const dateRef = useRef(null);
 
   const recomputeRemaining = (list) => {
@@ -62,19 +67,36 @@ const KonfirmasiPemesananDocModal = ({
       sisa = Math.max(sisa - n, 0);
       return {
         ...p,
-        nominal: String(n), // <- langsung simpan string
-        remaining: String(sisa), // kalau mau sisa juga string
+        nominal: String(n),
+        remaining: String(sisa),
       };
     });
   };
 
   const addPayment = () => {
     const n = Number(nominal || 0);
+    let errorMessage = "";
+
+    if (!paymentDate) {
+      errorMessage = "Tanggal pembayaran belum diisi.";
+    } else if (!paymentMethod) {
+      errorMessage = "Metode pembayaran belum dipilih.";
+    } else if (n <= 0) {
+      errorMessage = "Nominal pembayaran harus lebih dari 0.";
+    } else if (!paymentProof) {
+      errorMessage = "Bukti pembayaran wajib diunggah!";
+    }
+
+    if (errorMessage) {
+      alert(`⚠️ ${errorMessage}`);
+      return;
+    }
+
     const newPay = {
       paymentDate: convertToInputDateFormat(paymentDate),
       paymentMethod,
       nominal: String(n),
-      paymentProof: paymentProof ? paymentProof.name : "-",
+      paymentProof: paymentProof ? paymentProof : "-",
     };
     setPayments((prev) => recomputeRemaining([...prev, newPay]));
     resetPaymentForm();
@@ -87,6 +109,7 @@ const KonfirmasiPemesananDocModal = ({
     setPaymentProof(null);
     setPaymentDate(new Date().toISOString().slice(0, 10));
   };
+
   const deletePayment = (idx) => {
     setPayments((p) => p.filter((_, i) => i !== idx));
   };
@@ -116,6 +139,23 @@ const KonfirmasiPemesananDocModal = ({
       payments: cleanedPayments,
       paymentType: paymentType,
     });
+  };
+
+  const handleInputFile = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+
+    try {
+      const fileUrl = await uploadFile(file);
+      console.log("Uploaded file URL:", fileUrl);
+      setPaymentProof(fileUrl);
+    } catch (err) {
+      alert("Upload failed!");
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const remainingAfterIdx = (idx) => {
@@ -325,8 +365,17 @@ const KonfirmasiPemesananDocModal = ({
                         <td className="px-3 py-2">
                           {rupiah(remainingAfterIdx(i))}
                         </td>
-                        <td className="px-3 py-2 underline cursor-pointer">
-                          {p.proof || "-"}
+                        <td className="px-3 py-2">
+                          {p.paymentProof ? (
+                            <td
+                              className="px-3 py-2 underline text-green-700 hover:text-green-900 cursor-pointer text-center"
+                              onClick={() => setPopupImage(p.paymentProof)}
+                            >
+                              {p.paymentProof ? "Bukti Pembayaran" : "-"}
+                            </td>
+                          ) : (
+                            "-"
+                          )}
                         </td>
                         <td className="px-3 py-2">
                           <button
@@ -367,7 +416,6 @@ const KonfirmasiPemesananDocModal = ({
           </div>
         </div>
 
-        {/* Footer buttons */}
         <div className="flex flex-col sm:flex-row justify-end gap-3 mt-6">
           <button
             onClick={onClose}
@@ -423,7 +471,7 @@ const KonfirmasiPemesananDocModal = ({
             <input
               type="file"
               className="w-full border rounded p-2 mb-4"
-              onChange={(e) => setPaymentProof(e.target.files?.[0] || null)}
+              onChange={handleInputFile}
             />
             <div className="flex justify-end gap-2">
               <button
@@ -434,13 +482,22 @@ const KonfirmasiPemesananDocModal = ({
               </button>
               <button
                 onClick={addPayment}
-                className="px-4 py-2 bg-green-700 hover:bg-green-900 text-white rounded cursor-pointer"
+                disabled={isUploading}
+                className={`px-4 py-2 rounded text-white ${
+                  isUploading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-green-700 hover:bg-green-900 cursor-pointer"
+                }`}
               >
-                Simpan
+                {isUploading ? "Mengunggah..." : "Simpan"}
               </button>
             </div>
           </div>
         </div>
+      )}
+
+      {popupImage && (
+        <ImagePopUp imageUrl={popupImage} onClose={() => setPopupImage(null)} />
       )}
     </div>
   );
