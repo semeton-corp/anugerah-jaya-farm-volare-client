@@ -10,7 +10,11 @@ import {
   getAfkirChickenSale,
   updateAfkirChickenSalePayment,
 } from "../services/chickenMonitorings";
-import { convertToInputDateFormat, toYMD } from "../utils/dateFormat";
+import {
+  convertToInputDateFormat,
+  formatDateToDDMMYYYY,
+  toYMD,
+} from "../utils/dateFormat";
 import { GoAlertFill } from "react-icons/go";
 import { formatThousand, onlyDigits } from "../utils/moneyFormat";
 import ImagePopUp from "../components/ImagePopUp";
@@ -92,6 +96,23 @@ export default function DetailPenjualanAyam() {
       : "Belum Lunas";
 
   const addPayment = async () => {
+    let errorMessage = "";
+
+    if (!paymentDate) {
+      errorMessage = "Tanggal pembayaran belum diisi.";
+    } else if (!paymentMethod) {
+      errorMessage = "Metode pembayaran belum dipilih.";
+    } else if (nominal <= 0) {
+      errorMessage = "Nominal pembayaran harus lebih dari 0.";
+    } else if (!paymentProof) {
+      errorMessage = "Bukti pembayaran wajib diunggah!";
+    }
+
+    if (errorMessage) {
+      alert(`⚠️ ${errorMessage}`);
+      return;
+    }
+
     const newPayment = {
       paymentDate: convertToInputDateFormat(paymentDate),
       paymentMethod,
@@ -119,14 +140,19 @@ export default function DetailPenjualanAyam() {
     }
   };
 
-  const saveEdit = async () => {
+  const saveEdit = async ({
+    paymentMethod,
+    nominal,
+    paymentDate,
+    paymentProof,
+  }) => {
     let errorMessage = "";
 
-    if (!selectedEditPayment.paymentDate) {
+    if (!paymentDate) {
       errorMessage = "Tanggal pembayaran belum diisi.";
-    } else if (!selectedEditPayment.paymentMethod) {
+    } else if (!paymentMethod) {
       errorMessage = "Metode pembayaran belum dipilih.";
-    } else if (selectedEditPayment.nominal <= 0) {
+    } else if (nominal <= 0) {
       errorMessage = "Nominal pembayaran harus lebih dari 0.";
     } else if (!paymentProof) {
       errorMessage = "Bukti pembayaran wajib diunggah!";
@@ -136,12 +162,13 @@ export default function DetailPenjualanAyam() {
       alert(`⚠️ ${errorMessage}`);
       return;
     }
+
     try {
       const payload = {
-        paymentMethod: selectedEditPayment.paymentMethod,
+        paymentMethod: paymentMethod,
         paymentProof: paymentProof,
-        paymentDate: selectedEditPayment.paymentDate,
-        nominal: selectedEditPayment.nominal.toString(),
+        paymentDate: formatDateToDDMMYYYY(paymentDate),
+        nominal: nominal.toString(),
       };
       const updatePaymentResponse = await updateAfkirChickenSalePayment(
         payload,

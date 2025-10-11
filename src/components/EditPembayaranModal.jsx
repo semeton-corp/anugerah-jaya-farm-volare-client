@@ -23,14 +23,14 @@ export const EditPembayaranModal = ({
   useEffect(() => {
     if (!open) return;
     if (initialValues) {
+      console.log("have initial value: ");
       setPaymentMethod(initialValues.paymentMethod || defaultMethod);
       setNominal(
         initialValues.nominal != null ? String(initialValues.nominal) : ""
       );
-
       const isoLike = toISODate(initialValues.paymentDate);
       setPaymentDate(isoLike);
-
+      console.log("isoLike: ", isoLike);
       setPaymentProof(initialValues.paymentProof);
     } else {
       setPaymentMethod(defaultMethod);

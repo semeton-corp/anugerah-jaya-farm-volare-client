@@ -141,6 +141,7 @@ export default function DetailPengadaanDoc() {
   }) => {
     if (!selectedPayment?.id) return;
 
+    console.log("paymentDate: ", paymentDate);
     const payload = {
       paymentDate: formatDateToDDMMYYYY(paymentDate),
       nominal: String(nominal),
@@ -369,7 +370,7 @@ export default function DetailPengadaanDoc() {
                       <td className="w-full px-4 py-2 flex gap-3">
                         <BiSolidEditAlt
                           onClick={() => {
-                            console.log("p.paymentDate: ", p.date);
+                            console.log("p: ", p);
                             setSelectedPayment({
                               id: p.id,
                               paymentMethod: p.paymentMethod,
