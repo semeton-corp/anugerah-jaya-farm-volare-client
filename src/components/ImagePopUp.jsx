@@ -14,7 +14,7 @@ const ImagePopUp = ({ imageUrl, onClose }) => {
       >
         <button
           onClick={onClose}
-          className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-600 focus:outline-none"
+          className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-600 focus:outline-none cursor-pointer"
         >
           ✕
         </button>

@@ -200,7 +200,6 @@ const DraftPenjualanAyam = () => {
           sale={{
             saleDate: "09 Aug 2025",
             chickenCage: selectedConfirmItem.chickenCage,
-
             customer: selectedConfirmItem.afkirChickenCustomer,
             totalSellChicken: selectedConfirmItem.totalSellChicken,
             pricePerChicken: selectedConfirmItem.pricePerChicken,

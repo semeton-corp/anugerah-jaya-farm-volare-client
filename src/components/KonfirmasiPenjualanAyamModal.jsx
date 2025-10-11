@@ -2,6 +2,8 @@ import React, { useMemo, useRef, useState, useEffect } from "react";
 import { BiSolidEditAlt } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import { formatThousand, onlyDigits } from "../utils/moneyFormat";
+import { uploadFile } from "../services/file";
+import ImagePopUp from "./ImagePopUp";
 
 const toInputDate = (d) => {
   try {
@@ -77,6 +79,10 @@ const KonfirmasiPenjualanAyamModal = ({
   );
   const [nominal, setNominal] = useState("");
   const [paymentProof, setPaymentProof] = useState(null);
+
+  const [popupImage, setPopupImage] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+
   const dateRef = useRef(null);
 
   const remainingAfterIdx = (idx) => {
@@ -88,11 +94,28 @@ const KonfirmasiPenjualanAyamModal = ({
 
   const addPayment = () => {
     const amount = Number(nominal || 0);
+    let errorMessage = "";
+
+    if (!paymentDate) {
+      errorMessage = "Tanggal pembayaran belum diisi.";
+    } else if (!paymentMethod) {
+      errorMessage = "Metode pembayaran belum dipilih.";
+    } else if (nominal <= 0) {
+      errorMessage = "Nominal pembayaran harus lebih dari 0.";
+    } else if (!paymentProof) {
+      errorMessage = "Bukti pembayaran wajib diunggah!";
+    }
+
+    if (errorMessage) {
+      alert(`⚠️ ${errorMessage}`);
+      return;
+    }
+
     const newPay = {
       paymentDate: toInputDate(paymentDate),
       paymentMethod: paymentMethod,
       nominal: String(amount),
-      proof: paymentProof ? paymentProof.name : "-",
+      paymentProof: paymentProof,
     };
     setPayments((prev) => [...prev, newPay]);
     setShowPaymentModal(false);
@@ -113,7 +136,7 @@ const KonfirmasiPenjualanAyamModal = ({
       paymentDate: p.paymentDate ?? "",
       paymentMethod: p.paymentMethod ?? "",
       nominal: Number(p.nominal ?? 0),
-      proof: p.proof ?? null,
+      paymentProof: p.paymentProof ?? null,
     }));
 
     const totalPaid = cleanedPayments.reduce(
@@ -146,6 +169,23 @@ const KonfirmasiPenjualanAyamModal = ({
     };
 
     onConfirm?.(payload);
+  };
+
+  const handleInputFile = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+
+    try {
+      const fileUrl = await uploadFile(file);
+      console.log("Uploaded file URL:", fileUrl);
+      setPaymentProof(fileUrl);
+    } catch (err) {
+      alert("Upload failed!");
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -313,8 +353,17 @@ const KonfirmasiPenjualanAyamModal = ({
                         <td className="px-3 py-2">
                           {rupiah(remainingAfterIdx(i))}
                         </td>
-                        <td className="px-3 py-2 underline cursor-pointer">
-                          {p.proof || "-"}
+                        <td className="px-3 py-2">
+                          {p.paymentProof ? (
+                            <td
+                              className="px-3 py-2 underline text-green-700 hover:text-green-900 cursor-pointer text-center"
+                              onClick={() => setPopupImage(p.paymentProof)}
+                            >
+                              {p.paymentProof ? "Bukti Pembayaran" : "-"}
+                            </td>
+                          ) : (
+                            "-"
+                          )}
                         </td>
                         <td className="px-3 py-2">
                           <button
@@ -408,9 +457,8 @@ const KonfirmasiPenjualanAyamModal = ({
             <input
               type="file"
               className="w-full border rounded p-2 mb-4"
-              onChange={(e) => setPaymentProof(e.target.files?.[0] || null)}
+              onChange={handleInputFile}
             />
-
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setShowPaymentModal(false)}
@@ -420,13 +468,22 @@ const KonfirmasiPenjualanAyamModal = ({
               </button>
               <button
                 onClick={addPayment}
-                className="px-4 py-2 bg-green-700 hover:bg-green-900 text-white rounded cursor-pointer"
+                disabled={isUploading}
+                className={`px-4 py-2 rounded text-white ${
+                  isUploading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-green-700 hover:bg-green-900 cursor-pointer"
+                }`}
               >
-                Simpan
+                {isUploading ? "Mengunggah..." : "Simpan"}
               </button>
             </div>
           </div>
         </div>
+      )}
+
+      {popupImage && (
+        <ImagePopUp imageUrl={popupImage} onClose={() => setPopupImage(null)} />
       )}
     </div>
   );
