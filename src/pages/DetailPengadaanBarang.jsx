@@ -12,6 +12,8 @@ import {
 } from "../services/warehouses";
 import { EditPembayaranModal } from "../components/EditPembayaranModal";
 import { formatThousand, onlyDigits } from "../utils/moneyFormat";
+import ImagePopUp from "../components/ImagePopUp";
+import { uploadFile } from "../services/file";
 
 const rupiah = (n) => `Rp ${Number(n || 0).toLocaleString("id-ID")}`;
 const toISO = (d) => (d ? d : new Date().toISOString().slice(0, 10));
@@ -60,7 +62,10 @@ const DetailPengadaanBarang = () => {
   const [paymentMethod, setPaymentMethod] = useState("Tunai");
   const [paymentDate, setPaymentDate] = useState(todayISO);
   const [nominal, setNominal] = useState("");
-  const [paymentProof, setPaymentProof] = useState("https://example.com");
+  const [paymentProof, setPaymentProof] = useState();
+
+  const [popupImage, setPopupImage] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const priceTotal = Number(data?.totalPrice || 0);
 
@@ -118,10 +123,19 @@ const DetailPengadaanBarang = () => {
   };
 
   const addPayment = async () => {
+    if (nominal <= 0) {
+      alert("❌ Nominal pembayaran harus lebih dari 0!");
+      return;
+    }
+
+    if (!paymentProof) {
+      alert("❌ Silahkan unggah bukti pembayaran!");
+      return;
+    }
+
     try {
       const payload = {
         nominal: nominal,
-
         paymentMethod: paymentMethod,
         paymentDate: convertToInputDateFormat(toISO(paymentDate)),
         paymentProof: paymentProof,
@@ -311,7 +325,7 @@ const DetailPengadaanBarang = () => {
                   <th className="text-left px-3 py-2">Nominal Pembayaran</th>
                   <th className="text-left px-3 py-2">Sisa Bayar</th>
                   <th className="text-left px-3 py-2">Bukti Pembayaran</th>
-                  <th className="px-3 py-2"></th>
+                  <th className="px-3 py-2">Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -331,8 +345,17 @@ const DetailPengadaanBarang = () => {
                       <td className="px-3 py-2">{p.paymentMethod}</td>
                       <td className="px-3 py-2">{rupiah(p.nominalNum)}</td>
                       <td className="px-3 py-2">{rupiah(p.remainingNum)}</td>
-                      <td className="px-3 py-2 underline cursor-pointer">
-                        {p.proof}
+                      <td className="px-3 py-2">
+                        {p.proof ? (
+                          <td
+                            className="px-3 py-2 underline text-green-700 hover:text-green-900 cursor-pointer"
+                            onClick={() => setPopupImage(p.proof)}
+                          >
+                            {p.proof ? "Bukti Pembayaran" : "-"}
+                          </td>
+                        ) : (
+                          "-"
+                        )}
                       </td>
                       <td className="w-full px-4 py-2 flex gap-3">
                         <BiSolidEditAlt
@@ -422,14 +445,23 @@ const DetailPengadaanBarang = () => {
             <label className="block mb-1 font-medium">Bukti Pembayaran</label>
             <input
               type="file"
+              accept="image/*"
               className="w-full border rounded p-2 mb-4"
-              onChange={(e) =>
-                setPaymentProof(
-                  e.target.files?.[0]?.name
-                    ? `file://${e.target.files[0].name}`
-                    : "https://example.com"
-                )
-              }
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+
+                setIsUploading(true);
+
+                try {
+                  const fileUrl = await uploadFile(file);
+                  setPaymentProof(fileUrl);
+                } catch (err) {
+                  console.error(err);
+                } finally {
+                  setIsUploading(false);
+                }
+              }}
             />
 
             <div className="flex justify-end gap-2">
@@ -440,7 +472,12 @@ const DetailPengadaanBarang = () => {
                   setPaymentMethod("Tunai");
                   setPaymentDate(todayISO);
                 }}
-                className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded cursor-pointer"
+                disabled={isUploading}
+                className={`px-4 py-2 rounded text-white ${
+                  isUploading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-green-700 hover:bg-green-900 cursor-pointer"
+                }`}
               >
                 Batal
               </button>
@@ -448,7 +485,7 @@ const DetailPengadaanBarang = () => {
                 onClick={addPayment}
                 className="px-4 py-2 bg-green-700 hover:bg-green-900 text-white rounded cursor-pointer"
               >
-                Simpan
+                {isUploading ? "Mengunggah..." : "Simpan"}
               </button>
             </div>
           </div>
@@ -499,13 +536,10 @@ const DetailPengadaanBarang = () => {
           </div>
         </div>
       )}
-      <button
-        onClick={() => {
-          console.log("data: ", data);
-        }}
-      >
-        CHECK
-      </button>
+
+      {popupImage && (
+        <ImagePopUp imageUrl={popupImage} onClose={() => setPopupImage(null)} />
+      )}
     </div>
   );
 };
