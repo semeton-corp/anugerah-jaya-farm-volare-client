@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { getIncome } from "../services/cashflow";
 import ReceiptModal from "../components/Receipt";
 import { getStoreSaleById } from "../services/stores";
+import ImagePopUp from "../components/ImagePopUp";
 
 const formatRupiah = (n = 0) =>
   "Rp " +
@@ -87,6 +88,8 @@ export default function DetailPendapatan() {
   const [paymentHistory, setPaymentHistory] = useState();
   const [remaining, setRemaining] = useState();
   const receiptRef = useRef();
+
+  const [popupImage, setPopupImage] = useState(null);
 
   const data = useMemo(() => {
     if (!raw) return null;
@@ -227,11 +230,8 @@ export default function DetailPendapatan() {
         {/* Actions */}
         <div className="mt-6 flex gap-3">
           <a
-            href={data.buktiUrl || "#"}
-            target="_blank"
-            rel="noreferrer"
-            className="rounded bg-orange-300 hover:bg-orange-500 px-4 py-2 font-medium text-black"
-            onClick={(e) => !data.buktiUrl && e.preventDefault()}
+            className="rounded bg-orange-300 hover:bg-orange-500 px-4 py-2 font-medium text-black cursor-pointer"
+            onClick={() => setPopupImage(data.buktiUrl)}
           >
             Lihat Bukti Transaksi
           </a>
@@ -267,6 +267,10 @@ export default function DetailPendapatan() {
           onClose={() => setShowReceiptModal(false)}
           ref={receiptRef}
         />
+      )}
+
+      {popupImage && (
+        <ImagePopUp imageUrl={popupImage} onClose={() => setPopupImage(null)} />
       )}
     </div>
   );
