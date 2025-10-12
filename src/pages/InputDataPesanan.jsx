@@ -1439,7 +1439,7 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
                 <th className="px-4 py-2">Nominal Pembayaran</th>
                 <th className="px-4 py-2">Sisa Cicilan</th>
                 <th className="px-4 py-2">Bukti</th>
-                <th className="px-4 py-2"></th>
+                <th className="px-4 py-2">Aksi</th>
               </tr>
             </thead>
             <tbody className="border-b text-center">
@@ -1843,7 +1843,26 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
             />
 
             <label className="block mb-2 font-medium">Bukti Pembayaran</label>
-            <input type="file" className="w-full border p-2 rounded mb-4" />
+            <input
+              type="file"
+              accept="image/*"
+              className="w-full border rounded p-2 mb-4"
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+
+                setIsUploading(true);
+
+                try {
+                  const fileUrl = await uploadFile(file);
+                  setPaymentProof(fileUrl);
+                } catch (err) {
+                  console.error(err);
+                } finally {
+                  setIsUploading(false);
+                }
+              }}
+            />
 
             <div className="flex justify-end gap-2">
               <button
