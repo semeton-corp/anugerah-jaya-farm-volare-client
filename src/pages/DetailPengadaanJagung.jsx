@@ -10,6 +10,7 @@ import { EditPembayaranModal } from "../components/EditPembayaranModal";
 import { MdDelete } from "react-icons/md";
 import { BiSolidEditAlt } from "react-icons/bi";
 import { formatThousand, onlyDigits } from "../utils/moneyFormat";
+import ImagePopUp from "../components/ImagePopUp";
 
 const rupiah = (n) => `Rp ${Number(n || 0).toLocaleString("id-ID")}`;
 const toDDMMYYYY = (d) => {
@@ -51,7 +52,8 @@ const TambahPembayaranModal = ({
   const [paymentDate, setPaymentDate] = useState(
     new Date().toISOString().slice(0, 10)
   );
-  const [paymentProof, setPaymentProof] = useState("https://example.com");
+
+  const [paymentProof, setPaymentProof] = useState("");
 
   useEffect(() => {
     if (!open) return;
@@ -141,6 +143,9 @@ export default function DetailPengadaanJagung() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(null);
+
+  const [popupImage, setPopupImage] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const submitEditPayment = async ({
     paymentMethod,
@@ -327,8 +332,6 @@ export default function DetailPengadaanJagung() {
       paymentProof,
     };
 
-    // console.log("payload: ", payload);
-
     try {
       const res = await createWarehouseItemCornProcurementPayment(payload, id);
       if (res?.status === 200 || res?.status === 201) {
@@ -360,7 +363,7 @@ export default function DetailPengadaanJagung() {
           </p>
         </div>
         <div>
-        <p className="text-gray-600">Status Pengiriman</p>
+          <p className="text-gray-600">Status Pengiriman</p>
           <Badge tone={shipTone}>{procurementStatus || "-"}</Badge>
         </div>
         {/* <div>
@@ -514,7 +517,18 @@ export default function DetailPengadaanJagung() {
                       <td className="px-3 py-2">{p.paymentMethod}</td>
                       <td className="px-3 py-2">{rupiah(p.nominalNum)}</td>
                       <td className="px-3 py-2">{rupiah(p.remainingNum)}</td>
-                      <td className="px-3 py-2 underline">{p.proof || "-"}</td>
+                      <td className="px-3 py-2">
+                        {p.proof ? (
+                          <td
+                            className="px-3 py-2 underline text-green-700 hover:text-green-900 cursor-pointer"
+                            onClick={() => setPopupImage(p.proof)}
+                          >
+                            {p.proof ? "Bukti Pembayaran" : "-"}
+                          </td>
+                        ) : (
+                          "-"
+                        )}
+                      </td>
                       <td className="w-full px-4 py-2 flex gap-3">
                         <BiSolidEditAlt
                           onClick={() => {
@@ -611,6 +625,10 @@ export default function DetailPengadaanJagung() {
             </div>
           </div>
         </div>
+      )}
+
+      {popupImage && (
+        <ImagePopUp imageUrl={popupImage} onClose={() => setPopupImage(null)} />
       )}
     </div>
   );
