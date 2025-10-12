@@ -483,7 +483,12 @@ const DetailPengadaanBarang = () => {
               </button>
               <button
                 onClick={addPayment}
-                className="px-4 py-2 bg-green-700 hover:bg-green-900 text-white rounded cursor-pointer"
+                disabled={isUploading}
+                className={`px-4 py-2 rounded text-white ${
+                  isUploading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-green-700 hover:bg-green-900 cursor-pointer"
+                }`}
               >
                 {isUploading ? "Mengunggah..." : "Simpan"}
               </button>
