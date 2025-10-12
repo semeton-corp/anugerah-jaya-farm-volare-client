@@ -54,6 +54,8 @@ import {
 } from "../services/warehouses";
 import { formatThousand, onlyDigits } from "../utils/moneyFormat";
 import { IoInformationCircleOutline, IoLogoWhatsapp } from "react-icons/io5";
+import { uploadFile } from "../services/file";
+import ImagePopUp from "../components/ImagePopUp";
 
 const InputDataPesanan = () => {
   const location = useLocation();
@@ -111,7 +113,11 @@ const InputDataPesanan = () => {
   const [paymentType, setPaymentType] = useState("Penuh");
   const [paymentStatus, setPaymentStatus] = useState("Belum Lunas");
   const [paymentMethod, setPaymentMethod] = useState("Tunai");
-  const [paymentProof, setPaymentProof] = useState("https://example.com");
+  const [paymentProof, setPaymentProof] = useState();
+
+  const [popupImage, setPopupImage] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+
   const [isMoreThanDeadlinePaymentDate, setIsMoreThanDeadlinePaymentDate] =
     useState(false);
 
@@ -1461,8 +1467,17 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
                           remaining < 0 ? 0 : remaining
                         )}
                       </td>
-                      <td className="px-4 py-2 underline cursor-pointer">
-                        {payment.paymentProof ? "Lihat Bukti" : "-"}
+                      <td className="px-3 py-2">
+                        {payment.paymentProof ? (
+                          <td
+                            className="px-3 py-2 underline text-green-700 hover:text-green-900 cursor-pointer"
+                            onClick={() => setPopupImage(payment.paymentProof)}
+                          >
+                            {payment.paymentProof ? "Bukti Pembayaran" : "-"}
+                          </td>
+                        ) : (
+                          "-"
+                        )}
                       </td>
 
                       <td className="px-4 py-2 flex gap-3 justify-center">
@@ -1687,7 +1702,26 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
             />
 
             <label className="block mb-2 font-medium">Bukti Pembayaran</label>
-            <input type="file" className="w-full border p-2 rounded mb-4" />
+            <input
+              type="file"
+              accept="image/*"
+              className="w-full border rounded p-2 mb-4"
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+
+                setIsUploading(true);
+
+                try {
+                  const fileUrl = await uploadFile(file);
+                  setPaymentProof(fileUrl);
+                } catch (err) {
+                  console.error(err);
+                } finally {
+                  setIsUploading(false);
+                }
+              }}
+            />
 
             <div className="flex justify-end gap-2">
               <button
@@ -1705,6 +1739,16 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
               </button>
               <button
                 onClick={() => {
+                  if (!paymentProof) {
+                    alert("❌Silahkan upload bukti pembayaran");
+                    return;
+                  }
+
+                  if (nominal <= 0) {
+                    alert("❌Nominal harus lebih dari 0");
+                    return;
+                  }
+
                   if (id) {
                     createSalePaymentHandle(id);
                     return;
@@ -1729,13 +1773,19 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
 
                   setEditingIndex(null);
                   setPaymentMethod("Tunai");
+                  setPaymentProof(null);
                   setNominal(0);
                   setPaymentDate(today);
                   setShowPaymentModal(false);
                 }}
-                className="px-4 py-2 bg-green-700 hover:bg-green-900 text-white rounded cursor-pointer"
+                disabled={isUploading}
+                className={`px-4 py-2 rounded text-white ${
+                  isUploading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-green-700 hover:bg-green-900 cursor-pointer"
+                }`}
               >
-                Simpan
+                {isUploading ? "Mengunggah..." : "Simpan"}
               </button>
             </div>
           </div>
@@ -1919,6 +1969,10 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
           onClose={() => setShowReceiptModal(false)}
           ref={receiptRef}
         />
+      )}
+
+      {popupImage && (
+        <ImagePopUp imageUrl={popupImage} onClose={() => setPopupImage(null)} />
       )}
     </div>
   );
