@@ -11,6 +11,7 @@ import { MdDelete } from "react-icons/md";
 import { BiSolidEditAlt } from "react-icons/bi";
 import { formatThousand, onlyDigits } from "../utils/moneyFormat";
 import ImagePopUp from "../components/ImagePopUp";
+import { uploadFile } from "../services/file";
 
 const rupiah = (n) => `Rp ${Number(n || 0).toLocaleString("id-ID")}`;
 const toDDMMYYYY = (d) => {
@@ -54,13 +55,14 @@ const TambahPembayaranModal = ({
   );
 
   const [paymentProof, setPaymentProof] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     if (!open) return;
     setPaymentMethod(defaultMethod);
     setNominal("");
     setPaymentDate(new Date().toISOString().slice(0, 10));
-    setPaymentProof("https://example.com");
+    setPaymentProof("");
   }, [open, defaultMethod]);
 
   if (!open) return null;
@@ -82,7 +84,8 @@ const TambahPembayaranModal = ({
 
         <label className="block mb-1 font-medium">Nominal Pembayaran</label>
         <input
-          type="number"
+          type="text"
+          inputMode="numeric"
           className="w-full border rounded p-2 mb-3"
           placeholder="Masukkan nominal"
           value={formatThousand(nominal)}
@@ -101,13 +104,26 @@ const TambahPembayaranModal = ({
           onChange={(e) => setPaymentDate(e.target.value)}
         />
 
-        <label className="block mb-1 font-medium">Bukti Pembayaran (URL)</label>
+        <label className="block mb-1 font-medium">Bukti Pembayaran</label>
         <input
-          type="text"
+          type="file"
+          accept="image/*"
           className="w-full border rounded p-2 mb-4"
-          placeholder="https://contoh.com/bukti"
-          value={paymentProof}
-          onChange={(e) => setPaymentProof(e.target.value)}
+          onChange={async (e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+
+            setIsUploading(true);
+
+            try {
+              const fileUrl = await uploadFile(file);
+              setPaymentProof(fileUrl);
+            } catch (err) {
+              console.error(err);
+            } finally {
+              setIsUploading(false);
+            }
+          }}
         />
 
         <div className="flex justify-end gap-2">
@@ -126,9 +142,14 @@ const TambahPembayaranModal = ({
                 paymentProof,
               })
             }
-            className="px-4 py-2 bg-green-700 hover:bg-green-900 text-white rounded cursor-pointer"
+            disabled={isUploading}
+            className={`px-4 py-2 rounded text-white ${
+              isUploading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-green-700 hover:bg-green-900 cursor-pointer"
+            }`}
           >
-            Simpan
+            {isUploading ? "Mengunggah..." : "Simpan"}
           </button>
         </div>
       </div>
@@ -154,6 +175,15 @@ export default function DetailPengadaanJagung() {
     paymentProof,
   }) => {
     if (!selectedPayment?.id) return;
+    if (nominal <= 0) {
+      alert("❌Nominal pembayaran harus lebih dari 0.");
+      return;
+    }
+
+    if (!paymentProof) {
+      alert("❌ Silahkan unggah bukti pembayaran!");
+      return;
+    }
 
     const payload = {
       paymentDate: toDDMMYYYY(paymentDate),
@@ -325,6 +355,11 @@ export default function DetailPengadaanJagung() {
       alert("Tanggal bayar wajib diisi.");
       return;
     }
+    if (!paymentProof) {
+      alert("❌ Silahkan unggah bukti pembayaran!");
+      return;
+    }
+    
     const payload = {
       paymentDate: toDDMMYYYY(paymentDate),
       nominal: String(nominal),
