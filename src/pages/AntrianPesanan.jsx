@@ -88,7 +88,7 @@ const AntrianPesanan = () => {
   const [paymentStatus, setPaymentStatus] = useState("Belum Lunas");
   const [paymentMethod, setPaymentMethod] = useState("Tunai");
   const [paymentType, setPaymentType] = useState("Cicil");
-  const [paymentProof, setPaymentProof] = useState("https://example.com");
+  const [paymentProof, setPaymentProof] = useState();
 
   const [showAlokasiModal, setShowAlokasiModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -738,6 +738,7 @@ Apakah pesanan ini *jadi* untuk dipesan? 🙏`;
               paymentType={paymentType}
               setPaymentType={setPaymentType}
               paymentProof={paymentProof}
+              setPaymentProof={setPaymentProof}
               submitHandle={submitHandle}
               sendDate={sendDate}
               setSendDate={setSendDate}

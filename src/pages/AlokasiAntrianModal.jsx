@@ -6,6 +6,8 @@ import {
   convertToInputDateFormat,
 } from "../utils/dateFormat";
 import { formatThousand, onlyDigits } from "../utils/moneyFormat";
+import { uploadFile } from "../services/file";
+import ImagePopUp from "../components/ImagePopUp";
 
 // Helpers
 const parseNumber = (raw) => {
@@ -40,6 +42,7 @@ const AlokasiAntrianModal = ({
   paymentType,
   setPaymentType,
   paymentProof,
+  setPaymentProof,
   submitHandle,
   sendDate,
   setSendDate,
@@ -56,10 +59,9 @@ const AlokasiAntrianModal = ({
 
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [editingIndex, setEditingIndex] = useState(-1);
-  const [pmMethod, setPmMethod] = useState("Tunai");
-  const [pmNominal, setPmNominal] = useState("");
-  const [pmDate, setPmDate] = useState(new Date().toISOString().slice(0, 10));
-  const [pmProof, setPmProof] = useState("");
+
+  const [popupImage, setPopupImage] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const dateInputRef = useRef(null);
 
@@ -85,10 +87,10 @@ const AlokasiAntrianModal = ({
 
   const openAddPaymentModal = () => {
     setEditingIndex(-1);
-    setPmMethod("Tunai");
-    setPmNominal("");
-    setPmDate(new Date().toISOString().slice(0, 10));
-    setPmProof("");
+    setPaymentMethod("Tunai");
+    setNominal("");
+    setPaymentDate(new Date().toISOString().slice(0, 10));
+    setPaymentProof("");
     setShowPaymentModal(true);
   };
 
@@ -96,7 +98,7 @@ const AlokasiAntrianModal = ({
     const p = payments[index];
     if (!p) return;
     setEditingIndex(index);
-    setPmMethod(p.paymentMethod || "Tunai");
+    setPaymentMethod(p.paymentMethod || "Tunai");
     const iso =
       p.paymentDate && p.paymentDate.includes("-")
         ? (() => {
@@ -107,7 +109,7 @@ const AlokasiAntrianModal = ({
             return p.paymentDate;
           })()
         : new Date().toISOString().slice(0, 10);
-    setPmDate(
+    setPaymentDate(
       convertToInputDateFormat(iso)
         ? (() => {
             const parts = p.paymentDate.split("-");
@@ -115,31 +117,36 @@ const AlokasiAntrianModal = ({
           })()
         : iso
     );
-    setPmNominal(String(p.nominal || ""));
-    setPmProof(p.paymentProof || "");
+    setNominal(String(p.nominal || ""));
+    setPaymentProof(p.paymentProof || "");
     setShowPaymentModal(true);
   };
 
   const savePayment = () => {
-    const nominalNum = parseNumber(pmNominal);
+    const nominalNum = parseNumber(nominal);
     if (!nominalNum || nominalNum <= 0) {
       alert("Nominal pembayaran harus lebih dari 0.");
       return;
     }
-    if (!pmDate) {
+    if (!paymentDate) {
       alert("Tanggal pembayaran wajib diisi.");
       return;
     }
 
-    const iso = pmDate;
+    if (!paymentProof) {
+      alert("❌Silahkan upload bukti pembayaran");
+      return;
+    }
+
+    const iso = paymentDate;
     const [yyyy, mm, dd] = iso.split("-");
     const ddmmyyyy = `${dd}-${mm}-${yyyy}`;
 
     const entry = {
       paymentDate: ddmmyyyy,
-      paymentMethod: pmMethod || "Tunai",
+      paymentMethod: paymentMethod || "Tunai",
       nominal: String(nominalNum),
-      paymentProof: "https://example.com",
+      paymentProof: paymentProof,
     };
 
     setPayments((prev) => {
@@ -335,16 +342,14 @@ const AlokasiAntrianModal = ({
                       <td className="px-4 py-3">
                         {formatIDR(remainingAfterIndex(i))}
                       </td>
-                      <td className="px-4 py-3">
+                      <td className="px-3 py-2">
                         {p.paymentProof ? (
-                          <a
-                            href={p.paymentProof}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="underline"
+                          <td
+                            className="px-3 py-2 underline text-green-700 hover:text-green-900 cursor-pointer"
+                            onClick={() => setPopupImage(p.paymentProof)}
                           >
-                            Lihat Bukti
-                          </a>
+                            {p.paymentProof ? "Bukti Pembayaran" : "-"}
+                          </td>
                         ) : (
                           "-"
                         )}
@@ -422,8 +427,8 @@ const AlokasiAntrianModal = ({
             <label className="block mb-2 font-medium">Metode Pembayaran</label>
             <select
               className="w-full border p-2 rounded mb-4"
-              value={pmMethod}
-              onChange={(e) => setPmMethod(e.target.value)}
+              value={paymentMethod}
+              onChange={(e) => setPaymentMethod(e.target.value)}
             >
               <option value="Tunai">Tunai</option>
               <option value="Non Tunai">Non Tunai</option>
@@ -435,10 +440,10 @@ const AlokasiAntrianModal = ({
               inputMode="numeric"
               className="w-full border p-2 rounded mb-4"
               placeholder="Masukkan nominal pembayaran"
-              value={formatThousand(pmNominal)}
+              value={formatThousand(nominal)}
               onChange={(e) => {
                 const raw = onlyDigits(e.target.value);
-                setPmNominal(raw);
+                setNominal(raw);
               }}
             />
 
@@ -446,16 +451,30 @@ const AlokasiAntrianModal = ({
             <input
               type="date"
               className="w-full border rounded p-2 mb-4"
-              value={pmDate}
-              onChange={(e) => setPmDate(e.target.value)}
+              value={paymentDate}
+              onChange={(e) => setPaymentDate(e.target.value)}
             />
 
             <label className="block mb-2 font-medium">Bukti Pembayaran</label>
             <input
               type="file"
-              className="w-full border p-2 rounded mb-4"
-              // value={pmProof}
-              // onChange={(e) => setPmProof(e.target.value)}
+              accept="image/*"
+              className="w-full border rounded p-2 mb-4"
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+
+                setIsUploading(true);
+
+                try {
+                  const fileUrl = await uploadFile(file);
+                  setPaymentProof(fileUrl);
+                } catch (err) {
+                  console.error(err);
+                } finally {
+                  setIsUploading(false);
+                }
+              }}
             />
 
             <div className="flex justify-end gap-2">
@@ -470,13 +489,22 @@ const AlokasiAntrianModal = ({
               </button>
               <button
                 onClick={savePayment}
-                className="px-4 py-2 bg-green-700 hover:bg-green-900 text-white rounded cursor-pointer"
+                disabled={isUploading}
+                className={`px-4 py-2 rounded text-white ${
+                  isUploading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-green-700 hover:bg-green-900 cursor-pointer"
+                }`}
               >
-                Simpan
+                {isUploading ? "Mengunggah..." : "Simpan"}
               </button>
             </div>
           </div>
         </div>
+      )}
+
+      {popupImage && (
+        <ImagePopUp imageUrl={popupImage} onClose={() => setPopupImage(null)} />
       )}
     </div>
   );
