@@ -17,7 +17,7 @@ export const EditPembayaranModal = ({
   const [paymentDate, setPaymentDate] = useState(
     new Date().toISOString().slice(0, 10)
   );
-  const [paymentProof, setPaymentProof] = useState("https://example.com");
+  const [paymentProof, setPaymentProof] = useState();
   const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {

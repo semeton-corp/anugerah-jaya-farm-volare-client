@@ -8,10 +8,10 @@ export const uploadFile = async (file) => {
 
   let fileToUpload = file;
 
-  if (file.type.startsWith("image/") && file.size > 2 * 1024 * 1024) {
+  if (file.type.startsWith("image/") && file.size > 0.5 * 1024 * 1024) {
     try {
       const options = {
-        maxSizeMB: 1,
+        maxSizeMB: 0.2,
         masWidthOrHeight: 1920,
         useWebWorker: true,
       };

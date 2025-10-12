@@ -2,6 +2,8 @@ import React, { useMemo, useRef, useState } from "react";
 import { BiSolidEditAlt } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import { formatThousand, onlyDigits } from "../utils/moneyFormat";
+import { uploadFile } from "../services/file";
+import ImagePopUp from "./ImagePopUp";
 
 const rupiah = (n) => `Rp ${Number(n || 0).toLocaleString("id-ID")}`;
 const toYmd = (d = new Date()) => {
@@ -97,7 +99,11 @@ const KonfirmasiPemesananBarangModal = ({
   const [paymentMethod, setPaymentMethod] = useState("Tunai");
   const [paymentDate, setPaymentDate] = useState(toYmd());
   const [nominal, setNominal] = useState("");
-  const [paymentProof, setPaymentProof] = useState("https://example.com");
+
+  const [paymentProof, setPaymentProof] = useState();
+  const [popupImage, setPopupImage] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+
   const dateRef = useRef(null);
 
   const remainingAfterIdx = (idx) => {
@@ -108,6 +114,16 @@ const KonfirmasiPemesananBarangModal = ({
   };
 
   const addPayment = () => {
+    if (nominal <= 0) {
+      alert("❌ Nominal pembayaran harus lebih dari 0!");
+      return;
+    }
+
+    if (!paymentProof) {
+      alert("❌ Silahkan unggah bukti pembayaran!");
+      return;
+    }
+
     setPayments((prev) => [
       ...prev,
       {
@@ -121,6 +137,7 @@ const KonfirmasiPemesananBarangModal = ({
     setShowPaymentModal(false);
     setNominal("");
     setPaymentDate(toYmd());
+    setPaymentProof();
   };
 
   const deletePayment = (idx) =>
@@ -383,7 +400,7 @@ const KonfirmasiPemesananBarangModal = ({
             <p className="font-semibold text-lg">Pembayaran</p>
             <button
               onClick={() => setShowPaymentModal(true)}
-              className="bg-yellow-400 hover:bg-yellow-500 px-4 py-2 rounded text-black cursor-pointer"
+              className="bg-orange-300 hover:bg-orange-500 px-4 py-2 rounded text-black cursor-pointer"
             >
               Pilih Pembayaran
             </button>
@@ -399,16 +416,13 @@ const KonfirmasiPemesananBarangModal = ({
                     <th className="text-left px-3 py-2">Nominal Pembayaran</th>
                     <th className="text-left px-3 py-2">Sisa Bayar</th>
                     <th className="text-left px-3 py-2">Bukti Pembayaran</th>
-                    <th className="px-3 py-2"></th>
+                    <th className="px-3 py-2">Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
                   {payments.length === 0 ? (
                     <tr>
-                      <td
-                        className="px-3 py-3 text-center text-gray-500"
-                        colSpan={6}
-                      >
+                      <td className="px-3 py-3 text-gray-500" colSpan={6}>
                         Belum ada data pembayaran.
                       </td>
                     </tr>
@@ -421,8 +435,17 @@ const KonfirmasiPemesananBarangModal = ({
                         <td className="px-3 py-2">
                           {rupiah(remainingAfterIdx(i))}
                         </td>
-                        <td className="px-3 py-2 underline cursor-pointer">
-                          {p.proof || "-"}
+                        <td className="px-3 py-2">
+                          {p.proof ? (
+                            <td
+                              className="px-3 py-2 underline text-green-700 hover:text-green-900 cursor-pointer"
+                              onClick={() => setPopupImage(p.proof)}
+                            >
+                              {p.proof ? "Bukti Pembayaran" : "-"}
+                            </td>
+                          ) : (
+                            "-"
+                          )}
                         </td>
                         <td className="px-3 py-2">
                           <button
@@ -518,26 +541,55 @@ const KonfirmasiPemesananBarangModal = ({
             <label className="block mb-1 font-medium">Bukti Pembayaran</label>
             <input
               type="file"
+              accept="image/*"
               className="w-full border rounded p-2 mb-4"
-              onChange={(e) => setPaymentProof(e.target.files?.[0] || null)}
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+
+                setIsUploading(true);
+
+                try {
+                  const fileUrl = await uploadFile(file);
+                  setPaymentProof(fileUrl);
+                } catch (err) {
+                  console.error(err);
+                } finally {
+                  setIsUploading(false);
+                }
+              }}
             />
 
             <div className="flex justify-end gap-2">
               <button
-                onClick={() => setShowPaymentModal(false)}
+                onClick={() => {
+                  setShowPaymentModal(false);
+                  setPaymentProof();
+                  setNominal("");
+                  setPaymentDate(toYmd());
+                }}
                 className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded cursor-pointer"
               >
                 Batal
               </button>
               <button
                 onClick={addPayment}
-                className="px-4 py-2 bg-green-700 hover:bg-green-900 text-white rounded cursor-pointer"
+                disabled={isUploading}
+                className={`px-4 py-2 rounded text-white ${
+                  isUploading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-green-700 hover:bg-green-900 cursor-pointer"
+                }`}
               >
-                Simpan
+                {isUploading ? "Mengunggah..." : "Simpan"}
               </button>
             </div>
           </div>
         </div>
+      )}
+
+      {popupImage && (
+        <ImagePopUp imageUrl={popupImage} onClose={() => setPopupImage(null)} />
       )}
     </div>
   );

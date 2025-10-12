@@ -104,7 +104,7 @@ const DraftPengadaanBarang = () => {
     }
   };
 
-  const handleConfirmProcuremnet = async (payload) => {
+  const handleConfirmProcurement = async (payload) => {
     console.log("payload: ", payload);
     try {
       const submitResponse = await confirmationWarehouseItemProcurementDraft(
@@ -330,7 +330,7 @@ const DraftPengadaanBarang = () => {
           onClose={() => setShowOrderModal(false)}
           onConfirm={(payload) => {
             console.log("ORDER PAYLOAD →", payload);
-            handleConfirmProcuremnet(payload);
+            handleConfirmProcurement(payload);
           }}
           supplierOptions={supplierOptions}
         />
