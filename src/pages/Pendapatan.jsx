@@ -12,6 +12,7 @@ import { FaCalendarAlt } from "react-icons/fa";
 import MonthYearSelector from "../components/MonthYearSelector";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { getIncomeOverview } from "../services/cashflow";
+import ImagePopUp from "../components/ImagePopUp";
 
 const MONTHS_ID = [
   "Januari",
@@ -65,6 +66,8 @@ export default function Pendapatan() {
 
   const [incomeData, setIncomeData] = useState([]);
   const [pieChartData, setPieChartData] = useState([]);
+
+  const [popupImage, setPopupImage] = useState(null);
 
   const pieData = useMemo(() => {
     if (!pieChartData) return [];
@@ -265,7 +268,7 @@ export default function Pendapatan() {
                       <div className="flex flex-col gap-2 w-28">
                         <button
                           className="rounded bg-orange-300 hover:bg-orange-500 text-black px-3 py-1.5 cursor-pointer"
-                          onClick={() => alert("Lihat Bukti")}
+                          onClick={() => setPopupImage(item.paymentProof)}
                         >
                           Lihat Bukti
                         </button>
@@ -312,14 +315,10 @@ export default function Pendapatan() {
           </div>
         </div>
       </div>
-      <button
-        onClick={() => {
-          console.log("incomeData: ", incomeData);
-          console.log("pieChartData: ", pieChartData);
-        }}
-      >
-        CHECK
-      </button>
+
+      {popupImage && (
+        <ImagePopUp imageUrl={popupImage} onClose={() => setPopupImage(null)} />
+      )}
     </div>
   );
 }

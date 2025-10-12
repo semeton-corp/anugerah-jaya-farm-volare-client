@@ -13,6 +13,7 @@ import MonthYearSelector from "../components/MonthYearSelector";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { getExpenseOverview } from "../services/cashflow";
 import { useEffect } from "react";
+import ImagePopUp from "../components/ImagePopUp";
 
 const CATEGORY_OPTIONS = [
   "Operasional",
@@ -70,6 +71,8 @@ export default function Pengeluaran() {
   const [monthName, setMonthName] = useState(
     new Intl.DateTimeFormat("id-ID", { month: "long" }).format(new Date())
   );
+
+  const [popupImage, setPopupImage] = useState(null);
 
   const detailPages = ["tambah-pengeluaran", "detail-pengeluaran"];
   const isDetailPage = detailPages.some((segment) =>
@@ -233,7 +236,7 @@ export default function Pengeluaran() {
                     <div className="flex flex-col gap-2 w-28">
                       <button
                         className="rounded bg-orange-300 hover:bg-orange-500 text-black px-3 py-1.5"
-                        onClick={() => alert("Lihat Bukti")}
+                        onClick={() => setPopupImage(item.paymentProof)}
                       >
                         Lihat Bukti
                       </button>
@@ -276,17 +279,10 @@ export default function Pengeluaran() {
           </table>
         </div>
       </div>
-      <button
-        onClick={() => {
-          console.log("expenseData: ", expenseData);
-          console.log("pieData: ", pieData);
-          console.log("year: ", year);
-          console.log("month: ", month);
-          console.log("monthName: ", monthName);
-        }}
-      >
-        CHECK
-      </button>
+
+      {popupImage && (
+        <ImagePopUp imageUrl={popupImage} onClose={() => setPopupImage(null)} />
+      )}
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getExpense } from "../services/cashflow";
+import ImagePopUp from "../components/ImagePopUp";
 
 const formatRupiah = (n = 0) =>
   "Rp " +
@@ -58,15 +59,7 @@ export default function DetailPengeluaran() {
   const dateDisplay = formatDateID(createdAt);
   const timeDisplay = data?.time || formatTime(createdAt);
 
-  const handleOpenProof = () => {
-    const url =
-      data?.paymentProofUrl || data?.paymentProof || data?.proofUrl || "";
-    if (url) {
-      window.open(url, "_blank", "noopener,noreferrer");
-    } else {
-      alert("Bukti pembayaran tidak tersedia.");
-    }
-  };
+  const [popupImage, setPopupImage] = useState(null);
 
   const fetchData = async () => {
     try {
@@ -138,8 +131,10 @@ export default function DetailPengeluaran() {
               <div className="text-sm text-gray-600">Bukti Pembayaran</div>
               <button
                 type="button"
-                onClick={handleOpenProof}
-                className="mt-2 rounded bg-amber-400 hover:bg-amber-500 text-black px-3 py-1.5"
+                onClick={() => {
+                  setPopupImage(data.paymentProof);
+                }}
+                className="mt-2 rounded bg-orange-300 hover:bg-orange-500 text-black px-4 py-1.5 cursor-pointer"
               >
                 Lihat Bukti Transaksi
               </button>
@@ -160,6 +155,10 @@ export default function DetailPengeluaran() {
           </div>
         </div>
       </div>
+
+      {popupImage && (
+        <ImagePopUp imageUrl={popupImage} onClose={() => setPopupImage(null)} />
+      )}
     </div>
   );
 }
