@@ -20,6 +20,8 @@ import { MdDelete } from "react-icons/md";
 import { EditPembayaranModal } from "../components/EditPembayaranModal";
 import { formatThousand, onlyDigits } from "../utils/moneyFormat";
 import { FaExclamationTriangle } from "react-icons/fa";
+import { uploadFile } from "../services/file";
+import ImagePopUp from "../components/ImagePopUp";
 
 const rupiah = (n) => `Rp ${Number(n || 0).toLocaleString("id-ID")}`;
 
@@ -79,14 +81,15 @@ const TambahPembayaranModal = ({
   const [paymentDate, setPaymentDate] = useState(
     new Date().toISOString().slice(0, 10)
   );
-  const [paymentProof, setPaymentProof] = useState("https://example.com");
+  const [paymentProof, setPaymentProof] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     if (!open) return;
     setPaymentMethod(defaultMethod);
     setNominal("");
     setPaymentDate(new Date().toISOString().slice(0, 10));
-    setPaymentProof("https://example.com");
+    setPaymentProof("");
   }, [open, defaultMethod]);
 
   if (!open) return null;
@@ -128,11 +131,29 @@ const TambahPembayaranModal = ({
           onChange={(e) => setPaymentDate(e.target.value)}
         />
 
-        <label className="block mb-1 font-medium">Bukti Pembayaran (URL)</label>
-        <input type="file" className="w-full border rounded p-2 mb-4" />
+        <label className="block mb-1 font-medium">Bukti Pembayaran</label>
+        <input
+          type="file"
+          accept="image/*"
+          className="w-full border rounded p-2 mb-4"
+          onChange={async (e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+
+            setIsUploading(true);
+
+            try {
+              const fileUrl = await uploadFile(file);
+              setPaymentProof(fileUrl);
+            } catch (err) {
+              console.error(err);
+            } finally {
+              setIsUploading(false);
+            }
+          }}
+        />
 
         <div className="flex justify-end gap-2">
-          Tangg
           <button
             onClick={onClose}
             className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded cursor-pointer"
@@ -143,9 +164,14 @@ const TambahPembayaranModal = ({
             onClick={() =>
               onSave({ paymentMethod, nominal, paymentDate, paymentProof })
             }
-            className="px-4 py-2 bg-green-700 hover:bg-green-900 text-white rounded cursor-pointer"
+            disabled={isUploading}
+            className={`px-4 py-2 rounded text-white ${
+              isUploading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-green-700 hover:bg-green-900 cursor-pointer"
+            }`}
           >
-            Simpan
+            {isUploading ? "Mengunggah..." : "Simpan"}
           </button>
         </div>
       </div>
@@ -239,6 +265,7 @@ export default function DetailHutang() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState(null);
+  const [popupImage, setPopupImage] = useState(null);
 
   const overdue = isOverdue(data?.deadlinePaymentDate, data?.remainingPayment);
 
@@ -388,11 +415,17 @@ export default function DetailHutang() {
     paymentProof,
   }) => {
     if (!nominal || Number(nominal) <= 0) {
-      alert("Nominal pembayaran harus lebih dari 0.");
+      alert("❌Nominal pembayaran harus lebih dari 0.");
       return;
     }
+
     if (!paymentDate) {
-      alert("Tanggal bayar wajib diisi.");
+      alert("❌Tanggal bayar wajib diisi.");
+      return;
+    }
+
+    if (!paymentProof) {
+      alert("❌Bukti pembayaran wajib diisi.");
       return;
     }
 
@@ -553,15 +586,13 @@ export default function DetailHutang() {
                       <td className="px-3 py-2">{rupiah(p.nominal)}</td>
                       <td className="px-3 py-2">{rupiah(p.remaining)}</td>
                       <td className="px-3 py-2">
-                        {p.proof && p.proof !== "-" ? (
-                          <a
-                            href={p.proof}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="underline"
+                        {p.proof ? (
+                          <td
+                            className="px-3 py-2 underline text-green-700 hover:text-green-900 cursor-pointer"
+                            onClick={() => setPopupImage(p.proof)}
                           >
-                            Bukti Pembayaran
-                          </a>
+                            {p.proof ? "Bukti Pembayaran" : "-"}
+                          </td>
                         ) : (
                           "-"
                         )}
@@ -669,6 +700,10 @@ export default function DetailHutang() {
             </div>
           </div>
         </div>
+      )}
+
+      {popupImage && (
+        <ImagePopUp imageUrl={popupImage} onClose={() => setPopupImage(null)} />
       )}
     </div>
   );

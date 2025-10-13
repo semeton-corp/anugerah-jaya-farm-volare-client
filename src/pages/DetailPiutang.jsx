@@ -5,10 +5,19 @@ import {
   getReceivables,
   createUserCashAdvancePayment,
 } from "../services/cashflow";
-import { createStoreSalePayment } from "../services/stores";
-import { createAfkirChickenSalePayment, deleteAfkirChickenSalePayment } from "../services/chickenMonitorings";
+import {
+  createStoreSalePayment,
+  deleteStoreSalePayment,
+} from "../services/stores";
+import {
+  createAfkirChickenSalePayment,
+  deleteAfkirChickenSalePayment,
+} from "../services/chickenMonitorings";
 import { formatThousand, onlyDigits } from "../utils/moneyFormat";
-import { createWarehouseSalePayment } from "../services/warehouses";
+import {
+  createWarehouseSalePayment,
+  deleteWarehouseSalePayment,
+} from "../services/warehouses";
 import { FaExclamationTriangle } from "react-icons/fa";
 import { uploadFile } from "../services/file";
 import ImagePopUp from "../components/ImagePopUp";
@@ -130,7 +139,7 @@ const TambahPembayaranModal = ({
           onChange={(e) => setPaymentDate(e.target.value)}
         />
 
-        <label className="block mb-1 font-medium">Bukti Pembayaran (URL)</label>
+        <label className="block mb-1 font-medium">Bukti Pembayaran</label>
         <input
           type="file"
           accept="image/*"
@@ -205,23 +214,25 @@ const callAddPaymentByCategory = (category, id, payload) => {
   return Promise.reject(new Error("Kategori pembayaran tidak dikenali."));
 };
 
-const callDeletePaymentByCategory = (category, id, payload) => {
+const callDeletePaymentByCategory = (category, id, paymentId) => {
   const cat = (category || "").toLowerCase();
 
   if (cat.includes("kasbon")) {
-    return createUserCashAdvancePayment(payload, id);
+    ///the api not there yet
+    // return createUserCashAdvancePayment(id, paymentId);
+    return Promise.reject(new Error("Fitur hapus kasbon belum tersedia."));
   }
 
   if (cat.includes("penjualan telur gudang")) {
-    return createWarehouseSalePayment(payload, id);
+    return deleteWarehouseSalePayment(id, paymentId);
   }
 
   if (cat.includes("penjualan telur toko")) {
-    return createStoreSalePayment(payload, id);
+    return deleteStoreSalePayment(id, paymentId);
   }
 
   if (cat.includes("penjualan ayam afkir") || cat.includes("ayam afkir")) {
-    return createAfkirChickenSalePayment(payload, id);
+    return deleteAfkirChickenSalePayment(paymentId, id);
   }
 
   return Promise.reject(new Error("Kategori pembayaran tidak dikenali."));
@@ -266,16 +277,15 @@ export default function DetailPiutang() {
 
   const handleDeletePayment = async () => {
     try {
-      const deletePaymentResponse = await deleteAfkirChickenSalePayment(
-        selectedDeletePayment.id,
-        id
+      await callDeletePaymentByCategory(
+        headerCategory,
+        id,
+        selectedDeletePayment.id
       );
-      console.log("deletePaymentResponse: ", deletePaymentResponse);
-      if (deletePaymentResponse.status == 204) {
-        alert("✅ Berhasil menghapus data pembayaran");
-        setShowConfirmDelete(false);
-        fetchSalesData();
-      }
+      alert("✅ Pembayaran berhasil ditambahkan");
+      setShowConfirmDelete(false);
+      setSelectedDeletePayment(null);
+      fetchDetail();
     } catch (error) {
       console.log("error :", error);
     }
