@@ -47,7 +47,7 @@ export default function DetailGaji() {
 
     getUserSalaryDetail(salaryId)
       .then((resp) => {
-        console.log("resp: ", resp);
+        console.log("salary detail response: ", resp);
         const httpOK = resp?.status === 200;
         const payload = resp?.data;
         const apiOK = payload?.status === 200;
@@ -57,9 +57,8 @@ export default function DetailGaji() {
 
         const d = payload.data || {};
 
-        // Payment timestamp (derive date & time from any known field)
         const paidAt =
-          d.paymentDate || d.paidAt || d.createdAt || payload?.paymentDate;
+          d.paymentDate || d.paidDate || d.createdAt || payload?.paymentDate;
 
         // Month + User
         const month =
@@ -123,8 +122,8 @@ export default function DetailGaji() {
         const normalized = {
           id: String(salaryId),
           month,
-          paymentDate: paidAt || null,
-          paymentTime: paidAt ? fmtTimeID(paidAt) : null,
+          paymentDate: d.paidDate || null,
+          paymentTime: d.paidTime ,
           paymentProof: d.paymentProof || payload?.paymentProof || null,
           paymentMethod: d.paymentMethod || payload?.paymentMethod || "-",
 
@@ -183,7 +182,7 @@ export default function DetailGaji() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border rounded-lg p-4 mb-4">
         <div className="grid grid-cols-2 text-sm gap-y-2">
           <div className="text-gray-600">Tanggal Pembayaran Gaji :</div>
-          <div className="font-semibold">{fmtDateID(detail.paymentDate)}</div>
+          <div className="font-semibold">{detail.paymentDate}</div>
 
           <div className="text-gray-600">Gaji Bulan :</div>
           <div className="font-semibold">{detail.month || "-"}</div>
