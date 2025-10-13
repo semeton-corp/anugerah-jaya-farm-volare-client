@@ -23,7 +23,10 @@ export default function PembagianPakan() {
   const [selected, setSelected] = useState(null);
   const [gudangOptions, setGudangOptions] = useState([]);
   const [gudangId, setGudangId] = useState("");
+
   const [confirmationData, setConfirmationData] = useState([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedFeedDetails, setEditedFeedDetails] = useState([]);
 
   const [siteOptions, setSiteOptions] = useState([]);
   const [selectedSite, setSelectedSite] = useState(
@@ -41,7 +44,9 @@ export default function PembagianPakan() {
       const detailResponse = await getChickenCageFeed(row?.id);
       console.log("detailResponse: ", detailResponse);
       if (detailResponse.status == 200) {
-        setConfirmationData(detailResponse.data.data);
+        const data = detailResponse.data.data;
+        setConfirmationData(data);
+        setEditedFeedDetails(data.feedDetails);
         setOpen(true);
       }
     } catch (error) {
@@ -58,6 +63,11 @@ export default function PembagianPakan() {
     if (!selected) return;
     const payload = {
       warehouseId: parseInt(gudangId),
+      chickenCageFeedDetails: confirmationData.feedDetails.map((f) => ({
+        itemId: f.item.id,
+        category: f.item.category,
+        quantity: parseFloat(f.quantity) || 0,
+      })),
     };
     console.log("payload: ", payload);
     console.log("selected: ", selected);
@@ -173,10 +183,11 @@ export default function PembagianPakan() {
             <tr className="bg-green-700 text-white text-left text-sm sm:text-base">
               <th className="p-3 whitespace-nowrap">Kandang</th>
               <th className="p-3 whitespace-nowrap">Kategori Ayam</th>
-              <th className="p-3 whitespace-nowrap">Usia Ayam (Minggu)</th>
+              <th className="p-3 whitespace-nowrap">Usia Ayam </th>
               <th className="p-3 whitespace-nowrap">Jumlah Ayam (Ekor)</th>
               <th className="p-3 whitespace-nowrap">Jenis Pakan</th>
-              <th className="p-3 whitespace-nowrap">Jumlah Pakan</th>
+              <th className="p-3 whitespace-nowrap">Jumlah Pakan Minimum</th>
+              <th className="p-3 whitespace-nowrap">Status</th>
               <th className="p-3 whitespace-nowrap">Aksi</th>
             </tr>
           </thead>
@@ -185,14 +196,30 @@ export default function PembagianPakan() {
               <tr key={r.id} className="border-t text-sm sm:text-base">
                 <td className="p-3">{r.cage.name}</td>
                 <td className="p-3">{r.chickenCategory}</td>
-                <td className="p-3">{r.chickenAge}</td>
+                <td className="p-3">{`${r.chickenAge} Minggu`}</td>
                 <td className="p-3">
                   {r.totalChicken.toLocaleString("id-ID")} Ekor
                 </td>
-                <td className="p-3">{r.jenisPakan}</td>
+                <td className="p-3">{r.feedType}</td>
                 <td className="p-3">{rupiahKg(r.totalFeed)}</td>
                 <td className="p-3">
                   {r.chickenCategory && (
+                    <span
+                      className={`px-3 py-1 rounded
+                      ${
+                        r.isNeedFeed
+                          ? "bg-kritis-box-surface-color text-kritis-text-color"
+                          : "bg-aman-box-surface-color text-aman-text-color"
+                      }
+                   `}
+                    >
+                      {r.isNeedFeed ? "Belum Dibuat" : "Sudah Dibuat"}
+                    </span>
+                  )}
+                  {r.isNeedFeed}
+                </td>
+                <td className="p-3">
+                  {r.chickenCategory && r.isNeedFeed && (
                     <button
                       disabled={!canConfirmRow(r)}
                       onClick={() => openModal(r)}
@@ -219,13 +246,15 @@ export default function PembagianPakan() {
             {/* Header Modal */}
             <div className="flex items-center justify-between p-5 border-b">
               <h3 className="text-xl font-bold">Konfirmasi Pembagian Pakan</h3>
-              <button
-                className="text-2xl leading-none hover:text-gray-500 cursor-pointer"
-                onClick={closeModal}
-                aria-label="Close"
-              >
-                ×
-              </button>
+              <div className="flex items-center gap-3">
+                <button
+                  className="text-2xl leading-none hover:text-gray-500 cursor-pointer"
+                  onClick={closeModal}
+                  aria-label="Close"
+                >
+                  ×
+                </button>
+              </div>
             </div>
 
             {/* Konten Modal */}
@@ -256,9 +285,9 @@ export default function PembagianPakan() {
                 </div>
 
                 <div>
-                  <p className="text-sm text-gray-600">Sisa Pakan Kemarin</p>
+                  <p className="text-sm text-gray-600">Sisa Pakan</p>
                   <p className="font-semibold">
-                    {rupiahKg(confirmationData.yesterdayTotalFeed)}
+                    {rupiahKg(confirmationData.remainingTotalFeed)}
                   </p>
                 </div>
                 <div>
@@ -266,15 +295,49 @@ export default function PembagianPakan() {
                     Jumlah yang akan dibuat
                   </p>
                   <p className="font-semibold">
-                    {rupiahKg(confirmationData.expectedTotalFeed)}
+                    {rupiahKg(confirmationData.totalFeed)}
                   </p>
                 </div>
               </div>
 
               {/* Formula Table */}
               <div className="border rounded">
-                <div className="px-4 py-3 border-b font-semibold">
+                <div className="px-4 py-3 border-b font-semibold flex justify-between">
                   Formula Pakan
+                  <div>
+                    {isEditing ? (
+                      <div className="flex gap-2">
+                        <button
+                          className="font-normal bg-orange-300 hover:bg-orange-500 rounded px-3 py-1 cursor-pointer"
+                          onClick={() => {
+                            setConfirmationData({
+                              ...confirmationData,
+                              feedDetails: editedFeedDetails,
+                            });
+                            setIsEditing(false);
+                          }}
+                        >
+                          Simpan
+                        </button>
+                        <button
+                          className="font-normal bg-white hover:bg-orange-100 border-orange-300 border-2 rounded px-3 py-1 cursor-pointer"
+                          onClick={() => {
+                            setEditedFeedDetails(confirmationData.feedDetails);
+                            setIsEditing(false);
+                          }}
+                        >
+                          Batal
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        className="font-normal bg-orange-300 hover:bg-orange-500 rounded px-3 py-1 cursor-pointer"
+                        onClick={() => setIsEditing(true)}
+                      >
+                        Edit Jumlah Pakan Hari ini
+                      </button>
+                    )}
+                  </div>
                 </div>
                 <div className="p-4 overflow-x-auto">
                   <table className="w-full text-sm sm:text-base">
@@ -286,14 +349,34 @@ export default function PembagianPakan() {
                       </tr>
                     </thead>
                     <tbody>
-                      {confirmationData.feedDetails.map((f, i) => (
+                      {editedFeedDetails.map((f, i) => (
                         <tr key={i} className="border-b">
                           <td className="px-3 py-2">{f?.item?.name}</td>
                           <td className="px-3 py-2">{f?.percentage}%</td>
-                          <td className="px-3 py-2">{rupiahKg(f?.quantity)}</td>
+                          <td className="px-3 py-2">
+                            {isEditing ? (
+                              <input
+                                type="number"
+                                className="w-24 border rounded px-2 py-1"
+                                value={f.quantity}
+                                onChange={(e) => {
+                                  const newValue = e.target.value;
+                                  setEditedFeedDetails((prev) =>
+                                    prev.map((d, idx) =>
+                                      idx === i
+                                        ? { ...d, quantity: newValue }
+                                        : d
+                                    )
+                                  );
+                                }}
+                              />
+                            ) : (
+                              rupiahKg(f?.quantity)
+                            )}
+                          </td>
                         </tr>
                       ))}
-                      {confirmationData.feedDetails.length === 0 && (
+                      {editedFeedDetails.length === 0 && (
                         <tr>
                           <td
                             className="px-3 py-4 text-center text-gray-500"
@@ -340,9 +423,9 @@ export default function PembagianPakan() {
               </button>
               <button
                 onClick={submitConfirm}
-                disabled={!gudangId}
+                disabled={!gudangId || isEditing}
                 className={`px-4 py-2 rounded text-white ${
-                  gudangId
+                  gudangId && !isEditing
                     ? "bg-green-700 hover:bg-green-900 cursor-pointer"
                     : "bg-gray-400 cursor-not-allowed"
                 }`}

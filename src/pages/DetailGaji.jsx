@@ -264,17 +264,12 @@ export default function DetailGaji() {
 
         <div className="mt-4">
           <a
-            href={detail.paymentProof || "#"}
-            target="_blank"
-            rel="noreferrer"
             className={`inline-flex items-center rounded bg-amber-400 hover:bg-amber-500 text-black px-4 py-2 ${
               detail.paymentProof
                 ? "cursor-pointer"
                 : "opacity-50 cursor-not-allowed"
             }`}
-            onClick={(e) => {
-              if (!detail.paymentProof) e.preventDefault();
-            }}
+            onClick={() => setPopupImage(detail.paymentProof)}
           >
             Lihat Bukti Pembayaran
           </a>
