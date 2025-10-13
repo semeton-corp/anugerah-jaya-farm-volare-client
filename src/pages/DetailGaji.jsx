@@ -2,6 +2,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getUserSalaryDetail } from "../services/cashflow"; // adjust path if needed
+import ImagePopUp from "../components/ImagePopUp";
 
 /** ========= Utils ========= */
 const toNum = (v) =>
@@ -38,12 +39,15 @@ export default function DetailGaji() {
   const [loading, setLoading] = useState(false);
   const [detail, setDetail] = useState(null);
 
+  const [popupImage, setPopupImage] = useState(null);
+
   useEffect(() => {
     if (!salaryId) return;
     setLoading(true);
 
     getUserSalaryDetail(salaryId)
       .then((resp) => {
+        console.log("resp: ", resp);
         const httpOK = resp?.status === 200;
         const payload = resp?.data;
         const apiOK = payload?.status === 200;
@@ -133,7 +137,6 @@ export default function DetailGaji() {
           kasbons,
           user,
         };
-
         setDetail(normalized);
       })
       .catch((err) => {
@@ -277,6 +280,10 @@ export default function DetailGaji() {
           </a>
         </div>
       </div>
+
+      {popupImage && (
+        <ImagePopUp imageUrl={popupImage} onClose={() => setPopupImage(null)} />
+      )}
     </div>
   );
 }

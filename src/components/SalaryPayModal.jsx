@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { getUserSalaryDetail, payUserSalary } from "../services/cashflow";
+import { uploadFile } from "../services/file";
 
 /** ========= Utilities ========= */
 const formatIDR = (n) =>
@@ -38,6 +39,10 @@ export default function SalaryPayModal({ isOpen, onClose, salaryId, onSaved }) {
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [kasbonModalId, setKasbonModalId] = useState(null);
 
+  const [isUploading, setIsUploading] = useState(false);
+
+  const [paymentProof, setPaymentProof] = useState("");
+
   const handleClose = React.useCallback(() => {
     setIsEditingBase(false);
     setIsEditingComp(false);
@@ -59,7 +64,7 @@ export default function SalaryPayModal({ isOpen, onClose, salaryId, onSaved }) {
 
   async function uploadProofFile(file) {
     if (!file) return undefined;
-    return "https://example.com";
+    return "";
   }
 
   useEffect(() => {
@@ -232,15 +237,13 @@ export default function SalaryPayModal({ isOpen, onClose, salaryId, onSaved }) {
     if (!detail) return;
     setSaving(true);
 
-    if (!proofFile) {
+    if (!paymentProof) {
       alert("❌ Mohon memasukkan bukti pembayaran!");
       setSaving(false);
       return;
     }
 
     try {
-      const proofUrl = await uploadProofFile(proofFile);
-
       const userCashAdvancePayments = (detail.kasbons || [])
         .filter((k) => Number(k.payAmount) > 0)
         .map((k) => ({
@@ -248,7 +251,7 @@ export default function SalaryPayModal({ isOpen, onClose, salaryId, onSaved }) {
           paymentDate: formatDMY(new Date()),
           nominal: toStr(k.payAmount),
           paymentMethod,
-          paymentProof: proofUrl,
+          paymentProof: paymentProof,
         }));
 
       const payload = {
@@ -257,7 +260,7 @@ export default function SalaryPayModal({ isOpen, onClose, salaryId, onSaved }) {
         bonusSalary: toStr(detail.bonus),
         compentationSalary: toStr(compensation),
         additionalWorkSalary: toStr(addJobsTotal),
-        paymentProof: proofUrl,
+        paymentProof: paymentProof,
         paymentMethod,
         userCashAdvancePayments,
       };
@@ -595,13 +598,28 @@ export default function SalaryPayModal({ isOpen, onClose, salaryId, onSaved }) {
                   <div className="p-4 md:p-5 space-y-3">
                     <div className="text-sm font-medium">Bukti Pembayaran</div>
                     <label className="inline-flex items-center gap-2 border rounded px-3 py-2 text-sm cursor-pointer bg-gray-50 hover:bg-gray-100">
-                      <span>⬆ Unggah bukti pembayaran</span>
+                      <span>⬆</span>
                       <input
                         type="file"
-                        className="hidden"
-                        onChange={(e) =>
-                          setProofFile(e.target.files?.[0] || null)
-                        }
+                        accept="image/*"
+                        onChange={async (e) => {
+                          const fileInput = e.target;
+                          const file = fileInput.files?.[0];
+                          if (!file) return;
+
+                          setIsUploading(true);
+
+                          try {
+                            const fileUrl = await uploadFile(file);
+                            setPaymentProof(fileUrl);
+                          } catch (err) {
+                            console.error("Upload error:", err);
+                            alert("Upload gagal. Silakan coba lagi.");
+                            fileInput.value = "";
+                          } finally {
+                            setIsUploading(false);
+                          }
+                        }}
                       />
                     </label>
                     {proofFile && (
@@ -613,10 +631,16 @@ export default function SalaryPayModal({ isOpen, onClose, salaryId, onSaved }) {
                     <div className="pt-2">
                       <button
                         onClick={handleSave}
-                        disabled={saving}
-                        className="rounded bg-green-700 hover:bg-green-900 text-white px-4 py-2 cursor-pointer"
+                        disabled={isUploading}
+                        className={`rounded ${
+                          isUploading
+                            ? "bg-gray-400 cursor-not-allowed"
+                            : "bg-green-700 hover:bg-green-900 cursor-pointer"
+                        } text-white px-4 py-2 cursor-pointer`}
                       >
-                        {saving ? "Menyimpan..." : "Simpan Pembayaran Gaji"}
+                        {isUploading
+                          ? "Menyimpan..."
+                          : "Simpan Pembayaran Gaji"}
                       </button>
                     </div>
                   </div>
