@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import {
   getReceivables,
   createUserCashAdvancePayment,
+  deleteUserCashAdvancePayment,
 } from "../services/cashflow";
 import {
   createStoreSalePayment,
@@ -221,9 +222,7 @@ const callDeletePaymentByCategory = (category, id, paymentId) => {
   const cat = (category || "").toLowerCase();
 
   if (cat.includes("kasbon")) {
-    ///the api not there yet
-    // return createUserCashAdvancePayment(id, paymentId);
-    return Promise.reject(new Error("Fitur hapus kasbon belum tersedia."));
+    return deleteUserCashAdvancePayment(id, paymentId);
   }
 
   if (cat.includes("penjualan telur gudang")) {

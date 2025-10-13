@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate, Outlet } from "react-router-dom";
-import { getCage, getChickenCage } from "../services/cages";
+import { getCage, getChickenCage, getChickenCageFeed } from "../services/cages";
 import { kategoriAyam } from "../data/KategoriAyam";
 import { deleteChickenData, inputAyam } from "../services/chickenMonitorings";
 import { getChickenMonitoringById } from "../services/chickenMonitorings";
@@ -41,6 +41,21 @@ const InputAyam = () => {
 
   const [isEditMode, setIsEditMode] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const [remainingFeed, setRemainingFeed] = useState();
+
+  const fetchRemainingFeed = async () => {
+    try {
+      const detailResponse = await getChickenCageFeed(selectedChickenCage.id);
+      console.log("detailResponse: ", detailResponse);
+      if (detailResponse.status == 200) {
+        setRemainingFeed(detailResponse.data.data.remainingTotalFeed);
+      }
+    } catch (error) {
+      setRemainingFeed(0);
+      console.log("error :", error);
+    }
+  };
 
   useEffect(() => {
     const fetchCages = async () => {
@@ -86,6 +101,11 @@ const InputAyam = () => {
 
     fetchCages();
   }, []);
+
+  useEffect(() => {
+    console.log("selectedChickenCage: ", selectedChickenCage);
+    fetchRemainingFeed();
+  }, [selectedChickenCage]);
 
   async function deleteDataHandle() {
     try {
@@ -258,6 +278,16 @@ const InputAyam = () => {
             </div>
           </div>
         </div>
+
+        <label className="block font-medium mb-1">
+          Jumlah Pakan Yang Tersedia
+        </label>
+        <div className="flex items-center py-3">
+          <p className="text-lg font-bold">
+            {remainingFeed ? `${remainingFeed} Kg` : `-`}
+          </p>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
           <div>
             <label className="block font-medium mb-1">Jumlah ayam sakit</label>

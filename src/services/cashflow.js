@@ -97,6 +97,18 @@ export const createUserCashAdvancePayment = (payload, id) => {
   });
 };
 
+export const deleteUserCashAdvancePayment = (userCashAdvanceId, id) => {
+  return api.delete(
+    `/cashflows/cash-advances/${userCashAdvanceId}/payments/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    }
+  );
+};
+
 export const getReceivables = (category, id) => {
   return api.get(`/cashflows/receivables/${category}/${id}`, {
     headers: {
