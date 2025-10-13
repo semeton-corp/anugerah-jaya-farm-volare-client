@@ -6,10 +6,13 @@ import {
   createUserCashAdvancePayment,
 } from "../services/cashflow";
 import { createStoreSalePayment } from "../services/stores";
-import { createAfkirChickenSalePayment } from "../services/chickenMonitorings";
+import { createAfkirChickenSalePayment, deleteAfkirChickenSalePayment } from "../services/chickenMonitorings";
 import { formatThousand, onlyDigits } from "../utils/moneyFormat";
 import { createWarehouseSalePayment } from "../services/warehouses";
 import { FaExclamationTriangle } from "react-icons/fa";
+import { uploadFile } from "../services/file";
+import ImagePopUp from "../components/ImagePopUp";
+import { MdDelete } from "react-icons/md";
 
 // ===== Utils =====
 const rupiah = (n) => `Rp ${Number(n || 0).toLocaleString("id-ID")}`;
@@ -77,14 +80,15 @@ const TambahPembayaranModal = ({
   const [paymentDate, setPaymentDate] = useState(
     new Date().toISOString().slice(0, 10)
   );
-  const [paymentProof, setPaymentProof] = useState("https://example.com");
+  const [paymentProof, setPaymentProof] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     if (!open) return;
     setPaymentMethod(defaultMethod);
     setNominal("");
     setPaymentDate(new Date().toISOString().slice(0, 10));
-    setPaymentProof("https://example.com");
+    setPaymentProof("");
   }, [open, defaultMethod]);
 
   if (!open) return null;
@@ -127,7 +131,26 @@ const TambahPembayaranModal = ({
         />
 
         <label className="block mb-1 font-medium">Bukti Pembayaran (URL)</label>
-        <input type="file" className="w-full border rounded p-2 mb-4" />
+        <input
+          type="file"
+          accept="image/*"
+          className="w-full border rounded p-2 mb-4"
+          onChange={async (e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+
+            setIsUploading(true);
+
+            try {
+              const fileUrl = await uploadFile(file);
+              setPaymentProof(fileUrl);
+            } catch (err) {
+              console.error(err);
+            } finally {
+              setIsUploading(false);
+            }
+          }}
+        />
 
         <div className="flex justify-end gap-2">
           <button
@@ -145,9 +168,14 @@ const TambahPembayaranModal = ({
                 paymentProof,
               })
             }
-            className="px-4 py-2 bg-green-700 hover:bg-green-900 text-white rounded cursor-pointer"
+            disabled={isUploading}
+            className={`px-4 py-2 rounded text-white ${
+              isUploading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-green-700 hover:bg-green-900 cursor-pointer"
+            }`}
           >
-            Simpan
+            {isUploading ? "Mengunggah..." : "Simpan"}
           </button>
         </div>
       </div>
@@ -177,6 +205,28 @@ const callAddPaymentByCategory = (category, id, payload) => {
   return Promise.reject(new Error("Kategori pembayaran tidak dikenali."));
 };
 
+const callDeletePaymentByCategory = (category, id, payload) => {
+  const cat = (category || "").toLowerCase();
+
+  if (cat.includes("kasbon")) {
+    return createUserCashAdvancePayment(payload, id);
+  }
+
+  if (cat.includes("penjualan telur gudang")) {
+    return createWarehouseSalePayment(payload, id);
+  }
+
+  if (cat.includes("penjualan telur toko")) {
+    return createStoreSalePayment(payload, id);
+  }
+
+  if (cat.includes("penjualan ayam afkir") || cat.includes("ayam afkir")) {
+    return createAfkirChickenSalePayment(payload, id);
+  }
+
+  return Promise.reject(new Error("Kategori pembayaran tidak dikenali."));
+};
+
 export default function DetailPiutang() {
   const { id, category } = useParams();
   const [loading, setLoading] = useState(true);
@@ -184,6 +234,10 @@ export default function DetailPiutang() {
   const [data, setData] = useState(null);
 
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  const [selectedDeletePayment, setSelectedDeletePayment] = useState();
+
+  const [popupImage, setPopupImage] = useState(null);
 
   const overdue = isOverdue(data?.deadlinePaymentDate, data?.remainingPayment);
 
@@ -207,6 +261,23 @@ export default function DetailPiutang() {
       setErr("Terjadi kesalahan saat mengambil data.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeletePayment = async () => {
+    try {
+      const deletePaymentResponse = await deleteAfkirChickenSalePayment(
+        selectedDeletePayment.id,
+        id
+      );
+      console.log("deletePaymentResponse: ", deletePaymentResponse);
+      if (deletePaymentResponse.status == 204) {
+        alert("✅ Berhasil menghapus data pembayaran");
+        setShowConfirmDelete(false);
+        fetchSalesData();
+      }
+    } catch (error) {
+      console.log("error :", error);
     }
   };
 
@@ -254,7 +325,7 @@ export default function DetailPiutang() {
         paymentMethod: p.paymentMethod || "-",
         nominalNum,
         remainingNum: p.remaining,
-        proof: p.paymentProof || p.proof || "-",
+        paymentProof: p.paymentProof || "-",
       };
     });
   }, [payments, totalPiutang]);
@@ -278,11 +349,16 @@ export default function DetailPiutang() {
     paymentProof,
   }) => {
     if (!nominal || Number(nominal) <= 0) {
-      alert("Nominal pembayaran harus lebih dari 0.");
+      alert("❌Nominal pembayaran harus lebih dari 0.");
       return;
     }
     if (!paymentDate) {
-      alert("Tanggal bayar wajib diisi.");
+      alert("❌Tanggal bayar wajib diisi.");
+      return;
+    }
+
+    if (!paymentProof) {
+      alert("❌Silahkan unggah bukti pembayaran!");
       return;
     }
 
@@ -416,6 +492,7 @@ export default function DetailPiutang() {
                   <th className="text-left px-3 py-2">Nominal Pembayaran</th>
                   <th className="text-left px-3 py-2">Sisa Cicilan</th>
                   <th className="text-left px-3 py-2">Bukti Pembayaran</th>
+                  <th className="text-left px-3 py-2">Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -435,14 +512,34 @@ export default function DetailPiutang() {
                       <td className="px-3 py-2">{p.paymentMethod}</td>
                       <td className="px-3 py-2">{rupiah(p.nominalNum)}</td>
                       <td className="px-3 py-2">{rupiah(p.remainingNum)}</td>
-                      <td className="px-3 py-2 underline">
-                        {p.proof && p.proof !== "-" ? (
-                          <a href={p.proof} target="_blank" rel="noreferrer">
-                            Bukti Pembayaran
-                          </a>
+                      <td className="px-3 py-2">
+                        {p.paymentProof ? (
+                          <td
+                            className="px-3 py-2 underline text-green-700 hover:text-green-900 cursor-pointer"
+                            onClick={() => setPopupImage(p.paymentProof)}
+                          >
+                            {p.paymentProof ? "Bukti Pembayaran" : "-"}
+                          </td>
                         ) : (
                           "-"
                         )}
+                      </td>
+                      <td className="px-3 py-2">
+                        <div className="flex items-center gap-3">
+                          <button
+                            className="p-1 rounded hover:bg-gray-100"
+                            title="Hapus"
+                            onClick={() => {
+                              setShowConfirmDelete(true);
+                              setSelectedDeletePayment(p);
+                            }}
+                          >
+                            <MdDelete
+                              size={24}
+                              className="cursor-pointer text-black hover:text-gray-300 transition-colors duration-200"
+                            />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))
@@ -471,6 +568,34 @@ export default function DetailPiutang() {
         onClose={() => setShowPaymentModal(false)}
         onSave={submitPayment}
       />
+
+      {showConfirmDelete && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/10 bg-opacity-40 z-50">
+          <div className="bg-white rounded-xl p-6 w-[350px] shadow-lg text-center">
+            <h2 className="text-lg font-semibold mb-6">
+              Apakah anda yakin untuk menghapus data pembayaran ini?
+            </h2>
+            <div className="flex justify-center gap-3">
+              <button
+                onClick={() => setShowConfirmDelete(false)}
+                className="cursor-pointer px-6 py-2 rounded-lg bg-gray-200 text-gray-900 font-semibold hover:bg-gray-300"
+              >
+                Tidak
+              </button>
+              <button
+                onClick={handleDeletePayment}
+                className="cursor-pointer px-6 py-2 rounded-lg bg-red-500 text-white font-semibold hover:bg-red-600"
+              >
+                Ya, Lanjutkan
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {popupImage && (
+        <ImagePopUp imageUrl={popupImage} onClose={() => setPopupImage(null)} />
+      )}
     </div>
   );
 }
