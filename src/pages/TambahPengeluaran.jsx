@@ -8,6 +8,7 @@ import { getWarehouses } from "../services/warehouses";
 import { getCage } from "../services/cages";
 import { createExpense } from "../services/cashflow";
 import { useLocation, useNavigate } from "react-router-dom";
+import { uploadFile } from "../services/file";
 
 const formatTanggalID = (d = new Date()) =>
   new Intl.DateTimeFormat("id-ID", {
@@ -34,6 +35,9 @@ export default function TambahPengeluaran() {
   const navigate = useNavigate();
   const locaiton = useLocation();
 
+  const [popupImage, setPopupImage] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+
   const [form, setForm] = useState({
     expenseCategory: KATEGORI_OPTIONS[0],
     locationId: "",
@@ -45,7 +49,7 @@ export default function TambahPengeluaran() {
     nominal: "",
     paymentMethod: "Tunai",
     description: "",
-    paymentProof: "htpps://example.com",
+    paymentProof: "",
   });
 
   const isNonEmpty = (v) => v != null && String(v).trim() !== "";
@@ -355,7 +359,29 @@ export default function TambahPengeluaran() {
           </label>
           <input
             type="file"
-            className="w-full rounded border border-gray-300 bg-gray-100 px-3 py-2 outline-none"
+            accept="image/*"
+            className="w-full border border-gray-300 bg-gray-100 px-3 py-2 outline-none"
+            onChange={async (e) => {
+              const fileInput = e.target;
+              const file = fileInput.files?.[0];
+              if (!file) return;
+
+              setIsUploading(true);
+
+              try {
+                const fileUrl = await uploadFile(file);
+                setForm((prev) => ({
+                  ...prev,
+                  paymentProof: fileUrl,
+                }));
+              } catch (err) {
+                console.error("Upload error:", err);
+                alert("Upload gagal. Silakan coba lagi.");
+                fileInput.value = "";
+              } finally {
+                setIsUploading(false);
+              }
+            }}
           />
         </div>
 
@@ -374,10 +400,15 @@ export default function TambahPengeluaran() {
 
         <div className="flex justify-end">
           <button
+            disabled={isUploading}
             type="submit"
-            className="rounded bg-green-700 hover:bg-green-900 text-white px-5 py-2"
+            className={`rounded ${
+              isUploading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-green-700 hover:bg-green-900 cursor-pointer"
+            } text-white px-5 py-2`}
           >
-            Simpan
+            {isUploading ? "Mengunggah..." : "Simpan"}
           </button>
         </div>
       </form>

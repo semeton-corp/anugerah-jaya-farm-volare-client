@@ -456,8 +456,26 @@ const KonfirmasiPenjualanAyamModal = ({
             <label className="block mb-1 font-medium">Bukti Pembayaran</label>
             <input
               type="file"
+              accept="image/*"
               className="w-full border rounded p-2 mb-4"
-              onChange={handleInputFile}
+              onChange={async (e) => {
+                const fileInput = e.target;
+                const file = fileInput.files?.[0];
+                if (!file) return;
+
+                setIsUploading(true);
+
+                try {
+                  const fileUrl = await uploadFile(file);
+                  setPaymentProof(fileUrl);
+                } catch (err) {
+                  console.error("Upload error:", err);
+                  alert("Upload gagal. Silakan coba lagi.");
+                  fileInput.value = "";
+                } finally {
+                  setIsUploading(false);
+                }
+              }}
             />
             <div className="flex justify-end gap-2">
               <button

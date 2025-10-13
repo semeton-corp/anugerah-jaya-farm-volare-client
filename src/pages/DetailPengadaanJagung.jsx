@@ -110,7 +110,8 @@ const TambahPembayaranModal = ({
           accept="image/*"
           className="w-full border rounded p-2 mb-4"
           onChange={async (e) => {
-            const file = e.target.files?.[0];
+            const fileInput = e.target;
+            const file = fileInput.files?.[0];
             if (!file) return;
 
             setIsUploading(true);
@@ -119,7 +120,9 @@ const TambahPembayaranModal = ({
               const fileUrl = await uploadFile(file);
               setPaymentProof(fileUrl);
             } catch (err) {
-              console.error(err);
+              console.error("Upload error:", err);
+              alert("Upload gagal. Silakan coba lagi.");
+              fileInput.value = "";
             } finally {
               setIsUploading(false);
             }
@@ -359,7 +362,7 @@ export default function DetailPengadaanJagung() {
       alert("❌ Silahkan unggah bukti pembayaran!");
       return;
     }
-    
+
     const payload = {
       paymentDate: toDDMMYYYY(paymentDate),
       nominal: String(nominal),
