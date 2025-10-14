@@ -25,16 +25,8 @@ const formatRupiah = (n = 0) =>
     .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
 const COLORS = {
-  "Piutang Belum Terbayar": "#215963", // teal (dark)
-  "Piutang Sudah Terbayar": "#E29901", // orange
-};
-
-const toWA = (phone) => {
-  if (!phone) return "#";
-  // normalize: 08123... -> 628123...
-  const digits = String(phone).replace(/[^\d]/g, "");
-  const withCc = digits.startsWith("0") ? `62${digits.slice(1)}` : digits;
-  return `https://wa.me/${withCc}`;
+  "Piutang Belum Terbayar": "#215963",
+  "Piutang Sudah Terbayar": "#E29901",
 };
 
 const CATEGORY_OPTIONS = [
@@ -306,24 +298,22 @@ export default function Piutang() {
                     <td className="py-3 px-4">
                       <button
                         onClick={() => {
-                          const localNumber = r.phoneNumber;
-                          const waNumber = localNumber.replace(/^0/, "62");
-                          const message = `Halo ${r.name},
-                          Kami dari Anugerah Jaya Farm ingin mengingatkan mengenai tagihan Anda:
-                          
-                          📅 Tenggat: ${r.deadlinePaymentDate}
-                          🏷️ Kategori: ${r.category}
-                          📍 Lokasi: ${r.placeName}
-                          💰 Total: ${formatRupiah(
-                            formatThousand(r.totalNominal)
-                          )}
-                          💵 Sisa Tagihan: ${formatRupiah(
-                            formatThousand(r.remainingPayment)
-                          )}
-                          
-                          Mohon konfirmasi terkait pembayaran ini. Terima kasih 🙏`;
+                          const waNumber = r.phoneNumber.startsWith("62")
+                            ? r.phoneNumber
+                            : r.phoneNumber.replace(/^0/, "62");
 
-                          const waURL = `https://wa.me/${waNumber}?text=${encodeURIComponent(
+                          const message = `Halo ${r.name},
+Kami dari Anugerah Jaya Farm ingin mengingatkan mengenai tagihan Anda:
+
+📅 *Tenggat:* ${r.deadlinePaymentDate}
+🏷️ *Kategori:* ${r.category}
+📍 *Lokasi:* ${r.placeName}
+💰 *Total:* ${formatRupiah(r.totalNominal)}
+💵 *Sisa Tagihan:* ${formatRupiah(r.remainingPayment)}
+
+Mohon konfirmasi terkait pembayaran ini. Terima kasih 🙏`;
+
+                          const waURL = `https://api.whatsapp.com/send?phone=${waNumber}&text=${encodeURIComponent(
                             message
                           )}`;
                           window.open(waURL, "_blank");

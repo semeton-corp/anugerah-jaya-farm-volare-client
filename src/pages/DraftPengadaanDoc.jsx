@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import KonfirmasiPemesananDocModal from "../components/KonfirmasiPemesananDocModal";
 import { getCage, getChickenCage } from "../services/cages";
 import { TbBatteryEco } from "react-icons/tb";
+import { formatThousand } from "../utils/moneyFormat";
 
 const DraftPengadaanDoc = () => {
   const location = useLocation();
@@ -154,7 +155,7 @@ const DraftPengadaanDoc = () => {
                   <td className="p-2 sm:p-3 flex flex-col sm:flex-row items-start sm:items-center gap-2">
                     <button
                       onClick={() => {
-                        const localNumber = "081246087972";
+                        const localNumber = item?.supplier?.phoneNumber;
                         const waNumber = localNumber.replace(/^0/, "62");
 
                         const namaSupplier = item?.supplier?.name || "";
@@ -169,7 +170,7 @@ const DraftPengadaanDoc = () => {
 Halo ${namaSupplier}, kami dari *Anugerah Jaya Farm* ingin memastikan ketersediaan pesanan ayam berikut:
 
 🐔 *Nama Barang:* ${namaBarang}
-📦 *Jumlah:* ${jumlah} ekor
+📦 *Jumlah:* ${formatThousand(jumlah)} ekor
 
 Apakah ayam dengan jumlah tersebut tersedia dan siap dipesan?
 `;

@@ -144,23 +144,33 @@ const DraftPenjualanAyam = () => {
                     <div className="flex gap-2">
                       <button
                         onClick={() => {
-                          const localNumber = "081246087972";
-                          const waNumber = localNumber.replace(/^0/, "62");
-                          const message = `Halo ${
-                            item.afkirChickenCustomer.name
-                          }, 
-                          Kami dari Anugerah Jaya Farm ingin mengonfirmasi pesanan ayam afkir Anda:
+                          const localNumber = item?.afkirChickenCustomer?.phoneNumber;
+                          const waNumber = localNumber.startsWith("62")
+                            ? localNumber
+                            : localNumber.replace(/^0/, "62");
 
-                          🐔 Jumlah: ${item.totalSellChicken} ekor
-                          💰 Harga per ekor: ${formatCurrency(
-                            item.pricePerChicken
-                          )}
-                          📦 Total: ${formatCurrency(item.totalPrice)}
+                          const customerName =
+                            item?.afkirChickenCustomer?.name || "Pelanggan";
+                          const jumlah = item?.totalSellChicken || 0;
+                          const harga = formatCurrency(
+                            item?.pricePerChicken || 0
+                          );
+                          const total = formatCurrency(item?.totalPrice || 0);
 
-                          Apakah pesanan ini jadi diproses?`;
-                          const waURL = `https://wa.me/${waNumber}?text=${encodeURIComponent(
-                            message
-                          )}`;
+                          const rawMessage = `
+Halo *${customerName}*,
+
+Kami dari *Anugerah Jaya Farm* ingin mengonfirmasi pesanan ayam afkir Anda:
+
+🐔 *Jumlah:* ${jumlah} ekor  
+💰 *Harga per ekor:* ${harga}  
+📦 *Total:* ${total}
+
+Apakah pesanan ini jadi diproses? 🙏
+  `.trim();
+
+                          const message = encodeURIComponent(rawMessage);
+                          const waURL = `https://api.whatsapp.com/send?phone=${waNumber}&text=${message}`;
                           window.open(waURL, "_blank");
                         }}
                         className="px-3 py-1 bg-green-700 text-white rounded hover:bg-green-900"

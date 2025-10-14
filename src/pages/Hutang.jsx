@@ -26,12 +26,6 @@ const COLORS = {
   "Belum Lunas": "#E29901",
 };
 
-const toWA = (phone) => {
-  if (!phone) return "#";
-  const digits = String(phone).replace(/[^\d]/g, "");
-  const withCc = digits.startsWith("0") ? `62${digits.slice(1)}` : digits;
-  return `https://wa.me/${withCc}`;
-};
 
 const CATEGORY_OPTIONS = [
   "Pengadaan Ayam DOC",

@@ -1048,7 +1048,7 @@ const InputDataPesanan = () => {
           <div>
             <button
               onClick={() => {
-                const localNumber = "081246087972";
+                const localNumber = phone;
                 const waNumber = localNumber.replace(/^0/, "62");
                 const namaPelanggan = customerName;
                 const namaBarang = selectedItem.name;
@@ -1073,9 +1073,9 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
 📝 *Jumlah Transaksi Total Anda*: ${jumlahTransaksiTotal} Kali Belanja
 🎀 *Persentase potongan harga berdasar jumlah Transaksi*: ${diskon} 
 ━━━━━━━━━━━━━━━
-*Harga Semua Barang*: Rp ${formatThousand(hargaSemuaBarang)}
-*Potongan Harga*: - Rp ${formatThousand(potonganHarga)}
-*Total Harga Akhir*: Rp ${formatThousand(totalHarga)}
+*Harga Semua Barang*: Rp ${formatThousand(parseInt(hargaSemuaBarang))}
+*Potongan Harga*: - Rp ${formatThousand(parseInt(potonganHarga))}
+*Total Harga Akhir*: Rp ${formatThousand(parseInt(totalHarga))}
 
 ✅ Mohon konfirmasi, terima kasih.`;
 

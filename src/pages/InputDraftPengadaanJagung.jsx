@@ -620,7 +620,7 @@ Kami dari *Anugerah Jaya Farm* ingin menanyakan harga barang *PER ${unit.toUpper
 
 ━━━━━━━━━━━━━━━
 📦 *Nama Barang*: ${namaBarang}
-📝 *Rencana Pembelian*: ${rencanaPembelian}
+📝 *Rencana Pembelian*: ${rencanaPembelian} ${unit}
 ━━━━━━━━━━━━━━━
 
 ✅ Mohon konfirmasi, terima kasih.`;

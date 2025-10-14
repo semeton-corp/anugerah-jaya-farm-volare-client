@@ -339,7 +339,7 @@ export default function InputDraftPengadaanBarang() {
           </div>
           <button
             onClick={() => {
-              const localNumber = "081246087972";
+              const localNumber = supplier?.phoneNumber;
               const waNumber = localNumber.replace(/^0/, "62");
               const namaSupplier = supplier?.name || "";
               const namaBarang = item?.name || "";
@@ -351,7 +351,7 @@ Kami dari *Anugerah Jaya Farm* ingin menanyakan harga barang *PER ${unit.toUpper
 
 ━━━━━━━━━━━━━━━
 📦 *Nama Barang*: ${namaBarang}
-📝 *Rencana Pembelian*: ${rencanaPembelian}
+📝 *Rencana Pembelian*: ${rencanaPembelian} ${unit}
 ━━━━━━━━━━━━━━━
 
 ✅ Mohon konfirmasi, terima kasih.`;
