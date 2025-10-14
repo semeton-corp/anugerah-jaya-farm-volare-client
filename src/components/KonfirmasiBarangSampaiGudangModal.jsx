@@ -23,24 +23,34 @@ const KonfirmasiBarangSampaiGudangModal = ({
   };
 
   const handleContactSeller = () => {
-    const message = `Halo ${
-      data?.supplier?.name
-    }, kami dari Anugerah Jaya Farm ingin menyampaikan ada ketidaksesuaian pada barang yang dikirim:
-    
-    📦 Barang: ${data?.item?.name}
-    📊 Jumlah yang dipesan: ${expectedQuantity}  
-    📊 Jumlah diterima: ${jumlah} ${data?.item?.unit}
-    📝 Catatan: ${catatan || "-"}
-    
-    Mohon tindak lanjutnya, terima kasih 🙏`;
+    if (!data?.supplier?.phoneNumber) {
+      alert("Nomor WhatsApp supplier tidak tersedia!");
+      return;
+    }
 
-    console.log("data?.supplier?.phoneNumber: ", data?.supplier?.phoneNumber);
+    const supplierName = data?.supplier?.name || "Supplier";
+    const itemName = data?.item?.name || "-";
+    const unit = data?.item?.unit || "";
+    const expected = expectedQuantity || "-";
+    const received = jumlah || "-";
+    const note = catatan || "-";
 
-    const whatsappUrl = `https://wa.me/${
-      data?.supplier?.phoneNumber
-    }?text=${encodeURIComponent(message)}`;
+    const rawMessage = `
+Halo *${supplierName}*, kami dari *Anugerah Jaya Farm* ingin menyampaikan ada ketidaksesuaian pada barang yang dikirim:
 
-    window.open(whatsappUrl, "_blank");
+📦 *Barang:* ${itemName}
+📊 *Jumlah dipesan:* ${expected} ${unit}
+📊 *Jumlah diterima:* ${received} ${unit}
+📝 *Catatan:* ${note}
+
+Mohon tindak lanjutnya, terima kasih 🙏
+  `;
+
+    const waNumber = data.supplier.phoneNumber.replace(/^0/, "62");
+    const message = encodeURIComponent(rawMessage.trim());
+    const waURL = `https://api.whatsapp.com/send?phone=${waNumber}&text=${message}`;
+
+    window.open(waURL, "_blank");
   };
 
   return (

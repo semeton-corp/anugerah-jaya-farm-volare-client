@@ -20,6 +20,7 @@ const KonfirmasiPengadaanDocModal = ({ onClose, data, onConfirm }) => {
   };
 
   const handleContactSupplier = () => {
+    console.log("data: ", data);
     const localNumber = data?.supplierPhone || "";
     if (!localNumber || localNumber === "-") {
       alert("Nomor telepon supplier tidak tersedia");

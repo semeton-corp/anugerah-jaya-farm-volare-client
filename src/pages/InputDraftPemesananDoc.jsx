@@ -169,16 +169,17 @@ const InputDraftPemesananDoc = () => {
               <label className="block mb-1">Jumlah Pemesanan</label>
               <div className="flex gap-"> </div>
               <input
-                type="number"
+                type="text"
+                inputMode="numeric"
                 placeholder="Masukkan jumlah barang..."
                 className="w-full border rounded px-4 py-2"
-                value={quantity}
+                value={formatThousand(quantity)}
                 onChange={(e) => {
                   const val = Number(e.target.value);
                   if (selectedCage?.capacity && val > selectedCage.capacity) {
-                    setQuantity(selectedCage.capacity);
+                    setQuantity(onlyDigits(selectedCage.capacity));
                   } else {
-                    setQuantity(val);
+                    setQuantity(onlyDigits(val));
                   }
                 }}
                 min={0}

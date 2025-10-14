@@ -248,14 +248,30 @@ const DraftPengadaanBarang = () => {
                     <div className="flex gap-3 justify-center">
                       <button
                         onClick={() => {
-                          const localNumber = "081246087972";
-                          const waNumber = localNumber.replace(/^0/, "62");
-                          const namaSupplier = item?.supplier?.name || "";
-                          const namaBarang = item?.item?.name || "";
+                          const localNumber = item?.supplier?.phoneNumber || "";
+                          const waNumber = localNumber.startsWith("62")
+                            ? localNumber
+                            : localNumber.replace(/^0/, "62");
+
+                          const namaSupplier =
+                            item?.supplier?.name || "Supplier";
+                          const namaBarang = item?.item?.name || "-";
                           const satuan = item?.item?.unit || "";
-                          const jumlah = item?.quantity || "";
-                          const message = `Halo ${namaSupplier}, kami dari Anugerah Jaya Farm ingin memesan barang berikut:%0A%0A🧺 Nama Barang: ${namaBarang}%0A📦 Jumlah: ${jumlah} ${satuan}%0A%0AMohon konfirmasi ketersediaannya, terima kasih.`;
-                          const waURL = `https://wa.me/${waNumber}?text=${message}`;
+                          const jumlah = item?.quantity || "-";
+
+                          const rawMessage = `
+Halo *${namaSupplier}*,
+
+Kami dari *Anugerah Jaya Farm* ingin memesan barang berikut:
+
+🧺 *Nama Barang:* ${namaBarang}
+📦 *Jumlah:* ${jumlah} ${satuan}
+
+Mohon konfirmasi ketersediaannya, terima kasih 🙏
+    `.trim();
+
+                          const message = encodeURIComponent(rawMessage);
+                          const waURL = `https://api.whatsapp.com/send?phone=${waNumber}&text=${message}`;
 
                           window.open(waURL, "_blank");
                         }}

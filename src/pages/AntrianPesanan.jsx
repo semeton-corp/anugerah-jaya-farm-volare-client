@@ -655,8 +655,8 @@ const AntrianPesanan = () => {
                         <div className="flex gap-3 justify-center">
                           <button
                             onClick={() => {
-                              const localNumber =
-                                item?.customer?.phone || "081246087972";
+                              console.log("item: ", item);
+                              const localNumber = item?.customer?.phoneNumber;
                               const waNumber = localNumber.replace(/^0/, "62");
 
                               const namaCustomer =
