@@ -608,7 +608,7 @@ const InputDraftPengadaanJagung = () => {
               const selectedSupplier = supplierOptions.find(
                 (item) => item.id == formData.supplier
               );
-              const localNumber = "081246087972";
+              const localNumber = selectedSupplier?.phoneNumber;
               const waNumber = localNumber.replace(/^0/, "62");
               const namaSupplier = selectedSupplier.name || "Supplier";
               const namaBarang = "Jagung";
