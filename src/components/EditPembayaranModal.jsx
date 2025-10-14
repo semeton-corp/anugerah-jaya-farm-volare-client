@@ -36,7 +36,7 @@ export const EditPembayaranModal = ({
       setPaymentMethod(defaultMethod);
       setNominal("");
       setPaymentDate(new Date().toISOString().slice(0, 10));
-      setPaymentProof("https://example.com");
+      setPaymentProof("");
     }
   }, [open, defaultMethod, initialValues]);
 

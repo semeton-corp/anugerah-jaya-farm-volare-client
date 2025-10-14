@@ -9,6 +9,7 @@ import {
   updatePresence,
 } from "../services/presence";
 import MonthYearSelector from "../components/MonthYearSelector";
+import { uploadFile } from "../services/file";
 
 const Presensi = () => {
   const [presenceId, setPresenceId] = useState(0);
@@ -19,6 +20,9 @@ const Presensi = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState("");
+
+  const [isUploading, setIsUploading] = useState(false);
+  const [evidence, setEvidence] = useState();
 
   const monthNamesBahasa = [
     "Januari",
@@ -161,10 +165,10 @@ const Presensi = () => {
 
     navigator.geolocation.getCurrentPosition(
       async (position) => {
-        // const latitude = position.coords.latitude;
-        // const longitude = position.coords.longitude;
-        const latitude = -8.556790777490797;
-        const longitude = 115.21758360400582;
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        // const latitude = -8.556790777490797;
+        // const longitude = 115.21758360400582;
 
         const payload = {
           status: "Hadir",
@@ -229,9 +233,19 @@ const Presensi = () => {
         // const latitude = -8.556790777490797;
         // const longitude = 115.21758360400582;
 
+        if (!evidence) {
+          alert("❌Silakan unggah bukti sakit Anda.");
+          return;
+        }
+
+        if (!note) {
+          alert("❌Silakan isi keterangan sakit Anda.");
+          return;
+        }
+
         const payload = {
           status: "Sakit",
-          evidence: "evidence",
+          evidence: evidence,
           note: note,
           latitude: latitude,
           longitude: longitude,
@@ -248,6 +262,8 @@ const Presensi = () => {
               "✅Berhasil melakukan pengajuan sakit, mohon tunggu persetujuan"
             );
             setShowModal(false);
+            setEvidence(null);
+            setNote("");
           }
           // console.log("Update success:", res.data);
         } catch (err) {
@@ -285,9 +301,19 @@ const Presensi = () => {
         // const latitude = -8.556790777490797;
         // const longitude = 115.21758360400582;
 
+        if (!evidence) {
+          alert("❌Silakan unggah bukti izin Anda.");
+          return;
+        }
+
+        if (!note) {
+          alert("❌Silakan isi keterangan izin Anda.");
+          return;
+        }
+
         const payload = {
           status: "Izin",
-          evidence: "evidence",
+          evidence: evidence,
           note: note,
           latitude: latitude,
           longitude: longitude,
@@ -304,6 +330,8 @@ const Presensi = () => {
               "✅Berhasil melakukan pengajuan izin, mohon tunggu persetujuan"
             );
             setShowModal(false);
+            setEvidence(null);
+            setNote("");
           }
           console.log("Update success:", res.data);
         } catch (err) {
@@ -451,8 +479,12 @@ const Presensi = () => {
         <div className="fixed inset-0 flex items-center justify-center bg-black/30 z-50">
           <div className="bg-white rounded-lg p-4 sm:p-6 max-w-lg w-full relative mx-2">
             <button
-              onClick={() => setShowModal(false)}
-              className="absolute top-2 right-3 text-lg sm:text-xl"
+              onClick={() => {
+                setShowModal(false);
+                setEvidence(null);
+                setNote("");
+              }}
+              className="absolute top-2 right-3 text-lg sm:text-xl cursor-pointer hover:text-gray-500"
             >
               ✖
             </button>
@@ -477,10 +509,26 @@ const Presensi = () => {
               </label>
               <input
                 type="file"
-                onChange={(e) => {
-                  console.log(e.target.files[0]);
+                accept="image/*"
+                className="w-full border rounded px-3 py-2 text-sm"
+                onChange={async (e) => {
+                  const fileInput = e.target;
+                  const file = fileInput.files?.[0];
+                  if (!file) return;
+
+                  setIsUploading(true);
+
+                  try {
+                    const fileUrl = await uploadFile(file);
+                    setEvidence(fileUrl);
+                  } catch (err) {
+                    console.error("Upload error:", err);
+                    alert("Upload gagal. Silakan coba lagi.");
+                    fileInput.value = "";
+                  } finally {
+                    setIsUploading(false);
+                  }
                 }}
-                className="w-full border rounded px-2 py-1 text-sm"
               />
             </div>
 
@@ -493,9 +541,14 @@ const Presensi = () => {
                     handleSubmitIzin();
                   }
                 }}
-                className="bg-green-700 hover:bg-green-900 cursor-pointer text-white px-4 py-2 rounded text-sm sm:text-base"
+                disabled={isUploading}
+                className={`px-4 py-2 rounded text-white ${
+                  isUploading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-green-700 hover:bg-green-900 cursor-pointer"
+                }`}
               >
-                Ajukan
+                {isUploading ? "Mengunggah..." : "Ajukan"}
               </button>
             </div>
           </div>

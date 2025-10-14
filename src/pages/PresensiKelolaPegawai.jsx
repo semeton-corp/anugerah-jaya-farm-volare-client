@@ -6,6 +6,7 @@ import {
 } from "../services/presence";
 import { getTodayDateInBahasa } from "../utils/dateFormat";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import ImagePopUp from "../components/ImagePopUp";
 
 const classNames = (...arr) => arr.filter(Boolean).join(" ");
 
@@ -177,9 +178,10 @@ export default function PresensiKelolaPegawai() {
   };
 
   const toggleSelectAll = () => {
-    const ids = currentRequests
+    const ids = modalRequests
       .filter((x) => x.status === "pending")
       .map((x) => x.id);
+
     setSelected((prev) => {
       const allSelected = ids.every((id) => prev.has(id));
       return allSelected ? new Set() : new Set(ids);
@@ -400,6 +402,8 @@ function ApprovalModal({
   const title = isIzin ? `Persetujuan Izin` : `Persetujuan Sakit`;
   const pending = requests.filter((x) => x.status === "pending");
 
+  const [popupImage, setPopupImage] = useState(null);
+
   return (
     <Modal
       open={open}
@@ -480,17 +484,19 @@ function ApprovalModal({
                   </div>
                 </label>
                 {!!r.buktiUrl && (
-                  <PillButton
-                    onClick={() =>
-                      alert("❌Fitur bukti izin sedang dikembangkan!")
-                    }
-                  >
+                  <PillButton onClick={() => setPopupImage(r.buktiUrl)}>
                     Bukti Izin
                   </PillButton>
                 )}
               </div>
             </div>
           ))}
+          {popupImage && (
+            <ImagePopUp
+              imageUrl={popupImage}
+              onClose={() => setPopupImage(null)}
+            />
+          )}
           {/* <button
             onClick={() => {
               console.log("requests: ", requests);
