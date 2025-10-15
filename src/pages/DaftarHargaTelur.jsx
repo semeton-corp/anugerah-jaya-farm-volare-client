@@ -133,113 +133,116 @@ const DaftarHargaTelur = () => {
 
       {/* Harga Telur */}
       <div className="bg-white border shadow rounded p-6">
-        <div className="flex justify-between mb-3">
+        <div className="flex flex-col md:flex-row justify-between mb-3 gap-2">
           <h2 className="font-semibold text-lg">Harga Telur</h2>
           <button
             onClick={tambahKategoriHargaHandle}
-            className="bg-orange-300 px-4 py-1 rounded hover:bg-orange-500 cursor-pointer "
+            className="bg-orange-300 px-4 py-1 rounded hover:bg-orange-500 cursor-pointer whitespace-nowrap"
           >
             + Tambah Kategori Harga
           </button>
         </div>
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="bg-green-700 text-white rounded">
-              <th className="px-3 py-2">Kategori Harga</th>
-              <th className="px-3 py-2">Barang</th>
-              <th className="px-3 py-2">Satuan</th>
-              <th className="px-3 py-2">Harga</th>
-              <th className="px-3 py-2">Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            {hargaList.map((row, idx) => (
-              <tr key={idx} className="border-b">
-                <td className="px-3 py-2">{row.category}</td>
-                <td className="px-3 py-2">{row.item.name}</td>
-                <td className="px-3 py-2">{row.saleUnit}</td>
-                <td className="px-3 py-2">{`Rp ${formatThousand(
-                  row.price
-                )}`}</td>
-                <td className="px-3 py-2">
-                  <div className="flex gap-4">
-                    <button
-                      onClick={() => {
-                        editKategoriHargaHandle(row.id);
-                      }}
-                      className="bg-green-700 hover:bg-green-900 text-white px-3 py-1 rounded text-sm cursor-pointer"
-                    >
-                      Edit Harga
-                    </button>
-                    <button
-                      className="bg-red-500 hover:bg-red-700 cursor-pointer text-white px-3 py-1 rounded"
-                      onClick={() => {
-                        setShowDeleteHargaModal(true);
-                        setSelectedDeleteId(row.id);
-                      }}
-                    >
-                      Hapus
-                    </button>
-                  </div>
-                </td>
+
+        <div className="overflow-x-auto">
+          <table className="min-w-[700px] w-full text-left border-collapse text-sm sm:text-base">
+            <thead>
+              <tr className="bg-green-700 text-white">
+                <th className="px-3 py-2">Kategori Harga</th>
+                <th className="px-3 py-2">Barang</th>
+                <th className="px-3 py-2">Satuan</th>
+                <th className="px-3 py-2">Harga</th>
+                <th className="px-3 py-2">Aksi</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {hargaList.map((row, idx) => (
+                <tr key={idx} className="border-b">
+                  <td className="px-3 py-2">{row.category}</td>
+                  <td className="px-3 py-2">{row.item.name}</td>
+                  <td className="px-3 py-2">{row.saleUnit}</td>
+                  <td className="px-3 py-2">{`Rp ${formatThousand(
+                    row.price
+                  )}`}</td>
+                  <td className="px-3 py-2">
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        onClick={() => editKategoriHargaHandle(row.id)}
+                        className="bg-green-700 hover:bg-green-900 text-white px-3 py-1 rounded text-sm cursor-pointer whitespace-nowrap"
+                      >
+                        Edit Harga
+                      </button>
+                      <button
+                        onClick={() => {
+                          setShowDeleteHargaModal(true);
+                          setSelectedDeleteId(row.id);
+                        }}
+                        className="bg-red-500 hover:bg-red-700 cursor-pointer text-white px-3 py-1 rounded whitespace-nowrap"
+                      >
+                        Hapus
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Diskon */}
       <div className="bg-white border shadow rounded p-6">
-        <div className="flex justify-between mb-3">
+        <div className="flex flex-col md:flex-row justify-between mb-3 gap-2">
           <h2 className="font-semibold text-lg">Diskon</h2>
           <button
             onClick={tambahDiskonHandle}
-            className="bg-orange-300  px-4 py-1 rounded hover:bg-orange-500 cursor-pointer"
+            className="bg-orange-300 px-4 py-1 rounded hover:bg-orange-500 cursor-pointer whitespace-nowrap"
           >
             + Tambah Diskon
           </button>
         </div>
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr className="bg-green-700 text-white">
-              <th className="px-3 py-2">Nama Diskon</th>
-              <th className="px-3 py-2">Minimum Transaksi User</th>
-              <th className="px-3 py-2">Besar Diskon</th>
-              <th className="px-3 py-2">Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            {diskonList.map((row, idx) => (
-              <tr key={idx} className="border-b">
-                <td className="px-3 py-2">{row.name}</td>
-                <td className="px-3 py-2">{`${row.minimumTransactionUser} Kali`}</td>
-                <td className="px-3 py-2">{`${row.totalDiscount} %`}</td>
-                <td className="px-3 py-2">
-                  <div className="flex gap-4">
-                    <button
-                      onClick={() => {
-                        editDiskonHandle(row.id);
-                      }}
-                      className="bg-green-700 hover:bg-green-900 text-white px-3 py-1 rounded text-sm"
-                    >
-                      Edit Diskon
-                    </button>
-                    <button
-                      className="bg-red-500 hover:bg-red-700 cursor-pointer text-white px-3 py-1 rounded"
-                      onClick={() => {
-                        setShowDeleteDiskonModal(true);
-                        setSelectedDeleteId(row.id);
-                      }}
-                    >
-                      Hapus
-                    </button>
-                  </div>
-                </td>
+
+        <div className="overflow-x-auto">
+          <table className="min-w-[600px] w-full text-left border-collapse text-sm sm:text-base">
+            <thead>
+              <tr className="bg-green-700 text-white">
+                <th className="px-3 py-2">Nama Diskon</th>
+                <th className="px-3 py-2">Minimum Transaksi User</th>
+                <th className="px-3 py-2">Besar Diskon</th>
+                <th className="px-3 py-2">Aksi</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {diskonList.map((row, idx) => (
+                <tr key={idx} className="border-b">
+                  <td className="px-3 py-2">{row.name}</td>
+                  <td className="px-3 py-2">{`${row.minimumTransactionUser} Kali`}</td>
+                  <td className="px-3 py-2">{`${row.totalDiscount} %`}</td>
+                  <td className="px-3 py-2">
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => editDiskonHandle(row.id)}
+                        className="bg-green-700 hover:bg-green-900 text-white px-3 py-1 rounded text-sm whitespace-nowrap"
+                      >
+                        Edit Diskon
+                      </button>
+                      <button
+                        onClick={() => {
+                          setShowDeleteDiskonModal(true);
+                          setSelectedDeleteId(row.id);
+                        }}
+                        className="bg-red-500 hover:bg-red-700 cursor-pointer text-white px-3 py-1 rounded whitespace-nowrap"
+                      >
+                        Hapus
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
+
       {showDeleteModal && (
         <DeleteModal
           isOpen={showDeleteModal}
