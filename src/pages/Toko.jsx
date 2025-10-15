@@ -313,7 +313,7 @@ const Toko = () => {
                   <PiMoneyWavyFill size={24} color="white" />
                 </div>
               </div>
-              <div className="flex flex-col sm:flex-row gap-2 mt-2">
+              <div className="flex flex-col gap-2 mt-2">
                 <p className="text-lg font-semibold">{`${goodEggInIkat} Ikat`}</p>
                 <p className="text-lg font-semibold">{`${goodEggInKg} Kg`}</p>
               </div>
@@ -328,7 +328,7 @@ const Toko = () => {
                   <PiMoneyWavyFill size={24} color="white" />
                 </div>
               </div>
-              <div className="flex flex-col sm:flex-row gap-2 mt-2">
+              <div className="flex flex-col gap-2 mt-2">
                 <p className="text-lg font-semibold">{`${crackedEggInIkat} Ikat`}</p>
                 <p className="text-lg font-semibold">{`${crackedEggInKg} Kg`}</p>
               </div>

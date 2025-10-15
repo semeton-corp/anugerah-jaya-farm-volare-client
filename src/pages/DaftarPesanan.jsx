@@ -280,13 +280,14 @@ const DaftarPesanan = () => {
       {isDetailPage ? (
         <Outlet />
       ) : (
-        <div className="flex flex-col px-4 py-3 gap-4 ">
+        <div className="flex flex-col px-4 py-3 gap-4">
           {/* header section */}
-          <div className="flex justify-between mb-2 flex-wrap gap-4">
-            <h1 className="text-3xl font-bold">Daftar Pesanan</h1>
-            <div className="text-base flex gap-2">
-              {(userRole == "Owner" || userRole == "Kepala Kandang") && (
-                <div className="flex items-center rounded px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2 gap-4">
+            <h1 className="text-2xl sm:text-3xl font-bold">Daftar Pesanan</h1>
+
+            <div className="flex flex-wrap gap-2 sm:gap-3 text-sm sm:text-base">
+              {(userRole === "Owner" || userRole === "Kepala Kandang") && (
+                <div className="flex items-center rounded px-3 sm:px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
                   <MdStore size={18} />
                   <select
                     value={
@@ -299,10 +300,9 @@ const DaftarPesanan = () => {
                       const selected = placeOptions.find(
                         (item) => item.type === type && String(item.id) === id
                       );
-                      console.log("selectedPlace: ", selected);
                       setSelectedPlace(selected);
                     }}
-                    className="ml-2 bg-transparent text-base font-medium outline-none"
+                    className="ml-2 bg-transparent text-sm sm:text-base font-medium outline-none"
                   >
                     {placeOptions.map((place) => (
                       <option
@@ -315,20 +315,22 @@ const DaftarPesanan = () => {
                   </select>
                 </div>
               )}
-              <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+
+              <div className="flex items-center rounded-lg px-3 sm:px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
                 <FaMoneyBillWave size={18} />
                 <select
                   value={paymentStatus}
                   onChange={(e) => setPaymentStatus(e.target.value)}
-                  className="ml-2 bg-transparent text-base font-medium outline-none"
+                  className="ml-2 bg-transparent text-sm sm:text-base font-medium outline-none"
                 >
                   <option value="">Semua Status Pembayaran</option>
                   <option value="Lunas">Lunas</option>
                   <option value="Belum Lunas">Belum Lunas</option>
                 </select>
               </div>
+
               <div
-                className="flex items-center rounded-lg bg-orange-300 hover:bg-orange-500 cursor-pointer gap-2"
+                className="flex items-center rounded-lg bg-orange-300 hover:bg-orange-500 cursor-pointer"
                 onClick={openDatePicker}
               >
                 <input
@@ -336,12 +338,13 @@ const DaftarPesanan = () => {
                   type="date"
                   value={selectedDate}
                   onChange={handleDateChange}
-                  className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer gap-2"
+                  className="flex items-center rounded-lg px-3 sm:px-4 py-2 bg-transparent cursor-pointer outline-none"
                 />
               </div>
             </div>
           </div>
 
+          {/* notification list */}
           <div className="max-h-72 overflow-y-auto flex flex-col gap-3">
             {pageNotifications &&
               pageNotifications.map((item, index) => (
@@ -352,85 +355,81 @@ const DaftarPesanan = () => {
               ))}
           </div>
 
-          {/* detail penjualan */}
-          <div className=" flex gap-4 ">
-            <div className=" w-full bg-white px-8 py-6 rounded-lg border border-black-6">
-              <div className="flex justify-end">
-                <button
-                  onClick={inputDataPesananHandle}
-                  className="px-5 py-3 bg-orange-300 rounded-[4px] text-black hover:bg-orange-500 cursor-pointer font-medium mb-3"
-                >
-                  Pesan Barang
-                </button>
-              </div>
+          {/* data table */}
+          <div className="flex flex-col bg-white px-4 sm:px-8 py-6 rounded-lg border border-black-6 overflow-x-auto">
+            <div className="flex justify-end mb-3">
+              <button
+                onClick={inputDataPesananHandle}
+                className="px-4 sm:px-5 py-2 sm:py-3 bg-orange-300 rounded-[4px] text-black hover:bg-orange-500 cursor-pointer font-medium"
+              >
+                Pesan Barang
+              </button>
+            </div>
 
-              <table className="w-full text-sm">
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs sm:text-sm min-w-[800px]">
                 <thead>
                   <tr className="bg-green-700 text-white text-center">
-                    <th className="py-2 px-4">Tanggal Pesan</th>
-                    <th className="py-2 px-4">Nama Barang</th>
-                    <th className="py-2 px-4">Satuan</th>
-                    <th className="py-2 px-4">Jumlah</th>
-                    <th className="py-2 px-4">Pelanggan</th>
-                    <th className="py-2 px-4">Tanggal Kirim</th>
-                    <th className="py-2 px-4">Pembayaran</th>
-                    <th className="py-2 px-4">Pengiriman</th>
-                    <th className="py-2 px-4">Aksi</th>
-                    <th className="py-2 px-4"></th>
+                    <th className="py-2 px-3 sm:px-4">Tanggal Pesan</th>
+                    <th className="py-2 px-3 sm:px-4">Nama Barang</th>
+                    <th className="py-2 px-3 sm:px-4">Satuan</th>
+                    <th className="py-2 px-3 sm:px-4">Jumlah</th>
+                    <th className="py-2 px-3 sm:px-4">Pelanggan</th>
+                    <th className="py-2 px-3 sm:px-4">Tanggal Kirim</th>
+                    <th className="py-2 px-3 sm:px-4">Pembayaran</th>
+                    <th className="py-2 px-3 sm:px-4">Pengiriman</th>
+                    <th className="py-2 px-3 sm:px-4">Aksi</th>
                   </tr>
                 </thead>
                 <tbody className="text-center">
                   {dataAntrianPesanan?.map((item, index) => (
                     <tr key={index} className="border-b">
-                      <td className="py-2 px-4">{item.orderDate}</td>
-                      <td className="py-2 px-4">{item.item.name}</td>
-                      <td className="py-2 px-4">{item.saleUnit}</td>
-                      <td className="py-2 px-4">{item.quantity}</td>
-                      <td className="py-2 px-4">{item.customer.name}</td>
-                      <td className="py-2 px-4">{item.sentDate}</td>
-                      <td className="py-2 px-8">
-                        <div
-                          className={`px-3 py-1 rounded-[4px] ${
-                            item.paymentStatus == "Lunas"
+                      <td className="py-2 px-3 sm:px-4">{item.orderDate}</td>
+                      <td className="py-2 px-3 sm:px-4">{item.item.name}</td>
+                      <td className="py-2 px-3 sm:px-4">{item.saleUnit}</td>
+                      <td className="py-2 px-3 sm:px-4">{item.quantity}</td>
+                      <td className="py-2 px-3 sm:px-4">
+                        {item.customer.name}
+                      </td>
+                      <td className="py-2 px-3 sm:px-4">{item.sentDate}</td>
+                      <td className="py-2 px-3 sm:px-4">
+                        <span
+                          className={`px-3 py-1 rounded text-xs sm:text-sm font-semibold ${
+                            item.paymentStatus === "Lunas"
                               ? "bg-aman-box-surface-color text-aman-text-color"
                               : "bg-kritis-box-surface-color text-kritis-text-color"
                           }`}
                         >
                           {item.paymentStatus}
-                        </div>
+                        </span>
                       </td>
-
-                      <td className="py-2 px-8">
-                        <div
-                          className={`px-3 py-1 rounded-[4px] ${
+                      <td className="py-2 px-3 sm:px-4">
+                        <span
+                          className={`px-3 py-1 rounded text-xs sm:text-sm font-semibold ${
                             item.isSend
                               ? "bg-aman-box-surface-color text-aman-text-color"
                               : "bg-kritis-box-surface-color text-kritis-text-color"
                           }`}
                         >
                           {item.isSend ? "Terkirim" : "Belum Terkirim"}
-                        </div>
+                        </span>
                       </td>
-
-                      <td className="py-2 px-4">
-                        <div className="flex gap-4">
+                      <td className="py-2 px-3 sm:px-4">
+                        <div className="flex flex-wrap justify-center gap-2">
                           {!item.isSend && (
                             <button
                               onClick={() => {
                                 setShowSendModal(true);
                                 setSelectedSendId(item.id);
                               }}
-                              className="px-3 py-1 bg-orange-300 rounded-[4px]  hover:bg-orange-500 cursor-pointer"
+                              className="px-3 py-1 bg-orange-300 rounded hover:bg-orange-500 text-xs sm:text-sm"
                             >
                               Kirim
                             </button>
                           )}
-
                           <button
-                            onClick={() => {
-                              editDataPesananHandle(item);
-                            }}
-                            className="px-3 py-1 bg-green-700 rounded-[4px] text-white hover:bg-green-900 cursor-pointer"
+                            onClick={() => editDataPesananHandle(item)}
+                            className="px-3 py-1 bg-green-700 text-white rounded hover:bg-green-900 text-xs sm:text-sm"
                           >
                             Lihat Detail
                           </button>
@@ -440,43 +439,43 @@ const DaftarPesanan = () => {
                   ))}
                 </tbody>
               </table>
-              <div className="flex justify-between mt-16 px-6">
-                {dataAntrianPesanan?.length > 0 ? (
-                  <p className="text-sm text-[#CCCCCC]">{`Menampilkan halaman ${page} dari ${totalPages} halaman. Total ${totalData} data riwayat`}</p>
-                ) : (
-                  <p></p>
-                )}
-                <div className="flex gap-3">
-                  <div
-                    className={`rounded-[4px] py-2 px-6 ${
-                      page <= 1 || totalPages <= 0
-                        ? "bg-gray-200 cursor-not-allowed"
-                        : "bg-green-100 hover:bg-green-200 cursor-pointer"
-                    } flex items-center justify-center text-black text-base font-medium `}
-                    onClick={() =>
-                      page > 1 && totalPages > 0 && setPage(page - 1)
-                    }
-                  >
-                    <p>Previous</p>
-                  </div>
-                  <div
-                    className={`rounded-[4px] py-2 px-6 ${
-                      page >= totalPages || totalPages <= 0
-                        ? "bg-gray-200 cursor-not-allowed"
-                        : "bg-green-700 hover:bg-green-800 cursor-pointer"
-                    } flex items-center justify-center text-white text-base font-medium `}
-                    onClick={() =>
-                      page < totalPages && totalPages > 0 && setPage(page + 1)
-                    }
-                  >
-                    <p>Next</p>
-                  </div>
-                </div>
+            </div>
+
+            {/* pagination */}
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-10 px-2 sm:px-6">
+              {dataAntrianPesanan?.length > 0 && (
+                <p className="text-xs sm:text-sm text-gray-400">{`Menampilkan halaman ${page} dari ${totalPages} halaman. Total ${totalData} data riwayat`}</p>
+              )}
+              <div className="flex gap-3">
+                <button
+                  disabled={page <= 1}
+                  onClick={() => page > 1 && setPage(page - 1)}
+                  className={`rounded py-2 px-5 ${
+                    page <= 1
+                      ? "bg-gray-200 cursor-not-allowed"
+                      : "bg-green-100 hover:bg-green-200 cursor-pointer"
+                  } text-black text-sm font-medium`}
+                >
+                  Previous
+                </button>
+                <button
+                  disabled={page >= totalPages}
+                  onClick={() => page < totalPages && setPage(page + 1)}
+                  className={`rounded py-2 px-5 ${
+                    page >= totalPages
+                      ? "bg-gray-200 cursor-not-allowed"
+                      : "bg-green-700 hover:bg-green-800 cursor-pointer text-white"
+                  } text-sm font-medium`}
+                >
+                  Next
+                </button>
               </div>
             </div>
           </div>
+
+          {/* modal kirim */}
           {showSendModal && (
-            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
               <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full">
                 <h2 className="text-center text-lg font-semibold mb-4">
                   Apakah anda yakin untuk mengirim pesanan ini?

@@ -844,7 +844,8 @@ const InputDataPesanan = () => {
       {id ? (
         <></>
       ) : (
-        <div className="flex md:grid-cols-2 gap-4 justify-between">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* Telur OK */}
           <div className="p-4 w-full rounded-md border-2 border-black-6">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold">Telur OK</h2>
@@ -854,13 +855,13 @@ const InputDataPesanan = () => {
             </div>
 
             <div className="flex justify-center flex-wrap gap-4">
-              <div className="flex flex-col items-center justify-center min-w-32 px-4  py-4 bg-green-200 rounded-md">
+              <div className="flex flex-col items-center justify-center min-w-[80px] px-4 py-4 bg-green-200 rounded-md">
                 <p className="text-3xl font-bold text-center">
                   {parseInt(telurOkIkat)}
                 </p>
                 <p className="text-xl text-center">Ikat</p>
               </div>
-              <div className="flex flex-col items-center justify-center min-w-32 px-4  py-4 bg-green-200 rounded-md">
+              <div className="flex flex-col items-center justify-center min-w-[80px] px-4 py-4 bg-green-200 rounded-md">
                 <p className="text-3xl font-bold text-center">
                   {parseInt(telurOkKg)}
                 </p>
@@ -869,6 +870,7 @@ const InputDataPesanan = () => {
             </div>
           </div>
 
+          {/* Telur Retak */}
           <div className="p-4 w-full rounded-md border-2 border-black-6">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold">Telur Retak</h2>
@@ -878,13 +880,13 @@ const InputDataPesanan = () => {
             </div>
 
             <div className="flex justify-center flex-wrap gap-4">
-              <div className="flex flex-col items-center justify-center min-w-32 px-4 py-4 bg-green-200 rounded-md">
+              <div className="flex flex-col items-center justify-center min-w-[80px] px-4 py-4 bg-green-200 rounded-md">
                 <p className="text-3xl font-bold text-center">
                   {parseInt(telurRetakIkat)}
                 </p>
                 <p className="text-xl text-center">Ikat</p>
               </div>
-              <div className="flex flex-col items-center justify-center min-w-32 px-4  py-4 bg-green-200 rounded-md">
+              <div className="flex flex-col items-center justify-center min-w-[80px] px-4 py-4 bg-green-200 rounded-md">
                 <p className="text-3xl font-bold text-center">
                   {parseInt(telurRetakKg)}
                 </p>
@@ -892,6 +894,8 @@ const InputDataPesanan = () => {
               </div>
             </div>
           </div>
+
+          {/* Telur Bonyok */}
           <div className="p-4 w-full rounded-md border-2 border-black-6">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold">Telur Bonyok</h2>
@@ -901,7 +905,7 @@ const InputDataPesanan = () => {
             </div>
 
             <div className="flex justify-center flex-wrap gap-4">
-              <div className="flex flex-col items-center justify-center min-w-32 px-4 py-4 bg-green-200 rounded-md">
+              <div className="flex flex-col items-center justify-center min-w-[80px] px-4 py-4 bg-green-200 rounded-md">
                 <p className="text-3xl font-bold text-center">
                   {parseInt(telurBonyokPlastik)}
                 </p>
@@ -1199,18 +1203,19 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
           </div>
         </div>
         <div className="flex justify-end">
-          <div className="p-4 max-w-4xl">
-            <div className="grid grid-cols-2 mb-2">
+          <div className="p-4 w-full max-w-4xl">
+            {/* Harga Barang */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 mb-2 gap-y-1">
               <span
-                className={`text-lg ${
-                  isOutOfStock && !id ? " text-gray-400/30" : "text-black"
+                className={`text-base sm:text-lg ${
+                  isOutOfStock && !id ? "text-gray-400/30" : "text-black"
                 }`}
               >
                 Harga Barang :
               </span>
               <span
-                className={`font-bold text-lg text-right ${
-                  isOutOfStock && !id ? " text-gray-400/30" : "text-black"
+                className={`font-bold text-base sm:text-lg sm:text-right ${
+                  isOutOfStock && !id ? "text-gray-400/30" : "text-black"
                 }`}
               >
                 Rp{" "}
@@ -1220,17 +1225,18 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
               </span>
             </div>
 
-            <div className="grid grid-cols-2 mb-4">
+            {/* Potongan Harga */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 mb-4 gap-y-1">
               <span
-                className={`text-lg ${
-                  isOutOfStock && !id ? " text-gray-400/30" : "text-black"
+                className={`text-base sm:text-lg ${
+                  isOutOfStock && !id ? "text-gray-400/30" : "text-black"
                 }`}
               >
                 Potongan Harga :
               </span>
               <span
-                className={`font-bold text-lg text-right ${
-                  isOutOfStock && !id ? " text-gray-400/30" : "text-black"
+                className={`font-bold text-base sm:text-lg sm:text-right ${
+                  isOutOfStock && !id ? "text-gray-400/30" : "text-black"
                 }`}
               >
                 Rp -
@@ -1239,18 +1245,21 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
                   : itemPriceDiscount.toLocaleString("id-ID")}
               </span>
             </div>
-            <hr className="my-2 " />
-            <div className="grid grid-cols-2 mt-4">
+
+            <hr className="my-2" />
+
+            {/* Total */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 mt-4 gap-y-1">
               <span
-                className={`text-lg ${
-                  isOutOfStock && !id ? " text-gray-400/30" : "text-black"
+                className={`text-base sm:text-lg ${
+                  isOutOfStock && !id ? "text-gray-400/30" : "text-black"
                 }`}
               >
                 Total :
               </span>
               <span
-                className={`font-bold text-lg text-right ${
-                  isOutOfStock && !id ? " text-gray-400/30" : "text-black"
+                className={`font-bold text-base sm:text-lg sm:text-right ${
+                  isOutOfStock && !id ? "text-gray-400/30" : "text-black"
                 }`}
               >
                 Rp{" "}
@@ -1289,24 +1298,24 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
 
       {/* Status Pembayaran */}
       <div className="p-4 border border-black-6 rounded-[4px]">
-        <div className="flex justify-between">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
           <h1
             className={`text-lg font-bold ${
-              isOutOfStock && !id ? " text-gray-400/30" : "text-black"
+              isOutOfStock && !id ? "text-gray-400/30" : "text-black"
             }`}
           >
             Pembayaran
           </h1>
 
-          <div
-            className={`px-5 py-3  rounded-[4px]  ${
+          <button
+            className={`px-5 py-3 rounded-[4px] text-sm sm:text-base transition-colors duration-200 ${
               isOutOfStock && !id
-                ? " bg-orange-400/30 cursor-not-allowed"
-                : "bg-orange-400 hover:bg-orange-600 cursor-pointer"
-            } `}
+                ? "bg-orange-400/30 cursor-not-allowed text-gray-500"
+                : "bg-orange-400 hover:bg-orange-600 cursor-pointer text-black"
+            }`}
             onClick={() => {
               if (!isOutOfStock) {
-                if (paymentStatus == "Lunas") {
+                if (paymentStatus === "Lunas") {
                   alert("Pesanan ini sudah Lunas!");
                 } else {
                   setShowPaymentModal(true);
@@ -1317,7 +1326,7 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
             }}
           >
             Pilih Pembayaran
-          </div>
+          </button>
         </div>
 
         {!id && (
@@ -1424,160 +1433,166 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
         )}
 
         {/* table */}
-        <div className="mt-4">
-          <table className="w-full">
-            <thead
-              className={`w-full  ${
-                isOutOfStock && !id
-                  ? " bg-green-700/30 text-white"
-                  : "bg-green-700 text-white"
-              }`}
-            >
-              <tr>
-                <th className="px-4 py-2">Tanggal</th>
-                <th className="px-4 py-2">Metode Pembayaran</th>
-                <th className="px-4 py-2">Nominal Pembayaran</th>
-                <th className="px-4 py-2">Sisa Cicilan</th>
-                <th className="px-4 py-2">Bukti</th>
-                <th className="px-4 py-2">Aksi</th>
-              </tr>
-            </thead>
-            <tbody className="border-b text-center">
-              {tablePayments && tablePayments.length > 0 ? (
-                tablePayments.map((payment, index) => {
-                  const date = payment.date || payment.paymentDate;
-
-                  const totalPaidSoFar = tablePayments
-                    .slice(0, index + 1)
-                    .reduce((sum, p) => sum + Number(p.nominal || 0), 0);
-
-                  const remaining =
-                    itemTotalPrice - itemPriceDiscount - totalPaidSoFar;
-
-                  return (
-                    <tr key={payment.id || index}>
-                      <td className="px-4 py-2">{date}</td>
-                      <td className="px-4 py-2">{payment.paymentMethod}</td>
-                      <td className="px-4 py-2">
-                        Rp {Intl.NumberFormat("id-ID").format(payment.nominal)}
-                      </td>
-                      <td className="px-4 py-2">
-                        Rp{" "}
-                        {Intl.NumberFormat("id-ID").format(
-                          remaining < 0 ? 0 : remaining
-                        )}
-                      </td>
-                      <td className="px-3 py-2">
-                        {payment.paymentProof ? (
-                          <td
-                            className="px-3 py-2 underline text-green-700 hover:text-green-900 cursor-pointer"
-                            onClick={() => setPopupImage(payment.paymentProof)}
-                          >
-                            {payment.paymentProof ? "Bukti Pembayaran" : "-"}
-                          </td>
-                        ) : (
-                          "-"
-                        )}
-                      </td>
-
-                      <td className="px-4 py-2 flex gap-3 justify-center">
-                        <BiSolidEditAlt
-                          onClick={() => {
-                            console.log("payment: ", payment);
-                            setPaymentMethod(payment.paymentMethod);
-                            setNominal(payment.nominal);
-                            setPaymentDate(toISODate(payment.date));
-                            setPaymentId(payment.id);
-                            if (id) {
-                              setShowEditModal(true);
-                            } else {
-                              setEditingIndex(index);
-                              setShowEditModal(true);
-                            }
-                          }}
-                          size={24}
-                          className="cursor-pointer text-black hover:text-gray-300 transition-colors duration-200"
-                        />
-                        <MdDelete
-                          onClick={() => {
-                            if (id) {
-                              setShowDeletePaymentModal(true);
-                              setSelectedDeletePaymentId(payment.id);
-                            } else {
-                              setPayments((prev) =>
-                                prev.filter((_, i) => i !== index)
-                              );
-                            }
-                          }}
-                          size={24}
-                          className="cursor-pointer text-black hover:text-gray-300 transition-colors duration-200"
-                        />
-                      </td>
-                    </tr>
-                  );
-                })
-              ) : (
+        <div className="mt-4 max-h-80 overflow-y-auto border rounded">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[800px]">
+              <thead
+                className={`${
+                  isOutOfStock && !id
+                    ? "bg-green-700/30 text-white"
+                    : "bg-green-700 text-white"
+                }`}
+              >
                 <tr>
-                  <td
-                    colSpan={5}
-                    className={`text-center py-4 italic ${
-                      isOutOfStock ? "text-gray-500/20" : "text-gray-500"
-                    }`}
-                  >
-                    Belum ada data pembayaran.
-                  </td>
+                  <th className="px-4 py-2">Tanggal</th>
+                  <th className="px-4 py-2">Metode Pembayaran</th>
+                  <th className="px-4 py-2">Nominal Pembayaran</th>
+                  <th className="px-4 py-2">Sisa Cicilan</th>
+                  <th className="px-4 py-2">Bukti</th>
+                  <th className="px-4 py-2">Aksi</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+
+              <tbody className="border-b text-center">
+                {tablePayments?.length > 0 ? (
+                  tablePayments.map((payment, index) => {
+                    const date = payment.date || payment.paymentDate;
+                    const nominal = Number(payment.nominal || 0);
+
+                    const totalPaidSoFar = tablePayments
+                      .slice(0, index + 1)
+                      .reduce((sum, p) => sum + Number(p.nominal || 0), 0);
+
+                    const remaining = Math.max(
+                      itemTotalPrice - itemPriceDiscount - totalPaidSoFar,
+                      0
+                    );
+
+                    return (
+                      <tr key={payment.id || index}>
+                        <td className="px-4 py-2">{date}</td>
+                        <td className="px-4 py-2">{payment.paymentMethod}</td>
+                        <td className="px-4 py-2">
+                          Rp {Intl.NumberFormat("id-ID").format(nominal)}
+                        </td>
+                        <td className="px-4 py-2">
+                          Rp {Intl.NumberFormat("id-ID").format(remaining)}
+                        </td>
+                        <td className="px-3 py-2">
+                          {payment.paymentProof ? (
+                            <span
+                              className="underline text-green-700 hover:text-green-900 cursor-pointer"
+                              onClick={() =>
+                                setPopupImage(payment.paymentProof)
+                              }
+                            >
+                              Bukti Pembayaran
+                            </span>
+                          ) : (
+                            "-"
+                          )}
+                        </td>
+
+                        <td className="px-4 py-2 flex gap-3 justify-center">
+                          <BiSolidEditAlt
+                            onClick={() => {
+                              setPaymentMethod(payment.paymentMethod);
+                              setNominal(payment.nominal);
+                              setPaymentDate(toISODate(payment.date));
+                              setPaymentId(payment.id);
+
+                              if (id) {
+                                setShowEditModal(true);
+                              } else {
+                                setEditingIndex(index);
+                                setShowEditModal(true);
+                              }
+                            }}
+                            size={24}
+                            className="cursor-pointer text-black hover:text-gray-300 transition-colors duration-200"
+                          />
+
+                          <MdDelete
+                            onClick={() => {
+                              if (id) {
+                                setShowDeletePaymentModal(true);
+                                setSelectedDeletePaymentId(payment.id);
+                              } else {
+                                setPayments((prev) =>
+                                  prev.filter((_, i) => i !== index)
+                                );
+                              }
+                            }}
+                            size={24}
+                            className="cursor-pointer text-black hover:text-gray-300 transition-colors duration-200"
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={6}
+                      className={`text-center py-4 italic ${
+                        isOutOfStock ? "text-gray-500/20" : "text-gray-500"
+                      }`}
+                    >
+                      Belum ada data pembayaran.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         {/* status pembayaran */}
-        <div className="flex mt-4 items-center justify-between">
-          <div className="flex items-center gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between mt-4 gap-4">
+          {/* Status Pembayaran */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
             <h1
               className={`text-lg font-bold ${
                 isOutOfStock && !id ? "text-gray-400/50" : "text-black"
               }`}
             >
-              Status Pembayaran:{" "}
+              Status Pembayaran:
             </h1>
             <div
-              className={`px-5 py-3 text-xl rounded-[4px] ${
+              className={`px-4 py-2 text-base sm:text-xl rounded-[4px] font-semibold ${
                 paymentStatus === "Belum Lunas"
                   ? "bg-orange-200 text-kritis-text-color"
                   : "bg-aman-box-surface-color text-aman-text-color"
-              }
-              ${
+              } ${
                 isOutOfStock && !id
                   ? "bg-orange-200/50 text-kritis-text-color/30"
                   : ""
-              }
-              `}
+              }`}
             >
               {paymentStatus}
             </div>
           </div>
 
-          <div>
+          {/* Sisa Cicilan */}
+          <div className="flex flex-col items-start sm:items-end gap-1">
             <div
-              className={`text-xl font-semibold ${
+              className={`text-lg sm:text-xl font-semibold ${
                 isOutOfStock && !id ? "text-gray-500/20" : "text-black"
               }`}
             >
               Sisa Cicilan
             </div>
             <div
-              className={`font-semibold text-3xl flex ${
+              className={`font-semibold text-2xl sm:text-3xl flex items-center gap-1 ${
                 isOutOfStock && !id ? "text-gray-500/20" : "text-black"
               }`}
             >
-              <p className="me-2">Rp</p>
-              <p>
+              <span>Rp</span>
+              <span>
                 {isOutOfStock && !id
                   ? "0"
                   : Intl.NumberFormat("id-ID").format(remaining || 0)}
-              </p>
+              </span>
             </div>
           </div>
         </div>
@@ -1653,8 +1668,8 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
       </div> */}
 
       {showPaymentModal && (
-        <div className="fixed w-full inset-0 bg-black/60 flex items-center justify-center z-50">
-          <div className="w-full bg-white mx-40 p-6 rounded-lg shadow-xl relative">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+          <div className="w-full max-w-3xl bg-white rounded-lg shadow-xl p-6 relative">
             <h3 className="text-xl font-bold mb-4">
               {id ? "Tambah Pembayaran" : "Pembayaran"}
             </h3>
@@ -1663,9 +1678,7 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
             <select
               className="w-full border p-2 rounded mb-4"
               value={paymentMethod}
-              onChange={(e) => {
-                setPaymentMethod(e.target.value);
-              }}
+              onChange={(e) => setPaymentMethod(e.target.value)}
             >
               <option className="text-black-6" value="" disabled hidden>
                 Pilih Metode Pembayaran
@@ -1681,23 +1694,16 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
               className="w-full border p-2 rounded mb-4"
               placeholder="Masukkan nominal pembayaran"
               value={nominal == 0 ? "" : formatThousand(nominal)}
-              onChange={(e) => {
-                const raw = onlyDigits(e.target.value);
-                setNominal(raw);
-              }}
+              onChange={(e) => setNominal(onlyDigits(e.target.value))}
             />
 
-            <label className="block font-medium ">Tanggal Bayar</label>
+            <label className="block font-medium mb-2">Tanggal Bayar</label>
             <input
               ref={dateInputRef}
-              className="w-full border bg-black-4 cursor-pointer rounded p-2 mb-4"
               type="date"
+              className="w-full border bg-black-4 cursor-pointer rounded p-2 mb-4"
               value={paymentDate}
-              onClick={() => {
-                if (dateInputRef.current?.showPicker) {
-                  dateInputRef.current.showPicker();
-                }
-              }}
+              onClick={() => dateInputRef.current?.showPicker?.()}
               onChange={(e) => setPaymentDate(e.target.value)}
             />
 
@@ -1707,26 +1713,24 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
               accept="image/*"
               className="w-full border rounded p-2 mb-4"
               onChange={async (e) => {
-                const fileInput = e.target;
-                const file = fileInput.files?.[0];
+                const file = e.target.files?.[0];
                 if (!file) return;
 
                 setIsUploading(true);
-
                 try {
                   const fileUrl = await uploadFile(file);
                   setPaymentProof(fileUrl);
                 } catch (err) {
                   console.error("Upload error:", err);
                   alert("Upload gagal. Silakan coba lagi.");
-                  fileInput.value = "";
+                  e.target.value = "";
                 } finally {
                   setIsUploading(false);
                 }
               }}
             />
 
-            <div className="flex justify-end gap-2">
+            <div className="flex justify-end gap-2 flex-wrap">
               <button
                 onClick={() => {
                   setEditingIndex(null);
@@ -1742,15 +1746,10 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
               </button>
               <button
                 onClick={() => {
-                  if (!paymentProof) {
-                    alert("❌Silahkan upload bukti pembayaran");
-                    return;
-                  }
-
-                  if (nominal <= 0) {
-                    alert("❌Nominal harus lebih dari 0");
-                    return;
-                  }
+                  if (!paymentProof)
+                    return alert("❌Silahkan upload bukti pembayaran");
+                  if (nominal <= 0)
+                    return alert("❌Nominal harus lebih dari 0");
 
                   if (id) {
                     createSalePaymentHandle(id);
@@ -1759,19 +1758,16 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
 
                   const newPayment = {
                     paymentDate: formatDateToDDMMYYYY(paymentDate),
-                    nominal: Number(nominal ?? nominal ?? 0),
+                    nominal: Number(nominal ?? 0),
                     paymentMethod,
                     paymentProof,
                   };
 
                   setPayments((prev) => {
-                    if (editingIndex === null) {
-                      return [...prev, newPayment];
-                    } else {
-                      const copy = [...prev];
-                      copy[editingIndex] = newPayment;
-                      return copy;
-                    }
+                    if (editingIndex === null) return [...prev, newPayment];
+                    const copy = [...prev];
+                    copy[editingIndex] = newPayment;
+                    return copy;
                   });
 
                   setEditingIndex(null);
