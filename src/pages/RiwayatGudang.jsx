@@ -13,45 +13,6 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { getWarehouseItemHistories } from "../services/warehouses";
 
-const riwayatGudangData = [
-  {
-    waktu: "10:30",
-    namaBarang: "Telur OK",
-    satuan: "Ikat",
-    kuantitas: 4,
-    asalBarang: "Gudang A1",
-    tujuan: "Pak Tono",
-    keterangan: "Barang keluar",
-  },
-  {
-    waktu: "09:00",
-    namaBarang: "Telur Retak",
-    satuan: "Butir",
-    kuantitas: 120,
-    asalBarang: "Gudang A1",
-    tujuan: "Toko A",
-    keterangan: "Barang keluar",
-  },
-  {
-    waktu: "08:00",
-    namaBarang: "Telur Pecah",
-    satuan: "Butir",
-    kuantitas: 1200,
-    asalBarang: "Pelet990",
-    tujuan: "Gudang A1",
-    keterangan: "Barang masuk",
-  },
-  {
-    waktu: "07:20",
-    namaBarang: "Telur Retak",
-    satuan: "Butir",
-    kuantitas: 1200,
-    asalBarang: "Kandang A1",
-    tujuan: "Gudang A1",
-    keterangan: "Barang masuk",
-  },
-];
-
 const RiwayatGudang = () => {
   const [query, setQuery] = useState("");
   const location = useLocation();
@@ -118,12 +79,13 @@ const RiwayatGudang = () => {
   }
 
   return (
-    <div className="flex flex-col px-4 py-3 gap-4 ">
-      <div className="flex justify-between mb-2 flex-wrap gap-4">
-        <h1 className="text-3xl font-bold">Riwayat Gudang</h1>
+    <div className="flex flex-col px-4 py-3 gap-4">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 gap-3">
+        <h1 className="text-2xl sm:text-3xl font-bold">Riwayat Gudang</h1>
 
         <div
-          className="flex items-center rounded-lg bg-orange-300 hover:bg-orange-500 cursor-pointer gap-2 px-4 py-2"
+          className="flex items-center justify-center sm:justify-start rounded-lg bg-orange-300 hover:bg-orange-500 cursor-pointer gap-2 px-4 py-2 w-full sm:w-auto"
           onClick={openDatePicker}
         >
           {selectedDate ? (
@@ -132,11 +94,13 @@ const RiwayatGudang = () => {
               type="date"
               value={selectedDate}
               onChange={handleDateChange}
-              className="bg-transparent cursor-pointer"
+              className="bg-transparent cursor-pointer w-full sm:w-auto text-center"
             />
           ) : (
             <>
-              <span className="text-gray-700">Semua Hari</span>
+              <span className="text-gray-700 text-center w-full sm:w-auto">
+                Semua Hari
+              </span>
               <input
                 ref={dateInputRef}
                 type="date"
@@ -149,101 +113,108 @@ const RiwayatGudang = () => {
         </div>
       </div>
 
-      <div className=" rounded-[4px] border border-black-6">
-        <div className="px-6 py-6">
-          <table className="w-full ">
-            <thead className="px-8 rounded-[4px] bg-green-700 text-white text-center">
-              <tr className="">
-                <th className="py-2 px-4">Waktu</th>
-                <th className="py-2 px-4">Nama Barang</th>
-                <th className="py-2 px-4">Kuantitas</th>
-                <th className="py-2 px-4">Asal Barang</th>
-                <th className="py-2 px-4">Tujuan</th>
-                <th className="py-2 px-4">Keterangan</th>
+      {/* Table container (scrollable on mobile) */}
+      <div className="rounded-[4px] border border-black-6 overflow-x-auto">
+        <div className="min-w-[700px] sm:min-w-0 px-4 sm:px-6 py-6">
+          <table className="w-full text-sm sm:text-base">
+            <thead className="bg-green-700 text-white text-center">
+              <tr>
+                <th className="py-2 px-4 whitespace-nowrap">Waktu</th>
+                <th className="py-2 px-4 whitespace-nowrap">Nama Barang</th>
+                <th className="py-2 px-4 whitespace-nowrap">Kuantitas</th>
+                <th className="py-2 px-4 whitespace-nowrap">Asal Barang</th>
+                <th className="py-2 px-4 whitespace-nowrap">Tujuan</th>
+                <th className="py-2 px-4 whitespace-nowrap">Keterangan</th>
                 <th className="py-2 px-4"></th>
               </tr>
             </thead>
+
             <tbody className="text-center">
-              {historyData.map((data, index) => (
-                <tr key={index} className="border-b border-black-6">
-                  <td className="py-2 px-4 ">{data.time}</td>
-                  <td className="py-2 px-4">{data.itemName ?? "-"}</td>
-                  <td className="py-2 px-4">{data.quantity}</td>
-                  <td className="py-2 px-4">{data.source}</td>
-                  <td className="py-2 px-4">{data.destination}</td>
-                  <td className="py-2 px-4">
-                    <span
-                      className={`py-1 px-5 rounded text-sm font-semibold ${
-                        data.status === "Barang Masuk"
-                          ? "bg-aman-box-surface-color text-aman-text-color"
-                          : data.status === "Pending"
-                          ? "bg-green-200 text-green-900"
-                          : data.status === "Stok Diperbarui"
-                          ? "bg-orange-200 text-orange-900"
-                          : "bg-kritis-box-surface-color text-kritis-text-color"
-                      }`}
-                    >
-                      {data.status}
-                    </span>
-                  </td>
-                  <td className="py-2 px-4">
-                    <span
-                      onClick={() => {
-                        detailRiwayatHandle(data.id);
-                      }}
-                      className="underline hover:text-black-5 cursor-pointer"
-                    >
-                      Detail
-                    </span>
+              {historyData.length === 0 ? (
+                <tr>
+                  <td colSpan="7" className="py-6 text-gray-500">
+                    Tidak ada data riwayat.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                historyData.map((data, index) => (
+                  <tr
+                    key={index}
+                    className="border-b border-black-6 hover:bg-gray-50"
+                  >
+                    <td className="py-2 px-4">{data.time}</td>
+                    <td className="py-2 px-4">{data.itemName ?? "-"}</td>
+                    <td className="py-2 px-4">{data.quantity}</td>
+                    <td className="py-2 px-4">{data.source}</td>
+                    <td className="py-2 px-4">{data.destination}</td>
+                    <td className="py-2 px-2 sm:px-4 text-center">
+                      <span
+                        className={`inline-block py-1 px-3 sm:px-4 rounded text-[10px] sm:text-sm font-semibold whitespace-nowrap ${
+                          data.status === "Barang Masuk"
+                            ? "bg-aman-box-surface-color text-aman-text-color"
+                            : data.status === "Pending"
+                            ? "bg-green-200 text-green-900"
+                            : data.status === "Stok Diperbarui"
+                            ? "bg-orange-200 text-orange-900"
+                            : "bg-kritis-box-surface-color text-kritis-text-color"
+                        }`}
+                      >
+                        {data.status}
+                      </span>
+                    </td>
+
+                    <td className="py-2 px-4">
+                      <span
+                        onClick={() => detailRiwayatHandle(data.id)}
+                        className="underline hover:text-black-5 cursor-pointer"
+                      >
+                        Detail
+                      </span>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
 
-          <div className="flex justify-between mt-16 px-6">
-            {historyData?.length > 0 ? (
-              <p className="text-sm text-[#CCCCCC]">{`Menampilkan halaman ${page} dari ${totalPages} halaman. Total ${totalData} data riwayat`}</p>
-            ) : (
-              <p></p>
+          {/* Pagination */}
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-10 sm:mt-16 gap-4 sm:gap-0 px-2 sm:px-6">
+            {historyData?.length > 0 && (
+              <p className="text-sm text-gray-500 text-center sm:text-left">
+                {`Menampilkan halaman ${page} dari ${totalPages} halaman. Total ${totalData} data riwayat.`}
+              </p>
             )}
 
-            <div className="flex gap-3">
-              <div
+            <div className="flex justify-center sm:justify-end gap-3">
+              <button
+                disabled={page <= 1 || totalPages <= 0}
+                onClick={() => page > 1 && totalPages > 0 && setPage(page - 1)}
                 className={`rounded-[4px] py-2 px-6 ${
                   page <= 1 || totalPages <= 0
                     ? "bg-gray-200 cursor-not-allowed"
-                    : "bg-green-100 hover:bg-green-200 cursor-pointer"
-                } flex items-center justify-center text-black text-base font-medium `}
-                onClick={() => page > 1 && totalPages > 0 && setPage(page - 1)}
+                    : "bg-green-100 hover:bg-green-200"
+                } text-black text-sm sm:text-base font-medium`}
               >
-                <p>Previous</p>
-              </div>
-              <div
-                className={`rounded-[4px] py-2 px-6 ${
-                  page >= totalPages || totalPages <= 0
-                    ? "bg-gray-200 cursor-not-allowed"
-                    : "bg-green-700 hover:bg-green-800 cursor-pointer"
-                } flex items-center justify-center text-white text-base font-medium `}
+                Previous
+              </button>
+
+              <button
+                disabled={page >= totalPages || totalPages <= 0}
                 onClick={() =>
                   page < totalPages && totalPages > 0 && setPage(page + 1)
                 }
+                className={`rounded-[4px] py-2 px-6 ${
+                  page >= totalPages || totalPages <= 0
+                    ? "bg-gray-200 cursor-not-allowed"
+                    : "bg-green-700 hover:bg-green-800"
+                } text-white text-sm sm:text-base font-medium`}
               >
-                <p>Next</p>
-              </div>
+                Next
+              </button>
             </div>
           </div>
         </div>
       </div>
-      {/* <button
-        onClick={() => {
-          console.log("page: ", page);
-          console.log("totalData: ", totalData);
-          console.log("totalPage: ", totalPages);
-        }}
-      >
-        CHECK
-      </button> */}
     </div>
   );
 };
