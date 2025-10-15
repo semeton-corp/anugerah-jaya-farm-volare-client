@@ -440,14 +440,6 @@ export default function GajiPegawai() {
           fetchRows();
         }}
       />
-      <button
-        onClick={() => {
-          console.log("page: ", page);
-          console.log("totalPages: ", totalPages);
-        }}
-      >
-        CHECK
-      </button>
     </div>
   );
 }

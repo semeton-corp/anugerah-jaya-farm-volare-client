@@ -597,11 +597,16 @@ export default function SalaryPayModal({ isOpen, onClose, salaryId, onSaved }) {
                 <div className="border rounded-lg">
                   <div className="p-4 md:p-5 space-y-3">
                     <div className="text-sm font-medium">Bukti Pembayaran</div>
-                    <label className="inline-flex items-center gap-2 border rounded px-3 py-2 text-sm cursor-pointer bg-gray-50 hover:bg-gray-100">
+
+                    <label className="flex items-center gap-2 border rounded px-3 py-2 text-sm cursor-pointer bg-gray-50 hover:bg-gray-100 w-full md:w-auto">
                       <span>⬆</span>
+                      <span className="truncate max-w-xs">
+                        {paymentProof?.split("/").pop() || "Pilih file…"}
+                      </span>
                       <input
                         type="file"
                         accept="image/*"
+                        className="hidden"
                         onChange={async (e) => {
                           const fileInput = e.target;
                           const file = fileInput.files?.[0];
@@ -622,21 +627,16 @@ export default function SalaryPayModal({ isOpen, onClose, salaryId, onSaved }) {
                         }}
                       />
                     </label>
-                    {proofFile && (
-                      <div className="text-xs text-gray-600">
-                        File: {proofFile.name}
-                      </div>
-                    )}
 
-                    <div className="pt-2">
+                    <div className="pt-2 flex justify-start md:justify-end">
                       <button
                         onClick={handleSave}
                         disabled={isUploading}
-                        className={`rounded ${
+                        className={`rounded w-full md:w-auto text-white px-4 py-2 ${
                           isUploading
                             ? "bg-gray-400 cursor-not-allowed"
                             : "bg-green-700 hover:bg-green-900 cursor-pointer"
-                        } text-white px-4 py-2 cursor-pointer`}
+                        }`}
                       >
                         {isUploading
                           ? "Menyimpan..."
