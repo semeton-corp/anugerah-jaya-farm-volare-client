@@ -412,14 +412,6 @@ export default function TambahPengeluaran() {
           </button>
         </div>
       </form>
-      <button
-        onClick={() => {
-          console.log("form: ", form);
-          console.log("lokasiOptions: ", lokasiOptions);
-        }}
-      >
-        CHECK
-      </button>
     </div>
   );
 }

@@ -1,4 +1,3 @@
-// src/pages/Pengeluaran.jsx
 import React, { useMemo, useState } from "react";
 import {
   ResponsiveContainer,
@@ -129,26 +128,24 @@ export default function Pengeluaran() {
   return (
     <div className="p-4 space-y-4">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-2 mb-4">
         <h1 className="text-2xl font-bold">Pengeluaran</h1>
 
-        <div className="flex items-center gap-2">
-          <div className="">
-            <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="ml-2 bg-transparent text-base font-medium outline-none cursor-pointer"
-              >
-                {/* <option value="Semua">Semua Kategori</option> */}
-                {CATEGORY_OPTIONS.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-              </select>
-            </div>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+          <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="ml-2 bg-transparent text-base font-medium outline-none cursor-pointer"
+            >
+              {CATEGORY_OPTIONS.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
           </div>
+
           <MonthYearSelector
             month={month}
             year={year}
@@ -161,40 +158,80 @@ export default function Pengeluaran() {
 
       {/* Table */}
       <div className="border rounded-md p-4">
-        <div className=" p-4 w-full max-w-2xl my-4">
+        <div className="p-4 w-full max-w-2xl my-4">
           {pieData.length > 0 ? (
-            <ResponsiveContainer width="100%" height={240}>
-              <PieChart>
-                <Pie
-                  data={pieData}
-                  dataKey="value"
-                  nameKey="name"
-                  outerRadius={90}
-                  innerRadius={45}
-                  stroke="#fff"
-                  strokeWidth={1}
-                  paddingAngle={2}
-                >
-                  {pieData.map((d) => (
-                    <Cell key={d.name} fill={COLORS[d.name] || "#9CA3AF"} />
-                  ))}
-                </Pie>
-                <Tooltip
-                  formatter={(v, n) => [`${Number(v).toFixed(2)}%`, n]}
-                />
-                <Legend
-                  verticalAlign="middle"
-                  align="right"
-                  layout="vertical"
-                />
-              </PieChart>
-            </ResponsiveContainer>
+            <>
+              {/* Desktop Chart */}
+              <div className="hidden md:block">
+                <ResponsiveContainer width="100%" height={240}>
+                  <PieChart>
+                    <Pie
+                      data={pieData}
+                      dataKey="value"
+                      nameKey="name"
+                      outerRadius={90}
+                      innerRadius={45}
+                      stroke="#fff"
+                      strokeWidth={1}
+                      paddingAngle={2}
+                    >
+                      {pieData.map((d) => (
+                        <Cell key={d.name} fill={COLORS[d.name] || "#9CA3AF"} />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      formatter={(v, n) => [`${Number(v).toFixed(2)}%`, n]}
+                    />
+                    <Legend
+                      verticalAlign="middle"
+                      align="right"
+                      layout="vertical"
+                      iconSize={16}
+                      wrapperStyle={{ fontSize: 14 }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* Mobile Chart */}
+              <div className="block md:hidden">
+                <ResponsiveContainer width="100%" height={180}>
+                  <PieChart>
+                    <Pie
+                      data={pieData}
+                      dataKey="value"
+                      nameKey="name"
+                      outerRadius={60}
+                      innerRadius={30}
+                      stroke="#fff"
+                      strokeWidth={1}
+                      paddingAngle={2}
+                    >
+                      {pieData.map((d) => (
+                        <Cell key={d.name} fill={COLORS[d.name] || "#9CA3AF"} />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      formatter={(v, n) => [`${Number(v).toFixed(2)}%`, n]}
+                    />
+                    <Legend
+                      verticalAlign="middle"
+                      align="right"
+                      layout="vertical"
+                      iconSize={8}
+                      wrapperStyle={{ fontSize: 10 }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </>
           ) : (
             <div className="text-sm text-gray-500">
               Tidak ada data untuk periode ini.
             </div>
           )}
         </div>
+
         {/* Chart + Add button row */}
         <div className="flex items-start justify-end gap-4 my-3">
           <button
