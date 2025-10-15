@@ -20,7 +20,7 @@ const RiwayatStok = () => {
   const [storeItemHistories, setStoreItemHistories] = useState([]);
 
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
-  
+
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalData, setTotalData] = useState(0);
@@ -84,7 +84,7 @@ const RiwayatStok = () => {
   }
 
   return (
-    <div className="flex flex-col px-4 py-3 gap-4 ">
+    <div className="flex flex-col px-4 py-3 gap-4">
       {/* header */}
       <div className="flex justify-between mb-2 flex-wrap gap-4">
         <h1 className="text-3xl font-bold">Riwayat Stok Toko</h1>
@@ -104,12 +104,12 @@ const RiwayatStok = () => {
       </div>
 
       {/* entire box */}
-      <div className=" rounded-[4px] border border-black-6">
-        {/* pegawai table */}
-        <div className="px-6 py-6">
-          <table className="w-full ">
-            <thead className="px-8 rounded-[4px] bg-green-700 text-white text-center">
-              <tr className="">
+      <div className="rounded-[4px] border border-black-6">
+        {/* scroll wrapper for table */}
+        <div className="px-6 py-6 w-full overflow-x-auto">
+          <table className="min-w-[800px] w-full text-sm">
+            <thead className="bg-green-700 text-white text-center">
+              <tr>
                 <th className="py-2 px-4">Waktu</th>
                 <th className="py-2 px-4">Nama barang</th>
                 <th className="py-2 px-4">Kuantitas</th>
@@ -119,17 +119,21 @@ const RiwayatStok = () => {
                 <th className="py-2 px-4"></th>
               </tr>
             </thead>
+
             <tbody className="text-center">
               {storeItemHistories.map((item, index) => (
-                <tr key={index} className="border-b border-black-6">
-                  <td className="py-2 px-4 ">{item.time}</td>
+                <tr
+                  key={index}
+                  className="border-b border-black-6 hover:bg-gray-50"
+                >
+                  <td className="py-2 px-4">{item.time}</td>
                   <td className="py-2 px-4">{item.itemName}</td>
                   <td className="py-2 px-4">{item.quantity}</td>
                   <td className="py-2 px-4">{item.destination}</td>
                   <td className="py-2 px-4">{item.source ?? "-"}</td>
-                  <td className="py-2 px-4">
+                  <td className="py-2 px-2 sm:px-4 text-center">
                     <span
-                      className={`py-1 px-5 rounded text-sm font-semibold ${
+                      className={`inline-block min-w-[100px] text-center py-1 px-3 sm:px-5 rounded text-xs sm:text-sm font-semibold ${
                         item.status === "Barang Masuk"
                           ? "bg-aman-box-surface-color text-aman-text-color"
                           : item.status === "Pending"
@@ -142,11 +146,10 @@ const RiwayatStok = () => {
                       {item.status}
                     </span>
                   </td>
+
                   <td className="py-2 px-4">
                     <span
-                      onClick={() => {
-                        detailRiwayatHandle(item.id);
-                      }}
+                      onClick={() => detailRiwayatHandle(item.id)}
                       className="underline hover:text-black-5 cursor-pointer"
                     >
                       Detail
@@ -156,53 +159,50 @@ const RiwayatStok = () => {
               ))}
             </tbody>
           </table>
+
           {storeItemHistories.length < 1 && (
             <p className="p-3 w-full flex justify-center italic text-gray-300">
               Belum ada riwayat stok toko
             </p>
           )}
+        </div>
 
-          {/* footer */}
-          <div className="flex justify-between mt-16 px-6">
-            {storeItemHistories?.length > 0 ? (
-              <p className="text-sm text-[#CCCCCC]">{`Menampilkan halaman ${page} dari ${totalPages} halaman. Total ${totalData} data riwayat`}</p>
-            ) : (
-              <p></p>
-            )}
-            <div className="flex gap-3">
-              <div
-                className={`rounded-[4px] py-2 px-6 ${
-                  page <= 1 || totalPages <= 0
-                    ? "bg-gray-200 cursor-not-allowed"
-                    : "bg-green-100 hover:bg-green-200 cursor-pointer"
-                } flex items-center justify-center text-black text-base font-medium `}
-                onClick={() => page > 1 && totalPages > 0 && setPage(page - 1)}
-              >
-                <p>Previous</p>
-              </div>
-              <div
-                className={`rounded-[4px] py-2 px-6 ${
-                  page >= totalPages || totalPages <= 0
-                    ? "bg-gray-200 cursor-not-allowed"
-                    : "bg-green-700 hover:bg-green-800 cursor-pointer"
-                } flex items-center justify-center text-white text-base font-medium `}
-                onClick={() =>
-                  page < totalPages && totalPages > 0 && setPage(page + 1)
-                }
-              >
-                <p>Next</p>
-              </div>
+        {/* footer */}
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-3 mt-10 px-6">
+          {storeItemHistories?.length > 0 ? (
+            <p className="text-sm text-[#CCCCCC] text-center sm:text-left">
+              {`Menampilkan halaman ${page} dari ${totalPages} halaman. Total ${totalData} data riwayat`}
+            </p>
+          ) : (
+            <p></p>
+          )}
+
+          <div className="flex gap-3 mb-4">
+            <div
+              className={`rounded-[4px] py-2 px-6 ${
+                page <= 1 || totalPages <= 0
+                  ? "bg-gray-200 cursor-not-allowed"
+                  : "bg-green-100 hover:bg-green-200 cursor-pointer"
+              } flex items-center justify-center text-black text-base font-medium`}
+              onClick={() => page > 1 && totalPages > 0 && setPage(page - 1)}
+            >
+              <p>Previous</p>
+            </div>
+            <div
+              className={`rounded-[4px] py-2 px-6 ${
+                page >= totalPages || totalPages <= 0
+                  ? "bg-gray-200 cursor-not-allowed"
+                  : "bg-green-700 hover:bg-green-800 cursor-pointer"
+              } flex items-center justify-center text-white text-base font-medium`}
+              onClick={() =>
+                page < totalPages && totalPages > 0 && setPage(page + 1)
+              }
+            >
+              <p>Next</p>
             </div>
           </div>
         </div>
       </div>
-      <button
-        onClick={() => {
-          console.log("selectedDate: ", selectedDate);
-        }}
-      >
-        CHECK
-      </button>
     </div>
   );
 };
