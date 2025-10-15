@@ -101,7 +101,7 @@ const TugasPegawai = () => {
 
         <div className="px-4 py-2 overflow-x-auto">
           <table className="w-full min-w-[700px] mb-8 border-collapse">
-            <thead className="bg-green-700 text-white text-left">
+            <thead className="bg-green-700 text-white text-left text-sm sm:text-base">
               <tr>
                 <th className="py-2 px-4">Tanggal</th>
                 <th className="py-2 px-4">Tugas Tambahan</th>
@@ -168,7 +168,7 @@ const TugasPegawai = () => {
         </div>
 
         <div className="px-4 py-2 overflow-x-auto">
-          <table className="w-full min-w-[600px] mb-8 border-collapse text-center">
+          <table className="w-full min-w-[600px] mb-8 border-collapse text-center text-sm sm:text-base">
             <thead className="bg-green-700 text-white rounded-[4px]">
               <tr>
                 <th className="py-2 px-4">Jabatan</th>

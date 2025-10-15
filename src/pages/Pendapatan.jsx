@@ -148,26 +148,24 @@ export default function Pendapatan() {
 
   return (
     <div className="p-4 space-y-4">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-2">
         <h1 className="text-2xl font-bold">Pendapatan</h1>
 
-        <div className="flex items-center gap-2">
-          <div className="">
-            <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="ml-2 bg-transparent text-base font-medium outline-none cursor-pointer"
-              >
-                {CATEGORY_OPTIONS.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-              </select>
-            </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="ml-2 bg-transparent text-base font-medium outline-none cursor-pointer"
+            >
+              {CATEGORY_OPTIONS.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
           </div>
+
           <MonthYearSelector
             month={month}
             year={year}
@@ -195,19 +193,20 @@ export default function Pendapatan() {
         </span>
       </div>
 
-      {/* Card wrapper */}
       <div className="border rounded-md p-4">
-        {/* Pie + legend */}
         <div className="max-w-2xl">
           {pieData.length > 0 ? (
-            <ResponsiveContainer width="100%" height={240}>
+            <ResponsiveContainer
+              width="100%"
+              height={window.innerWidth < 768 ? 180 : 240}
+            >
               <PieChart>
                 <Pie
                   data={pieData}
                   dataKey="value"
                   nameKey="name"
-                  outerRadius={90}
-                  innerRadius={45}
+                  outerRadius={window.innerWidth < 768 ? 60 : 90}
+                  innerRadius={window.innerWidth < 768 ? 30 : 45}
                   stroke="#fff"
                   strokeWidth={1}
                   paddingAngle={2}
@@ -226,6 +225,11 @@ export default function Pendapatan() {
                   verticalAlign="middle"
                   align="right"
                   layout="vertical"
+                  iconSize={window.innerWidth < 768 ? 8 : 16}
+                  wrapperStyle={{
+                    fontSize: window.innerWidth < 768 ? 12 : 20,
+                    maxHeight: window.innerWidth < 768 ? 100 : 200,
+                  }}
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -239,7 +243,7 @@ export default function Pendapatan() {
         {/* Table */}
         <div className="mt-4">
           <div className="overflow-x-auto">
-            <table className="min-w-full text-sm">
+            <table className="min-w-full text-sm sm:text-base">
               <thead>
                 <tr className="bg-green-700 text-white">
                   <th className="py-3 px-4 text-left rounded-tl-md">Tanggal</th>

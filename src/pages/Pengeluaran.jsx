@@ -206,7 +206,7 @@ export default function Pengeluaran() {
           </button>
         </div>
         <div className="overflow-x-auto">
-          <table className="min-w-full text-sm">
+          <table className="min-w-full text-sm sm:text-base">
             <thead>
               <tr className="bg-green-700 text-white">
                 <th className="py-3 px-4 text-left rounded-tl-md">Tanggal</th>

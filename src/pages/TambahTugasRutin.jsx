@@ -146,14 +146,11 @@ const TambahTugasRutin = () => {
 
   return (
     <div className="flex flex-col px-4 py-3 gap-4">
-      {/* Header */}
       <div className="flex justify-between items-center mb-2 flex-wrap gap-4">
         <h1 className="text-3xl font-bold">Tambah Tugas Rutin</h1>
       </div>
 
-      {/* Table Section */}
       <div className="w-full mx-auto p-6 bg-white shadow rounded border border-black-6">
-        {/* Pilih Lokasi */}
         <label className="block font-medium  mt-4">Jabatan</label>
         {isEditMode ? (
           <>
@@ -204,7 +201,7 @@ const TambahTugasRutin = () => {
             tasks.map((task, index) => (
               <div
                 key={index}
-                className="p-6 border flex flex-col gap-1 border-black-6 rounded-[4px] bg-black-4 mb-4"
+                className="p-6 border flex flex-col gap-1 border-black-6 rounded-[4px] bg-black-4 mb-4 text-sm sm:text-base"
               >
                 {isEditMode ? (
                   <>
@@ -225,9 +222,6 @@ const TambahTugasRutin = () => {
                       <button
                         className="ml-2 text-red-600 hover:text-red-800 cursor-pointer"
                         onClick={() => {
-                          // const newTasks = [...tasks];
-                          // newTasks.splice(index, 1);
-                          // setTasks(newTasks);
                           deleteTaskHandle(task.id);
                         }}
                       >
