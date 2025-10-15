@@ -90,7 +90,7 @@ const DaftarKandang = () => {
 
   return (
     <div className="p-6">
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-2">
         <h1 className="text-2xl font-bold">Kandang</h1>
         {userRole == "Owner" && (
           <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
@@ -111,8 +111,8 @@ const DaftarKandang = () => {
         )}
       </div>
 
-      <div className="bg-white rounded border border-black p-8">
-        <div className="flex justify-end mb-4 space-x-2">
+      <div className="bg-white rounded border border-black p-4 md:p-8">
+        <div className="flex flex-wrap justify-end mb-4 gap-2">
           <div
             onClick={pindahAyamHandle}
             className="flex items-center rounded px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer"
@@ -127,55 +127,81 @@ const DaftarKandang = () => {
           </div>
         </div>
 
-        <table className="min-w-full table-auto border-gray-200">
-          <thead className="bg-green-700 text-white">
-            <tr>
-              <th className="px-4 py-2 text-left">Status</th>
-              <th className="px-4 py-2 text-left">Kandang</th>
-              <th className="px-4 py-2 text-left">ID Batch</th>
-              <th className="px-4 py-2 text-left">Kategori</th>
-              <th className="px-4 py-2 text-left">Usia (minggu)</th>
-              <th className="px-4 py-2 text-left">Kapasitas Maksimum (Ekor)</th>
-              <th className="px-4 py-2 text-left">PIC Ayam</th>
-              <th className="px-4 py-2 text-left">PIC Telur</th>
-              <th className="px-4 py-2 text-left">Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            {kandangData.map((row, index) => (
-              <tr key={index} className="border-t">
-                <td className="px-4 py-2">
-                  {row.batchId ? (
-                    <span className="px-3 py-1 bg-aman-box-surface-color text-aman-text-color font-semibold rounded shadow-sm">
-                      Kandang Aktif
-                    </span>
-                  ) : (
-                    <span className="px-3 py-1 bg-kritis-box-surface-color text-kritis-text-color rounded shadow-sm">
-                      Kandang Tidak Aktif
-                    </span>
-                  )}
-                </td>
-                <td className="px-4 py-2">{row.cage.name}</td>
-                <td className="px-4 py-2">{row.batchId}</td>
-                <td className="px-4 py-2">{row.chickenCategory}</td>
-                <td className="px-4 py-2">{row.chickenAge}</td>
-                <td className="px-4 py-2">{row.cage.capacity}</td>
-                <td className="px-4 py-2">{row.chickenPic}</td>
-                <td className="px-4 py-2">{row.eggPic}</td>
-                <td className="px-4 py-2">
-                  <button
-                    onClick={() => {
-                      detailKandangHandle(row.id);
-                    }}
-                    className="bg-green-700 hover:bg-green-900 hover:cursor-pointer text-white px-3 py-1 rounded"
-                  >
-                    Lihat Detail
-                  </button>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="min-w-[900px] w-full table-auto border-gray-200">
+            <thead className="bg-green-700 text-white">
+              <tr>
+                <th className="px-4 py-2 text-left whitespace-nowrap">
+                  Status
+                </th>
+                <th className="px-4 py-2 text-left whitespace-nowrap">
+                  Kandang
+                </th>
+                <th className="px-4 py-2 text-left whitespace-nowrap">
+                  ID Batch
+                </th>
+                <th className="px-4 py-2 text-left whitespace-nowrap">
+                  Kategori
+                </th>
+                <th className="px-4 py-2 text-left whitespace-nowrap">
+                  Usia (minggu)
+                </th>
+                <th className="px-4 py-2 text-left whitespace-nowrap">
+                  Kapasitas Maksimum (Ekor)
+                </th>
+                <th className="px-4 py-2 text-left whitespace-nowrap">
+                  PIC Ayam
+                </th>
+                <th className="px-4 py-2 text-left whitespace-nowrap">
+                  PIC Telur
+                </th>
+                <th className="px-4 py-2 text-left whitespace-nowrap">Aksi</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {kandangData.map((row, index) => (
+                <tr key={index} className="border-t">
+                  <td className="px-4 py-2 whitespace-nowrap">
+                    {row.batchId ? (
+                      <span className="px-3 py-1 bg-aman-box-surface-color text-aman-text-color font-semibold rounded shadow-sm">
+                        Kandang Aktif
+                      </span>
+                    ) : (
+                      <span className="px-3 py-1 bg-kritis-box-surface-color text-kritis-text-color rounded shadow-sm">
+                        Kandang Tidak Aktif
+                      </span>
+                    )}
+                  </td>
+                  <td className="px-4 py-2 whitespace-nowrap">
+                    {row.cage.name}
+                  </td>
+                  <td className="px-4 py-2 whitespace-nowrap">{row.batchId}</td>
+                  <td className="px-4 py-2 whitespace-nowrap">
+                    {row.chickenCategory}
+                  </td>
+                  <td className="px-4 py-2 whitespace-nowrap">
+                    {row.chickenAge}
+                  </td>
+                  <td className="px-4 py-2 whitespace-nowrap">
+                    {row.cage.capacity}
+                  </td>
+                  <td className="px-4 py-2 whitespace-nowrap">
+                    {row.chickenPic}
+                  </td>
+                  <td className="px-4 py-2 whitespace-nowrap">{row.eggPic}</td>
+                  <td className="px-4 py-2 whitespace-nowrap">
+                    <button
+                      onClick={() => detailKandangHandle(row.id)}
+                      className="bg-green-700 hover:bg-green-900 hover:cursor-pointer text-white px-3 py-1 rounded whitespace-nowrap"
+                    >
+                      Lihat Detail
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
