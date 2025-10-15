@@ -72,8 +72,9 @@ const DaftarGudang = () => {
   }
 
   return (
-    <div className="p-6 mx-auto ">
-      <div className="flex justify-between mb-4 ">
+    <div className="p-6 mx-auto">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row justify-between mb-4 gap-4">
         <h1 className="text-3xl font-bold">Gudang</h1>
 
         {userRole == "Owner" && (
@@ -95,53 +96,75 @@ const DaftarGudang = () => {
         )}
       </div>
 
+      {/* Table container */}
       <div className="bg-white border rounded p-4">
+        {/* Action buttons */}
         <div className="flex justify-end mb-4 gap-4">
           <button
             onClick={handleTambahGudang}
-            className="bg-orange-300  px-4 py-2 rounded hover:bg-orange-500 cursor-pointer"
+            className="bg-orange-300 px-4 py-2 rounded hover:bg-orange-500 cursor-pointer"
           >
             + Tambah Gudang
           </button>
         </div>
 
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="bg-green-700 text-white">
-              <th className="px-4 py-2 text-left">Nama Gudang</th>
-              <th className="px-4 py-2 text-left">Lokasi</th>
-              <th className="px-4 py-2 text-left">Jumlah Pekerja</th>
-              <th className="px-4 py-2 text-left">Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            {gudangList.map((gudang, index) => (
-              <tr key={gudang.id} className={`${index !== 0 && "border-t"}`}>
-                <td className="px-4 py-2">{gudang?.name}</td>
-                <td className="px-4 py-2">{gudang?.location?.name}</td>
-                <td className="px-4 py-2">{gudang?.totalEmployee}</td>
-                <td className="px-4 py-2">
-                  <button
-                    onClick={() =>
-                      handleLihatDetail(gudang.id, gudang.location.id)
-                    }
-                    className="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-900 cursor-pointer"
-                  >
-                    Lihat Detail
-                  </button>
-                </td>
+        {/* Scrollable table */}
+        <div className="overflow-x-auto">
+          <table className="min-w-[600px] w-full border-collapse">
+            <thead>
+              <tr className="bg-green-700 text-white">
+                <th className="px-4 py-2 text-left whitespace-nowrap">
+                  Nama Gudang
+                </th>
+                <th className="px-4 py-2 text-left whitespace-nowrap">
+                  Lokasi
+                </th>
+                <th className="px-4 py-2 text-left whitespace-nowrap">
+                  Jumlah Pekerja
+                </th>
+                <th className="px-4 py-2 text-left whitespace-nowrap">Aksi</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {gudangList.map((gudang, index) => (
+                <tr key={gudang.id} className={`${index !== 0 && "border-t"}`}>
+                  <td className="px-4 py-2 whitespace-nowrap">
+                    {gudang?.name}
+                  </td>
+                  <td className="px-4 py-2 whitespace-nowrap">
+                    {gudang?.location?.name}
+                  </td>
+                  <td className="px-4 py-2 whitespace-nowrap">
+                    {gudang?.totalEmployee}
+                  </td>
+                  <td className="px-4 py-2 whitespace-nowrap">
+                    <button
+                      onClick={() =>
+                        handleLihatDetail(gudang.id, gudang.location.id)
+                      }
+                      className="bg-green-700 text-white px-3 py-1 rounded hover:bg-green-900 cursor-pointer"
+                    >
+                      Lihat Detail
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Footer / Check button tetap terlihat */}
+        <div className="mt-4 flex justify-end">
+          <button
+            onClick={() => {
+              console.log("gudangList: ", gudangList);
+            }}
+            className="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300"
+          >
+            Check
+          </button>
+        </div>
       </div>
-      <button
-        onClick={() => {
-          console.log("gudangList: ", gudangList);
-        }}
-      >
-        Check
-      </button>
     </div>
   );
 };

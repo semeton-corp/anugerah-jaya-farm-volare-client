@@ -206,7 +206,7 @@ const DetailGudang = () => {
                   <td className="px-4 py-2">{emp.name}</td>
                   <td className="px-4 py-2">{emp.role.name}</td>
                   <td className="px-4 py-2">{emp.phoneNumber}</td>
-                  <td className="px-4 py-2 space-x-2">
+                  <td className="px-4 py-2 flex space-x-2">
                     <button
                       className="bg-green-700 hover:bg-green-900 text-white px-3 py-1 rounded"
                       onClick={() => handleViewProfile(emp.id)}
@@ -290,13 +290,6 @@ const DetailGudang = () => {
           </div>
         </div>
       )}
-      <button
-        onClick={() => {
-          console.log("employeeOptions: ", employeeOptions);
-        }}
-      >
-        CHECK
-      </button>
     </div>
   );
 };
