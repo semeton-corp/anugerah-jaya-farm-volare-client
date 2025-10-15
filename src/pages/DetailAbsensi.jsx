@@ -98,8 +98,9 @@ const DetailAbsensi = ({ mode }) => {
 
   return (
     <div className="p-4">
-      <div className="flex justify-between items-center mb-2 flex-wrap gap-4">
-        <h1 className="text-2xl font-bold mb-4">Detail Absensi</h1>
+      {/* Header */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-2 gap-4">
+        <h1 className="text-2xl md:text-3xl font-bold">Detail Absensi</h1>
         <MonthYearSelector
           month={month}
           year={year}
@@ -108,78 +109,91 @@ const DetailAbsensi = ({ mode }) => {
           setYear={setYear}
         />
       </div>
-      <div className="bg-white rounded border border-black-6 p-6">
-        <table className="w-full border-collapse ">
-          <thead className="bg-green-700 text-white text-sm">
-            <tr>
-              <th className="p-2 text-left">Tanggal</th>
-              <th className="p-2 text-left">Jam masuk</th>
-              <th className="p-2 text-left">Jam pulang</th>
-              <th className="p-2 text-left">Jumlah Lembur</th>
-              <th className="p-2 text-left">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {attendanceData.length === 0 ? (
+
+      {/* Table container */}
+      <div className="bg-white rounded border border-black-6 p-4">
+        {/* Scrollable table */}
+        <div className="overflow-x-auto">
+          <table className="min-w-[600px] w-full border-collapse text-sm">
+            <thead className="bg-green-700 text-white">
               <tr>
-                <td colSpan={5} className="text-center py-4 text-gray-500">
-                  Belum ada data absensi
-                </td>
+                <th className="p-2 text-left whitespace-nowrap">Tanggal</th>
+                <th className="p-2 text-left whitespace-nowrap">Jam masuk</th>
+                <th className="p-2 text-left whitespace-nowrap">Jam pulang</th>
+                <th className="p-2 text-left whitespace-nowrap">
+                  Jumlah Lembur
+                </th>
+                <th className="p-2 text-left whitespace-nowrap">Status</th>
               </tr>
-            ) : (
-              attendanceData.map((row, i) => (
-                <tr key={i} className="border-b">
-                  <td className="p-2">{row.date}</td>
-                  <td className="p-2">{row.startTime}</td>
-                  <td className="p-2">{row.endTime}</td>
-                  <td className="p-2">{row.overTime}</td>
-                  <td className="p-2">
-                    <span
-                      className={`px-3 py-1 rounded ${
-                        row.startTime !== ""
-                          ? "bg-aman-box-surface-color text-aman-text-color"
-                          : "bg-kritis-box-surface-color text-kritis-text-color"
-                      }`}
-                    >
-                      {row.startTime !== "" ? "Hadir" : "Tidak hadir"}
-                    </span>
+            </thead>
+            <tbody>
+              {attendanceData.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="text-center py-4 text-gray-500">
+                    Belum ada data absensi
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                attendanceData.map((row, i) => (
+                  <tr key={i} className="border-b">
+                    <td className="p-2 whitespace-nowrap">{row.date}</td>
+                    <td className="p-2 whitespace-nowrap">{row.startTime}</td>
+                    <td className="p-2 whitespace-nowrap">{row.endTime}</td>
+                    <td className="p-2 whitespace-nowrap">{row.overTime}</td>
+                    <td className="p-2 whitespace-nowrap">
+                      <span
+                        className={`px-3 py-1 rounded ${
+                          row.startTime !== ""
+                            ? "bg-aman-box-surface-color text-aman-text-color"
+                            : "bg-kritis-box-surface-color text-kritis-text-color"
+                        }`}
+                      >
+                        {row.startTime !== "" ? "Hadir" : "Tidak hadir"}
+                      </span>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
 
-        <div className="flex justify-between mt-16 px-6">
-          {attendanceData?.length > 0 ? (
-            <p className="text-sm text-[#CCCCCC]">{`Menampilkan halaman ${page} dari ${totalPages} halaman. Total ${totalData} data riwayat`}</p>
-          ) : (
-            <p></p>
+        {/* Footer / Pagination */}
+        <div className="flex flex-col md:flex-row justify-between mt-4 gap-2 md:gap-0 px-2 md:px-6">
+          {attendanceData?.length > 0 && (
+            <p className="text-sm text-[#CCCCCC]">
+              Menampilkan halaman {page} dari {totalPages} halaman. Total{" "}
+              {totalData} data riwayat
+            </p>
           )}
 
           <div className="flex gap-3">
-            <div
-              className={`rounded-[4px] py-2 px-6 ${
-                page <= 1 || totalPages <= 0
-                  ? "bg-gray-200 cursor-not-allowed"
-                  : "bg-green-100 hover:bg-green-200 cursor-pointer"
-              } flex items-center justify-center text-black text-base font-medium `}
+            <button
+              type="button"
+              disabled={page <= 1 || totalPages <= 0}
               onClick={() => page > 1 && totalPages > 0 && setPage(page - 1)}
+              className={`rounded-[4px] py-2 px-6 text-base font-medium ${
+                page <= 1 || totalPages <= 0
+                  ? "bg-gray-200 cursor-not-allowed text-black"
+                  : "bg-green-100 hover:bg-green-200 cursor-pointer text-black"
+              }`}
             >
-              <p>Previous</p>
-            </div>
-            <div
-              className={`rounded-[4px] py-2 px-6 ${
-                page >= totalPages || totalPages <= 0
-                  ? "bg-gray-200 cursor-not-allowed"
-                  : "bg-green-700 hover:bg-green-800 cursor-pointer"
-              } flex items-center justify-center text-white text-base font-medium `}
+              Previous
+            </button>
+            <button
+              type="button"
+              disabled={page >= totalPages || totalPages <= 0}
               onClick={() =>
                 page < totalPages && totalPages > 0 && setPage(page + 1)
               }
+              className={`rounded-[4px] py-2 px-6 text-base font-medium ${
+                page >= totalPages || totalPages <= 0
+                  ? "bg-gray-200 cursor-not-allowed text-black"
+                  : "bg-green-700 hover:bg-green-800 cursor-pointer text-white"
+              }`}
             >
-              <p>Next</p>
-            </div>
+              Next
+            </button>
           </div>
         </div>
       </div>

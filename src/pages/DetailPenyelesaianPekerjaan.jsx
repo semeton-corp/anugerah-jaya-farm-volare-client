@@ -111,8 +111,8 @@ const DetailPenyelesaianPekerjaan = () => {
   return (
     <div className="p-4">
       {/* header */}
-      <div className="flex justify-between mb-3">
-        <div className="text-3xl font-bold mb-4">
+      <div className="flex flex-col md:flex-row justify-between mb-3 gap-2 items-start md:items-center">
+        <div className="text-2xl md:text-3xl font-bold mb-2 md:mb-0">
           Detail Penyelesaian Pekerjaan
         </div>
         <MonthYearSelector
@@ -124,49 +124,61 @@ const DetailPenyelesaianPekerjaan = () => {
         />
       </div>
 
-      {/* tugas tambahan  */}
+      {/* tugas tambahan */}
       <div className="border p-4 border-black-6 rounded-lg bg-white mb-3">
         <h2 className="text-xl font-semibold mb-4">Pekerjaan Tambahan</h2>
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="bg-green-700 text-white text-left">
-              <th className="py-2 px-4">Tanggal Mengambil Pekerjaan</th>
-              <th className="py-2 px-4">Waktu Mengambil Pekerjaan</th>
-              <th className="py-2 px-4">Nama Pekerjaan</th>
-              <th className="py-2 px-4">Keterangan</th>
-            </tr>
-          </thead>
-          <tbody>
-            {!additionalWorks || additionalWorks.length === 0 ? (
-              <tr>
-                <td colSpan={3} className="py-4 text-center text-gray-500">
-                  Belum terdapat data pekerjaan tambahan
-                </td>
+        <div className="overflow-x-auto">
+          <table className="min-w-[600px] w-full text-sm">
+            <thead>
+              <tr className="bg-green-700 text-white text-left">
+                <th className="py-2 px-4 whitespace-nowrap">
+                  Tanggal Mengambil Pekerjaan
+                </th>
+                <th className="py-2 px-4 whitespace-nowrap">
+                  Waktu Mengambil Pekerjaan
+                </th>
+                <th className="py-2 px-4 whitespace-nowrap">Nama Pekerjaan</th>
+                <th className="py-2 px-4 whitespace-nowrap">Keterangan</th>
               </tr>
-            ) : (
-              additionalWorks.map((item, index) => (
-                <tr key={index} className="border-b">
-                  <td className="py-2 px-4">{item.takenDate}</td>
-                  <td className="py-2 px-4">{item.takenTime}</td>
-                  <td className="py-2 px-4">{item.additionalWork.name}</td>
-                  <td className="py-2 px-4">
-                    <span
-                      className={`px-3 py-1 rounded text-sm font-medium ${
-                        item.isDone
-                          ? "bg-aman-box-surface-color text-aman-text-color"
-                          : "bg-kritis-box-surface-color text-kritis-text-color"
-                      }`}
-                    >
-                      {item.isDone ? "Selesai" : "Dalam Proses"}
-                    </span>
+            </thead>
+            <tbody>
+              {!additionalWorks || additionalWorks.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="py-4 text-center text-gray-500">
+                    Belum terdapat data pekerjaan tambahan
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-
-        <div className="flex justify-between mt-16 px-6">
+              ) : (
+                additionalWorks.map((item, index) => (
+                  <tr key={index} className="border-b">
+                    <td className="py-2 px-4 whitespace-nowrap">
+                      {item.takenDate}
+                    </td>
+                    <td className="py-2 px-4 whitespace-nowrap">
+                      {item.takenTime}
+                    </td>
+                    <td className="py-2 px-4 whitespace-nowrap">
+                      {item.additionalWork.name}
+                    </td>
+                    <td className="py-2 px-4 whitespace-nowrap">
+                      <span
+                        className={`px-3 py-1 rounded text-sm font-medium ${
+                          item.isDone
+                            ? "bg-aman-box-surface-color text-aman-text-color"
+                            : "bg-kritis-box-surface-color text-kritis-text-color"
+                        }`}
+                      >
+                        {item.isDone ? "Selesai" : "Dalam Proses"}
+                      </span>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+        {/* pagination */}
+        <div className="flex flex-col md:flex-row justify-between mt-6 gap-2 md:gap-0 px-2 md:px-6">
           <p className="text-sm text-[#CCCCCC]">
             Menampilkan {additionalWorks?.length} data dari {maxPageAdditional}{" "}
             Halaman Riwayat
@@ -176,16 +188,14 @@ const DetailPenyelesaianPekerjaan = () => {
               type="button"
               disabled={pageAdditional === 1}
               onClick={pageAdditional > 1 ? onPrevAdditional : undefined}
-              className={`rounded-[4px] py-2 px-6 text-base font-medium
-                  ${
-                    pageAdditional === 1
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-green-100 hover:bg-green-200 text-black cursor-pointer"
-                  }`}
+              className={`rounded-[4px] py-2 px-6 text-base font-medium ${
+                pageAdditional === 1
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-green-100 hover:bg-green-200 text-black cursor-pointer"
+              }`}
             >
               Previous
             </button>
-
             <button
               type="button"
               disabled={pageAdditional === maxPageAdditional}
@@ -194,12 +204,11 @@ const DetailPenyelesaianPekerjaan = () => {
                   ? onNextAdditional
                   : undefined
               }
-              className={`rounded-[4px] py-2 px-6 text-base font-medium
-                  ${
-                    pageAdditional === maxPageAdditional
-                      ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                      : "bg-green-700 hover:bg-green-900 text-white cursor-pointer"
-                  }`}
+              className={`rounded-[4px] py-2 px-6 text-base font-medium ${
+                pageAdditional === maxPageAdditional
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-green-700 hover:bg-green-900 text-white cursor-pointer"
+              }`}
             >
               Next
             </button>
@@ -207,93 +216,89 @@ const DetailPenyelesaianPekerjaan = () => {
         </div>
       </div>
 
-      {/* Tugas hari ini */}
+      {/* tugas rutin */}
       <div className="border p-4 border-black-6 rounded-lg bg-white">
         <h2 className="text-xl font-semibold mb-4">Pekerjaan Rutin</h2>
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="bg-green-700 text-white text-left">
-              <th className="py-2 px-4">Tanggal Selesai</th>
-              <th className="py-2 px-4">Waktu Selesai</th>
-              <th className="py-2 px-4">Nama Pekerjaan</th>
-              <th className="py-2 px-4">Keterangan</th>
-            </tr>
-          </thead>
-          <tbody>
-            {!dailyWorks || dailyWorks.length === 0 ? (
-              <tr>
-                <td colSpan={3} className="text-center py-4 text-gray-500">
-                  Belum ada pekerjaan harian
-                </td>
+        <div className="overflow-x-auto">
+          <table className="min-w-[600px] w-full text-sm">
+            <thead>
+              <tr className="bg-green-700 text-white text-left">
+                <th className="py-2 px-4 whitespace-nowrap">Tanggal Selesai</th>
+                <th className="py-2 px-4 whitespace-nowrap">Waktu Selesai</th>
+                <th className="py-2 px-4 whitespace-nowrap">Nama Pekerjaan</th>
+                <th className="py-2 px-4 whitespace-nowrap">Keterangan</th>
               </tr>
-            ) : (
-              dailyWorks.map((item, index) => (
-                <tr key={index} className="border-b">
-                  <td className="py-2 px-4">{item.finishedDate}</td>
-                  <td className="py-2 px-4">{item.finishedTime}</td>
-                  <td className="py-2 px-4">{item.dailyWork.description}</td>
-                  <td className="py-2 px-4">
-                    <span
-                      className={`px-3 py-1 rounded text-sm font-medium ${
-                        item.isDone
-                          ? "bg-aman-box-surface-color text-aman-text-color"
-                          : "bg-kritis-box-surface-color text-kritis-text-color"
-                      }`}
-                    >
-                      {item.isDone ? "Selesai" : "Tidak Selesai"}
-                    </span>
+            </thead>
+            <tbody>
+              {!dailyWorks || dailyWorks.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="text-center py-4 text-gray-500">
+                    Belum ada pekerjaan harian
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-        <div className="flex justify-between mt-16 px-6">
+              ) : (
+                dailyWorks.map((item, index) => (
+                  <tr key={index} className="border-b">
+                    <td className="py-2 px-4 whitespace-nowrap">
+                      {item.finishedDate}
+                    </td>
+                    <td className="py-2 px-4 whitespace-nowrap">
+                      {item.finishedTime}
+                    </td>
+                    <td className="py-2 px-4 whitespace-nowrap">
+                      {item.dailyWork.description}
+                    </td>
+                    <td className="py-2 px-4 whitespace-nowrap">
+                      <span
+                        className={`px-3 py-1 rounded text-sm font-medium ${
+                          item.isDone
+                            ? "bg-aman-box-surface-color text-aman-text-color"
+                            : "bg-kritis-box-surface-color text-kritis-text-color"
+                        }`}
+                      >
+                        {item.isDone ? "Selesai" : "Tidak Selesai"}
+                      </span>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+        {/* pagination */}
+        <div className="flex flex-col md:flex-row justify-between mt-6 gap-2 md:gap-0 px-2 md:px-6">
           <p className="text-sm text-[#CCCCCC]">
             Menampilkan {dailyWorks.length} data dari {maxPageDaily} Halaman
-            Riwayat{" "}
+            Riwayat
           </p>
           <div className="flex gap-3">
             <button
               type="button"
               disabled={pageDaily === 1}
               onClick={pageDaily > 1 ? onPrevDaily : undefined}
-              className={`rounded-[4px] py-2 px-6 text-base font-medium
-                ${
-                  pageDaily === 1
-                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                    : "bg-green-100 hover:bg-green-200 text-black cursor-pointer"
-                }`}
+              className={`rounded-[4px] py-2 px-6 text-base font-medium ${
+                pageDaily === 1
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-green-100 hover:bg-green-200 text-black cursor-pointer"
+              }`}
             >
               Previous
             </button>
-
             <button
               type="button"
               disabled={pageDaily === maxPageDaily}
               onClick={pageDaily < maxPageDaily ? onNextDaily : undefined}
-              className={`rounded-[4px] py-2 px-6 text-base font-medium
-                ${
-                  pageDaily === maxPageDaily
-                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                    : "bg-green-700 hover:bg-green-900 text-white cursor-pointer"
-                }`}
+              className={`rounded-[4px] py-2 px-6 text-base font-medium ${
+                pageDaily === maxPageDaily
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-green-700 hover:bg-green-900 text-white cursor-pointer"
+              }`}
             >
               Next
             </button>
           </div>
         </div>
       </div>
-      <button
-        onClick={() => {
-          console.log("tugasTambahanData: ", tugasTambahanData);
-          console.log("additionalWorks: ", additionalWorks);
-          console.log("maxPageDaily: ", maxPageDaily);
-          console.log("pageDaily: ", pageDaily);
-        }}
-      >
-        check
-      </button>
     </div>
   );
 };
