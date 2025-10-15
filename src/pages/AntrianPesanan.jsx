@@ -557,7 +557,8 @@ const AntrianPesanan = () => {
             </div>
           </div>
 
-          <div className="flex md:grid-cols-2 gap-4 justify-between">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {/* Telur OK */}
             <div className="p-4 w-full rounded-md border-2 border-black-6">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-semibold">Telur OK</h2>
@@ -565,15 +566,14 @@ const AntrianPesanan = () => {
                   <MdEgg size={24} color="white" />
                 </div>
               </div>
-
               <div className="flex justify-center flex-wrap gap-4">
-                <div className="flex flex-col items-center justify-center min-w-32 px-4  py-4 bg-green-200 rounded-md">
+                <div className="flex flex-col items-center justify-center min-w-32 px-4 py-4 bg-green-200 rounded-md">
                   <p className="text-3xl font-bold text-center">
                     {parseInt(telurOkIkat)}
                   </p>
                   <p className="text-xl text-center">Ikat</p>
                 </div>
-                <div className="flex flex-col items-center justify-center min-w-32 px-4  py-4 bg-green-200 rounded-md">
+                <div className="flex flex-col items-center justify-center min-w-32 px-4 py-4 bg-green-200 rounded-md">
                   <p className="text-3xl font-bold text-center">
                     {parseInt(telurOkKg)}
                   </p>
@@ -582,6 +582,7 @@ const AntrianPesanan = () => {
               </div>
             </div>
 
+            {/* Telur Retak */}
             <div className="p-4 w-full rounded-md border-2 border-black-6">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-semibold">Telur Retak</h2>
@@ -589,7 +590,6 @@ const AntrianPesanan = () => {
                   <TbEggCrackedFilled size={24} color="white" />
                 </div>
               </div>
-
               <div className="flex justify-center flex-wrap gap-4">
                 <div className="flex flex-col items-center justify-center min-w-32 px-4 py-4 bg-green-200 rounded-md">
                   <p className="text-3xl font-bold text-center">
@@ -597,7 +597,7 @@ const AntrianPesanan = () => {
                   </p>
                   <p className="text-xl text-center">Ikat</p>
                 </div>
-                <div className="flex flex-col items-center justify-center min-w-32 px-4  py-4 bg-green-200 rounded-md">
+                <div className="flex flex-col items-center justify-center min-w-32 px-4 py-4 bg-green-200 rounded-md">
                   <p className="text-3xl font-bold text-center">
                     {parseInt(telurRetakKg)}
                   </p>
@@ -605,6 +605,8 @@ const AntrianPesanan = () => {
                 </div>
               </div>
             </div>
+
+            {/* Telur Bonyok */}
             <div className="p-4 w-full rounded-md border-2 border-black-6">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-semibold">Telur Bonyok</h2>
@@ -612,7 +614,6 @@ const AntrianPesanan = () => {
                   <TbEggCrackedFilled size={24} color="white" />
                 </div>
               </div>
-
               <div className="flex justify-center flex-wrap gap-4">
                 <div className="flex flex-col items-center justify-center min-w-32 px-4 py-4 bg-green-200 rounded-md">
                   <p className="text-3xl font-bold text-center">
@@ -624,9 +625,9 @@ const AntrianPesanan = () => {
             </div>
           </div>
 
-          <div className=" flex gap-4 ">
-            <div className=" w-full bg-white px-8 py-6 rounded-lg border border-black-6">
-              <table className="w-full text-sm">
+          <div className="flex gap-4">
+            <div className="w-full bg-white px-4 py-4 rounded-lg border border-black-6 overflow-x-auto">
+              <table className="min-w-[800px] w-full text-sm">
                 <thead>
                   <tr className="bg-green-700 text-white text-center">
                     <th className="py-2 px-4">Antrian</th>
@@ -641,7 +642,7 @@ const AntrianPesanan = () => {
                   {dataAntrianPesanan?.map((item, index) => (
                     <tr key={index} className="border-b">
                       <td className="py-2 px-4">
-                        <div className="flex justify-center">
+                        <div className="flex justify-center gap-1">
                           <p>#</p>
                           <p>{index + 1}</p>
                         </div>
@@ -650,15 +651,12 @@ const AntrianPesanan = () => {
                       <td className="py-2 px-4">{item?.saleUnit}</td>
                       <td className="py-2 px-4">{item?.quantity}</td>
                       <td className="py-2 px-4">{item?.customer?.name}</td>
-
                       <td className="py-2 px-4">
-                        <div className="flex gap-3 justify-center">
+                        <div className="flex flex-wrap gap-2 justify-center">
                           <button
                             onClick={() => {
-                              console.log("item: ", item);
                               const localNumber = item?.customer?.phoneNumber;
                               const waNumber = localNumber.replace(/^0/, "62");
-
                               const namaCustomer =
                                 item?.customer?.name || "Pelanggan";
                               const namaBarang = item?.item?.name || "-";
@@ -678,30 +676,30 @@ Apakah pesanan ini *jadi* untuk dipesan? 🙏`;
 
                               const message = encodeURIComponent(rawMessage);
                               const waURL = `https://api.whatsapp.com/send/?phone=${waNumber}&text=${message}`;
-
                               window.open(waURL, "_blank");
                             }}
-                            className="px-3 py-1 bg-green-700 rounded-[4px] text-white hover:bg-green-900 cursor-pointer flex items-center gap-1"
+                            className="px-3 py-1 bg-green-700 rounded-[4px] text-white hover:bg-green-900 cursor-pointer flex items-center gap-1 whitespace-nowrap"
                           >
                             <IoLogoWhatsapp size={18} />
                             Konfirmasi
                           </button>
+
                           <button
                             onClick={() => {
-                              console.log("item: ", item);
                               setSelectedItemHandle(item);
                               setShowAlokasiModal(true);
                             }}
-                            className="px-3 py-1 bg-green-700 rounded-[4px] text-white hover:bg-green-900 cursor-pointer"
+                            className="px-3 py-1 bg-green-700 rounded-[4px] text-white hover:bg-green-900 cursor-pointer whitespace-nowrap"
                           >
                             Alokasikan
                           </button>
+
                           <button
                             onClick={() => {
                               setShowDeleteModal(true);
                               setSelectedDeletedId(item?.id);
                             }}
-                            className="px-3 py-1 bg-kritis-box-surface-color rounded-[4px] text-white hover:bg-kritis-text-color cursor-pointer"
+                            className="px-3 py-1 bg-kritis-box-surface-color rounded-[4px] text-white hover:bg-kritis-text-color cursor-pointer whitespace-nowrap"
                           >
                             Hapus
                           </button>
@@ -713,6 +711,7 @@ Apakah pesanan ini *jadi* untuk dipesan? 🙏`;
               </table>
             </div>
           </div>
+
           {showAlokasiModal && (
             <AlokasiAntrianModal
               customerName={customerName}
