@@ -242,17 +242,21 @@ const Toko = () => {
       {isDetailPage ? (
         <Outlet />
       ) : (
-        <div className="flex flex-col px-4 py-3 gap-4 ">
-          <div className="flex justify-between mb-2 flex-wrap gap-4">
-            <h1 className="text-3xl font-bold">Ringkasan</h1>
-            <div className="flex gap-2">
-              {userRole != "Pekerja Toko" && (
-                <div className="flex items-center rounded px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+        <div className="flex flex-col px-3 sm:px-4 py-3 gap-5">
+          {/* Header */}
+          <div className="flex flex-col md:flex-row md:justify-between items-start md:items-center gap-4">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-green-800">
+              Ringkasan
+            </h1>
+
+            <div className="flex flex-wrap gap-2 w-full md:w-auto">
+              {userRole !== "Pekerja Toko" && (
+                <div className="flex items-center w-full sm:w-auto rounded px-3 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer transition">
                   <MdStore size={18} />
                   <select
                     value={selectedStore}
                     onChange={(e) => setSelectedStore(e.target.value)}
-                    className="ml-2 bg-transparent text-base font-medium outline-none"
+                    className="ml-2 bg-transparent text-sm sm:text-base font-medium outline-none w-full"
                   >
                     {stores.map((site) => (
                       <option key={site.id} value={site.id}>
@@ -262,6 +266,7 @@ const Toko = () => {
                   </select>
                 </div>
               )}
+
               <MonthYearSelector
                 month={month}
                 year={year}
@@ -271,104 +276,86 @@ const Toko = () => {
               />
             </div>
           </div>
-          <div className="flex md:grid-cols-2 gap-4 justify-between">
-            <div className="p-4 w-full rounded-md bg-green-100">
+
+          {/* Summary Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {[
+              { title: "Pendapatan", value: totalIncome },
+              { title: "Piutang", value: totalReceivables },
+            ].map((item, i) => (
+              <div key={i} className="p-4 rounded-md bg-green-100 shadow-sm">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-base sm:text-lg font-semibold">
+                    {item.title}
+                  </h2>
+                  <div className="p-2 rounded-xl bg-green-700">
+                    <PiMoneyWavyFill size={24} color="white" />
+                  </div>
+                </div>
+                <div className="flex items-center flex-wrap">
+                  <p className="text-xl sm:text-2xl font-semibold me-2">Rp</p>
+                  <p className="text-xl sm:text-2xl font-semibold">
+                    {new Intl.NumberFormat("id-ID").format(item.value)}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Egg Summary */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="p-4 rounded-md bg-green-100 shadow-sm">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold">Pendapatan</h2>
+                <h2 className="text-base sm:text-lg font-semibold">
+                  Telur OK Terjual
+                </h2>
                 <div className="p-2 rounded-xl bg-green-700">
                   <PiMoneyWavyFill size={24} color="white" />
                 </div>
               </div>
-              <div>
-                <div className="flex flex-wrap gap-4">
-                  <div className="flex items-center">
-                    <p className="text-3xl font-semibold me-3">Rp</p>
-                    <p className="text-3xl font-semibold">
-                      {new Intl.NumberFormat("id-ID").format(totalIncome)}
-                    </p>
-                  </div>
-                </div>
+              <div className="flex flex-col sm:flex-row gap-2 mt-2">
+                <p className="text-lg font-semibold">{`${goodEggInIkat} Ikat`}</p>
+                <p className="text-lg font-semibold">{`${goodEggInKg} Kg`}</p>
               </div>
             </div>
-            <div className="p-4 w-full rounded-md bg-green-100">
+
+            <div className="p-4 rounded-md bg-green-100 shadow-sm">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold">Piutang</h2>
+                <h2 className="text-base sm:text-lg font-semibold">
+                  Telur Retak Terjual
+                </h2>
                 <div className="p-2 rounded-xl bg-green-700">
                   <PiMoneyWavyFill size={24} color="white" />
                 </div>
               </div>
+              <div className="flex flex-col sm:flex-row gap-2 mt-2">
+                <p className="text-lg font-semibold">{`${crackedEggInIkat} Ikat`}</p>
+                <p className="text-lg font-semibold">{`${crackedEggInKg} Kg`}</p>
+              </div>
+            </div>
 
-              <div>
-                <div className="flex flex-wrap gap-4">
-                  <div className="flex items-center">
-                    <p className="text-3xl font-semibold me-3">Rp</p>
-                    <p className="text-3xl font-semibold">
-                      {new Intl.NumberFormat("id-ID").format(totalReceivables)}
-                    </p>
-                  </div>
+            <div className="p-4 rounded-md bg-green-100 shadow-sm">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-base sm:text-lg font-semibold">
+                  Telur Bonyok Terjual
+                </h2>
+                <div className="p-2 rounded-xl bg-green-700">
+                  <PiMoneyWavyFill size={24} color="white" />
                 </div>
               </div>
+              <p className="text-lg font-semibold mt-2">{`${brokenEggInPlastik} Plastik`}</p>
             </div>
           </div>
-          <div className="flex gap-4">
-            <div className="p-4 w-full rounded-md bg-green-100">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold">Telur OK Terjual</h2>
-                <div className="p-2 rounded-xl bg-green-700">
-                  <MdShoppingCart size={24} color="white" />
-                </div>
-              </div>
 
-              <div className="flex mt-4">
-                <div className=" items-center">
-                  <p className="text-xl font-semibold me-3">{`${goodEggInIkat} Ikat`}</p>
-                  <p className="text-xl font-semibold me-3">{`${goodEggInKg} Kg`}</p>
-                </div>
-              </div>
-              <div className="flex  flex-wrap gap-4">
-                <div className="flex flex-wrap gap-4"></div>
-              </div>
-            </div>
-            <div className="p-4 w-full rounded-md bg-green-100">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold">Telur Retak Terjual</h2>
-                <div className="p-2 rounded-xl bg-green-700">
-                  <MdShoppingCart size={24} color="white" />
-                </div>
-              </div>
-
-              <div className="flex mt-4">
-                <div className=" items-center">
-                  <p className="text-xl font-semibold me-3">{`${crackedEggInIkat} Ikat`}</p>
-                  <p className="text-xl font-semibold me-3">{`${crackedEggInKg} Kg`}</p>
-                </div>
-              </div>
-            </div>
-            <div className="p-4 w-full rounded-md bg-green-100">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-semibold">Telur Bonyok Terjual</h2>
-                <div className="p-2 rounded-xl bg-green-700">
-                  <MdShoppingCart size={24} color="white" />
-                </div>
-              </div>
-
-              <div className="flex mt-4">
-                <div className=" flex flex-col items-center">
-                  <p className="text-xl font-semibold me-3">{`${brokenEggInPlastik} Plastik`}</p>
-                </div>
-              </div>
-              <div className="flex  flex-wrap gap-4">
-                <div className="flex flex-wrap gap-4"></div>
-              </div>
-            </div>
-          </div>
-          <div className="p-6 rounded-lg border border-black-6 bg-white">
-            <div className="flex justify-between">
-              <h2 className="text-xl font-semibold mb-4">
+          {/* Chart Section */}
+          <div className="p-4 sm:p-6 rounded-lg border bg-white shadow-sm">
+            <div className="flex flex-col sm:flex-row justify-between gap-3 mb-4">
+              <h2 className="text-lg sm:text-xl font-semibold text-green-800">
                 Rekapitulasi Penjualan
               </h2>
-              <div className="flex gap-4">
-                <div className="flex items-center rounded-lg px-2 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+
+              <div className="flex flex-wrap gap-2">
+                <div className="flex items-center rounded-lg px-3 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
                   <select
                     value={itemId}
                     onChange={(e) => {
@@ -378,7 +365,7 @@ const Toko = () => {
                       setItemId(e.target.value);
                       setItemName(itemNameObj.name);
                     }}
-                    className="ml-2 bg-transparent text-base font-medium outline-none"
+                    className="ml-2 bg-transparent text-sm md:text-base font-medium outline-none"
                   >
                     {eggCategoryOptions.map((choice, index) => (
                       <option key={index} value={choice.id}>
@@ -387,12 +374,12 @@ const Toko = () => {
                     ))}
                   </select>
                 </div>
-                <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+                <div className="flex items-center rounded-lg px-3 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
                   <FaCalendarAlt size={18} />
                   <select
                     value={graphFilter}
                     onChange={(e) => setGraphFilter(e.target.value)}
-                    className="ml-2 bg-transparent text-base font-medium outline-none"
+                    className="ml-2 bg-transparent text-sm md:text-base font-medium outline-none"
                   >
                     {graphFilterOptions.map((choice, index) => (
                       <option key={index} value={choice}>
@@ -404,96 +391,60 @@ const Toko = () => {
               </div>
             </div>
 
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={storeGraph}>
-                <XAxis dataKey="key" />
-                <YAxis
-                  label={{
-                    value: itemName == "Telur Bonyok" ? "Plastik" : "Kg",
-                    angle: -90,
-                    position: "insideLeft",
-                    style: { textAnchor: "middle", fontSize: 12 },
-                  }}
-                />
-                <Tooltip />
-                <Legend
-                  layout="horizontal"
-                  verticalAlign="top"
-                  align="center"
-                  formatter={(value) => {
-                    if (value === "ok") return "Telur OK";
-                    if (value === "retak") return "Telur Retak";
-                    if (value === "pecah") return "Telur Pecah";
-                    return value;
-                  }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="value"
-                  stroke="#00c853"
-                  strokeWidth={2}
-                  name="Jumlah"
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="p-6 rounded-lg border border-black-6 bg-white">
-            <div className="overflow-x-auto">
-              <div className="flex justify-end mb-3">
-                <div></div>
-                <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
-                  <FaMoneyBillWave size={18} />
-                  <select
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    className="ml-2 bg-transparent text-base font-medium outline-none"
-                  >
-                    {categoryOptions.map((opt) => (
-                      <option key={opt} value={opt} className="text-black">
-                        {opt}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+            <div className="w-full overflow-x-auto">
+              <div className="min-w-[600px]">
+                <ResponsiveContainer width="100%" height={250}>
+                  <LineChart data={storeGraph}>
+                    <XAxis dataKey="key" />
+                    <YAxis
+                      label={{
+                        value: itemName === "Telur Bonyok" ? "Plastik" : "Kg",
+                        angle: -90,
+                        position: "insideLeft",
+                      }}
+                    />
+                    <Tooltip />
+                    <Legend />
+                    <Line
+                      type="monotone"
+                      dataKey="value"
+                      stroke="#00c853"
+                      strokeWidth={2}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
               </div>
+            </div>
+          </div>
 
-              <table className="w-full text-sm text-left border-collapse">
+          {/* Table Section */}
+          <div className="p-4 sm:p-6 rounded-lg border bg-white shadow-sm">
+            <div className="flex justify-end mb-3">
+              <div className="flex items-center rounded-lg px-3 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+                <FaMoneyBillWave size={18} />
+                <select
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="ml-2 bg-transparent text-sm md:text-base font-medium outline-none"
+                >
+                  {categoryOptions.map((opt) => (
+                    <option key={opt} value={opt}>
+                      {opt}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs sm:text-sm text-left border-collapse min-w-[600px]">
                 <thead>
                   <tr className="bg-green-700 text-white text-center">
-                    <th className="py-2 px-4">
-                      {category == "Pendapatan"
-                        ? "Tanggal"
-                        : "Tenggat Pembayaran"}
-                    </th>
-                    <th className="py-2 px-4">Tempat</th>
-                    <th className="py-2 px-4">Kategori</th>
-                    <th className="py-2 px-4">Nama Customer</th>
-                    {category == "Pendapatan" && (
-                      <>
-                        <th className="py-2 px-4">Item</th>
-                        <th className="py-2 px-4">Satuan</th>
-                        <th className="py-2 px-4">Qty</th>
-                      </>
-                    )}
-
-                    <th className="py-2 px-4">Total Nominal</th>
-                    {category == "Piutang" && (
-                      <>
-                        <th className="py-2 px-4">Sisa Pembayaran</th>
-                      </>
-                    )}
-
-                    {category == "Pendapatan" && (
-                      <>
-                        <th className="py-2 px-4">Bukti Bayar</th>
-                      </>
-                    )}
-
-                    {category == "Piutang" && (
-                      <>
-                        <th className="py-2 px-4">Status</th>
-                      </>
-                    )}
+                    <th className="py-2 px-3">Tanggal</th>
+                    <th className="py-2 px-3">Tempat</th>
+                    <th className="py-2 px-3">Kategori</th>
+                    <th className="py-2 px-3">Customer</th>
+                    <th className="py-2 px-3">Total</th>
+                    <th className="py-2 px-3">Status</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -502,124 +453,70 @@ const Toko = () => {
                       key={index}
                       className="border-t border-gray-200 hover:bg-gray-50 text-center"
                     >
-                      <td className="py-2 px-4">
-                        {row.date || row.deadlinePaymentDate}
-                      </td>
-                      <td className="py-2 px-4">{row.placeName}</td>
-                      <td className="py-2 px-4">{row.category}</td>
-                      <td className="py-2 px-4">
+                      <td className="py-2 px-3">{row.date || row.paidDate}</td>
+                      <td className="py-2 px-3">{row.placeName}</td>
+                      <td className="py-2 px-3">{row.category}</td>
+                      <td className="py-2 px-3">
                         {row.customerName || row.name}
                       </td>
-                      {category == "Pendapatan" && (
-                        <>
-                          <td className="py-2 px-4">{row.itemName}</td>
-                          <td className="py-2 px-4">{row.itemUnit}</td>
-                          <td className="py-2 px-4">{row.quantity}</td>
-                        </>
-                      )}
-
-                      {category == "Piutang" && (
-                        <>
-                          <td className="py-2 px-4">
-                            Rp{" "}
-                            {parseInt(row.remainingPayment).toLocaleString(
-                              "id-ID"
-                            )}
-                          </td>
-                        </>
-                      )}
-
-                      <td className="py-2 px-4">
+                      <td className="py-2 px-3">
                         Rp{" "}
                         {parseInt(
                           row.nominal || row.totalNominal
                         ).toLocaleString("id-ID")}
                       </td>
-
-                      {category == "Pendapatan" && (
-                        <>
-                          <td className="py-2 px-4">
-                            <a
-                              href={row.paymentProof}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-green-700 hover:underline hover:text-green-300"
-                            >
-                              Lihat
-                            </a>
-                          </td>
-                        </>
-                      )}
-
-                      {category == "Piutang" && (
-                        <>
-                          <td className="py-2 px-4">
-                            {row.paymentStatus === "Lunas" ? (
-                              <span className="px-3 py-1 bg-aman-box-surface-color text-aman-text-color font-semibold rounded shadow-sm">
-                                Lunas
-                              </span>
-                            ) : (
-                              <span className="px-3 py-1 bg-kritis-box-surface-color text-kritis-text-color font-semibold rounded shadow-sm">
-                                Belum Lunas
-                              </span>
-                            )}
-                          </td>
-                        </>
-                      )}
+                      <td className="py-2 px-3 text-xs sm:text-sm md:text-base">
+                        <span
+                          className={`inline-block px-2 sm:px-3 py-1 rounded font-semibold text-center whitespace-nowrap ${
+                            row.paymentStatus === "Lunas" || row.date
+                              ? "bg-green-200 text-green-900"
+                              : "bg-red-200 text-red-900"
+                          }`}
+                        >
+                          {row.date ? "Lunas" : row.paymentStatus}
+                        </span>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            <div className="flex justify-between mt-16 px-6">
-              {storeCashFlows?.length > 0 ? (
-                <p className="text-sm text-[#CCCCCC]">{`Menampilkan halaman ${page} dari ${totalPages} halaman. Total ${totalData} data riwayat`}</p>
-              ) : (
-                <p></p>
+
+            {/* Pagination */}
+            <div className="flex flex-col sm:flex-row justify-between mt-6 text-sm items-center gap-3">
+              {storeCashFlows?.length > 0 && (
+                <p className="text-gray-400 text-center sm:text-left">
+                  Menampilkan halaman {page} dari {totalPages} halaman. Total{" "}
+                  {totalData} data.
+                </p>
               )}
 
-              <div className="flex gap-3">
-                <div
-                  className={`rounded-[4px] py-2 px-6 ${
-                    page <= 1 || totalPages <= 0
+              <div className="flex gap-2">
+                <button
+                  disabled={page <= 1}
+                  onClick={() => page > 1 && setPage(page - 1)}
+                  className={`rounded py-2 px-4 ${
+                    page <= 1
                       ? "bg-gray-200 cursor-not-allowed"
-                      : "bg-green-100 hover:bg-green-200 cursor-pointer"
-                  } flex items-center justify-center text-black text-base font-medium `}
-                  onClick={() =>
-                    page > 1 && totalPages > 0 && setPage(page - 1)
-                  }
+                      : "bg-green-100 hover:bg-green-200"
+                  }`}
                 >
-                  <p>Previous</p>
-                </div>
-                <div
-                  className={`rounded-[4px] py-2 px-6 ${
-                    page >= totalPages || totalPages <= 0
-                      ? "bg-gray-200 cursor-not-allowed"
-                      : "bg-green-700 hover:bg-green-800 cursor-pointer"
-                  } flex items-center justify-center text-white text-base font-medium `}
-                  onClick={() =>
-                    page < totalPages && totalPages > 0 && setPage(page + 1)
-                  }
+                  Previous
+                </button>
+                <button
+                  disabled={page >= totalPages}
+                  onClick={() => page < totalPages && setPage(page + 1)}
+                  className={`rounded py-2 px-4 text-white ${
+                    page >= totalPages
+                      ? "bg-gray-300 cursor-not-allowed"
+                      : "bg-green-700 hover:bg-green-800"
+                  }`}
                 >
-                  <p>Next</p>
-                </div>
+                  Next
+                </button>
               </div>
             </div>
           </div>
-
-          <button
-            onClick={() => {
-              console.log("month: ", month);
-              console.log("monthName: ", monthName);
-              console.log("year: ", year);
-              console.log("itemId: ", itemId);
-              console.log("graphFilter: ", graphFilter);
-              console.log("itemName: ", itemName);
-              console.log("storeGraph: ", storeGraph);
-            }}
-          >
-            CHECK
-          </button>
         </div>
       )}
     </>

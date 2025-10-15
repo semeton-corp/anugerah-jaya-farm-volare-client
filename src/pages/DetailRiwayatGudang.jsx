@@ -27,14 +27,16 @@ export default function DetailRiwayatGudang() {
   }, []);
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Detail Riwayat</h1>
+    <div className="p-4 sm:p-6">
+      <h1 className="text-xl sm:text-2xl font-bold mb-4">Detail Riwayat</h1>
 
-      <div className="border rounded p-6 bg-white">
+      <div className="border rounded p-4 sm:p-6 bg-white">
         <div className="mb-6">
-          <label className="block font-medium mb-1">Status</label>
+          <label className="block font-medium mb-1 text-sm sm:text-base">
+            Status
+          </label>
           <span
-            className={`inline-block px-3 py-1 rounded  font-semibold ${
+            className={`inline-block px-3 py-1 rounded text-xs sm:text-sm font-semibold ${
               historyData?.status === "Barang Masuk"
                 ? "bg-aman-box-surface-color text-aman-text-color"
                 : historyData?.status === "Barang Keluar"
@@ -46,57 +48,82 @@ export default function DetailRiwayatGudang() {
           </span>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
           <div>
-            <p className=" text-gray-600">Waktu :</p>
-            <p className="font-bold text-lg">{historyData?.time}</p>
+            <p className="text-gray-600 text-sm sm:text-base">Waktu :</p>
+            <p className="font-bold text-base sm:text-lg">
+              {historyData?.time}
+            </p>
           </div>
           <div>
-            <p className=" text-gray-600">Tanggal :</p>
-            <p className="font-bold text-lg">{historyData?.date}</p>
+            <p className="text-gray-600 text-sm sm:text-base">Tanggal :</p>
+            <p className="font-bold text-base sm:text-lg">
+              {historyData?.date}
+            </p>
           </div>
         </div>
+
         {status === "Stok diperbaharui" ? (
-          <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
             <div>
-              <p className=" text-gray-600">Tempat Barang</p>
-              <p className="font-bold text-lg">Gudang Pusat (DUMMY)</p>
+              <p className="text-gray-600 text-sm sm:text-base">
+                Tempat Barang
+              </p>
+              <p className="font-bold text-base sm:text-lg">
+                Gudang Pusat (DUMMY)
+              </p>
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
             <div>
-              <p className=" text-gray-600">Asal Barang</p>
-              <p className="font-bold text-lg">{historyData?.source}</p>
+              <p className="text-gray-600 text-sm sm:text-base">Asal Barang</p>
+              <p className="font-bold text-base sm:text-lg">
+                {historyData?.source}
+              </p>
             </div>
             {historyData?.destination != "-" && (
               <div>
-                <p className=" text-gray-600">Tujuan Barang</p>
-                <p className="font-bold text-lg">{historyData?.destination}</p>
+                <p className="text-gray-600 text-sm sm:text-base">
+                  Tujuan Barang
+                </p>
+                <p className="font-bold text-base sm:text-lg">
+                  {historyData?.destination}
+                </p>
               </div>
             )}
           </div>
         )}
 
         <div className="mb-6">
-          <p className=" text-gray-600">Nama barang</p>
-          <p className="font-bold text-lg">{historyData?.itemName}</p>
+          <p className="text-gray-600 text-sm sm:text-base">Nama Barang</p>
+          <p className="font-bold text-base sm:text-lg">
+            {historyData?.itemName}
+          </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
           <div>
-            <p className=" text-gray-600">Jumlah barang awal</p>
-            <p className="font-bold text-lg">{`${historyData?.quantityBefore} ${historyData?.itemUnit}`}</p>
+            <p className="text-gray-600 text-sm sm:text-base">
+              Jumlah Barang Awal
+            </p>
+            <p className="font-bold text-base sm:text-lg">{`${historyData?.quantityBefore} ${historyData?.itemUnit}`}</p>
           </div>
           <div>
-            <p className=" text-gray-600">Jumlah barang akhir</p>
-            <p className="font-bold text-lg">{`${historyData?.quantityAfter} ${historyData?.itemUnit}`}</p>
+            <p className="text-gray-600 text-sm sm:text-base">
+              Jumlah Barang Akhir
+            </p>
+            <p className="font-bold text-base sm:text-lg">{`${historyData?.quantityAfter} ${historyData?.itemUnit}`}</p>
           </div>
         </div>
 
         <div>
-          <p className=" text-gray-600">Diperbaharui oleh</p>
-          <p className="font-bold text-lg">{historyData?.updatedBy}</p>
+          <p className="text-gray-600 text-sm sm:text-base">
+            Diperbaharui oleh
+          </p>
+          <p className="font-bold text-base sm:text-lg">
+            {historyData?.updatedBy}
+          </p>
         </div>
       </div>
     </div>
