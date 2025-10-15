@@ -95,34 +95,41 @@ const TambahVaksinObat = () => {
     }
 
     console.log("Form data:", data);
-    // send `data` to backend if needed
   };
 
   return (
-    <div className="mt-8">
-      <h1 className="text-3xl font-bold mb-6">Tambah Vaksin / Obat</h1>
+    <div className="mt-8 px-4 sm:px-8">
+      {/* Title */}
+      <h1 className="text-2xl sm:text-3xl font-bold mb-6 text-center sm:text-left">
+        Tambah Vaksin / Obat
+      </h1>
 
-      <div className=" mx-auto  p-6 bg-white rounded border">
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* name */}
+      {/* Form Container */}
+      <div className="mx-auto w-full  bg-white p-4 sm:p-6 rounded-lg border shadow-sm">
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Name */}
           <div>
-            <label className="block font-medium mb-1">Nama vaksin / obat</label>
+            <label className="block font-medium mb-1 text-sm sm:text-base">
+              Nama vaksin / obat
+            </label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Masukkan nama vaksin / obat"
-              className="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300"
+              className="w-full border rounded px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-green-500"
             />
           </div>
 
-          {/* type */}
+          {/* Type */}
           <div>
-            <label className="block font-medium mb-1">Kategori vaksin</label>
+            <label className="block font-medium mb-1 text-sm sm:text-base">
+              Kategori vaksin
+            </label>
             <select
               value={type}
               onChange={(e) => setType(e.target.value)}
-              className="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300"
+              className="w-full border rounded px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-green-500"
             >
               <option value="">Pilih kategori…</option>
               {kategoriVaksinList.map((item, idx) => (
@@ -133,64 +140,58 @@ const TambahVaksinObat = () => {
             </select>
           </div>
 
-          {/* chickenAge */}
+          {/* Chicken Age */}
           <div>
-            <label className="block font-medium mb-1">Usia ayam</label>
-            <div className="flex items-center space-x-2">
+            <label className="block font-medium mb-1 text-sm sm:text-base">
+              Usia ayam
+            </label>
+            <div className="flex items-center gap-2 flex-wrap">
               <input
                 type="number"
                 value={chickenAge}
                 onChange={(e) => setChickenAge(e.target.value)}
                 placeholder="Masukkan usia ayam"
-                className="w-1/6 border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300"
+                className="w-1/3 sm:w-1/5 border rounded px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-green-500"
               />
-              <span className="font-bold">Minggu</span>
+              <span className="font-semibold text-sm sm:text-base">Minggu</span>
             </div>
           </div>
 
-          {/* chickenCategory (auto) */}
+          {/* Chicken Category */}
           <div>
-            <label className="block font-medium mb-1">Kategori ayam</label>
-            <div className="py-2 text-lg font-bold">
+            <label className="block font-medium mb-1 text-sm sm:text-base">
+              Kategori ayam
+            </label>
+            <div className="py-2 text-base sm:text-lg font-semibold text-gray-700">
               {chickenCategory || "-"}
             </div>
           </div>
 
-          {/* note */}
+          {/* Note */}
           <div>
-            <label className="block font-medium mb-1">Catatan</label>
+            <label className="block font-medium mb-1 text-sm sm:text-base">
+              Catatan
+            </label>
             <textarea
               value={note}
               onChange={(e) => setNote(e.target.value)}
               placeholder="Tuliskan catatan untuk vaksin (*opsional)"
-              className="w-full border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300"
+              className="w-full border rounded px-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-green-500"
+              rows={3}
             />
           </div>
 
-          {/* Simpan */}
+          {/* Submit */}
           <div className="text-right">
             <button
               type="submit"
-              className="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-900 cursor-pointer"
+              className="bg-green-700 text-white px-4 sm:px-6 py-2 rounded hover:bg-green-900 transition-colors cursor-pointer text-sm sm:text-base"
             >
               Simpan
             </button>
           </div>
         </form>
       </div>
-      <button
-        onClick={() => {
-          console.log({
-            name,
-            type,
-            chickenAge: chickenAge ? parseInt(chickenAge) : null,
-            chickenCategory,
-            note,
-          });
-        }}
-      >
-        Check
-      </button>
     </div>
   );
 };

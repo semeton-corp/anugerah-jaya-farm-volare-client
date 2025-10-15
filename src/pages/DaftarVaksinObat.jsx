@@ -51,47 +51,75 @@ export default function DaftarVaksinObat() {
 
   return (
     <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4">Daftar Vaksin & Obat</h2>
+      {/* Header */}
+      <div className="flex flex-wrap justify-between items-center mb-4 gap-4">
+        <h2 className="text-2xl sm:text-3xl font-bold">Daftar Vaksin & Obat</h2>
 
-      <div className="border rounded-lg p-6">
-        <div className="flex justify-end mb-6">
-          <button
-            onClick={tambahVaksinHandle}
-            className="bg-orange-300 hover:bg-orange-500  px-5 py-2 rounded text-black cursor-pointer"
-          >
-            + Tambah Vaksin
-          </button>
-        </div>
+        <button
+          onClick={tambahVaksinHandle}
+          className="bg-orange-300 hover:bg-orange-500 px-4 sm:px-5 py-2 rounded text-black font-medium text-sm sm:text-base cursor-pointer transition-all"
+        >
+          + Tambah Vaksin
+        </button>
+      </div>
 
-        <table className="w-full text-left border-collapse">
+      {/* Table Container */}
+      <div className="border rounded-lg p-4 sm:p-6 bg-white shadow-sm overflow-x-auto">
+        <table className="min-w-full text-left border-collapse text-sm text-gray-800">
           <thead>
             <tr className="bg-green-700 text-white">
-              <th className="px-6 py-2">Nama Vaksin</th>
-              <th className="px-6 py-2">Kategori Vaksin/Obat</th>
-              <th className="px-6 py-2">Usia Ayam</th>
-              <th className="px-6 py-2">Kategori Ayam</th>
-              <th className="px-6 py-2">Aksi</th>
+              <th className="px-4 sm:px-6 py-2 whitespace-nowrap">
+                Nama Vaksin
+              </th>
+              <th className="px-4 sm:px-6 py-2 whitespace-nowrap">
+                Kategori Vaksin/Obat
+              </th>
+              <th className="px-4 sm:px-6 py-2 whitespace-nowrap">Usia Ayam</th>
+              <th className="px-4 sm:px-6 py-2 whitespace-nowrap">
+                Kategori Ayam
+              </th>
+              <th className="px-4 sm:px-6 py-2 whitespace-nowrap">Aksi</th>
             </tr>
           </thead>
           <tbody>
-            {vaksinData.map((item, index) => (
-              <tr key={index} className="border-b hover:bg-gray-50 text-sm">
-                <td className="px-4 py-2">{item.name}</td>
-                <td className="px-4 py-2">{item.type}</td>
-                <td className="px-4 py-2">{item.chickenAge}</td>
-                <td className="px-4 py-2">{item.chickenCategory}</td>
-                <td className="px-4 py-2">
-                  <button
-                    onClick={() => {
-                      detailVaksinHandle(item.id);
-                    }}
-                    className="bg-green-700 hover:bg-green-900 text-white px-3 py-1 rounded text-sm cursor-pointer"
-                  >
-                    Lihat Detail
-                  </button>
+            {vaksinData.length > 0 ? (
+              vaksinData.map((item, index) => (
+                <tr
+                  key={index}
+                  className="border-b hover:bg-gray-50 transition-colors"
+                >
+                  <td className="px-4 sm:px-6 py-2 whitespace-nowrap">
+                    {item.name}
+                  </td>
+                  <td className="px-4 sm:px-6 py-2 whitespace-nowrap">
+                    {item.type}
+                  </td>
+                  <td className="px-4 sm:px-6 py-2 whitespace-nowrap">
+                    {item.chickenAge}
+                  </td>
+                  <td className="px-4 sm:px-6 py-2 whitespace-nowrap">
+                    {item.chickenCategory}
+                  </td>
+                  <td className="px-4 sm:px-6 py-2 whitespace-nowrap">
+                    <button
+                      onClick={() => detailVaksinHandle(item.id)}
+                      className="bg-green-700 hover:bg-green-900 text-white px-3 py-1 rounded text-xs sm:text-sm transition-all"
+                    >
+                      Lihat Detail
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan={5}
+                  className="text-center text-gray-500 py-4 text-sm"
+                >
+                  Tidak ada data vaksin.
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
