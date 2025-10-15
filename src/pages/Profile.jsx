@@ -128,9 +128,10 @@ const Profile = ({ mode }) => {
   }
 
   return (
-    <div className="flex flex-col px-4 py-3 gap-4">
-      <div className="flex justify-between">
-        <h1 className="text-3xl font-bold">Profile</h1>
+    <div className="flex flex-col px-3 py-3 gap-4">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <h1 className="text-2xl sm:text-3xl font-bold">Profile</h1>
         <MonthYearSelector
           month={month}
           year={year}
@@ -140,99 +141,72 @@ const Profile = ({ mode }) => {
         />
       </div>
 
-      <div className="flex gap-4">
-        <div className="w-2/8">
-          <div className="w-full rounded-[4px] border border-black-6 flex flex-col items-center px-4 mb-4">
+      {/* Main Content */}
+      <div className="flex flex-col md:flex-row gap-4">
+        {/* LEFT COLUMN */}
+        <div className="w-full md:w-2/6 flex flex-col gap-4">
+          {/* Profile Card */}
+          <div className="w-full rounded-md border border-gray-300 flex flex-col items-center px-4 py-5">
             <img
-              className="mt-[30px] w-[125px] h-[125px] rounded-full mb-4"
+              className="w-[100px] sm:w-[125px] h-[100px] sm:h-[125px] rounded-full mb-3"
               src={photoProfile}
+              alt="Profile"
             />
-            <h1 className="text-lg font-bold">{userData.name}</h1>
-            <div className="flex gap-3 mb-4">
-              <p className="text-base">ID: </p>
-              <p className="text-base">{userData.id} </p>
-            </div>
-            <div className="flex justify-between w-full px-4 mb-2"></div>
-            <div className="flex justify-between w-full px-4 mb-2">
-              <div>
-                <p className="text-base font-medium">Username </p>
+            <h1 className="text-lg font-bold text-center">{userData.name}</h1>
+
+            <div className="text-sm sm:text-base w-full space-y-2 mt-3">
+              <div className="flex justify-between px-3">
+                <p>ID:</p>
+                <p>{userData.id}</p>
               </div>
-              <div>
-                <p className=" text-base text-[#565656] break-words text-right">
-                  {userData?.username}
+              <div className="flex justify-between px-3">
+                <p className="font-medium">Username</p>
+                <p className="text-gray-600 text-right break-words">
+                  {userData.username}
                 </p>
               </div>
-            </div>
-            <div className="flex justify-between w-full px-4 mb-2">
-              <div>
-                <p className="text-base font-medium">Email </p>
-              </div>
-              <div>
-                <p className=" text-base text-[#565656] break-words text-right">
-                  {userData?.email}
+              <div className="flex justify-between px-3">
+                <p className="font-medium">Email</p>
+                <p className="text-gray-600 text-right break-words">
+                  {userData.email}
                 </p>
               </div>
-            </div>
-            <div className="flex justify-between w-full px-4 mb-2">
-              <div>
-                <p className="text-base font-medium">Nomor Telepon </p>
-              </div>
-              <div>
-                <p className="max-w-60 text-base text-[#565656] break-words text-right">
-                  {userData?.phoneNumber}
+              <div className="flex justify-between px-3">
+                <p className="font-medium">Nomor Telepon</p>
+                <p className="max-w-[150px] text-gray-600 text-right break-words">
+                  {userData.phoneNumber}
                 </p>
               </div>
-            </div>
-            <div className="flex justify-between w-full px-4 mb-2">
-              <div>
-                <p className="text-base font-medium">Alamat Tinggal </p>
-              </div>
-              <div>
-                <p className="max-w-60 text-base text-[#565656] break-words text-right">
-                  {userData?.address}{" "}
+              <div className="flex justify-between px-3">
+                <p className="font-medium">Alamat</p>
+                <p className="max-w-[150px] text-gray-600 text-right break-words">
+                  {userData.address}
                 </p>
               </div>
-            </div>
-            <div className="flex justify-between w-full px-4 mb-8">
-              <div>
-                <p className="text-base font-medium">Bergabung </p>
-              </div>
-              <div>
-                <p className="max-w-60 text-base text-[#565656] break-words text-right">
-                  {userData?.createdAt}{" "}
-                </p>
+              <div className="flex justify-between px-3">
+                <p className="font-medium">Bergabung</p>
+                <p className="text-gray-600">{userData.createdAt}</p>
               </div>
             </div>
           </div>
 
-          <div className="w-full py-8 rounded-[4px] border border-black-6 flex flex-col items-center px-4">
-            <div className="flex justify-between w-full px-4 mb-2">
-              <div>
-                <p className="text-base font-medium">Jabatan </p>
-              </div>
-              <div>
-                <p className="text-base text-[#565656]">
-                  {userData.role?.name}{" "}
-                </p>
-              </div>
+          {/* Role & Site */}
+          <div className="w-full py-5 rounded-md border border-gray-300 flex flex-col items-center px-4">
+            <div className="flex justify-between w-full px-3 mb-2">
+              <p className="font-medium">Jabatan</p>
+              <p className="text-gray-600">{userData.role?.name}</p>
             </div>
-            <div className="flex justify-between w-full px-4 mb-2">
-              <div>
-                <p className="text-base font-medium">Site </p>
-              </div>
-              <div>
-                <p className="max-w-60 text-base text-[#565656] break-words text-right">
-                  {userData?.location?.name}{" "}
-                </p>
-              </div>
+            <div className="flex justify-between w-full px-3 mb-2">
+              <p className="font-medium">Site</p>
+              <p className="text-gray-600 text-right">
+                {userData.location?.name}
+              </p>
             </div>
-            <div className="flex justify-between w-full px-4 ">
-              <div>
-                <p className="text-base font-medium">PIC </p>
-              </div>
-              <div>
-                {userPlacements.map((item) => (
-                  <p className="max-w-90text-base text-[#565656] break-words text-right">
+            <div className="flex justify-between w-full px-3">
+              <p className="font-medium">PIC</p>
+              <div className="text-gray-600 text-right">
+                {userPlacements.map((item, i) => (
+                  <p key={i} className="break-words">
                     {item}
                   </p>
                 ))}
@@ -240,321 +214,289 @@ const Profile = ({ mode }) => {
             </div>
           </div>
 
-          <div className="mt-4 w-full">
-            <div className="flex mt-2 w-full gap-3">
-              {mode === "StaffDetail" && (
-                <div className="flex flex-col sm:flex-row gap-3 w-full sm:justify-center">
-                  <button
-                    onClick={handleEditPegawai}
-                    className="flex items-center justify-center gap-2 px-4 py-2 
-                 rounded-md cursor-pointer 
-                 bg-orange-200 hover:bg-orange-500 
-                 w-full sm:w-auto sm:min-w-[180px]"
-                  >
-                    <RiEdit2Fill size={20} />
-                    <span className="text-base sm:text-lg font-medium">
-                      Edit Pegawai
-                    </span>
-                  </button>
+          {/* Action Buttons */}
+          {mode === "StaffDetail" && (
+            <div className="flex flex-col sm:flex-row gap-3 w-full mt-2">
+              <button
+                onClick={handleEditPegawai}
+                className="flex items-center justify-center gap-2 px-4 py-2 
+              rounded-md cursor-pointer 
+              bg-orange-200 hover:bg-orange-500 w-full sm:w-auto"
+              >
+                <RiEdit2Fill size={20} />
+                <span className="text-base sm:text-lg font-medium">
+                  Edit Pegawai
+                </span>
+              </button>
 
-                  <button
-                    onClick={() => setShowDelete(true)}
-                    className="flex items-center justify-center gap-2 px-4 py-2 
-                 rounded-md cursor-pointer 
-                 bg-red-600 text-red-100 hover:bg-red-300 hover:text-white
-                 w-full sm:w-auto sm:min-w-[180px]"
-                  >
-                    <RiDeleteBin6Line size={20} />
-                    <span className="text-base sm:text-lg font-medium">
-                      Hapus Pegawai
-                    </span>
-                  </button>
-                </div>
-              )}
+              <button
+                onClick={() => setShowDelete(true)}
+                className="flex items-center justify-center gap-2 px-4 py-2 
+              rounded-md cursor-pointer 
+              bg-red-600 text-white hover:bg-red-700 w-full sm:w-auto"
+              >
+                <RiDeleteBin6Line size={20} />
+                <span className="text-base sm:text-lg font-medium">
+                  Hapus Pegawai
+                </span>
+              </button>
             </div>
-          </div>
-          {/* <button
-            onClick={() => {
-              console.log("myData: ", userData);
-              console.log("userInformation: ", userInformation);
-              console.log("userPresenceInformation: ", userPresenceInformation);
-              console.log("userSalaryInformation: ", userSalaryInformation);
-              console.log("kpiPerformances: ", kpiPerformances);
-              console.log("userData: ", userData);
-              console.log("userPlacements: ", userPlacements);
-            }}
-          >
-            CHECK
-          </button> */}
+          )}
         </div>
 
+        {/* RIGHT COLUMN */}
         {showSection && (
-          <div className="w-6/8">
-            <div className="bg-white p-6 rounded border border-black-6 w-full mb-4">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">
+          <div className="w-full md:w-4/6 flex flex-col gap-4">
+            {/* Catatan Kinerja */}
+            <div className="bg-white p-4 sm:p-6 rounded border border-gray-300">
+              <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-3">
                 Catatan Kinerja
               </h2>
-              <div className="bg-amber-100/60 p-4 rounded-lg">
-                <p className="text-gray-700">{note}</p>
+              <div className="bg-amber-100/60 p-3 rounded-lg">
+                <p className="text-gray-700 text-sm sm:text-base">{note}</p>
               </div>
             </div>
-            <div className="flex md:grid-cols-2 gap-4 justify-between">
-              <div className="p-4 w-full rounded-md bg-green-100">
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-lg font-semibold">Total jam kerja</h2>
+
+            {/* KPI Section */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Total Jam Kerja */}
+              <div className="p-4 rounded-md bg-green-100">
+                <div className="flex justify-between items-center mb-3">
+                  <h2 className="text-lg font-semibold">Total Jam Kerja</h2>
                 </div>
-                <div className="flex flex-wrap gap-4 items-center">
+                <div className="flex items-center gap-3">
                   <div className="p-2 rounded-xl bg-green-700">
                     <FaClock size={24} color="white" />
                   </div>
-                  <div className="flex items-center">
-                    <p className="text-3xl font-semibold me-3">
-                      {userInformation?.totalWorkHour != null
-                        ? new Intl.NumberFormat("en-US", {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          }).format(Number(userInformation?.totalWorkHour))
-                        : "-"}
-                    </p>
-                    <p className="text-lg font-semibold">jam</p>
-                  </div>
+                  <p className="text-3xl font-semibold">
+                    {userInformation?.totalWorkHour ?? "-"}
+                    <span className="text-lg ml-1">jam</span>
+                  </p>
                 </div>
               </div>
-              <div className="p-4 w-full rounded-md bg-green-100">
-                <div className="flex justify-between items-center mb-4">
+
+              {/* KPI Skor */}
+              <div className="p-4 rounded-md bg-green-100">
+                <div className="flex justify-between items-center mb-3">
                   <h2 className="text-lg font-semibold">Skor KPI</h2>
                 </div>
-                <div className="flex flex-wrap gap-4">
-                  <div className="flex flex-wrap gap-4 items-center">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-xl bg-green-700">
+                    <FaChartLine size={24} color="white" />
+                  </div>
+                  <p className="text-3xl font-semibold">
+                    {userInformation?.workKpiScore ?? "-"}
+                    <span className="text-lg ml-1">%</span>
+                  </p>
+                </div>
+              </div>
+
+              {/* KPI Ayam (conditional) */}
+              {userData?.role?.name === "Pekerja Kandang" && (
+                <div className="p-4 rounded-md bg-green-100">
+                  <div className="flex justify-between items-center mb-3">
+                    <h2 className="text-lg font-semibold">Skor KPI Ayam</h2>
+                  </div>
+                  <div className="flex items-center gap-3">
                     <div className="p-2 rounded-xl bg-green-700">
                       <FaChartLine size={24} color="white" />
                     </div>
-                    <div className="flex items-center">
-                      <p className="text-3xl font-semibold pe-2">
-                        {userInformation?.workKpiScore != null
-                          ? new Intl.NumberFormat("en-US", {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2,
-                            }).format(Number(userInformation?.workKpiScore))
-                          : "-"}
-                      </p>
-                      <p className="text-xl font-semibold">%</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {userData?.role?.name == "Pekerja Kandang" && (
-                <div className="p-4 w-full rounded-md bg-green-100">
-                  <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-lg font-semibold">Skor KPI Ayam</h2>
-                  </div>
-                  <div className="flex flex-wrap gap-4">
-                    <div className="flex flex-wrap gap-4 items-center">
-                      <div className="p-2 rounded-xl bg-green-700">
-                        <FaChartLine size={24} color="white" />
-                      </div>
-                      <div className="flex items-center">
-                        <p className="text-3xl font-semibold pe-2">
-                          {userInformation?.chickenKpiScore}
-                        </p>
-                        <p className="text-xl font-semibold">%</p>
-                      </div>
-                    </div>
+                    <p className="text-3xl font-semibold">
+                      {userInformation?.chickenKpiScore ?? "-"}
+                      <span className="text-lg ml-1">%</span>
+                    </p>
                   </div>
                 </div>
               )}
             </div>
-            <div className="p-4 border border-black-6 bg-white rounded-md mt-4 ">
-              <h2 className="text-lg font-semibold mb-4">Performa KPI</h2>
-              <ResponsiveContainer width="100%" height={300}>
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={kpiPerformances}>
-                    <XAxis dataKey="key" />
-                    <YAxis />
-                    <Tooltip />
-                    <Line
-                      type="monotone"
-                      dataKey="workKpiScore"
-                      stroke="#FF0000"
-                      strokeWidth={2}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="chickenKpiScore"
-                      stroke="#FFD700"
-                      strokeWidth={2}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </ResponsiveContainer>
+
+            {/* Chart */}
+            <div className="p-4 border border-gray-300 bg-white rounded-md">
+              <h2 className="text-lg font-semibold mb-3">Performa KPI</h2>
+
+              {/* Scrollable container */}
+              <div className="w-full overflow-x-auto">
+                {/* Inner wrapper with minimum width to trigger scroll */}
+                <div className="min-w-[600px]">
+                  <ResponsiveContainer width="100%" height={250}>
+                    <LineChart data={kpiPerformances}>
+                      <XAxis dataKey="key" />
+                      <YAxis />
+                      <Tooltip />
+                      <Line
+                        type="monotone"
+                        dataKey="workKpiScore"
+                        stroke="#FF0000"
+                        strokeWidth={2}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="chickenKpiScore"
+                        stroke="#FFD700"
+                        strokeWidth={2}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
             </div>
-            <div className="flex gap-4 mt-4">
-              <div className="bg-white flex-1 p-4 border border-black-6 rounded-lg">
+
+            {/* PRESENSI & TUGAS */}
+            <div className="flex flex-col lg:flex-row gap-4">
+              {/* Presensi */}
+              <div className="bg-white flex-1 p-4 border border-gray-300 rounded-lg">
                 <div className="flex justify-between items-center mb-2">
                   <h2 className="text-lg font-semibold">Total Presensi</h2>
                   <button
                     onClick={detailAbsensiHandle}
-                    className="px-4 py-2 rounded-[4px] bg-orange-400 hover:bg-orange-600 cursor-pointer"
+                    className="px-4 py-2 rounded-md bg-orange-400 hover:bg-orange-600 text-black text-sm"
                   >
                     Detail
                   </button>
                 </div>
-                <div className="flex w-full gap-4 px-4 justify-center">
-                  <div className="border border-black-6 rounded-[4px] bg-white shadow-lg px-[32px] py-[18px]">
-                    <div className="flex flex-col justify-center gap-2">
-                      <div className="flex flex-col items-center">
-                        <p className="text-[40px] font-bold">
-                          {userPresenceInformation?.totalPresent}
-                        </p>
-                        <p className="text-xl">Kali</p>
-                      </div>
-                      <div className="rounded-[4px] bg-[#87FF8B] flex items-center">
-                        <p className="w-full text-center px-3">Hadir</p>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <div className="border border-gray-300 rounded-md bg-white shadow px-6 py-4 flex-1">
+                    <div className="flex flex-col items-center">
+                      <p className="text-[36px] font-bold">
+                        {userPresenceInformation?.totalPresent}
+                      </p>
+                      <p className="text-base">Kali</p>
+                      <div className="rounded bg-[#87FF8B] px-3 mt-2">
+                        <p className="text-center">Hadir</p>
                       </div>
                     </div>
                   </div>
-                  <div className="border border-black-6 rounded-[4px] bg-white shadow-lg px-[32px] py-[18px]">
-                    <div className="flex flex-col justify-center gap-2">
-                      <div className="flex flex-col items-center">
-                        <p className="text-[40px] font-bold">
-                          {userPresenceInformation?.totalNotPresent}
+                  <div className="border border-gray-300 rounded-md bg-white shadow px-6 py-4 flex-1">
+                    <div className="flex flex-col items-center">
+                      <p className="text-[36px] font-bold">
+                        {userPresenceInformation?.totalNotPresent}
+                      </p>
+                      <p className="text-base">Kali</p>
+                      <div className="rounded bg-[#FF5E5E] px-3 mt-2">
+                        <p className="text-center text-kritis-text-color">
+                          Tidak Hadir
                         </p>
-                        <p className="text-xl">Kali</p>
-                      </div>
-                      <div className="rounded-[4px] bg-[#FF5E5E] flex items-center">
-                        <p className="w-full text-center px-3">Tidak Hadir</p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="bg-white flex-1 p-4 border border-black-6 rounded-lg">
+
+              {/* Penyelesaian Tugas */}
+              <div className="bg-white flex-1 p-4 border border-gray-300 rounded-lg">
                 <div className="flex justify-between items-center mb-2">
                   <h2 className="text-lg font-semibold">Penyelesaian Tugas</h2>
                   <button
-                    onClick={() => {
-                      detailPenyelesaianPekerjaan(userData.id);
-                    }}
-                    className="px-4 py-2 rounded-[4px] bg-orange-400 hover:bg-orange-600 cursor-pointer"
+                    onClick={() => detailPenyelesaianPekerjaan(userData.id)}
+                    className="px-4 py-2 rounded-md bg-orange-400 hover:bg-orange-600 text-black text-sm"
                   >
                     Detail
                   </button>
                 </div>
-                <div className="flex w-full gap-4 px-4 justify-center">
-                  <div className="border border-black-6 rounded-[4px] bg-white shadow-lg px-[32px] py-[18px]">
-                    <div className="flex flex-col justify-center gap-2">
-                      <div className="flex flex-col items-center">
-                        <p className="text-[40px] font-bold">
-                          {userWorkInformation?.totalWorkDone}
-                        </p>
-                        <p className="text-xl">Tugas</p>
-                      </div>
-                      <div className="rounded-[4px] bg-[#87FF8B] flex items-center">
-                        <p className="w-full text-center px-3">Selesai</p>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <div className="border border-gray-300 rounded-md bg-white shadow px-6 py-4 flex-1">
+                    <div className="flex flex-col items-center">
+                      <p className="text-[36px] font-bold">
+                        {userWorkInformation?.totalWorkDone}
+                      </p>
+                      <p className="text-base">Tugas</p>
+                      <div className="rounded bg-[#87FF8B] px-3 mt-2">
+                        <p className="text-center">Selesai</p>
                       </div>
                     </div>
                   </div>
-                  <div className="border border-black-6 rounded-[4px] bg-white shadow-lg px-[32px] py-[18px]">
-                    <div className="flex flex-col justify-center gap-2">
-                      <div className="flex flex-col items-center">
-                        <p className="text-[40px] font-bold">
-                          {" "}
-                          {userWorkInformation?.totalWorkNotDone}
-                        </p>
-                        <p className="text-xl">Tugas</p>
-                      </div>
-                      <div className="rounded-[4px] bg-[#FF5E5E] flex items-center">
-                        <p className="w-full text-center px-3">Tidak Selesai</p>
+                  <div className="border border-gray-300 rounded-md bg-white shadow px-6 py-4 flex-1">
+                    <div className="flex flex-col items-center">
+                      <p className="text-[36px] font-bold">
+                        {userWorkInformation?.totalWorkNotDone}
+                      </p>
+                      <p className="text-base">Tugas</p>
+                      <div className="rounded bg-[#FF5E5E] px-3 mt-2">
+                        <p className="text-center text-kritis-text-color">Tidak Selesai</p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="p-4 border border-black-6 mt-4 rounded-[4px] w-full bg-white">
-              <h2 className="text-lg font-semibold mb-4">Rincian gaji</h2>
-              <div className="space-y-2 text-sm">
+
+            {/* Gaji */}
+            <div className="p-4 border border-gray-300 mt-4 rounded-md bg-white">
+              <h2 className="text-lg font-semibold mb-3">Rincian Gaji</h2>
+              <div className="space-y-2 text-sm sm:text-base">
                 {userSalaryInformation?.baseSalary && (
                   <div className="flex justify-between border-b pb-1">
                     <span>Gaji Pokok</span>
                     <span>
-                      {formatRupiah(userSalaryInformation?.baseSalary)}
+                      {formatRupiah(userSalaryInformation.baseSalary)}
                     </span>
                   </div>
                 )}
-
-                {userSalaryInformation?.additionalWorkSalary != 0 && (
+                {userSalaryInformation?.additionalWorkSalary !== 0 && (
                   <div className="flex justify-between border-b pb-1">
-                    <span>Gaji Pekerjaaan Tambahan</span>
+                    <span>Gaji Tambahan</span>
                     <span>
-                      {formatRupiah(
-                        userSalaryInformation?.additionalWorkSalary
-                      )}
+                      {formatRupiah(userSalaryInformation.additionalWorkSalary)}
                     </span>
                   </div>
                 )}
-
                 {userSalaryInformation?.bonusSalary && (
                   <div className="flex justify-between border-b pb-1">
                     <span>Bonus</span>
                     <span>
-                      {formatRupiah(userSalaryInformation?.bonusSalary)}
+                      {formatRupiah(userSalaryInformation.bonusSalary)}
                     </span>
                   </div>
                 )}
-
-                {userSalaryInformation?.compentationSalary != 0 && (
+                {userSalaryInformation?.compentationSalary !== 0 && (
                   <div className="flex justify-between border-b pb-1">
                     <span>Kompensasi</span>
                     <span>
-                      {formatRupiah(userSalaryInformation?.compentationSalary)}
+                      {formatRupiah(userSalaryInformation.compentationSalary)}
                     </span>
                   </div>
                 )}
-
                 {(userSalaryInformation?.cashBond ?? 0) !== 0 && (
                   <div className="flex justify-between border-b pb-1">
                     <span>Kasbon</span>
-                    <span className="font-semibold text-red-600">
+                    <span className="text-red-600 font-semibold">
                       -{formatRupiah(userSalaryInformation.cashBond)}
                     </span>
                   </div>
                 )}
-
                 <div className="flex justify-between font-bold pt-2">
                   <span>Total</span>
-                  <span>
-                    {formatRupiah(userSalaryInformation?.totalSalary)}
-                  </span>
+                  <span>{formatRupiah(userSalaryInformation.totalSalary)}</span>
                 </div>
               </div>
             </div>
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation */}
       {showDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div
             className="absolute inset-0 bg-black/20"
             onClick={() => !isDeleting && setShowDelete(false)}
           />
-          <div className="relative w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
+          <div className="relative w-[90%] max-w-md rounded-lg bg-white p-6 shadow-lg">
             <h3 className="text-lg font-semibold mb-1">Hapus Pegawai?</h3>
             <p className="text-sm text-gray-600 mb-4">
               Pegawai <span className="font-medium">{userData?.name}</span> akan
               dihapus permanen. Tindakan ini tidak bisa dibatalkan.
             </p>
-
             <div className="flex justify-end gap-2">
               <button
-                className="px-4 py-2 rounded border border-gray-300 bg-white hover:bg-gray-200 disabled:opacity-60 cursor-pointer"
+                className="px-4 py-2 rounded border border-gray-300 bg-white hover:bg-gray-200 disabled:opacity-60"
                 onClick={() => setShowDelete(false)}
                 disabled={isDeleting}
               >
                 Batal
               </button>
               <button
-                className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700 disabled:opacity-60 cursor-pointer"
+                className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700 disabled:opacity-60"
                 onClick={handleConfirmDelete}
                 disabled={isDeleting}
               >
