@@ -112,8 +112,6 @@ const RequestKeGudang = () => {
   };
 
   const handleBarangSampai = async (data) => {
-    // console.log("Payload dikirim:", data);
-    // console.log("selectedItem: ", selectedItem);
     const payload = {
       quantity: parseInt(data.jumlah),
     };
@@ -123,7 +121,6 @@ const RequestKeGudang = () => {
         payload,
         selectedItem.id
       );
-      // console.log("sampaiResponse: ", sampaiResponse);
       if (sampaiResponse.status == 200) {
         fetchRequestItemsData();
       }
@@ -236,13 +233,13 @@ const RequestKeGudang = () => {
       {isDetailPage ? (
         <Outlet />
       ) : (
-        <div className="flex flex-col px-4 py-3 gap-4 ">
-          {/* header */}
-          <div className="flex justify-between mb-2 flex-wrap gap-4">
-            <h1 className="text-3xl font-bold">Pesan ke Gudang</h1>
+        <div className="flex flex-col px-4 py-3 gap-6">
+          {/* Header */}
+          <div className="flex flex-wrap justify-between items-center gap-4">
+            <h1 className="text-2xl sm:text-3xl font-bold">Pesan ke Gudang</h1>
 
-            <div className="flex gap-4">
-              {userRole != "Pekerja Toko" && (
+            <div className="flex flex-wrap gap-3 items-center">
+              {userRole !== "Pekerja Toko" && (
                 <div className="flex items-center rounded px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
                   <MdStore size={18} />
                   <select
@@ -258,8 +255,9 @@ const RequestKeGudang = () => {
                   </select>
                 </div>
               )}
+
               <div
-                className="flex items-center rounded-lg bg-orange-300 hover:bg-orange-500 cursor-pointer gap-2"
+                className="flex items-center rounded-lg bg-orange-300 hover:bg-orange-500 cursor-pointer"
                 onClick={openDatePicker}
               >
                 <input
@@ -267,126 +265,141 @@ const RequestKeGudang = () => {
                   type="date"
                   value={selectedDate}
                   onChange={handleDateChange}
-                  className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer gap-2"
+                  className="px-4 py-2 bg-transparent text-base font-medium outline-none cursor-pointer"
                 />
               </div>
             </div>
           </div>
 
-          {/* entire box */}
-          <div className="p-6 rounded-[4px] border border-black-6">
-            <div className="flex justify-end">
+          {/* Main Box */}
+          <div className="p-4 sm:p-6 rounded border border-gray-300 bg-white">
+            <div className="flex justify-end mb-4">
               <button
                 onClick={pesanBarangHandle}
-                className="px-5 py-3 bg-orange-300 rounded-[4px] text-black hover:bg-orange-500 cursor-pointer font-medium mb-3"
+                className="px-4 sm:px-5 py-2 sm:py-3 bg-orange-300 rounded text-black hover:bg-orange-500 font-medium"
               >
                 Pesan Barang
               </button>
             </div>
-            {/* pegawai table */}
-            <div className="p-6">
-              <table className="w-full text-left border-collapse">
+
+            {/* Table Section */}
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-sm sm:text-base border-collapse">
                 <thead>
-                  <tr className="bg-green-700 text-white">
-                    <th className="px-4 py-2">Nama barang</th>
+                  <tr className="bg-green-700 text-white text-left">
+                    <th className="px-4 py-2">Nama Barang</th>
                     <th className="px-4 py-2">Jumlah Pesan (ikat)</th>
                     <th className="px-4 py-2">Gudang Pemesanan</th>
                     <th className="px-4 py-2">Keterangan</th>
-                    <th className="px-4 py-2">Aksi</th>
+                    <th className="px-4 py-2 text-center">Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {requestData?.map((item, idx) => (
-                    <tr key={idx} className="border-b hover:bg-gray-50">
-                      <td className="px-4 py-2">{item.item.name}</td>
-                      <td className="px-4 py-2">{item.quantity}</td>
-                      <td className="px-4 py-2">{item.warehouse.name}</td>
-                      <td className="px-4 py-2">
-                        <span
-                          className={`px-3 py-1 rounded text-sm font-semibold ${getStatusStyle(
-                            item.status
-                          )}`}
-                        >
-                          {item.status}
-                        </span>
-                      </td>
-                      <td>
-                        {getSecondAction(item.status) &&
-                          (getSecondAction(item.status).label !==
-                            "Sortir Telur" ||
-                            item.item.name === "Telur Retak") && (
-                            <button
-                              onClick={() => {
-                                const label = getSecondAction(
-                                  item.status
-                                ).label;
-                                if (label === "Barang Sampai") {
-                                  setSelectedItem(item);
-                                  setShowBarangSampaiModal(true);
-                                } else if (
-                                  item.item.name === "Telur Retak" &&
-                                  label === "Sortir Telur"
-                                ) {
-                                  setSelectedItem(item);
-                                  setShowSortirModal(true);
-                                } else if (label === "Batal Pesan") {
-                                  setSelectedItem(item);
-                                  setShowBatalModal(true);
-                                }
-                              }}
-                              className={`${
-                                getSecondAction(item.status).color
-                              } px-3 py-1 mx-2 text-sm rounded`}
-                            >
-                              {getSecondAction(item.status).label}
-                            </button>
-                          )}
+                  {requestData?.length > 0 ? (
+                    requestData.map((item, idx) => (
+                      <tr
+                        key={idx}
+                        className="border-b hover:bg-gray-50 text-gray-800"
+                      >
+                        <td className="px-4 py-2">{item.item.name}</td>
+                        <td className="px-4 py-2">{item.quantity}</td>
+                        <td className="px-4 py-2">{item.warehouse.name}</td>
+                        <td className="px-4 py-2">
+                          <span
+                            className={`inline-block px-3 py-1 rounded text-xs sm:text-sm font-semibold ${getStatusStyle(
+                              item.status
+                            )}`}
+                          >
+                            {item.status}
+                          </span>
+                        </td>
+                        <td className="px-4 py-2 text-center">
+                          {getSecondAction(item.status) &&
+                            (getSecondAction(item.status).label !==
+                              "Sortir Telur" ||
+                              item.item.name === "Telur Retak") && (
+                              <button
+                                onClick={() => {
+                                  const label = getSecondAction(
+                                    item.status
+                                  ).label;
+                                  if (label === "Barang Sampai") {
+                                    setSelectedItem(item);
+                                    setShowBarangSampaiModal(true);
+                                  } else if (
+                                    item.item.name === "Telur Retak" &&
+                                    label === "Sortir Telur"
+                                  ) {
+                                    setSelectedItem(item);
+                                    setShowSortirModal(true);
+                                  } else if (label === "Batal Pesan") {
+                                    setSelectedItem(item);
+                                    setShowBatalModal(true);
+                                  }
+                                }}
+                                className={`${
+                                  getSecondAction(item.status).color
+                                } px-3 py-1 mx-1 text-xs sm:text-sm rounded`}
+                              >
+                                {getSecondAction(item.status).label}
+                              </button>
+                            )}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan="5"
+                        className="p-3 text-center italic text-gray-500"
+                      >
+                        Belum ada data pesanan ke gudang
                       </td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
-              {requestData.length < 1 && (
-                <>
-                  <p className="p-3 w-full flex justify-center italic text-gray-500">
-                    Belum ada data pesanan ke gudang
-                  </p>
-                </>
-              )}
             </div>
 
-            <div className="flex justify-between mt-16 px-6">
+            {/* Pagination */}
+            <div className="flex flex-col sm:flex-row justify-between items-center mt-8 gap-4">
               {requestData?.length > 0 ? (
-                <p className="text-sm text-[#CCCCCC]">{`Menampilkan halaman ${page} dari ${totalPages} halaman. Total ${totalData} data riwayat`}</p>
+                <p className="text-sm text-gray-400 text-center sm:text-left">
+                  Menampilkan halaman {page} dari {totalPages} halaman. Total{" "}
+                  {totalData} data riwayat.
+                </p>
               ) : (
-                <p></p>
+                <div />
               )}
 
               <div className="flex gap-3">
-                <div
-                  className={`rounded-[4px] py-2 px-6 ${
+                <button
+                  disabled={page === 1}
+                  onClick={() => page > 1 && setPage(page - 1)}
+                  className={`rounded py-2 px-5 text-sm font-medium ${
                     page === 1
                       ? "bg-gray-200 cursor-not-allowed"
-                      : "bg-green-100 hover:bg-green-200 cursor-pointer"
-                  } flex items-center justify-center text-black text-base font-medium `}
-                  onClick={() => page > 1 && setPage(page - 1)}
+                      : "bg-green-100 hover:bg-green-200 text-black"
+                  }`}
                 >
-                  <p>Previous</p>
-                </div>
-                <div
-                  className={`rounded-[4px] py-2 px-6 ${
+                  Previous
+                </button>
+                <button
+                  disabled={page === totalPages}
+                  onClick={() => page < totalPages && setPage(page + 1)}
+                  className={`rounded py-2 px-5 text-sm font-medium ${
                     page === totalPages
                       ? "bg-gray-200 cursor-not-allowed"
-                      : "bg-green-700 hover:bg-green-800 cursor-pointer"
-                  } flex items-center justify-center text-white text-base font-medium `}
-                  onClick={() => page < totalPages && setPage(page + 1)}
+                      : "bg-green-700 hover:bg-green-800 text-white"
+                  }`}
                 >
-                  <p>Next</p>
-                </div>
+                  Next
+                </button>
               </div>
             </div>
           </div>
 
+          {/* Modals */}
           {showBarangSampaiModal && selectedItem && (
             <KonfirmasiBarangSampaiModal
               isOpen={showBarangSampaiModal}
@@ -395,9 +408,7 @@ const RequestKeGudang = () => {
               satuan="Ikat"
               defaultJumlah={selectedItem.quantity}
               onSubmit={(data) => {
-                handleBarangSampai({
-                  ...data,
-                });
+                handleBarangSampai({ ...data });
                 setShowBarangSampaiModal(false);
               }}
             />
@@ -429,17 +440,6 @@ const RequestKeGudang = () => {
               item={selectedItem}
             />
           )}
-
-          <button
-            onClick={() => {
-              console.log("storePlacement: ", storePlacement);
-              console.log("totalPages: ", totalPages);
-              console.log("page: ", page);
-              console.log("requestData: ", requestData);
-            }}
-          >
-            CHECK
-          </button>
         </div>
       )}
     </>
