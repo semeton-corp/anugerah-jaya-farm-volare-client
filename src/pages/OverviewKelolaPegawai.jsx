@@ -163,246 +163,112 @@ const OverviewKelolaPegawai = () => {
         </div>
       </div>
 
-      <div className="flex md:grid-cols-2 gap-4 justify-between">
-        <div className="p-4 w-full rounded-md bg-green-100">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold">Pegawai Aktif</h2>
-          </div>
-
-          <div className="flex flex-wrap gap-4 items-center">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Pegawai Aktif */}
+        <div className="p-4 rounded-md bg-green-100 flex flex-col gap-4">
+          <h2 className="text-lg font-semibold">Pegawai Aktif</h2>
+          <div className="flex items-center gap-4">
             <div className="p-2 rounded-xl bg-green-700">
               <BsPersonVcardFill size={24} color="white" />
             </div>
-            <div className="flex items-center">
-              <p className="text-3xl font-semibold me-3">
-                {`${userPerformanceSummary?.totalUser ?? "-"} Orang`}
-              </p>
-            </div>
+            <p className="text-3xl font-semibold">
+              {`${userPerformanceSummary?.totalUser ?? "-"} Orang`}
+            </p>
           </div>
         </div>
 
-        <div className="p-4 w-full rounded-md bg-green-100">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold">KPI All</h2>
-          </div>
-
-          <div className="flex flex-wrap gap-4">
-            <div className="flex flex-wrap gap-4">
-              <div className="flex flex-wrap gap-4 items-center">
-                <div className="p-2 rounded-xl bg-green-700">
-                  <FaPercentage size={24} color="white" />
-                </div>
-                <div className="flex items-center">
-                  <p className="text-3xl font-semibold pe-2">
-                    {userPerformanceSummary?.kpiAll != null
-                      ? new Intl.NumberFormat("en-US", {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        }).format(Number(userPerformanceSummary?.kpiAll))
-                      : "-"}
-                  </p>
-                  <p className="text-xl font-semibold">%</p>
-                </div>
-              </div>
+        {/* KPI All */}
+        <div className="p-4 rounded-md bg-green-100 flex flex-col gap-4">
+          <h2 className="text-lg font-semibold">KPI All</h2>
+          <div className="flex items-center gap-4">
+            <div className="p-2 rounded-xl bg-green-700">
+              <FaPercentage size={24} color="white" />
             </div>
+            <p className="text-3xl font-semibold">
+              {userPerformanceSummary?.kpiAll != null
+                ? new Intl.NumberFormat("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }).format(Number(userPerformanceSummary?.kpiAll))
+                : "-"}{" "}
+              <span className="text-xl font-semibold">%</span>
+            </p>
           </div>
         </div>
 
-        <div className="p-4 w-full rounded-md bg-green-100">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold">KPI Kerja</h2>
-          </div>
-
-          <div className="flex flex-wrap gap-4">
-            <div className="flex flex-wrap gap-4">
-              <div className="flex flex-wrap gap-4 items-center">
-                <div className="p-2 rounded-xl bg-green-700">
-                  <FaPercentage size={24} color="white" />
-                </div>
-                <div className="flex items-center">
-                  <p className="text-3xl font-semibold pe-2">
-                    {userPerformanceSummary?.kpiUser != null
-                      ? new Intl.NumberFormat("en-US", {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        }).format(Number(userPerformanceSummary?.kpiUser))
-                      : "-"}
-                  </p>
-                  <p className="text-xl font-semibold">%</p>
-                </div>
-              </div>
+        {/* KPI Kerja */}
+        <div className="p-4 rounded-md bg-green-100 flex flex-col gap-4">
+          <h2 className="text-lg font-semibold">KPI Kerja</h2>
+          <div className="flex items-center gap-4">
+            <div className="p-2 rounded-xl bg-green-700">
+              <FaPercentage size={24} color="white" />
             </div>
+            <p className="text-3xl font-semibold">
+              {userPerformanceSummary?.kpiUser != null
+                ? new Intl.NumberFormat("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }).format(Number(userPerformanceSummary?.kpiUser))
+                : "-"}{" "}
+              <span className="text-xl font-semibold">%</span>
+            </p>
           </div>
         </div>
 
-        <div className="p-4 w-full rounded-md bg-green-100">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold">KPI Ayam</h2>
-          </div>
-
-          <div className="flex flex-wrap gap-4">
-            <div className="flex flex-wrap gap-4">
-              <div className="flex flex-wrap gap-4 items-center">
-                <div className="p-2 rounded-xl bg-green-700">
-                  <FaPercentage size={24} color="white" />
-                </div>
-                <div className="flex items-center">
-                  <p className="text-3xl font-semibold pe-2">
-                    {userPerformanceSummary?.kpiChicken != null
-                      ? new Intl.NumberFormat("en-US", {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        }).format(Number(userPerformanceSummary?.kpiChicken))
-                      : "-"}
-                  </p>
-                  <p className="text-xl font-semibold">%</p>
-                </div>
-              </div>
+        {/* KPI Ayam */}
+        <div className="p-4 rounded-md bg-green-100 flex flex-col gap-4">
+          <h2 className="text-lg font-semibold">KPI Ayam</h2>
+          <div className="flex items-center gap-4">
+            <div className="p-2 rounded-xl bg-green-700">
+              <FaPercentage size={24} color="white" />
             </div>
+            <p className="text-3xl font-semibold">
+              {userPerformanceSummary?.kpiChicken != null
+                ? new Intl.NumberFormat("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }).format(Number(userPerformanceSummary?.kpiChicken))
+                : "-"}{" "}
+              <span className="text-xl font-semibold">%</span>
+            </p>
           </div>
         </div>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-6">
-        <div className="w-5/5 bg-white rounded-lg py-6 ps-6 pe-9 border border-gray-300">
-          <h2 className="text-lg font-semibold mb-4 ">Statistik KPI Pegawai</h2>
-          <ResponsiveContainer width="100%" height={380}>
-            <LineChart data={sortedPerformaKpiChart}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="key" />
-              <YAxis
-                label={{
-                  value: "Nilai KPI",
-                  angle: -90,
-                  position: "insideLeft",
-                }}
-              />
-              <Tooltip
-                formatter={(value) => value.toFixed(2)}
-                labelFormatter={(label) => `Minggu: ${label}`}
-              />
-              <Line
-                type="monotone"
-                dataKey="kpiUserPerformance"
-                stroke="#ef4444"
-                strokeWidth={2}
-                dot={{ r: 4 }}
-                name="Kinerja Pegawai"
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-
-        {/* <div className="w-3/5 bg-white p-4 rounded-lg border border-gray-300">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-lg font-semibold">Kinerja perusahaan</h2>
-            <select
-              value={selectedFilter}
-              onChange={(e) => setSelectedFilter(e.target.value)}
-              className="bg-gray-200 px-2 py-1 rounded"
-            >
-              <option>Rentabilitas</option>
-              <option>Produktivitas</option>
-              <option>Penjualan</option>
-            </select>
+        <div className="w-full overflow-x-auto">
+          <div className="min-w-[800px] bg-white rounded-lg py-6 px-6 border border-gray-300">
+            <h2 className="text-lg font-semibold mb-4">
+              Statistik KPI Pegawai
+            </h2>
+            <ResponsiveContainer width="100%" height={380}>
+              <LineChart data={sortedPerformaKpiChart}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="key" />
+                <YAxis
+                  label={{
+                    value: "Nilai KPI",
+                    angle: -90,
+                    position: "insideLeft",
+                  }}
+                />
+                <Tooltip
+                  formatter={(value) => value.toFixed(2)}
+                  labelFormatter={(label) => `Minggu: ${label}`}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="kpiUserPerformance"
+                  stroke="#ef4444"
+                  strokeWidth={2}
+                  dot={{ r: 4 }}
+                  name="Kinerja Pegawai"
+                />
+              </LineChart>
+            </ResponsiveContainer>
           </div>
-
-          <ResponsiveContainer width="100%" height="90%">
-            <LineChart data={performaKpiChart}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="key" />
-              <YAxis domain={[0, 50]} />
-              <Tooltip />
-              <Legend verticalAlign="top" align="center" />
-              <Line
-                type="monotone"
-                dataKey="ayamMati"
-                stroke="#ef4444"
-                name="Ayam Mati"
-              />
-              <Line
-                type="monotone"
-                dataKey="ayamSakit"
-                stroke="#facc15"
-                name="Ayam Sakit"
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div> */}
+        </div>
       </div>
-
-      {/* detail penjualan */}
-      {/* <div className="bg-white p-4 rounded-lg border border-gray-300">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold">Daftar pegawai hari ini</h2>
-          <div className="p-2 rounded-full hover:bg-black-4 cursor-pointer">
-            <FiMaximize2 size={24} color="" />
-          </div>
-        </div>
-        <div className="">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="bg-green-700 text-white text-left">
-                <th className="py-2 px-4">Pegawai</th>
-                <th className="py-2 px-4">Jabatan</th>
-                <th className="py-2 px-4">Status</th>
-                <th className="py-2 px-4">Jam masuk</th>
-                <th className="py-2 px-4">Jam pulang</th>
-                <th className="py-2 px-4">Jumlah Lembur</th>
-              </tr>
-            </thead>
-            <tbody className="">
-              {pegawaiHariIni.map((item, index) => (
-                <tr key={index} className="border-b ">
-                  <td className="py-2 px-4 ">
-                    <div className="flex w-72 gap-6">
-                      <div className="h-12 w-12 rounded-full overflow-hidden">
-                        <img src={profileAvatar} alt="Profile Avatar" />
-                      </div>
-
-                      <div className="w-52">
-                        <p className="text-base font-me leading-tight">
-                          {item.pegawai.nama}
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          {item.pegawai.email}
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className=" items-center px-4">{item.jabatan}</td>
-                  <td className="py-2 px-4">
-                    <div className="flex items-center h-full">
-                      <div
-                        className={`min-w-[80px] py-1 px-2 rounded text-sm font-semibold text-center ${
-                          item.status === "Hadir"
-                            ? "bg-aman-box-surface-color text-aman-text-color"
-                            : "bg-kritis-box-surface-color text-kritis-text-color"
-                        }`}
-                      >
-                        {item.status}
-                      </div>
-                    </div>
-                  </td>
-                  <td className="py-2 px-4">
-                    <div className="flex  items-center h-full">
-                      <p className="pe-2">{item.jamMasuk}</p>
-                      <p className="">WIB</p>
-                    </div>
-                  </td>
-                  <td className="py-2 px-4">
-                    <div className="flex  items-center h-full">
-                      <p className="pe-2">{item.jamPulang}</p>
-                      <p className="">WIB</p>
-                    </div>
-                  </td>
-                  <td className="py-2 px-4 h-full">{item.jumlahLembur}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div> */}
     </div>
   );
 };
