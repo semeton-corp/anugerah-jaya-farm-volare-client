@@ -18,10 +18,11 @@ function Badge({ children, intent = "gray" }) {
     red: "bg-[#FF5E5E]/50 text-[#640404]",
     gray: "bg-gray-100/50 text-gray-700",
   };
+
   return (
     <span
       className={classNames(
-        "px-3 py-1 rounded-full text-sm font-medium",
+        "rounded-full font-medium text-xs sm:text-sm px-2 sm:px-3 py-1 whitespace-nowrap",
         styles[intent]
       )}
     >
@@ -263,7 +264,7 @@ export default function PresensiKelolaPegawai() {
         <div className="text-right text-gray-500">{getTodayDateInBahasa()}</div>
       </div>
 
-      <div className="overflow-hidden rounded border shadow-sm">
+      <div className="overflow-x-auto rounded border shadow-sm">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-green-700">
             <tr>

@@ -101,85 +101,93 @@ const PresensiLokasi = () => {
         {`Presensi ${locationItem?.placeName}`}
       </h1>
 
-      {/* Absensi Hari Ini */}
       <div className="bg-white border border-black-6 rounded p-4 mb-6">
         <h2 className="text-lg font-semibold mb-4">Absensi Hari Ini</h2>
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="bg-green-700 text-left text-sm font-medium text-white">
-              <th className="px-6 py-3">Aksi</th>
-              <th className="px-6 py-3">Pegawai</th>
-              <th className="px-6 py-3">Jabatan</th>
-              <th className="px-6 py-3">Status</th>
-              <th className="px-6 py-3">Status Pengajuan</th>
-              <th className="px-6 py-3">Jam Masuk</th>
-              <th className="px-6 py-3">Jam Pulang</th>
-              <th className="px-6 py-3">Penyelesaian Tugas</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200">
-            {todayPresences.map((row) => (
-              <tr key={row.id}>
-                <td
-                  onClick={() => {
-                    handleDetail(row.id);
-                  }}
-                  className="py-2 px-4 underline text-black hover:text-black-6 cursor-pointer"
-                >
-                  Detail
-                </td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center space-x-3">
-                    <img
-                      src={`${row.photoProfile}`}
-                      className="w-12 h-12 rounded-full"
-                    />
-                    <div>
-                      <p className="font-medium">{row.nama}</p>
-                      <p className="text-gray-500 ">{row.email}</p>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4">{row.roleName}</td>
-                <td className="px-6 py-4">
-                  <span
-                    className={`inline-block px-3 py-1  font-medium rounded ${
-                      row.status == "Alpha"
-                        ? "bg-kritis-box-surface-color text-kritis-text-color"
-                        : row.status == "Hadir"
-                        ? "bg-aman-box-surface-color text-aman-text-color"
-                        : row.status == "Sakit"
-                        ? "bg-orange-400 text-orange-900"
-                        : "bg-green-300 text-orange-8000"
-                    }`}
-                  >
-                    {row.status}
-                  </span>
-                </td>
-                <td className="px-6 py-4">{row.submissionPresenceStatus}</td>
-                <td className="px-6 py-4">{row.arrivedTime}</td>
-                <td className="px-6 py-4">{row.departureTime}</td>
-                <td className="px-6 py-4">
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div
-                      className="bg-green-500 h-2 rounded-full"
-                      style={{ width: `${row.workDonePercentage}%` }}
-                    />
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    {row.workDonePercentage}%
-                  </p>
-                </td>
+
+        <div className="overflow-x-auto text-sm sm:text-base">
+          <table className="w-full min-w-[800px] border-collapse">
+            <thead>
+              <tr className="bg-green-700 text-left text-sm font-medium text-white">
+                <th className="px-6 py-3">Aksi</th>
+                <th className="px-6 py-3">Pegawai</th>
+                <th className="px-6 py-3">Jabatan</th>
+                <th className="px-6 py-3">Status</th>
+                <th className="px-6 py-3">Status Pengajuan</th>
+                <th className="px-6 py-3">Jam Masuk</th>
+                <th className="px-6 py-3">Jam Pulang</th>
+                <th className="px-6 py-3">Penyelesaian Tugas</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {todayPresences.map((row) => (
+                <tr key={row.id}>
+                  <td
+                    onClick={() => handleDetail(row.id)}
+                    className="py-2 px-4 underline text-black hover:text-black-6 cursor-pointer whitespace-nowrap"
+                  >
+                    Detail
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center space-x-3 mr-4">
+                      <img
+                        src={`${row.photoProfile}`}
+                        className="w-12 h-12 rounded-full"
+                      />
+                      <div>
+                        <p className="font-medium">{row.nama}</p>
+                        <p className="text-gray-500">{row.email}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {row.roleName}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span
+                      className={`inline-block px-3 py-1 font-medium rounded ${
+                        row.status == "Alpha"
+                          ? "bg-kritis-box-surface-color text-kritis-text-color"
+                          : row.status == "Hadir"
+                          ? "bg-aman-box-surface-color text-aman-text-color"
+                          : row.status == "Sakit"
+                          ? "bg-orange-400 text-orange-900"
+                          : "bg-green-300 text-orange-8000"
+                      }`}
+                    >
+                      {row.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {row.submissionPresenceStatus}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {row.arrivedTime}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {row.departureTime}
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div
+                        className="bg-green-500 h-2 rounded-full"
+                        style={{ width: `${row.workDonePercentage}%` }}
+                      />
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {row.workDonePercentage}%
+                    </p>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Rangkuman Presensi */}
       <div className="bg-white border border-black-6 rounded p-4">
-        <div className="flex justify-between">
-          <h2 className="text-lg font-semibold mb-4">Rangkuman Presensi</h2>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-lg font-semibold">Rangkuman Presensi</h2>
           <MonthYearSelector
             month={month}
             year={year}
@@ -189,66 +197,69 @@ const PresensiLokasi = () => {
           />
         </div>
 
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="bg-green-700 text-left text-sm font-medium text-white">
-              <th className="px-6 py-3">Aksi</th>
-              <th className="px-6 py-3">Pegawai</th>
-              <th className="px-6 py-3">Jabatan</th>
-              <th className="px-6 py-3">Jumlah Hadir</th>
-              <th className="px-6 py-3">Jumlah Sakit</th>
-              <th className="px-6 py-3">Jumlah Izin</th>
-              <th className="px-6 py-3">Jumlah Alpha</th>
-            </tr>
-          </thead>
-          <tbody className="text-sm divide-y divide-gray-200">
-            {presenceSummaries.map((row) => (
-              <tr key={row.id}>
-                <td
-                  onClick={() => {
-                    handleDetail(row.id);
-                  }}
-                  className="py-2 px-4 underline text-black hover:text-black-6 cursor-pointer"
-                >
-                  Detail
-                </td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center space-x-3">
-                    <img
-                      src={`${row.photoProfile}`}
-                      className="w-12 h-12 rounded-full"
-                    />
-                    <div>
-                      <p className="font-medium">{row.nama}</p>
-                      <p className="text-gray-500 ">{row.email}</p>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4">{row.roleName}</td>
-                <td className="px-6 py-4">
-                  <span className="px-3 py-1 rounded-lg font-semibold bg-aman-box-surface-color text-green-700">
-                    {row.totalPresentUser}
-                  </span>
-                </td>
-                <td className="px-6 py-4">
-                  <span className="px-3 py-1 rounded-lg font-semibold bg-orange-100 text-yellow-700">
-                    {row.totalSickUser}
-                  </span>
-                </td>
-                <td className="px-6 py-4">
-                  <span className="px-3 py-1 rounded-lg font-semibold bg-green-100 text-green-700">
-                    {row.totalPermissionUser}
-                  </span>
-                </td>
-                <td className="px-6 py-4">
-                  <span className="px-3 py-1 rounded-lg  font-semibold bg-kritis-box-surface-color text-kritis-text-color">
-                    {row.totalAlphaUser}
-                  </span>
-                </td>
+        {/* Wrapper scrollable */}
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[700px] border-collapse">
+            <thead>
+              <tr className="bg-green-700 text-left text-sm font-medium text-white">
+                <th className="px-6 py-3">Aksi</th>
+                <th className="px-6 py-3">Pegawai</th>
+                <th className="px-6 py-3">Jabatan</th>
+                <th className="px-6 py-3">Jumlah Hadir</th>
+                <th className="px-6 py-3">Jumlah Sakit</th>
+                <th className="px-6 py-3">Jumlah Izin</th>
+                <th className="px-6 py-3">Jumlah Alpha</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="text-sm divide-y divide-gray-200">
+              {presenceSummaries.map((row) => (
+                <tr key={row.id}>
+                  <td
+                    onClick={() => handleDetail(row.id)}
+                    className="py-2 px-4 underline text-black hover:text-black-6 cursor-pointer whitespace-nowrap"
+                  >
+                    Detail
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center space-x-3">
+                      <img
+                        src={`${row.photoProfile}`}
+                        className="w-12 h-12 rounded-full"
+                      />
+                      <div>
+                        <p className="font-medium">{row.nama}</p>
+                        <p className="text-gray-500">{row.email}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {row.roleName}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="px-3 py-1 rounded-lg font-semibold bg-aman-box-surface-color text-green-700">
+                      {row.totalPresentUser}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="px-3 py-1 rounded-lg font-semibold bg-orange-100 text-yellow-700">
+                      {row.totalSickUser}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="px-3 py-1 rounded-lg font-semibold bg-green-100 text-green-700">
+                      {row.totalPermissionUser}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="px-3 py-1 rounded-lg font-semibold bg-kritis-box-surface-color text-kritis-text-color">
+                      {row.totalAlphaUser}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
