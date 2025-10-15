@@ -269,51 +269,55 @@ const PengadaanBarang = () => {
           </div>
         </div>
 
-        <div className="mt-3 w-full overflow-x-auto border border-gray-200 bg-white shadow-sm">
-          <table className="min-w-full text-sm text-gray-800">
-            <thead>
-              <tr className="bg-green-700 text-white text-left">
-                <th className="px-4 py-3 whitespace-nowrap">
-                  Tanggal Pemesanan
-                </th>
-                <th className="px-4 py-3 whitespace-nowrap">Nama Barang</th>
-                <th className="px-4 py-3 whitespace-nowrap">Jumlah</th>
-                <th className="px-4 py-3 whitespace-nowrap">Supplier</th>
-                <th className="px-4 py-3 whitespace-nowrap">Estimasi Tiba</th>
-                <th className="px-4 py-3 whitespace-nowrap">
-                  Tenggat Pembayaran
-                </th>
-                <th className="px-4 py-3 whitespace-nowrap">
-                  Status Pembayaran
-                </th>
-                <th className="px-4 py-3 whitespace-nowrap">Keterangan</th>
-                <th className="px-4 py-3 whitespace-nowrap">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {daftarBarangData.map((r, idx) => {
-                const paidDate = parseToDate(
-                  r.paidDate || r.paymentPaidDate || r.paid_at || ""
-                );
-                const deadlineDate = parseToDate(
-                  r.deadlinePaymentDate ||
-                    r.deadline ||
-                    r.deadline_at ||
-                    r.deadlinePaymentDate
-                );
+        <div className="mt-3 w-full border border-gray-200 bg-white shadow-sm flex flex-col max-h-[75vh]">
+          {/* Table container (scrollable body) */}
+          <div className="overflow-x-auto overflow-y-auto flex-1">
+            <table className="min-w-full text-sm text-gray-800">
+              <thead className="sticky top-0 bg-green-700 text-white text-left z-10">
+                <tr>
+                  <th className="px-4 py-3 whitespace-nowrap">
+                    Tanggal Pemesanan
+                  </th>
+                  <th className="px-4 py-3 whitespace-nowrap">Nama Barang</th>
+                  <th className="px-4 py-3 whitespace-nowrap">Jumlah</th>
+                  <th className="px-4 py-3 whitespace-nowrap">Supplier</th>
+                  <th className="px-4 py-3 whitespace-nowrap">Estimasi Tiba</th>
+                  <th className="px-4 py-3 whitespace-nowrap">
+                    Tenggat Pembayaran
+                  </th>
+                  <th className="px-4 py-3 whitespace-nowrap">
+                    Status Pembayaran
+                  </th>
+                  <th className="px-4 py-3 whitespace-nowrap">Keterangan</th>
+                  <th className="px-4 py-3 whitespace-nowrap">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                {daftarBarangData.map((r, idx) => {
+                  const paidDate = parseToDate(
+                    r.paidDate || r.paymentPaidDate || r.paid_at || ""
+                  );
+                  const deadlineDate = parseToDate(
+                    r.deadlinePaymentDate ||
+                      r.deadline ||
+                      r.deadline_at ||
+                      r.deadlinePaymentDate
+                  );
 
-                const isPaidLate =
-                  paidDate && deadlineDate
-                    ? paidDate.getTime() > deadlineDate.getTime()
-                    : false;
+                  const isPaidLate =
+                    paidDate && deadlineDate
+                      ? paidDate.getTime() > deadlineDate.getTime()
+                      : false;
 
-                const isLate =
-                  (r.isMoreThanDeadlinePaymentDate || isPaidLate) &&
-                  r.paymentStatus !== "Lunas";
+                  const isLate =
+                    (r.isMoreThanDeadlinePaymentDate || isPaidLate) &&
+                    r.paymentStatus !== "Lunas";
 
-                return (
-                  <React.Fragment key={r.id ?? idx}>
-                    <tr className="border-b hover:bg-gray-50 transition">
+                  return (
+                    <tr
+                      key={r.id ?? idx}
+                      className="border-b hover:bg-gray-50 transition"
+                    >
                       <td className="px-4 py-3 whitespace-nowrap">
                         {r.orderDate}
                       </td>
@@ -397,59 +401,63 @@ const PengadaanBarang = () => {
                         </div>
                       </td>
                     </tr>
-                  </React.Fragment>
-                );
-              })}
+                  );
+                })}
 
-              {daftarBarangData.length === 0 && (
-                <tr>
-                  <td
-                    colSpan={9}
-                    className="px-4 py-6 text-center text-gray-500 text-sm"
-                  >
-                    Tidak ada data.
-                  </td>
-                </tr>
+                {daftarBarangData.length === 0 && (
+                  <tr>
+                    <td
+                      colSpan={9}
+                      className="px-4 py-6 text-center text-gray-500 text-sm"
+                    >
+                      Tidak ada data.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Fixed footer (not scrollable) */}
+          <div className="border-t bg-white sticky bottom-0 z-10">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 px-4 py-3">
+              {daftarBarangData?.length > 0 ? (
+                <p className="text-xs sm:text-sm text-gray-500">
+                  {`Menampilkan halaman ${page} dari ${totalPages} halaman. Total ${totalData} data riwayat`}
+                </p>
+              ) : (
+                <p className="text-xs sm:text-sm text-gray-500">&nbsp;</p>
               )}
-            </tbody>
-          </table>
 
-          {/* Pagination Section */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 mt-6 px-4 py-3 border-t">
-            {daftarBarangData?.length > 0 ? (
-              <p className="text-xs sm:text-sm text-gray-500">
-                {`Menampilkan halaman ${page} dari ${totalPages} halaman. Total ${totalData} data riwayat`}
-              </p>
-            ) : (
-              <p className="text-xs sm:text-sm text-gray-500">&nbsp;</p>
-            )}
+              <div className="flex flex-wrap gap-2 w-full sm:w-auto justify-between sm:justify-end">
+                <button
+                  disabled={page <= 1 || totalPages <= 0}
+                  onClick={() =>
+                    page > 1 && totalPages > 0 && setPage(page - 1)
+                  }
+                  className={`rounded py-2 px-4 text-sm sm:text-base font-medium transition-all ${
+                    page <= 1 || totalPages <= 0
+                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      : "bg-green-100 hover:bg-green-200 text-black"
+                  }`}
+                >
+                  Previous
+                </button>
 
-            <div className="flex flex-wrap gap-2 w-full sm:w-auto justify-between sm:justify-end">
-              <button
-                disabled={page <= 1 || totalPages <= 0}
-                onClick={() => page > 1 && totalPages > 0 && setPage(page - 1)}
-                className={`rounded py-2 px-4 text-sm sm:text-base font-medium transition-all ${
-                  page <= 1 || totalPages <= 0
-                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                    : "bg-green-100 hover:bg-green-200 text-black"
-                }`}
-              >
-                Previous
-              </button>
-
-              <button
-                disabled={page >= totalPages || totalPages <= 0}
-                onClick={() =>
-                  page < totalPages && totalPages > 0 && setPage(page + 1)
-                }
-                className={`rounded py-2 px-4 text-sm sm:text-base font-medium transition-all ${
-                  page >= totalPages || totalPages <= 0
-                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                    : "bg-green-700 hover:bg-green-800 text-white"
-                }`}
-              >
-                Next
-              </button>
+                <button
+                  disabled={page >= totalPages || totalPages <= 0}
+                  onClick={() =>
+                    page < totalPages && totalPages > 0 && setPage(page + 1)
+                  }
+                  className={`rounded py-2 px-4 text-sm sm:text-base font-medium transition-all ${
+                    page >= totalPages || totalPages <= 0
+                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      : "bg-green-700 hover:bg-green-800 text-white"
+                  }`}
+                >
+                  Next
+                </button>
+              </div>
             </div>
           </div>
         </div>

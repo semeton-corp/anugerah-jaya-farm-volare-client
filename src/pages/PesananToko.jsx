@@ -280,12 +280,12 @@ const PesananToko = () => {
 
   return (
     <div className="flex flex-col px-4 py-3 gap-3 ">
-      <div className="flex justify-between mb-2 flex-wrap gap-4">
-        <h1 className="text-3xl font-bold">Pesanan Toko</h1>
+      <div className="flex flex-wrap justify-between items-center mb-4 gap-4">
+        <h1 className="text-2xl md:text-3xl font-bold">Pesanan Toko</h1>
 
-        <div className="flex gap-2">
-          {(userRole == "Owner" || userRole == "Kepala Kandang") && (
-            <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+        <div className="flex flex-wrap gap-3 justify-end">
+          {(userRole === "Owner" || userRole === "Kepala Kandang") && (
+            <div className="flex items-center rounded-lg px-3 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
               <MdStore size={18} />
               <select
                 value={selectedWarehouse}
@@ -302,7 +302,7 @@ const PesananToko = () => {
           )}
 
           <div
-            className="flex items-center rounded-lg bg-orange-300 hover:bg-orange-500 cursor-pointer gap-2"
+            className="flex items-center rounded-lg bg-orange-300 hover:bg-orange-500 cursor-pointer"
             onClick={openDatePicker}
           >
             <input
@@ -310,7 +310,7 @@ const PesananToko = () => {
               type="date"
               value={selectedDate}
               onChange={handleDateChange}
-              className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer gap-2"
+              className="px-3 py-2 bg-transparent outline-none text-base font-medium cursor-pointer"
             />
           </div>
         </div>
@@ -406,13 +406,13 @@ const PesananToko = () => {
                       ? data.store.name
                       : "-"}
                   </td>
-                  <td className="py-2 px-4">
+                  <td className="py-2 px-4 text-center">
                     <span
                       className={`${getStatusStyle(
                         data.status
-                      )} px-3 py-1 text-sm rounded`}
+                      )} inline-block min-w-[100px] text-center px-3 py-1 text-sm rounded whitespace-nowrap`}
                     >
-                      {data.status == "Menunggu"
+                      {data.status === "Menunggu"
                         ? "Belum Dikirim"
                         : data.status}
                     </span>
@@ -508,17 +508,6 @@ const PesananToko = () => {
           </div>
         </div>
       )}
-
-      <button
-        onClick={() => {
-          console.log("selectedWarehouse: ", selectedWarehouse);
-          console.log("page: ", page);
-          console.log("requestData: ", requestData);
-          console.log("showBatalModal: ", showBatalModal);
-        }}
-      >
-        CHECK
-      </button>
     </div>
   );
 };
