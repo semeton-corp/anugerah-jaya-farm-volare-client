@@ -205,15 +205,21 @@ const PengadaanBarang = () => {
 
   return (
     <div className="flex flex-col px-4 py-3 gap-4">
-      <div className="flex justify-between items-center mb-2 flex-wrap gap-4">
-        <h1 className="text-3xl font-bold">Pengadaan Barang</h1>
-        <div className="flex gap-4">
-          <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
-            <FaMoneyBillWave size={18} />
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-4">
+        {/* Title */}
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
+          Pengadaan Barang
+        </h1>
+
+        {/* Filters */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full sm:w-auto">
+          {/* Payment Status Filter */}
+          <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer transition-all duration-200 w-full">
+            <FaMoneyBillWave size={18} className="flex-shrink-0" />
             <select
               value={paymentStatus}
               onChange={(e) => setPaymentStatus(e.target.value)}
-              className="ml-2 bg-transparent text-base font-medium outline-none"
+              className="ml-2 bg-transparent text-sm sm:text-base font-medium outline-none w-full"
             >
               <option value="">Semua Status Pembayaran</option>
               {paymentStatusOptions.map((opt) => (
@@ -223,17 +229,19 @@ const PengadaanBarang = () => {
               ))}
             </select>
           </div>
+
+          {/* Warehouse Filter (Owner / Kepala Kandang only) */}
           {(userRole === "Owner" || userRole === "Kepala Kandang") && (
-            <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
-              <MdStore size={18} />
+            <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer transition-all duration-200 w-full">
+              <MdStore size={18} className="flex-shrink-0" />
               <select
                 value={selectedWarehouse}
                 onChange={(e) => {
                   const warehouseId = e.target.value;
-                  console.log("warehouseId: ", warehouseId);
+                  console.log("warehouseId:", warehouseId);
                   setSelectedWarehouse(warehouseId);
                 }}
-                className="ml-2 bg-transparent text-base font-medium outline-none"
+                className="ml-2 bg-transparent text-sm sm:text-base font-medium outline-none w-full"
               >
                 <option value="">Semua Gudang</option>
                 {warehouses?.map((warehouse) => (
@@ -261,19 +269,25 @@ const PengadaanBarang = () => {
           </div>
         </div>
 
-        <div className="mt-3 overflow-x-auto">
-          <table className="min-w-full">
+        <div className="mt-3 w-full overflow-x-auto border border-gray-200 bg-white shadow-sm">
+          <table className="min-w-full text-sm text-gray-800">
             <thead>
-              <tr className="bg-green-700  text-white text-left">
-                <th className="px-4 py-3">Tanggal Pemesanan</th>
-                <th className="px-4 py-3">Nama barang</th>
-                <th className="px-4 py-3">Jumlah</th>
-                <th className="px-4 py-3">Supplier</th>
-                <th className="px-4 py-3">Estimasi Tiba</th>
-                <th className="px-4 py-3">Tenggat Pembayaran</th>
-                <th className="px-4 py-3">Status Pembayaran</th>
-                <th className="px-4 py-3">Keterangan</th>
-                <th className="px-4 py-3 ">Aksi</th>
+              <tr className="bg-green-700 text-white text-left">
+                <th className="px-4 py-3 whitespace-nowrap">
+                  Tanggal Pemesanan
+                </th>
+                <th className="px-4 py-3 whitespace-nowrap">Nama Barang</th>
+                <th className="px-4 py-3 whitespace-nowrap">Jumlah</th>
+                <th className="px-4 py-3 whitespace-nowrap">Supplier</th>
+                <th className="px-4 py-3 whitespace-nowrap">Estimasi Tiba</th>
+                <th className="px-4 py-3 whitespace-nowrap">
+                  Tenggat Pembayaran
+                </th>
+                <th className="px-4 py-3 whitespace-nowrap">
+                  Status Pembayaran
+                </th>
+                <th className="px-4 py-3 whitespace-nowrap">Keterangan</th>
+                <th className="px-4 py-3 whitespace-nowrap">Aksi</th>
               </tr>
             </thead>
             <tbody>
@@ -299,37 +313,48 @@ const PengadaanBarang = () => {
 
                 return (
                   <React.Fragment key={r.id ?? idx}>
-                    <tr className="border-b">
-                      <td className="px-4 py-3">{r.orderDate}</td>
-                      <td className="px-4 py-3">{r.item.name}</td>
-                      <td className="px-4 py-3">{`${r.quantity} ${r.item.unit}`}</td>
-                      <td className="px-4 py-3">{r.supplier.name}</td>
-                      <td className="px-4 py-3">{r.estimationArrivalDate}</td>
-                      <td className="px-4 py-3">
+                    <tr className="border-b hover:bg-gray-50 transition">
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        {r.orderDate}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        {r.item.name}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap">{`${r.quantity} ${r.item.unit}`}</td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        {r.supplier.name}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        {r.estimationArrivalDate}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap">
                         <div className="flex items-center gap-2">
                           <span
-                            className={
+                            className={`${
                               r.paymentStatus === "Lunas"
-                                ? "text-gray-200"
+                                ? "text-gray-400"
                                 : isLate
-                                ? "text-red-600"
+                                ? "text-red-600 font-semibold"
                                 : ""
-                            }
+                            }`}
                           >
-                            {r.paymentStatus == "Lunas"
+                            {r.paymentStatus === "Lunas"
                               ? "(Lunas)"
                               : r.deadlinePaymentDate || "-"}
                           </span>
 
                           {isLate && (
-                            <span title="Terlambat" className="text-red-500">
-                              <GoAlertFill size={24} />
+                            <span
+                              title="Terlambat"
+                              className="text-red-500 flex-shrink-0"
+                            >
+                              <GoAlertFill size={20} />
                             </span>
                           )}
                         </div>
                       </td>
 
-                      <td className="px-4 py-3">
+                      <td className="px-4 py-3 whitespace-nowrap">
                         {r.paymentStatus === "Lunas"
                           ? badge("Lunas", "success")
                           : r.paymentStatus === "Belum Dibayar"
@@ -337,28 +362,27 @@ const PengadaanBarang = () => {
                           : badge("Belum Lunas", "warning")}
                       </td>
 
-                      <td className="px-4 py-3">
+                      <td className="px-4 py-3 whitespace-nowrap">
                         {r.procurementStatus === "Sampai - Sesuai"
                           ? badge("Sampai - Sesuai", "success")
                           : r.procurementStatus === "Sampai - Tidak Sesuai"
-                          ? badge("Sampai - Tidak Sesuai", "success")
-                          : r.procurementStatus == "Sedang Dikirim"
+                          ? badge("Sampai - Tidak Sesuai", "danger")
+                          : r.procurementStatus === "Sedang Dikirim"
                           ? badge("Sedang Dikirim", "warning")
                           : r.procurementStatus
                           ? badge(r.procurementStatus, "neutral")
                           : "-"}
                       </td>
 
-                      <td className="px-4 py-3">
-                        <div className="flex gap-2">
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <div className="flex flex-col sm:flex-row gap-2">
                           {!r.IsArrived && (
                             <button
                               onClick={() => {
                                 setIsShowConfirmModal(true);
                                 setSelectedItem(r);
-                                console.log("r: ", r);
                               }}
-                              className="bg-orange-300 hover:bg-orange-500 cursor-pointer text-black px-3 py-1 rounded"
+                              className="bg-orange-300 hover:bg-orange-500 text-black px-3 py-1 rounded text-sm font-medium"
                             >
                               Barang Sampai
                             </button>
@@ -366,28 +390,22 @@ const PengadaanBarang = () => {
 
                           <button
                             onClick={() => handleDetail(r.id)}
-                            className="bg-green-700 hover:bg-green-900 cursor-pointer text-white px-3 py-1 rounded"
+                            className="bg-green-700 hover:bg-green-900 text-white px-3 py-1 rounded text-sm font-medium"
                           >
                             Lihat Detail
                           </button>
                         </div>
                       </td>
                     </tr>
-
-                    <tr>
-                      <td colSpan={9}>
-                        <div className="h-px bg-gray-200 w-full" />
-                      </td>
-                    </tr>
                   </React.Fragment>
                 );
               })}
 
-              {daftarBarangData.length == 0 && (
+              {daftarBarangData.length === 0 && (
                 <tr>
                   <td
                     colSpan={9}
-                    className="px-4 py-6 text-center text-gray-500"
+                    className="px-4 py-6 text-center text-gray-500 text-sm"
                   >
                     Tidak ada data.
                   </td>
@@ -395,36 +413,43 @@ const PengadaanBarang = () => {
               )}
             </tbody>
           </table>
-          <div className="flex justify-between mt-16 px-6">
+
+          {/* Pagination Section */}
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 mt-6 px-4 py-3 border-t">
             {daftarBarangData?.length > 0 ? (
-              <p className="text-sm text-[#CCCCCC]">{`Menampilkan halaman ${page} dari ${totalPages} halaman. Total ${totalData} data riwayat`}</p>
+              <p className="text-xs sm:text-sm text-gray-500">
+                {`Menampilkan halaman ${page} dari ${totalPages} halaman. Total ${totalData} data riwayat`}
+              </p>
             ) : (
-              <p></p>
+              <p className="text-xs sm:text-sm text-gray-500">&nbsp;</p>
             )}
 
-            <div className="flex gap-3">
-              <div
-                className={`rounded-[4px] py-2 px-6 ${
-                  page <= 1 || totalPages <= 0
-                    ? "bg-gray-200 cursor-not-allowed"
-                    : "bg-green-100 hover:bg-green-200 cursor-pointer"
-                } flex items-center justify-center text-black text-base font-medium `}
+            <div className="flex flex-wrap gap-2 w-full sm:w-auto justify-between sm:justify-end">
+              <button
+                disabled={page <= 1 || totalPages <= 0}
                 onClick={() => page > 1 && totalPages > 0 && setPage(page - 1)}
+                className={`rounded py-2 px-4 text-sm sm:text-base font-medium transition-all ${
+                  page <= 1 || totalPages <= 0
+                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                    : "bg-green-100 hover:bg-green-200 text-black"
+                }`}
               >
-                <p>Previous</p>
-              </div>
-              <div
-                className={`rounded-[4px] py-2 px-6 ${
-                  page >= totalPages || totalPages <= 0
-                    ? "bg-gray-200 cursor-not-allowed"
-                    : "bg-green-700 hover:bg-green-800 cursor-pointer"
-                } flex items-center justify-center text-white text-base font-medium `}
+                Previous
+              </button>
+
+              <button
+                disabled={page >= totalPages || totalPages <= 0}
                 onClick={() =>
                   page < totalPages && totalPages > 0 && setPage(page + 1)
                 }
+                className={`rounded py-2 px-4 text-sm sm:text-base font-medium transition-all ${
+                  page >= totalPages || totalPages <= 0
+                    ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                    : "bg-green-700 hover:bg-green-800 text-white"
+                }`}
               >
-                <p>Next</p>
-              </div>
+                Next
+              </button>
             </div>
           </div>
         </div>
