@@ -155,123 +155,110 @@ const OverviewStok = () => {
       window.history.replaceState({}, document.title);
     }
   }, [selectedStore, location]);
+
   return (
     <>
       {isDetailPage ? (
         <Outlet />
       ) : (
-        <div className="flex flex-col px-4 py-3 gap-4 ">
-          {/* header section */}
-          <div className="flex justify-between mb-2 flex-wrap gap-4">
-            <h1 className="text-3xl font-bold">Stok Toko</h1>
-            <div className="flex gap-2">
-              {userRole != "Pekerja Toko" && (
-                <div className="flex items-center rounded px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
-                  <MdStore size={18} />
-                  <select
-                    value={selectedStore}
-                    onChange={(e) => setSelectedStore(e.target.value)}
-                    className="ml-2 bg-transparent text-base font-medium outline-none"
-                  >
-                    {stores?.map((site) => (
-                      <option key={site.id} value={site.id}>
-                        {site.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
-            </div>
+        <div className="flex flex-col px-4 py-3 gap-6">
+          {/* Header section */}
+          <div className="flex flex-wrap justify-between items-center gap-4">
+            <h1 className="text-2xl sm:text-3xl font-bold">Stok Toko</h1>
+            {userRole !== "Pekerja Toko" && (
+              <div className="flex items-center rounded px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+                <MdStore size={18} />
+                <select
+                  value={selectedStore}
+                  onChange={(e) => setSelectedStore(e.target.value)}
+                  className="ml-2 bg-transparent text-base font-medium outline-none"
+                >
+                  {stores?.map((site) => (
+                    <option key={site.id} value={site.id}>
+                      {site.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
 
           <PageNotificationsSection pageNotifications={pageNotifications} />
 
-          <div className="flex md:grid-cols-2 gap-4 justify-between">
-            <div className="p-4 w-full rounded-md border-2 border-black-6">
+          {/* Cards for Telur */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {/* Telur OK */}
+            <div className="p-4 w-full rounded-md border border-gray-300 bg-white">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-semibold">Telur OK Ikat</h2>
                 <div className="p-2 rounded-xl bg-green-700">
                   <MdEgg size={24} color="white" />
                 </div>
               </div>
-
-              <div className="flex justify-center gap-4">
-                <div className="flex justify-center flex-wrap gap-4">
-                  <div className="flex flex-col items-center justify-center w-32 py-4 bg-green-200 rounded-md">
-                    <p className="text-3xl font-bold text-center">
-                      {parseInt(telurOkIkat)}
-                    </p>
-                    <p className="text-xl text-center">Ikat</p>
-                  </div>
+              <div className="flex justify-center flex-wrap gap-4">
+                <div className="flex flex-col items-center justify-center w-28 sm:w-32 py-4 bg-green-200 rounded-md">
+                  <p className="text-2xl sm:text-3xl font-bold text-center">
+                    {parseInt(telurOkIkat)}
+                  </p>
+                  <p className="text-lg text-center">Ikat</p>
                 </div>
-
-                <div className="flex justify-center flex-wrap gap-4">
-                  <div className="flex flex-col items-center justify-center w-32 py-4 bg-green-200 rounded-md">
-                    <p className="text-3xl font-bold text-center">
-                      {parseInt(telurOkKg)}
-                    </p>
-                    <p className="text-xl text-center">Kg</p>
-                  </div>
+                <div className="flex flex-col items-center justify-center w-28 sm:w-32 py-4 bg-green-200 rounded-md">
+                  <p className="text-2xl sm:text-3xl font-bold text-center">
+                    {parseInt(telurOkKg)}
+                  </p>
+                  <p className="text-lg text-center">Kg</p>
                 </div>
               </div>
             </div>
 
-            <div className="p-4 w-full rounded-md border-2 border-black-6">
+            {/* Telur Retak */}
+            <div className="p-4 w-full rounded-md border border-gray-300 bg-white">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-semibold">Telur Retak</h2>
                 <div className="p-2 rounded-xl bg-green-700">
                   <MdEgg size={24} color="white" />
                 </div>
               </div>
-
-              <div className="flex gap-4 justify-center">
-                <div className="flex justify-center flex-wrap gap-4">
-                  {/* item ikat */}
-                  <div className="flex flex-col items-center justify-center w-32 py-4 bg-green-200 rounded-md">
-                    <p className="text-3xl font-bold text-center">
-                      {parseInt(telurRetakIkat)}
-                    </p>
-                    <p className="text-xl text-center">Ikat</p>
-                  </div>
+              <div className="flex justify-center flex-wrap gap-4">
+                <div className="flex flex-col items-center justify-center w-28 sm:w-32 py-4 bg-green-200 rounded-md">
+                  <p className="text-2xl sm:text-3xl font-bold text-center">
+                    {parseInt(telurRetakIkat)}
+                  </p>
+                  <p className="text-lg text-center">Ikat</p>
                 </div>
-
-                <div className="flex justify-center flex-wrap gap-4">
-                  {/* item ikat */}
-                  <div className="flex flex-col items-center justify-center w-32 py-4 bg-green-200 rounded-md">
-                    <p className="text-3xl font-bold text-center">
-                      {parseInt(telurRetakKg)}
-                    </p>
-                    <p className="text-xl text-center">kg</p>
-                  </div>
+                <div className="flex flex-col items-center justify-center w-28 sm:w-32 py-4 bg-green-200 rounded-md">
+                  <p className="text-2xl sm:text-3xl font-bold text-center">
+                    {parseInt(telurRetakKg)}
+                  </p>
+                  <p className="text-lg text-center">Kg</p>
                 </div>
               </div>
             </div>
 
-            {/* telur Retak */}
-            <div className="p-4 w-full rounded-md border-2 border-black-6">
+            {/* Telur Bonyok */}
+            <div className="p-4 w-full rounded-md border border-gray-300 bg-white">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-semibold">Telur Bonyok</h2>
                 <div className="p-2 rounded-xl bg-green-700">
                   <TbEggCrackedFilled size={24} color="white" />
                 </div>
               </div>
-
               <div className="flex justify-center flex-wrap gap-4">
-                {/* item butir */}
-                <div className="flex flex-col items-center justify-center w-32 py-4 bg-green-200 rounded-md">
-                  <p className="text-3xl font-bold text-center">
+                <div className="flex flex-col items-center justify-center w-28 sm:w-32 py-4 bg-green-200 rounded-md">
+                  <p className="text-2xl sm:text-3xl font-bold text-center">
                     {parseInt(telurBonyokPlastik)}
                   </p>
-                  <p className="text-xl text-center">Plastik</p>
+                  <p className="text-lg text-center">Plastik</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="flex flex-col lg:flex-row h-120 gap-6">
-            <div className="w-full bg-white px-8 py-6 rounded-lg border border-gray-300">
+          {/* Table Section */}
+          <div className="flex flex-col lg:flex-row gap-6">
+            <div className="w-full bg-white px-4 sm:px-8 py-6 rounded-lg border border-gray-300">
               <div className="overflow-x-auto">
-                <table className="w-full text-base">
+                <table className="min-w-full text-sm sm:text-base">
                   <thead>
                     <tr className="bg-green-700 font-medium text-white text-center">
                       <th className="py-2 px-4">Nama Barang</th>
@@ -287,9 +274,9 @@ const OverviewStok = () => {
                         <td className="py-2 px-4">{item.item.name}</td>
                         <td className="py-2 px-4">{item.item.unit}</td>
                         <td className="py-2 px-4">{item.quantity}</td>
-                        <td className="py-2 px-4 ">
+                        <td className="py-2 px-4">
                           <span
-                            className={`w-24 py-1 px-5 rounded text-sm font-semibold ${
+                            className={`inline-block min-w-[6rem] py-1 px-3 rounded text-sm font-semibold ${
                               item.description === "aman"
                                 ? "bg-aman-box-surface-color text-aman-text-color"
                                 : item.description === "-"
@@ -305,7 +292,7 @@ const OverviewStok = () => {
                             onClick={() =>
                               editStokHandle(item.store.id, item.item.id)
                             }
-                            className="px-3 py-1 bg-green-700 rounded-[4px] text-white hover:bg-green-900 cursor-pointer font-medium mb-3"
+                            className="px-3 py-1 bg-green-700 rounded text-white hover:bg-green-900 cursor-pointer font-medium"
                           >
                             Edit Stok
                           </button>
@@ -317,14 +304,6 @@ const OverviewStok = () => {
               </div>
             </div>
           </div>
-          <button
-            onClick={() => {
-              console.log("selectedStore: ", selectedStore);
-              console.log("storeItems: ", storeItems);
-            }}
-          >
-            CHECK
-          </button>
         </div>
       )}
     </>

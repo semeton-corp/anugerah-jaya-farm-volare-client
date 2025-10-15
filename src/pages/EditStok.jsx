@@ -93,14 +93,6 @@ const EditStok = () => {
         onCancel={() => setShowConfirm(false)}
         onConfirm={handleSubmit}
       />
-      <button
-        onClick={() => {
-          console.log("storeId: ", storeId);
-          console.log("itemId: ", itemId);
-        }}
-      >
-        CHECK
-      </button>
     </div>
   );
 };
