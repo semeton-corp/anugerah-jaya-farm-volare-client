@@ -178,10 +178,8 @@ export default function InputDraftPengadaanBarang() {
   };
 
   const tambahSupplierHandle = () => {
-    const newPath = location.pathname.replace(
-      "input-draft-pengadaan-barang",
-      "tambah-supplier"
-    );
+    const basePath = location.pathname.split("input-draft-pengadaan-barang")[0];
+    const newPath = `${basePath}tambah-supplier`;
     navigate(newPath);
   };
 
@@ -328,36 +326,37 @@ export default function InputDraftPengadaanBarang() {
             )}
           </select>
         </div>
-        <div className="flex items-center mb-8 gap-4">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center mb-6 gap-3 sm:gap-4">
+          {/* Tambah Supplier Button */}
           <div
-            onClick={() => {
-              tambahSupplierHandle();
-            }}
-            className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer"
+            onClick={tambahSupplierHandle}
+            className="flex items-center justify-center sm:justify-start rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer w-full sm:w-auto transition-all duration-200"
           >
-            <div className="text-base font-medium ms-2 ">+ Tambah Supplier</div>
+            <span className="text-base font-medium">+ Tambah Supplier</span>
           </div>
+
+          {/* Tanyakan Harga Button */}
           <button
             onClick={() => {
               const localNumber = supplier?.phoneNumber;
-              const waNumber = localNumber.replace(/^0/, "62");
+              const waNumber = localNumber?.replace(/^0/, "62");
               const namaSupplier = supplier?.name || "";
               const namaBarang = item?.name || "";
               const unit = item?.unit || "";
-              const rencanaPembelian = `${totalOrder} ${item?.unit} `;
+              const rencanaPembelian = `${totalOrder} ${unit}`;
+
               const rawMessage = `Halo ${namaSupplier} 🙏🙏🙏
 
 Kami dari *Anugerah Jaya Farm* ingin menanyakan harga barang *PER ${unit.toUpperCase()}* berikut:
 
 ━━━━━━━━━━━━━━━
 📦 *Nama Barang*: ${namaBarang}
-📝 *Rencana Pembelian*: ${rencanaPembelian} ${unit}
+📝 *Rencana Pembelian*: ${rencanaPembelian}
 ━━━━━━━━━━━━━━━
 
 ✅ Mohon konfirmasi, terima kasih.`;
 
               const message = encodeURIComponent(rawMessage);
-
               const urlApiWhats = `https://api.whatsapp.com/send/?phone=${waNumber}&text=${message}`;
 
               if (supplier && totalOrder) {
@@ -365,20 +364,22 @@ Kami dari *Anugerah Jaya Farm* ingin menanyakan harga barang *PER ${unit.toUpper
               }
             }}
             disabled={!supplier || !totalOrder}
-            className={`px-4 py-2 rounded-[4px] text-white flex gap-4 ${
+            className={`flex items-center justify-center gap-3 px-4 py-2 rounded text-white text-base font-medium w-full sm:w-auto transition-all duration-200 ${
               !supplier || !totalOrder
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-green-700 hover:bg-green-900 cursor-pointer"
             }`}
           >
-            <div className="text-base font-medium ms-2">Tanyakan Harga</div>
-            <IoLogoWhatsapp size={24} />
+            <span>Tanyakan Harga</span>
+            <IoLogoWhatsapp size={22} />
           </button>
         </div>
 
         <div className="flex gap-8">
           <div>
-            <p className=" text-gray-600">Kebutuhan per-hari</p>
+            <p className="text-xs sm:text-base text-gray-600">
+              Kebutuhan per-hari
+            </p>
             <p className="font-semibold text-lg">
               {dailySpending
                 ? `${dailySpending.toLocaleString("id-ID")} ${
@@ -388,7 +389,7 @@ Kami dari *Anugerah Jaya Farm* ingin menanyakan harga barang *PER ${unit.toUpper
             </p>
           </div>
           <div>
-            <p className=" text-gray-600">
+            <p className="text-xs sm:text-base text-gray-600">
               Rekomendasi minimum jumlah pembelian
             </p>
             <p className="font-semibold text-lg">

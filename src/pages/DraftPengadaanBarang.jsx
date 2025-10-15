@@ -174,11 +174,14 @@ const DraftPengadaanBarang = () => {
 
   return (
     <div className="p-6">
-      <div className="mb-6 flex justify-between">
-        <h2 className="text-3xl font-bold">Draft Pengadaan Barang</h2>
+      <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+          Draft Pengadaan Barang
+        </h2>
+
         {(userRole === "Owner" || userRole === "Kepala Kandang") && (
-          <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
-            <MdStore size={18} />
+          <div className="w-full sm:w-auto flex items-center justify-between sm:justify-start rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer transition-all duration-200">
+            <MdStore size={18} className="flex-shrink-0" />
             <select
               value={selectedWarehouse}
               onChange={(e) => {
@@ -190,10 +193,14 @@ const DraftPengadaanBarang = () => {
                   setCornCapacity(selected.cornCapacity);
                 }
               }}
-              className="ml-2 bg-transparent text-base font-medium outline-none"
+              className="ml-2 bg-transparent text-sm sm:text-base font-medium outline-none w-full sm:w-auto"
             >
               {warehouses?.map((warehouse) => (
-                <option key={warehouse.id} value={warehouse.id}>
+                <option
+                  key={warehouse.id}
+                  value={warehouse.id}
+                  className="text-black"
+                >
                   {warehouse.name}
                 </option>
               ))}
@@ -201,25 +208,25 @@ const DraftPengadaanBarang = () => {
           </div>
         )}
       </div>
+
       <div className="bg-white p-4 rounded border shadow">
-        <div className="flex justify-end items-center mb-3 gap-4">
+        <div className="flex flex-col sm:flex-row justify-end items-stretch sm:items-center mb-3 gap-3 sm:gap-4">
           <button
-            onClick={() => {
-              handlePerbandinganPakan();
-            }}
-            className="bg-orange-300 hover:bg-yellow-500 py-2 rounded px-4 cursor-pointer"
+            onClick={handlePerbandinganPakan}
+            className="bg-orange-300 hover:bg-yellow-500 py-2 px-4 rounded cursor-pointer text-sm sm:text-base w-full sm:w-auto transition-colors duration-200"
           >
             Perbandingan Pakan
           </button>
+
           <button
             onClick={inputDraftPesanBarangHandle}
-            className="bg-orange-300 hover:bg-yellow-500 py-2 px-4 rounded cursor-pointer"
+            className="bg-orange-300 hover:bg-yellow-500 py-2 px-4 rounded cursor-pointer text-sm sm:text-base w-full sm:w-auto transition-colors duration-200"
           >
             + Tambah Pengadaan Barang
           </button>
         </div>
         <div className="overflow-x-auto">
-          <table className="min-w-full table-auto border-collapse">
+          <table className="text-sm sm:text-base min-w-full table-auto border-collapse">
             <thead>
               <tr className="bg-green-700 text-white text-left">
                 <th className="p-3">Tanggal Input</th>
@@ -302,7 +309,7 @@ Mohon konfirmasi ketersediaannya, terima kasih 🙏
                           setSelectedItem(item);
                           setShowBatalModal(true);
                         }}
-                        className="px-3 py-1 bg-kritis-box-surface-color rounded-[4px] text-white hover:bg-kritis-text-color cursor-pointer"
+                        className="px-3 py-1 bg-kritis-box-surface-color rounded-[4px] text-kritis-text-color hover:bg-kritis-text-color cursor-pointer"
                       >
                         Batalkan
                       </button>
