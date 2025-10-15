@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getCageFeed, updateCageFeed } from "../services/cages";
 import { getItems } from "../services/item";
+import { MdDelete } from "react-icons/md";
 
 const EditFormulaPakan = () => {
   const navigate = useNavigate();
@@ -267,7 +268,7 @@ const EditFormulaPakan = () => {
                 className="bg-red-500 text-white px-3 py-2 rounded self-start md:self-center"
                 title="Hapus bahan"
               >
-                🗑
+                <MdDelete size={24} />
               </button>
             </div>
           ))}

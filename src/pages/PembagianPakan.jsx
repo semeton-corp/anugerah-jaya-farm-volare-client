@@ -202,22 +202,24 @@ export default function PembagianPakan() {
                 </td>
                 <td className="p-3">{r.feedType}</td>
                 <td className="p-3">{rupiahKg(r.totalFeed)}</td>
-                <td className="p-3">
+                <td className="p-3 text-sm sm:text-base whitespace-normal break-words">
                   {r.chickenCategory && (
-                    <span
-                      className={`px-3 py-1 rounded
-                      ${
-                        r.isNeedFeed
-                          ? "bg-kritis-box-surface-color text-kritis-text-color"
-                          : "bg-aman-box-surface-color text-aman-text-color"
-                      }
-                   `}
-                    >
-                      {r.isNeedFeed ? "Belum Dibuat" : "Sudah Dibuat"}
-                    </span>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                      <span
+                        className={`inline-block text-center px-3 py-1 rounded text-xs sm:text-sm font-medium
+                          ${
+                            r.isNeedFeed
+                              ? "bg-kritis-box-surface-color text-kritis-text-color"
+                              : "bg-aman-box-surface-color text-aman-text-color"
+                          }
+                          `}
+                      >
+                        {r.isNeedFeed ? "Belum Dibuat" : "Sudah Dibuat"}
+                      </span>
+                    </div>
                   )}
-                  {r.isNeedFeed}
                 </td>
+
                 <td className="p-3">
                   {r.chickenCategory && r.isNeedFeed && (
                     <button
