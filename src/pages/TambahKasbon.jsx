@@ -260,13 +260,6 @@ export default function TambahKasbon() {
           </button>
         </div>
       </form>
-      <button
-        onClick={() => {
-          console.log("selectedUser: ", selectedUser);
-        }}
-      >
-        CHECK
-      </button>
     </div>
   );
 }

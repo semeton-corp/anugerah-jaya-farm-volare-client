@@ -26,7 +26,6 @@ const COLORS = {
   "Belum Lunas": "#E29901",
 };
 
-
 const CATEGORY_OPTIONS = [
   "Pengadaan Ayam DOC",
   "Pengadaan Gudang",
@@ -189,12 +188,12 @@ export default function Hutang() {
       </div>
 
       {/* Banner peringatan */}
-      {nearingDue && (
+      {/* {nearingDue && (
         <div className="flex items-center gap-3 rounded-md bg-amber-100 text-amber-900 px-4 py-3">
           <FaExclamationTriangle />
           <span className="font-medium">{nearingDue}</span>
         </div>
-      )}
+      )} */}
 
       <PageNotificationsSection pageNotifications={pageNotifications} />
 

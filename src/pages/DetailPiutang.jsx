@@ -460,10 +460,10 @@ export default function DetailPiutang() {
 
       {/* Riwayat Pembayaran */}
       <div className="rounded-md border border-gray-300">
-        <div className="flex items-center justify-between p-4">
-          <div className="flex items-center gap-4 flex-wrap">
-            <div>
-              <span className="text-sm">Tipe Pembayaran : </span>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 flex-wrap">
+            <div className="flex items-center gap-2 text-sm">
+              <span>Tipe Pembayaran:</span>
               <Badge
                 tone={
                   paymentType?.toLowerCase() === "cicil" ? "warning" : "success"
@@ -472,8 +472,9 @@ export default function DetailPiutang() {
                 {paymentType || "—"}
               </Badge>
             </div>
+
             <div className="text-sm">
-              Tenggat Pembayaran :{" "}
+              Tenggat Pembayaran:{" "}
               <span className="font-semibold">
                 {deadlinePaymentDate || "-"}
               </span>
@@ -482,7 +483,7 @@ export default function DetailPiutang() {
 
           <button
             onClick={() => {
-              if (paymentStatus != "Lunas") {
+              if (paymentStatus !== "Lunas") {
                 setShowPaymentModal(true);
               } else {
                 alert("✅Pembayaran Sudah Lunas!");
@@ -560,12 +561,13 @@ export default function DetailPiutang() {
             </table>
           </div>
 
-          <div className="flex items-center justify-between mt-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4 gap-4">
             <div className="flex items-center gap-3">
               <span className="font-semibold">Status Pembayaran :</span>
               <Badge tone={statusBadge}>{paymentStatus}</Badge>
             </div>
-            <div className="text-right">
+
+            <div className="text-left sm:text-right">
               <p className="text-sm">Sisa Cicilan</p>
               <p className="text-xl font-extrabold">
                 {rupiah(remainingPayment)}
