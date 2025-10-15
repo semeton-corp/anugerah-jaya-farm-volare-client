@@ -545,7 +545,7 @@ export default function DetailHutang() {
                 setShowPaymentModal(true);
               }
             }}
-            className="bg-amber-400 hover:bg-amber-500 px-4 py-2 rounded text-black cursor-pointer"
+            className="bg-orange-300 hover:bg-orange-500 px-4 py-2 rounded text-black cursor-pointer"
           >
             Pilih Pembayaran
           </button>
@@ -560,7 +560,7 @@ export default function DetailHutang() {
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full text-sm sm:text-base">
               <thead className="bg-green-700 text-white">
                 <tr>
                   <th className="text-left px-3 py-2">Tanggal</th>
