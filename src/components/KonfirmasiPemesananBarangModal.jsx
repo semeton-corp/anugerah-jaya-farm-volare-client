@@ -185,27 +185,27 @@ const KonfirmasiPemesananBarangModal = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/30">
-      <div className="bg-white w-[95%] max-w-4xl p-6 rounded shadow-lg">
-        <h2 className="text-2xl font-semibold mb-6">
+    <div className="fixed inset-0 z-[100] flex items-start justify-center bg-black/30 overflow-y-auto">
+      <div className="bg-white w-[95%] max-w-4xl p-4 md:p-6 rounded shadow-lg my-8 mt-10 md:mt-16">
+        <h2 className="text-xl md:text-2xl font-semibold mb-6 text-center md:text-left">
           Konfirmasi Pemesanan Barang
         </h2>
 
         {/* Info atas */}
-        <div className="mb-4 grid grid-cols-3 gap-6">
+        <div className="mb-4 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           <div>
             <p className="text-sm text-gray-600">Tanggal Pemesanan</p>
-            <p className="font-semibold">{orderDate}</p>
+            <p className="font-semibold break-words">{orderDate}</p>
           </div>
           <div>
             <p className="text-sm text-gray-600">Nama Barang</p>
-            <p className="font-semibold">{itemName}</p>
+            <p className="font-semibold break-words">{itemName}</p>
           </div>
           <div>
-            <div className="flex">
+            <div className="flex items-center justify-between md:justify-start">
               <p className="text-sm text-gray-600">Supplier</p>
               <button
-                className="p-1 rounded border hover:bg-gray-100"
+                className="p-1 rounded border hover:bg-gray-100 ml-2"
                 onClick={() => setEditSupplier((v) => !v)}
                 title="Edit"
               >
@@ -213,51 +213,48 @@ const KonfirmasiPemesananBarangModal = ({
               </button>
             </div>
             {editSupplier ? (
-              <>
-                <select
-                  className="w-full border rounded px-3 py-2 bg-gray-100"
-                  value={supplier?.id || ""}
-                  onChange={(e) =>
-                    setSupplier(
-                      filteredSupplier.find(
-                        (s) => s.id === Number(e.target.value)
-                      )
+              <select
+                className="w-full border rounded px-3 py-2 bg-gray-100 mt-1"
+                value={supplier?.id || ""}
+                onChange={(e) =>
+                  setSupplier(
+                    filteredSupplier.find(
+                      (s) => s.id === Number(e.target.value)
                     )
-                  }
-                >
-                  <option value="" disabled>
-                    Pilih supplier...
-                  </option>
-
-                  {filteredSupplier?.length > 0 ? (
-                    filteredSupplier?.map((b) => (
-                      <option key={b.id} value={b.id}>
-                        {b.name}
-                      </option>
-                    ))
-                  ) : (
-                    <option value="" disabled>
-                      Tidak ada supplier tersedia untuk barang yang dipilih
+                  )
+                }
+              >
+                <option value="" disabled>
+                  Pilih supplier...
+                </option>
+                {filteredSupplier?.length > 0 ? (
+                  filteredSupplier?.map((b) => (
+                    <option key={b.id} value={b.id}>
+                      {b.name}
                     </option>
-                  )}
-                </select>
-              </>
+                  ))
+                ) : (
+                  <option value="" disabled>
+                    Tidak ada supplier tersedia
+                  </option>
+                )}
+              </select>
             ) : (
               <p
-                className={` ${
-                  supplier.name ? "font-semibold" : "italic text-black-5"
+                className={`mt-1 ${
+                  supplier.name ? "font-semibold" : "italic text-gray-500"
                 }`}
               >
-                {supplier.name ? supplier.name : "supplier belum dipilih"}
+                {supplier.name || "supplier belum dipilih"}
               </p>
             )}
           </div>
         </div>
 
         {/* Baris angka utama */}
-        <div className="grid grid-cols-3 gap-6 mb-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-2">
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 justify-between md:justify-start">
               <p className="text-sm text-gray-600">Kebutuhan per-hari</p>
               <button
                 className="p-1 rounded border hover:bg-gray-100"
@@ -286,7 +283,7 @@ const KonfirmasiPemesananBarangModal = ({
           </div>
 
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 justify-between md:justify-start">
               <p className="text-sm text-gray-600">Kebutuhan (hari)</p>
               <button
                 className="p-1 rounded border hover:bg-gray-100"
@@ -317,9 +314,10 @@ const KonfirmasiPemesananBarangModal = ({
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-6 mb-2">
+        {/* Harga */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-2">
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 justify-between md:justify-start">
               <p className="text-sm text-gray-600">Harga Beli / Unit</p>
               <button
                 className="p-1 rounded border hover:bg-gray-100"
@@ -349,7 +347,7 @@ const KonfirmasiPemesananBarangModal = ({
         </div>
 
         {/* Tanggal Estimasi & Kadaluarsa */}
-        <div className="grid grid-cols-2 gap-6 mt-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mt-4">
           <div>
             <p className="text-sm text-gray-600 mb-1">Tanggal Estimasi Tiba</p>
             <input
@@ -369,7 +367,8 @@ const KonfirmasiPemesananBarangModal = ({
             />
           </div>
         </div>
-        {paymentType != "Penuh" && (
+
+        {paymentType !== "Penuh" && (
           <div className="mt-3">
             <p className="text-sm text-gray-600 mb-1">Tenggat Pembayaran</p>
             <input
@@ -395,12 +394,12 @@ const KonfirmasiPemesananBarangModal = ({
         </div>
 
         {/* Pembayaran */}
-        <div className="border rounded mt-3">
-          <div className="flex items-center justify-between p-4">
+        <div className="border rounded mt-3 overflow-x-auto">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between p-4 gap-3">
             <p className="font-semibold text-lg">Pembayaran</p>
             <button
               onClick={() => setShowPaymentModal(true)}
-              className="bg-orange-300 hover:bg-orange-500 px-4 py-2 rounded text-black cursor-pointer"
+              className="bg-orange-300 hover:bg-orange-500 px-4 py-2 rounded text-black cursor-pointer w-full md:w-auto text-center"
             >
               Pilih Pembayaran
             </button>
@@ -408,21 +407,24 @@ const KonfirmasiPemesananBarangModal = ({
 
           <div className="px-4 pb-4">
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full min-w-[600px] text-sm">
                 <thead className="bg-green-700 text-white">
                   <tr>
                     <th className="text-left px-3 py-2">Tanggal</th>
-                    <th className="text-left px-3 py-2">Metode Pembayaran</th>
-                    <th className="text-left px-3 py-2">Nominal Pembayaran</th>
-                    <th className="text-left px-3 py-2">Sisa Bayar</th>
-                    <th className="text-left px-3 py-2">Bukti Pembayaran</th>
+                    <th className="text-left px-3 py-2">Metode</th>
+                    <th className="text-left px-3 py-2">Nominal</th>
+                    <th className="text-left px-3 py-2">Sisa</th>
+                    <th className="text-left px-3 py-2">Bukti</th>
                     <th className="px-3 py-2">Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
                   {payments.length === 0 ? (
                     <tr>
-                      <td className="px-3 py-3 text-gray-500" colSpan={6}>
+                      <td
+                        className="px-3 py-3 text-gray-500 text-center"
+                        colSpan={6}
+                      >
                         Belum ada data pembayaran.
                       </td>
                     </tr>
@@ -435,17 +437,11 @@ const KonfirmasiPemesananBarangModal = ({
                         <td className="px-3 py-2">
                           {rupiah(remainingAfterIdx(i))}
                         </td>
-                        <td className="px-3 py-2">
-                          {p.proof ? (
-                            <td
-                              className="px-3 py-2 underline text-green-700 hover:text-green-900 cursor-pointer"
-                              onClick={() => setPopupImage(p.proof)}
-                            >
-                              {p.proof ? "Bukti Pembayaran" : "-"}
-                            </td>
-                          ) : (
-                            "-"
-                          )}
+                        <td
+                          className="px-3 py-2 underline text-green-700 hover:text-green-900 cursor-pointer"
+                          onClick={() => setPopupImage(p.proof)}
+                        >
+                          {p.proof ? "Bukti Pembayaran" : "-"}
                         </td>
                         <td className="px-3 py-2">
                           <button
@@ -463,7 +459,7 @@ const KonfirmasiPemesananBarangModal = ({
               </table>
             </div>
 
-            <div className="flex items-center justify-between mt-4">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between mt-4 gap-3">
               <div className="flex items-center gap-3">
                 <span className="font-semibold">Status Pembayaran :</span>
                 <span
@@ -476,7 +472,7 @@ const KonfirmasiPemesananBarangModal = ({
                   {paymentStatus}
                 </span>
               </div>
-              <div className="text-right">
+              <div className="text-right w-full md:w-auto">
                 <p className="text-sm">Sisa Bayar : {rupiah(remaining)}</p>
               </div>
             </div>
@@ -484,26 +480,29 @@ const KonfirmasiPemesananBarangModal = ({
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end gap-3 mt-6">
+        <div className="flex flex-col md:flex-row justify-end gap-3 mt-6">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800 cursor-pointer"
+            className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-gray-800 cursor-pointer w-full md:w-auto"
           >
             Batal
           </button>
           <button
             onClick={handleConfirm}
-            className="px-4 py-2 rounded bg-green-700 hover:bg-green-900 text-white cursor-pointer"
+            className="px-4 py-2 rounded bg-green-700 hover:bg-green-900 text-white cursor-pointer w-full md:w-auto"
           >
             Konfirmasi pesanan
           </button>
         </div>
       </div>
 
+      {/* Payment Modal */}
       {showPaymentModal && (
-        <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/50">
-          <div className="bg-white w-full max-w-lg p-6 rounded shadow-xl">
-            <h3 className="text-lg font-bold mb-4">Pembayaran</h3>
+        <div className="fixed inset-0 z-[110] flex justify-center items-start md:items-center bg-black/50 overflow-y-auto">
+          <div className="bg-white w-[95%] max-w-lg p-4 md:p-6 rounded shadow-xl my-6 md:my-0 mt-20 md:mt-0 mx-auto">
+            <h3 className="text-lg font-bold mb-4 text-center md:text-left">
+              Pembayaran
+            </h3>
 
             <label className="block mb-1 font-medium">Nominal Pembayaran</label>
             <input
@@ -549,7 +548,6 @@ const KonfirmasiPemesananBarangModal = ({
                 if (!file) return;
 
                 setIsUploading(true);
-
                 try {
                   const fileUrl = await uploadFile(file);
                   setPaymentProof(fileUrl);
@@ -563,7 +561,7 @@ const KonfirmasiPemesananBarangModal = ({
               }}
             />
 
-            <div className="flex justify-end gap-2">
+            <div className="flex flex-col md:flex-row justify-end gap-2 mt-4">
               <button
                 onClick={() => {
                   setShowPaymentModal(false);
@@ -571,14 +569,14 @@ const KonfirmasiPemesananBarangModal = ({
                   setNominal("");
                   setPaymentDate(toYmd());
                 }}
-                className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded cursor-pointer"
+                className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded cursor-pointer w-full md:w-auto"
               >
                 Batal
               </button>
               <button
                 onClick={addPayment}
                 disabled={isUploading}
-                className={`px-4 py-2 rounded text-white ${
+                className={`px-4 py-2 rounded text-white w-full md:w-auto ${
                   isUploading
                     ? "bg-gray-400 cursor-not-allowed"
                     : "bg-green-700 hover:bg-green-900 cursor-pointer"
