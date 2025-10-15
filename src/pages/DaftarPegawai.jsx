@@ -11,6 +11,7 @@ import { getListUser, getUserOverviewList } from "../services/user";
 import { getRoles } from "../services/roles";
 import { MdStore } from "react-icons/md";
 import { getLocations } from "../services/location";
+import { formatThousand } from "../utils/moneyFormat";
 
 const DaftarPegawai = () => {
   const location = useLocation();
@@ -127,12 +128,10 @@ const DaftarPegawai = () => {
   }
   return (
     <div className="flex flex-col px-4 py-3 gap-4 ">
-      {/* header */}
       <div className="flex justify-between mb-2 flex-wrap gap-4">
         <h1 className="text-3xl font-bold">Daftar Pegawai</h1>
       </div>
 
-      {/* entire box */}
       <div className=" rounded-[4px] border border-black-6">
         <div className="px-6 pt-8 pb-4 flex items-center justify-between border-b ">
           <p className="text-lg font-bold">Pegawai Aktif</p>
@@ -179,65 +178,67 @@ const DaftarPegawai = () => {
           </div>
         </div>
 
-        {/* pegawai table */}
         <div className="px-6 py-2">
-          <table className="w-full ">
-            <thead className="px-8 rounded-[4px] bg-green-700 text-white text-left">
-              <tr>
-                <th className="py-2 px-4">Pegawai</th>
-                <th className="py-2 px-4">ID</th>
-                <th className="py-2 px-4">Jabatan</th>
-                <th className="py-2 px-4">Status Kinerja</th>
-                <th className="py-2 px-4"></th>
-                <th className="py-2 px-4"></th>
-              </tr>
-            </thead>
-            <tbody className="">
-              {pegawaiAktifData?.map((item, index) => (
-                <tr key={index} className="border-b border-black-6">
-                  <td className="py-3 px-4">
-                    <div className="flex gap-6">
-                      <div className="h-12 w-12 rounded-full overflow-hidden">
-                        <img src={item?.photoProfile} alt="Profile Avatar" />
-                      </div>
-
-                      <div className="">
-                        <p className="text-base font-me leading-tight">
-                          {item?.name}
-                        </p>
-                        <p className="text-sm text-gray-500">{item?.email}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="py-2 px-4">{item?.id}</td>
-                  <td className="py-2 px-4">{item?.role?.name}</td>
-                  <td className="py-2 px-4">
-                    <span
-                      className={`inline-block px-6 py-2 rounded-lg font-medium text-center
-                        ${
-                          ((item.kpiStatus || "").toLowerCase() === "baik" &&
-                            "bg-[#87FF8B] text-black") ||
-                          ((item.kpiStatus || "").toLowerCase() === "buruk" &&
-                            "bg-[#FF5E5E] text-black") ||
-                          "bg-gray-200 text-gray-700"
-                        }`}
-                    >
-                      {item.kpiStatus ?? "-"}
-                    </span>
-                  </td>
-                  <td className="py-2 px-4">{item.salary}</td>
-                  <td
-                    onClick={() => {
-                      handleDetail(item.id);
-                    }}
-                    className="py-2 px-4 underline text-black hover:text-black-6 cursor-pointer"
-                  >
-                    Detail
-                  </td>
+          {/* Scrollable wrapper */}
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[700px]">
+              <thead className="px-8 rounded-[4px] bg-green-700 text-white text-left">
+                <tr>
+                  <th className="py-2 px-4">Pegawai</th>
+                  <th className="py-2 px-4">ID</th>
+                  <th className="py-2 px-4">Jabatan</th>
+                  <th className="py-2 px-4">Status Kinerja</th>
+                  <th className="py-2 px-4">Gaji</th>
+                  <th className="py-2 px-4">Aksi</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {pegawaiAktifData?.map((item, index) => (
+                  <tr key={index} className="border-b border-black-6">
+                    <td className="py-3 px-4">
+                      <div className="flex gap-6 items-center">
+                        <div className="h-12 w-12 rounded-full overflow-hidden">
+                          <img src={item?.photoProfile} alt="Profile Avatar" />
+                        </div>
+                        <div>
+                          <p className="text-base font-medium leading-tight">
+                            {item?.name}
+                          </p>
+                          <p className="text-sm text-gray-500">{item?.email}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="py-2 px-4 whitespace-nowrap">{item?.id}</td>
+                    <td className="py-2 px-4 whitespace-nowrap">
+                      {item?.role?.name}
+                    </td>
+                    <td className="py-2 px-4 whitespace-nowrap">
+                      <span
+                        className={`inline-block px-6 py-2 rounded-lg font-medium text-center ${
+                          (item.kpiStatus || "").toLowerCase() === "baik"
+                            ? "bg-[#87FF8B] text-black"
+                            : (item.kpiStatus || "").toLowerCase() === "buruk"
+                            ? "bg-[#FF5E5E] text-black"
+                            : "bg-gray-200 text-gray-700"
+                        }`}
+                      >
+                        {item.kpiStatus ?? "-"}
+                      </span>
+                    </td>
+                    <td className="py-2 px-4 whitespace-nowrap">
+                      {`Rp ${formatThousand(item.salaryRecommendation)}`}
+                    </td>
+                    <td
+                      onClick={() => handleDetail(item.id)}
+                      className="py-2 px-4 underline text-black hover:text-black-6 cursor-pointer whitespace-nowrap"
+                    >
+                      Detail
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mt-6 px-6 gap-3">
             <p className="text-sm text-[#777]">

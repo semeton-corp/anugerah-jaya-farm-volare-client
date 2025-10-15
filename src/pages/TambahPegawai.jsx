@@ -484,7 +484,7 @@ function ProfilPegawaiForm({
   }, [selectedRole, roles]);
 
   return (
-    <div className="border border-black-6 p-6 rounded-md shadow-sm">
+    <div className="border border-black-6 p-6 rounded-md shadow-sm w-full max-w-5xl mx-auto">
       <h2 className="font-bold text-xl mb-4">Profil Pegawai</h2>
 
       <div className="grid gap-4 mb-4">
@@ -494,11 +494,11 @@ function ProfilPegawaiForm({
         </div>
       </div>
 
-      <div className="grid gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="flex flex-col">
           <label className="mb-1">Jabatan Pegawai</label>
           <select
-            className="border rounded p-4 mb-3"
+            className="border rounded p-3 w-full"
             value={selectedRole}
             onChange={(e) => setSelectedRole(e.target.value)}
           >
@@ -509,37 +509,38 @@ function ProfilPegawaiForm({
             ))}
           </select>
         </div>
+
         {isShowLocationIdField && (
-          <>
-            <label className="block font-medium mb-1">{labelLokasi}</label>
+          <div className="flex flex-col">
+            <label className="mb-1 font-medium">{labelLokasi}</label>
             <select
               value={locationId}
               onChange={(e) => setLocationId(e.target.value)}
-              className="w-full border rounded p-4  focus:outline-none focus:ring"
+              className="border rounded p-3 w-full focus:outline-none focus:ring"
               required
             >
-              <option value="text-gray-100">{placeHolderLokasi}</option>
+              <option value="">{placeHolderLokasi}</option>
               {locationOptions.map((lokasi, idx) => (
                 <option key={idx} value={lokasi.id}>
                   {lokasi.name}
                 </option>
               ))}
             </select>
-          </>
+          </div>
         )}
 
         {isShowPicField && (
-          <>
+          <div className="flex flex-col col-span-1 md:col-span-2">
             <label className="mb-1">PIC</label>
             {selectedRole == 1 || selectedRole == 2 ? (
-              <div className="flex flex-col gap-2 mb-3">
+              <div className=" flex flex-col gap-4 mb-3">
                 {pics?.length === 0 && (
                   <span className="text-gray-400">No PICs available</span>
                 )}
                 {pics?.map((pic) => (
                   <label
                     key={pic.id}
-                    className="inline-flex items-center gap-2 mx-8"
+                    className="inline-flex items-center gap-2"
                   >
                     <input
                       type="checkbox"
@@ -554,7 +555,7 @@ function ProfilPegawaiForm({
                           );
                         }
                       }}
-                      className="scale-150 mr-2 cursor-pointer accent-green-700"
+                      className="scale-125 cursor-pointer accent-green-700"
                     />
                     <span className="text-lg">{pic?.cage?.name}</span>
                   </label>
@@ -562,7 +563,7 @@ function ProfilPegawaiForm({
               </div>
             ) : (
               <select
-                className="border rounded p-4 mb-3"
+                className="border rounded p-3 w-full mb-3"
                 value={selectedPic}
                 onChange={(e) => {
                   const options = Array.from(e.target.selectedOptions).map(
@@ -571,9 +572,7 @@ function ProfilPegawaiForm({
                   setSelectedPic(options);
                 }}
               >
-                <option value="">
-                  <p className="text-gray-200">Pilih lokasi pic...</p>
-                </option>
+                <option value="">Pilih lokasi pic...</option>
                 {pics?.length === 0 && (
                   <option disabled>No PICs available</option>
                 )}
@@ -584,61 +583,73 @@ function ProfilPegawaiForm({
                 ))}
               </select>
             )}
-          </>
+          </div>
         )}
 
-        <label className="mb-1">Nama Pegawai</label>
-        <input
-          type="text"
-          placeholder="Nama Pegawai"
-          className="border rounded p-4 mb-3"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-
-        <label className="mb-1">Email Pegawai</label>
-        <input
-          type="email"
-          placeholder="Masukkan email pegawai"
-          className="border rounded p-4 mb-3"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-
-        <label className="mb-1">Username Pegawai</label>
-        <input
-          type="text"
-          placeholder="Masukkan username pegawai"
-          className="border rounded p-4 mb-3"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-
-        <label className="mb-1">Nomor Telepon Pegawai</label>
-        <input
-          type="number"
-          placeholder="Masukkan nomor telepon pegawai"
-          className="border rounded p-4 mb-3"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-        />
-
-        <label className="mb-1">Alamat Pegawai</label>
-        <input
-          type="text"
-          placeholder="Masukkan alamat tinggal pegawai"
-          className="border rounded p-4 mb-3"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-        />
-        <div className="flex justify-end">
-          <button
-            className="w-36 items-center bg-green-700 hover:bg-green-900 cursor-pointer text-white px-4 py-2 rounded"
-            onClick={() => setTab("gaji")}
-          >
-            Selanjutnya
-          </button>
+        {/* Input Fields */}
+        <div className="flex flex-col">
+          <label className="mb-1">Nama Pegawai</label>
+          <input
+            type="text"
+            placeholder="Nama Pegawai"
+            className="border rounded p-3 w-full"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
         </div>
+
+        <div className="flex flex-col">
+          <label className="mb-1">Email Pegawai</label>
+          <input
+            type="email"
+            placeholder="Masukkan email pegawai"
+            className="border rounded p-3 w-full"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+
+        <div className="flex flex-col">
+          <label className="mb-1">Username Pegawai</label>
+          <input
+            type="text"
+            placeholder="Masukkan username pegawai"
+            className="border rounded p-3 w-full"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </div>
+
+        <div className="flex flex-col">
+          <label className="mb-1">Nomor Telepon Pegawai</label>
+          <input
+            type="number"
+            placeholder="Masukkan nomor telepon pegawai"
+            className="border rounded p-3 w-full"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
+        </div>
+
+        <div className="flex flex-col">
+          <label className="mb-1">Alamat Pegawai</label>
+          <input
+            type="text"
+            placeholder="Masukkan alamat tinggal pegawai"
+            className="border rounded p-3 w-full"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className="flex justify-end mt-4">
+        <button
+          className="w-36 bg-green-700 hover:bg-green-900 cursor-pointer text-white px-4 py-2 rounded"
+          onClick={() => setTab("gaji")}
+        >
+          Selanjutnya
+        </button>
       </div>
     </div>
   );

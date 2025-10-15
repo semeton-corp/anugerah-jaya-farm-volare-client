@@ -99,9 +99,9 @@ const TugasPegawai = () => {
           </div>
         </div>
 
-        <div className="px-6 py-2 ">
-          <table className="w-full mb-8">
-            <thead className="px-8 rounded-[4px] bg-green-700 text-white text-left">
+        <div className="px-4 py-2 overflow-x-auto">
+          <table className="w-full min-w-[700px] mb-8 border-collapse">
+            <thead className="bg-green-700 text-white text-left">
               <tr>
                 <th className="py-2 px-4">Tanggal</th>
                 <th className="py-2 px-4">Tugas Tambahan</th>
@@ -111,7 +111,7 @@ const TugasPegawai = () => {
                 <th className="py-2 px-4"></th>
               </tr>
             </thead>
-            <tbody className="">
+            <tbody>
               {tugasTambahanData.length > 0 ? (
                 tugasTambahanData.map((item, index) => (
                   <tr key={index} className="border-b border-black-6">
@@ -167,28 +167,26 @@ const TugasPegawai = () => {
           </div>
         </div>
 
-        <div className="px-6 py-2 ">
-          <table className="w-full mb-8">
-            <thead className="px-8 rounded-[4px] bg-green-700 text-white text-center">
+        <div className="px-4 py-2 overflow-x-auto">
+          <table className="w-full min-w-[600px] mb-8 border-collapse text-center">
+            <thead className="bg-green-700 text-white rounded-[4px]">
               <tr>
                 <th className="py-2 px-4">Jabatan</th>
                 <th className="py-2 px-4">Jumlah Tugas</th>
                 <th className="py-2 px-4">Jumlah Pekerja</th>
-                <th className="py-2 px-4">Aksi </th>
+                <th className="py-2 px-4">Aksi</th>
               </tr>
             </thead>
-            <tbody className="">
+            <tbody>
               {tugasRutinData.map((item, index) => (
-                <tr key={index} className="border-b border-black-6 text-center">
+                <tr key={index} className="border-b border-black-6">
                   <td className="py-2 px-4">{item.role.name}</td>
                   <td className="py-2 px-4">{item.totalWork}</td>
                   <td className="py-2 px-4">{item.totalUser}</td>
                   <td className="py-2 px-4 flex justify-center">
                     <span
-                      onClick={() => {
-                        editTugasRutinHandle(item.role.id);
-                      }}
-                      className="rounded-[4px] py-2 px-6 bg-green-700  text-white font-medium hover:bg-green-900 cursor-pointer"
+                      onClick={() => editTugasRutinHandle(item.role.id)}
+                      className="rounded-[4px] py-2 px-6 bg-green-700 text-white font-medium hover:bg-green-900 cursor-pointer"
                     >
                       + Edit tugas rutin
                     </span>
