@@ -157,7 +157,7 @@ const TambahBarangBaru = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 mb-6 gap-4">
+        <div className="grid grid-cols-1 mb-6 gap-4">
           <div>
             <label className="block font-medium mb-1">
               Jumlah Penggunaan Harian

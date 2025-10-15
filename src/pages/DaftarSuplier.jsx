@@ -9,23 +9,6 @@ import { getSuppliers } from "../services/supplier";
 import { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
-const suppliersDummy = [
-  {
-    name: "Pelet099",
-    address: "JL. AJF 1",
-    phone: "0812345678",
-  },
-  {
-    name: "Super Jagung",
-    address: "JL. AJF 2",
-    phone: "0812345678",
-  },
-  {
-    name: "Dagang Dedak",
-    address: "JL. AJF 3",
-    phone: "0812345678",
-  },
-];
 const DaftarSuplier = () => {
   const userRole = localStorage.getItem("role");
   const location = useLocation();
@@ -78,92 +61,72 @@ const DaftarSuplier = () => {
     return <Outlet />;
   }
   return (
-    <div className="flex flex-col px-4 py-3 gap-4 ">
-      {/* header */}
-      <div className="flex justify-between mb-2 flex-wrap gap-4">
-        <h1 className="text-3xl font-bold">Daftar Supplier</h1>
+    <div className="flex flex-col px-4 py-3 gap-4">
+      {/* Header */}
+      <div className="flex flex-wrap justify-between items-center gap-4">
+        <h1 className="text-2xl sm:text-3xl font-bold">Daftar Supplier</h1>
+
+        <button
+          onClick={tambahSupplierHandle}
+          className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 text-sm sm:text-base font-medium cursor-pointer transition-all"
+        >
+          + Tambah Supplier
+        </button>
       </div>
 
-      {/* entire box */}
-      <div className=" rounded-[4px] border border-black-6">
-        {/* pegawai table */}
-        <div className="px-6 py-6">
-          <div className="flex justify-end items-center mb-4">
-            <div
-              onClick={() => {
-                tambahSupplierHandle();
-              }}
-              className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer"
-            >
-              <div className="text-base font-medium ms-2 ">
-                + Tambah Supplier
-              </div>
-            </div>
-          </div>
-
-          <table className="w-full ">
-            <thead className="rounded-[4px] bg-green-700 text-white">
-              <tr className="text-left">
-                <th className="py-2 px-4">Nama Supplier</th>
-                <th className="py-2 px-4">Alamat</th>
-                <th className="py-2 px-4">Nomor Telepon</th>
-                <th className="py-2 px-4"></th>
+      {/* Main Box */}
+      <div className="rounded-md border border-gray-300 bg-white shadow-sm">
+        <div className="px-3 sm:px-6 py-4 sm:py-6 overflow-x-auto">
+          <table className="min-w-full text-sm text-gray-800 border-collapse">
+            <thead className="bg-green-700 text-white">
+              <tr>
+                <th className="py-3 px-4 text-left whitespace-nowrap">
+                  Nama Supplier
+                </th>
+                <th className="py-3 px-4 text-left whitespace-nowrap">
+                  Alamat
+                </th>
+                <th className="py-3 px-4 text-left whitespace-nowrap">
+                  Nomor Telepon
+                </th>
+                <th className="py-3 px-4"></th>
               </tr>
             </thead>
+
             <tbody>
-              {supplierData.map((item, index) => (
-                <tr key={index} className="border-b">
-                  <td className="px-4 py-2">{item.name}</td>
-                  <td className="px-4 py-2">{item.address}</td>
-                  <td className="px-4 py-2">{item.phoneNumber}</td>
-                  <td className="px-4 py-2">
-                    <button
-                      onClick={() => {
-                        lihatDetailHandle(item.id);
-                      }}
-                      className="bg-green-700 hover:bg-green-900 text-white px-2 py-1 rounded text-sm"
-                    >
-                      Lihat Detail
-                    </button>
+              {supplierData.length > 0 ? (
+                supplierData.map((item, index) => (
+                  <tr
+                    key={index}
+                    className="border-b hover:bg-gray-50 transition-colors"
+                  >
+                    <td className="px-4 py-2 whitespace-nowrap">{item.name}</td>
+                    <td className="px-4 py-2 min-w-[200px]">{item.address}</td>
+                    <td className="px-4 py-2 whitespace-nowrap">
+                      {item.phoneNumber}
+                    </td>
+                    <td className="px-4 py-2 whitespace-nowrap">
+                      <button
+                        onClick={() => lihatDetailHandle(item.id)}
+                        className="bg-green-700 hover:bg-green-900 text-white px-3 py-1 rounded text-xs sm:text-sm transition-all"
+                      >
+                        Lihat Detail
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan={4}
+                    className="px-4 py-6 text-center text-gray-500 text-sm"
+                  >
+                    Tidak ada data supplier.
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
-
-            {/* <tbody className="text-center">
-              {supplierData.map((item, index) => (
-                <tr key={index} className="border-b border-black-6">
-                  <td className="py-2 px-4 ">{item.name}</td>
-                  <td className="py-2 px-4">{item.warehouseItem.name}</td>
-                  <td className="py-2 px-4">{item.address}</td>
-                  <td className="py-2 px-4">{item.phoneNumber}</td>
-                  <td className="py-2 px-4">
-                    <p
-                      onClick={() => {
-                        editSupplierHandle(item.id);
-                      }}
-                      className="underline hover:text-black-6 cursor-pointer"
-                    >
-                      Detail
-                    </p>
-                  </td>
-                </tr>
-              ))}
-            </tbody> */}
           </table>
-
-          {/* footer */}
-          {/* <div className="flex justify-between mt-16 px-6">
-            <p className="text-sm text-[#CCCCCC]">Menampilkan 1-7 data</p>
-            <div className="flex gap-3">
-              <div className="rounded-[4px] py-2 px-6 bg-green-100 flex items-center justify-center text-black text-base font-medium hover:bg-green-200 cursor-pointer">
-                <p>Previous </p>
-              </div>
-              <div className="rounded-[4px] py-2 px-6 bg-green-700 flex items-center justify-center text-white text-base font-medium hover:bg-green-800 cursor-pointer">
-                <p>Next</p>
-              </div>
-            </div>
-          </div> */}
         </div>
       </div>
     </div>
