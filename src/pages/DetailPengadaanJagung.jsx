@@ -496,11 +496,14 @@ export default function DetailPengadaanJagung() {
 
       {/* Pembayaran */}
       <div className="border rounded mt-3">
-        <div className="flex items-center justify-between p-4">
-          <p className="font-semibold text-lg">Pembayaran</p>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 gap-3">
+          <p className="font-semibold text-lg text-center sm:text-left w-full sm:w-auto">
+            Pembayaran
+          </p>
+
           <button
             onClick={() => setShowPaymentModal(true)}
-            className="bg-orange-300 hover:bg-orange-500 px-4 py-2 rounded text-black cursor-pointer"
+            className="bg-orange-300 hover:bg-orange-500 px-4 py-2 rounded text-black font-medium w-full sm:w-auto transition-all duration-200"
           >
             Tambah Pembayaran
           </button>
@@ -527,7 +530,7 @@ export default function DetailPengadaanJagung() {
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="text-sm sm:text-base w-full">
               <thead className="bg-green-700 text-white">
                 <tr>
                   <th className="text-left px-3 py-2">Tanggal</th>
@@ -597,17 +600,20 @@ export default function DetailPengadaanJagung() {
               </tbody>
             </table>
           </div>
-          <div className="flex items-center justify-between mt-4">
-            <div className="flex items-center gap-3">
-              <span className="font-semibold">Status Pembayaran :</span>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-4 gap-3">
+            <div className="flex items-center gap-2">
+              <span className="font-semibold text-sm md:text-base">
+                Status Pembayaran :
+              </span>
               <Badge tone={finalRemaining === 0 ? "success" : "warning"}>
                 {finalRemaining === 0 ? "Lunas" : "Belum Lunas"}
               </Badge>
             </div>
-            <div className="text-right">
-              <p className="font-bold text-xl">
-                Sisa Bayar :{" "}
-                <p className="text-3xl">{rupiah(finalRemaining)}</p>
+
+            <div className="text-left sm:text-right w-full sm:w-auto">
+              <p className="font-bold text-base md:text-xl">Sisa Bayar:</p>
+              <p className="text-2xl md:text-3xl  font-semibold">
+                {rupiah(finalRemaining)}
               </p>
             </div>
           </div>

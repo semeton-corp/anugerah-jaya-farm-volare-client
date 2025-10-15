@@ -383,13 +383,16 @@ const KonfirmasiPemesananJagungModal = ({
 
         {/* Pembayaran */}
         <div className="border rounded mt-3">
-          <div className="flex items-center justify-between p-4">
-            <p className="font-semibold text-lg">Pembayaran</p>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 gap-3">
+            <p className="font-semibold text-lg text-center sm:text-left w-full sm:w-auto">
+              Pembayaran
+            </p>
+
             <button
               onClick={() => setShowPaymentModal(true)}
-              className="bg-orange-300 hover:bg-orange-500 px-4 py-2 rounded text-black cursor-pointer"
+              className="bg-orange-300 hover:bg-orange-500 px-4 py-2 rounded text-black font-medium w-full sm:w-auto transition-all duration-200"
             >
-              Pilih Pembayaran
+              Tambah Pembayaran
             </button>
           </div>
 

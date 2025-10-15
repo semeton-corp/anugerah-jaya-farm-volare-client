@@ -689,15 +689,6 @@ Kami dari *Anugerah Jaya Farm* ingin menanyakan harga barang *PER ${unit.toUpper
           </button>
         </div>
       </form>
-      <button
-        onClick={() => {
-          console.log("formData: ", formData);
-          console.log("discountRate: ", discountRate);
-          console.log("discountData: ", discountData);
-        }}
-      >
-        CHECK
-      </button>
     </div>
   );
 };

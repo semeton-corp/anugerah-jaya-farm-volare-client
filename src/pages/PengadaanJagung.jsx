@@ -193,15 +193,18 @@ const PengadaanJagung = () => {
   return (
     <div className="flex flex-col px-4 py-3 gap-6">
       {/* Header Section */}
-      <div className="flex justify-between items-center mb-2 flex-wrap gap-4">
-        <h1 className="text-3xl font-bold">Pengadaan Jagung</h1>
-        <div className="flex gap-4">
-          <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-4 gap-3">
+        <h1 className="text-2xl md:text-3xl font-bold text-center md:text-left">
+          Pengadaan Jagung
+        </h1>
+
+        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+          <div className="flex items-center justify-between sm:justify-start rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer transition-colors">
             <FaMoneyBillWave size={18} />
             <select
               value={paymentStatus}
               onChange={(e) => setPaymentStatus(e.target.value)}
-              className="ml-2 bg-transparent text-base font-medium outline-none"
+              className="ml-2 bg-transparent text-base font-medium outline-none w-full sm:w-auto"
             >
               <option value="">Semua Status Pembayaran</option>
               {paymentStatusOptions.map((opt) => (
@@ -211,8 +214,9 @@ const PengadaanJagung = () => {
               ))}
             </select>
           </div>
+
           {(userRole === "Owner" || userRole === "Kepala Kandang") && (
-            <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+            <div className="flex items-center justify-between sm:justify-start rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer transition-colors">
               <MdStore size={18} />
               <select
                 value={selectedWarehouse}
@@ -221,7 +225,7 @@ const PengadaanJagung = () => {
                   console.log("warehouseId: ", warehouseId);
                   setSelectedWarehouse(warehouseId);
                 }}
-                className="ml-2 bg-transparent text-base font-medium outline-none"
+                className="ml-2 bg-transparent text-base font-medium outline-none w-full sm:w-auto"
               >
                 <option value="">Semua Gudang</option>
                 {warehouses?.map((warehouse) => (
@@ -250,7 +254,7 @@ const PengadaanJagung = () => {
           </button>
         </div>
         <div className="mt-3 overflow-x-auto">
-          <table className="min-w-full">
+          <table className="text-sm sm:text-base min-w-full">
             <thead>
               <tr className="bg-green-700 text-white text-left">
                 <th className="px-4 py-3">Tanggal Pemesanan</th>
