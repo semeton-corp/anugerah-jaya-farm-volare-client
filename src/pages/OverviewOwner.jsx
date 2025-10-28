@@ -26,6 +26,7 @@ import { getGeneralOverview } from "../services/general";
 import { useEffect } from "react";
 import { useState } from "react";
 import { fmtRp } from "./GajiPegawai";
+import { getTodayDateInBahasa } from "../utils/dateFormat";
 
 const data = [
   { date: "29 Mar", produksi: 25, penjualan: 30 },
@@ -114,7 +115,8 @@ const OverviewOwner = () => {
   return (
     <div className="flex flex-col px-4 py-3 gap-4 ">
       <div className="flex justify-between items-center mb-2 flex-wrap gap-4">
-        <h1 className="text-3xl font-bold">Ringkasan</h1>
+        <h1 className="text-3xl font-bold">Ringkasan Hari ini</h1>
+        <p>{getTodayDateInBahasa()}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -191,7 +193,10 @@ const OverviewOwner = () => {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="key" />
               <YAxis />
-              <Tooltip />
+              <Tooltip
+                formatter={(value, name) => [`${value} Kg`, name]}
+                labelFormatter={(label) => `Tanggal: ${label}`}
+              />
               <Legend verticalAlign="top" align="right" />
               <Line
                 type="monotone"

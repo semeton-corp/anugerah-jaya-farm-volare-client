@@ -33,6 +33,7 @@ import {
 import { getLocations } from "../services/location";
 import { getChickenCage } from "../services/cages";
 import { getChickenOverview } from "../services/chickenMonitorings";
+import { getTodayDateInBahasa } from "../utils/dateFormat";
 
 const ayamChartData = [
   {
@@ -146,7 +147,7 @@ const Ayam = () => {
         selectedChickenCage,
         graphFilter
       );
-    console.log("overviewResponse: ", overviewResponse);
+      console.log("overviewResponse: ", overviewResponse);
       if (overviewResponse.status == 200) {
         const data = overviewResponse.data.data;
         setChickenDetail(data.chickenDetail);
@@ -197,7 +198,8 @@ const Ayam = () => {
                 : "Ringkasan Ayam Hari Ini"}
             </h1>
 
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-3 items-center">
+              <p>{getTodayDateInBahasa()}</p>
               {(userRole == "Owner" || userRole == "Kepala Kandang") && (
                 <div className="flex items-center rounded-lg px-3 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer w-full sm:w-auto">
                   <MdStore size={18} />

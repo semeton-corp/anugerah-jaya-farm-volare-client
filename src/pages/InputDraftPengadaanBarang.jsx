@@ -289,12 +289,43 @@ export default function InputDraftPengadaanBarang() {
           </div>
 
           <div>
-            <p className=" text-gray-600">Total Pesan</p>
-            <p className="font-semibold text-lg">
-              {totalOrder
-                ? `${totalOrder.toLocaleString("id-ID")} ${item?.unit || "-"}`
-                : "-"}
-            </p>
+            <div className="flex gap-8">
+              <div>
+                {" "}
+                <p className=" text-gray-600">Total Pesan</p>
+                <p className="font-semibold text-lg">
+                  {totalOrder
+                    ? `${totalOrder.toLocaleString("id-ID")} ${
+                        item?.unit || "-"
+                      }`
+                    : "-"}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs sm:text-base text-gray-600">
+                  Kebutuhan per-hari
+                </p>
+                <p className="font-semibold text-lg">
+                  {dailySpending
+                    ? `${dailySpending.toLocaleString("id-ID")} ${
+                        item?.unit || "-"
+                      }`
+                    : "-"}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs sm:text-base text-gray-600">
+                  Rekomendasi minimum jumlah pembelian
+                </p>
+                <p className="font-semibold text-lg">
+                  {dailySpending
+                    ? `${(dailySpending * 3).toLocaleString("id-ID")} ${
+                        item?.unit || "-"
+                      }`
+                    : "-"}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -375,38 +406,11 @@ Kami dari *Anugerah Jaya Farm* ingin menanyakan harga barang *PER ${unit.toUpper
           </button>
         </div>
 
-        <div className="flex gap-8">
-          <div>
-            <p className="text-xs sm:text-base text-gray-600">
-              Kebutuhan per-hari
-            </p>
-            <p className="font-semibold text-lg">
-              {dailySpending
-                ? `${dailySpending.toLocaleString("id-ID")} ${
-                    item?.unit || "-"
-                  }`
-                : "-"}
-            </p>
-          </div>
-          <div>
-            <p className="text-xs sm:text-base text-gray-600">
-              Rekomendasi minimum jumlah pembelian
-            </p>
-            <p className="font-semibold text-lg">
-              {dailySpending
-                ? `${(dailySpending * 3).toLocaleString("id-ID")} ${
-                    item?.unit || "-"
-                  }`
-                : "-"}
-            </p>
-          </div>
-        </div>
-
         {/* Harga / unit & Total */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
           <div>
             <label className=" text-gray-600 block mb-1">
-              Harga Beli / Unit
+              {`Harga Beli / ${item?.unit}`}
             </label>
             <div className="flex items-center gap-2">
               <input

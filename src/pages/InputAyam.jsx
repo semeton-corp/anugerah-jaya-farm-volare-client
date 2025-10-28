@@ -165,6 +165,17 @@ const InputAyam = () => {
 
       if (errorMessage === "chicken monitoring already exists for today") {
         alert("❌Sudah terdapat data untuk kandang yang dipilih hari ini!");
+      } else if (
+        errorMessage.includes("insufficient feed stock to adjust by")
+      ) {
+        const match = errorMessage.match(/adjust by ([\d.]+)/);
+        const amount = match ? match[1] : "0";
+
+        alert(
+          `❌ Jumlah pakan yang tersedia kurang, silahkan aduk pakan sejumlah ${parseInt(
+            amount
+          )} kg`
+        );
       } else {
         alert("❌Gagal menyimpan data: " + errorMessage);
       }

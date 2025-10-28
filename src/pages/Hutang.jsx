@@ -185,19 +185,9 @@ export default function Hutang() {
         </div>
       </div>
 
-      {/* Banner peringatan */}
-      {/* {nearingDue && (
-        <div className="flex items-center gap-3 rounded-md bg-amber-100 text-amber-900 px-4 py-3">
-          <FaExclamationTriangle />
-          <span className="font-medium">{nearingDue}</span>
-        </div>
-      )} */}
-
       <PageNotificationsSection pageNotifications={pageNotifications} />
 
-      {/* Card */}
       <div className="border rounded-md p-4">
-        {/* Chart */}
         <div className="max-w-full sm:max-w-xl">
           {loading ? (
             <div className="text-sm text-gray-500">Memuat…</div>
@@ -242,7 +232,6 @@ export default function Hutang() {
           )}
         </div>
 
-        {/* Table */}
         <div className="overflow-x-auto mt-4">
           <table className="min-w-full text-sm">
             <thead>
