@@ -401,6 +401,7 @@ const AlokasiAntrianModal = ({
         <div className="flex justify-end gap-4 mt-4">
           <button
             onClick={() => {
+              setPaymentHistory(null);
               setShowAlokasiModal(false);
             }}
             className="p-2 text-green-700 px-6 rounded border border-green-700 hover:bg-green-200"
@@ -483,6 +484,8 @@ const AlokasiAntrianModal = ({
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => {
+                  setPaymentProof("");
+                  setNominal("");
                   setShowPaymentModal(false);
                   setEditingIndex(-1);
                 }}

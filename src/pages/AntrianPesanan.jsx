@@ -432,7 +432,9 @@ const AntrianPesanan = () => {
           "antrian-pesanan",
           "daftar-pesanan"
         );
-        navigate(newPath);
+        navigate(newPath, {
+          state: { selectedPlace },
+        });
       }
     } catch (error) {
       console.log("response error: ", error);
