@@ -22,7 +22,7 @@ const Verification = () => {
 
   const handleResend = () => {
     console.log("Resend email clicked");
-    setSecondsLeft(60); // reset timer
+    setSecondsLeft(60);
     setShowButton(false);
   };
 
@@ -39,7 +39,6 @@ const Verification = () => {
   return (
     <div className="flex h-screen justify-center mt-18 md:mt-48  px-4">
       <div className="w-full max-w-[720px] p-4 md:p-0">
-        {/* logo and welcoming text */}
         <div className="mb-6">
           <img
             src={logo}

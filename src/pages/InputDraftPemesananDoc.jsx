@@ -163,11 +163,9 @@ const InputDraftPemesananDoc = () => {
             </select>
           </div>
 
-          {/* Jumlah & Harga */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block mb-1">Jumlah Pemesanan</label>
-              <div className="flex gap-"> </div>
               <input
                 type="text"
                 inputMode="numeric"
@@ -175,14 +173,18 @@ const InputDraftPemesananDoc = () => {
                 className="w-full border rounded px-4 py-2"
                 value={formatThousand(quantity)}
                 onChange={(e) => {
-                  const val = Number(e.target.value);
+                  const raw = e.target.value;
+
+                  const digits = onlyDigits(raw);
+
+                  const val = parseInt(digits || "0", 10);
+
                   if (selectedCage?.capacity && val > selectedCage.capacity) {
-                    setQuantity(onlyDigits(selectedCage.capacity));
+                    setQuantity(selectedCage.capacity);
                   } else {
-                    setQuantity(onlyDigits(val));
+                    setQuantity(val);
                   }
                 }}
-                min={0}
               />
             </div>
           </div>

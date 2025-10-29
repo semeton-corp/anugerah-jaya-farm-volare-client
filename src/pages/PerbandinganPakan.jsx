@@ -160,10 +160,11 @@ export default function PerbandinganPakan() {
     const payload = {
       warehouseId: selectedWarehouse.id,
       itemId: selectedPakanJadi.id,
-      daysNeed: daysJadi,
+      daysNeed: Number(daysJadi),
       price: String(hargaPakanJadi),
       dailySpending: selectedPakanJadi.dailySpending,
     };
+    
     try {
       const jadiResponse = await createReadyToEatFeed(payload);
       console.log("jadiResponse: ", jadiResponse);
@@ -587,9 +588,9 @@ export default function PerbandinganPakan() {
                 <input
                   type="text"
                   className="w-full px-3 py-2 rounded-md border border-gray-300"
-                  value={hargaPakanJadi}
+                  value={formatThousand(hargaPakanJadi)}
                   onChange={(e) => {
-                    const raw = e.target.value.replace(/\D/g, "");
+                    const raw = onlyDigits(e.target.value);
                     setHargaPakanJadi(raw);
                   }}
                 />
