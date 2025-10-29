@@ -94,6 +94,13 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
   };
 
   useEffect(() => {
+    getNotificationsState();
+
+    const interval = setInterval(getNotificationsState, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
     const handleClickOutside = (event) => {
       if (
         dropdownRef.current &&
