@@ -44,7 +44,11 @@ const salesData = [
 const Toko = () => {
   const userRole = localStorage.getItem("role");
   const location = useLocation();
-  const detailPages = ["detail-stok-toko", "riwayat-aktivitas-toko"];
+  const detailPages = [
+    "detail-stok-toko",
+    "riwayat-aktivitas-toko",
+    "detail-pendapatan",
+  ];
   const isDetailPage = detailPages.some((segment) =>
     location.pathname.includes(segment)
   );
@@ -216,6 +220,12 @@ const Toko = () => {
       alert("Gagal memuat data toko: ", error);
       console.log("error: ", error);
     }
+  };
+
+  const handlePendapatanDetail = (category, id, parentId) => {
+    navigate(
+      `${location.pathname}/detail-pendapatan/${category}/${id}/${parentId}`
+    );
   };
 
   useEffect(() => {
@@ -445,6 +455,7 @@ const Toko = () => {
                     <th className="py-2 px-3">Customer</th>
                     <th className="py-2 px-3">Total</th>
                     <th className="py-2 px-3">Status</th>
+                    <th className="py-2 px-3">Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -475,6 +486,22 @@ const Toko = () => {
                         >
                           {row.date ? "Lunas" : row.paymentStatus}
                         </span>
+                      </td>
+                      <td className="py-3 px-4 flex justify-center ">
+                        <div className="flex flex-col gap-2 w-28">
+                          <span
+                            className="rounded bg-green-700 hover:bg-green-900 text-white px-3 py-1.5 cursor-pointer"
+                            onClick={() => {
+                              handlePendapatanDetail(
+                                row.category,
+                                row.id,
+                                row.parentId
+                              );
+                            }}
+                          >
+                            Lihat detail
+                          </span>
+                        </div>
                       </td>
                     </tr>
                   ))}

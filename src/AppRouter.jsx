@@ -518,6 +518,12 @@ const AppRouter = createBrowserRouter([
               {
                 path: "overview-toko",
                 element: <Toko />,
+                children: [
+                  {
+                    path: "detail-pendapatan/:category/:id/:parentId",
+                    element: <DetailPendapatan />,
+                  },
+                ],
               },
               {
                 path: "stok-toko",
