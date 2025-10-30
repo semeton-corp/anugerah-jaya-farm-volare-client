@@ -45,10 +45,7 @@ const DetailVaksinObat = () => {
         setChickenHealthMonitorings(
           detailResponse.data.data.chickenHealthMonitorings
         );
-        console.log(
-          "detailResponse.data.data.chickenHealthMonitorings: ",
-          detailResponse.data.data.chickenHealthMonitorings
-        );
+        console.log("detailResponse.data.data: ", detailResponse.data.data);
       }
     } catch (error) {
       console.log("error :", error);
@@ -121,7 +118,7 @@ const DetailVaksinObat = () => {
           </div>
           <div>
             <p className="text-gray-600">Kategori ayam</p>
-            <p className="font-bold">{chickenCage?.cage?.chickenCategory}</p>
+            <p className="font-bold">{chickenCage?.chickenCategory}</p>
           </div>
           <div>
             <p className="text-gray-600">Lokasi Kandang</p>

@@ -145,39 +145,49 @@ const DetailKinerjaAyam = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {performacesData.map((row, index) => (
-                    <tr key={index} className="border-b text-center">
-                      <td className="py-2 px-4">{row.cageName}</td>
-                      <td className="py-2 px-4">{row.chickenCategory}</td>
-                      <td className="py-2 px-4">{row.chickenAge}</td>
-                      <td className="py-2 px-4">{row.totalChicken}</td>
-                      <td className="py-2 px-4">{row.totalGoodEgg}</td>
-                      <td className="py-2 px-4">
-                        {Number(row.averageConsumptionPerChicken).toFixed(2)}
-                      </td>
-
-                      <td className="py-2 px-4">
-                        {Number(row.averageWeightPerEgg).toFixed(2)}
-                      </td>
-                      <td className="py-2 px-4">
-                        {Number(row.fcr).toFixed(2)}
-                      </td>
-                      <td className="py-2 px-4">
-                        {Number(row.hdp).toFixed(2)}
-                      </td>
-                      <td className="py-2 px-4 flex justify-center">
-                        <div
-                          className={`w-24 py-1 flex justify-center rounded text-sm font-semibold ${
-                            row.productivity === "Produktif"
-                              ? "bg-aman-box-surface-color text-aman-text-color"
-                              : "bg-kritis-box-surface-color text-kritis-text-color"
-                          }`}
-                        >
-                          {row.productivity}
-                        </div>
+                  {performacesData.length === 0 ? (
+                    <tr>
+                      <td
+                        colSpan="10"
+                        className="py-4 text-center text-gray-500"
+                      >
+                        Data pada tanggal yang dipilih kosong!
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    performacesData.map((row, index) => (
+                      <tr key={index} className="border-b text-center">
+                        <td className="py-2 px-4">{row.cageName}</td>
+                        <td className="py-2 px-4">{row.chickenCategory}</td>
+                        <td className="py-2 px-4">{row.chickenAge}</td>
+                        <td className="py-2 px-4">{row.totalChicken}</td>
+                        <td className="py-2 px-4">{row.totalGoodEgg}</td>
+                        <td className="py-2 px-4">
+                          {Number(row.averageConsumptionPerChicken).toFixed(2)}
+                        </td>
+                        <td className="py-2 px-4">
+                          {Number(row.averageWeightPerEgg).toFixed(2)}
+                        </td>
+                        <td className="py-2 px-4">
+                          {Number(row.fcr).toFixed(2)}
+                        </td>
+                        <td className="py-2 px-4">
+                          {Number(row.hdp).toFixed(2)}
+                        </td>
+                        <td className="py-2 px-4 flex justify-center">
+                          <div
+                            className={`w-24 py-1 flex justify-center rounded text-sm font-semibold ${
+                              row.productivity === "Produktif"
+                                ? "bg-aman-box-surface-color text-aman-text-color"
+                                : "bg-kritis-box-surface-color text-kritis-text-color"
+                            }`}
+                          >
+                            {row.productivity}
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
