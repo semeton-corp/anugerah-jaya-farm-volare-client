@@ -418,7 +418,13 @@ const Toko = () => {
                         position: "insideLeft",
                       }}
                     />
-                    <Tooltip />
+                    <Tooltip
+                      formatter={(value) => [
+                        `${value} ${
+                          itemName === "Telur Bonyok" ? "Plastik" : "Kg"
+                        }`,
+                      ]}
+                    />
                     <Legend />
                     <Line
                       type="monotone"
