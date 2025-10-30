@@ -48,6 +48,7 @@ const Toko = () => {
     "detail-stok-toko",
     "riwayat-aktivitas-toko",
     "detail-pendapatan",
+    "detail-piutang",
   ];
   const isDetailPage = detailPages.some((segment) =>
     location.pathname.includes(segment)
@@ -226,6 +227,10 @@ const Toko = () => {
     navigate(
       `${location.pathname}/detail-pendapatan/${category}/${id}/${parentId}`
     );
+  };
+
+  const handlePiutangDetail = (category, id, parentId) => {
+    navigate(`${location.pathname}/detail-piutang/${category}/${id}`);
   };
 
   useEffect(() => {
@@ -492,11 +497,15 @@ const Toko = () => {
                           <span
                             className="rounded bg-green-700 hover:bg-green-900 text-white px-3 py-1.5 cursor-pointer"
                             onClick={() => {
-                              handlePendapatanDetail(
-                                row.category,
-                                row.id,
-                                row.parentId
-                              );
+                              if (category == "Pendapatan") {
+                                handlePendapatanDetail(
+                                  row.category,
+                                  row.id,
+                                  row.parentId
+                                );
+                              } else {
+                                handlePiutangDetail(row.category, row.id);
+                              }
                             }}
                           >
                             Lihat detail

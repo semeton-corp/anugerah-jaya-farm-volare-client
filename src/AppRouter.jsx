@@ -523,6 +523,10 @@ const AppRouter = createBrowserRouter([
                     path: "detail-pendapatan/:category/:id/:parentId",
                     element: <DetailPendapatan />,
                   },
+                  {
+                    path: "detail-piutang/:category/:id",
+                    element: <DetailPiutang />,
+                  },
                 ],
               },
               {
