@@ -23,8 +23,10 @@ import { use } from "react";
 import { FaCalendarAlt } from "react-icons/fa";
 import { getEggOverview } from "../services/eggs";
 import { getTodayDateInBahasa } from "../utils/dateFormat";
+import YearSelector from "../components/YearSelector";
 
 const ProduksiTelur = () => {
+  const [year, setYear] = useState(2025);
   const userRole = localStorage.getItem("role");
   const userName = localStorage.getItem("userName");
 
@@ -88,10 +90,20 @@ const ProduksiTelur = () => {
 
   const fetchOverviewData = async () => {
     try {
+      let selectedYear = undefined;
+      console.log("graphFilter: ", graphFilter);
+
+      console.log("Is tahun ini : ", graphFilter == "Tahun Ini");
+
+      if (graphFilter === "Tahun Ini") {
+        selectedYear = year;
+      }
+
       const overviewResponse = await getEggOverview(
         selectedSite,
         selectedChickenCage,
-        graphFilter
+        graphFilter,
+        selectedYear
       );
       console.log("overviewResponse: ", overviewResponse);
       if (overviewResponse.status == 200) {
@@ -159,7 +171,7 @@ const ProduksiTelur = () => {
 
   useEffect(() => {
     fetchOverviewData();
-  }, [selectedChickenCage, selectedSite, graphFilter]);
+  }, [year, selectedChickenCage, selectedSite, graphFilter]);
 
   return (
     <>
@@ -294,19 +306,24 @@ const ProduksiTelur = () => {
               <h2 className="text-lg sm:text-xl font-semibold">
                 Rekapitulasi Produksi
               </h2>
-              <div className="flex items-center rounded-lg px-3 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
-                <FaCalendarAlt size={18} />
-                <select
-                  value={graphFilter}
-                  onChange={(e) => setGraphFilter(e.target.value)}
-                  className="ml-2 bg-transparent text-sm sm:text-base font-medium outline-none"
-                >
-                  {graphFilterOptions.map((choice, index) => (
-                    <option key={index} value={choice}>
-                      {choice}
-                    </option>
-                  ))}
-                </select>
+              <div className="flex gap-3">
+                {graphFilter === "Tahun Ini" && (
+                  <YearSelector year={year} setYear={setYear} />
+                )}
+                <div className="flex items-center rounded-lg px-3 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+                  <FaCalendarAlt size={18} />
+                  <select
+                    value={graphFilter}
+                    onChange={(e) => setGraphFilter(e.target.value)}
+                    className="ml-2 bg-transparent text-sm sm:text-base font-medium outline-none"
+                  >
+                    {graphFilterOptions.map((choice, index) => (
+                      <option key={index} value={choice}>
+                        {choice}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
             </div>
 

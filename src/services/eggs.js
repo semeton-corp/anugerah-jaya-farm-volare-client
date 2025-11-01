@@ -47,7 +47,7 @@ export const updateEggMonitoring = (dataId, payload) => {
   });
 };
 
-export const getEggOverview = (locationId, cageId, overviewGraphTime) => {
+export const getEggOverview = (locationId, cageId, overviewGraphTime, year) => {
   return api.get(`/eggs/overview`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -57,6 +57,7 @@ export const getEggOverview = (locationId, cageId, overviewGraphTime) => {
       locationId: locationId,
       cageId: cageId,
       overviewGraphTime: overviewGraphTime,
+      year: year,
     },
   });
 };
