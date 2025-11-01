@@ -120,6 +120,7 @@ const DetailTugasTambahan = () => {
               <tr className="bg-green-700 text-white">
                 <th className="px-4 py-2 text-left">Nama Pegawai</th>
                 <th className="px-4 py-2 text-left">Jabatan</th>
+                <th className="px-4 py-2 text-left">Status</th>
               </tr>
             </thead>
             <tbody>
@@ -128,6 +129,17 @@ const DetailTugasTambahan = () => {
                   <tr key={index} className="border-t">
                     <td className="px-4 py-2">{worker.userName || "-"}</td>
                     <td className="px-4 py-2">{worker.roleName || "-"}</td>
+                    <td className="px-4 py-4 ">
+                      {worker.isDone ? (
+                        <span className="bg-aman-box-surface-color text-aman-text-color px-4 py-2 rounded text-sm font-medium">
+                          Selesai
+                        </span>
+                      ) : (
+                        <span className="bg-kritis-box-surface-color text-kritis-text-color  px-4 py-2  rounded text-sm font-medium">
+                          Belum Selesai
+                        </span>
+                      )}
+                    </td>
                   </tr>
                 )
               )}
@@ -141,7 +153,7 @@ const DetailTugasTambahan = () => {
             onClick={() => {
               setShowDeleteModal(true);
             }}
-            className="bg-red-500 text-white py-2 px-6 rounded hover:bg-red-700"
+            className="bg-red-500 text-white py-2 px-6 rounded hover:bg-red-700 cursor-pointer"
           >
             Hapus Tugas Tambahan
           </button>

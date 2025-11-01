@@ -3,6 +3,7 @@ import { MdDelete } from "react-icons/md";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { getChickenCage } from "../services/cages";
 import { createAfkirChickenDraft } from "../services/chickenMonitorings";
+import { formatThousand, onlyDigits } from "../utils/moneyFormat";
 
 const kandangList = [
   { id: 1, name: "Sidodadi 04", jumlah: 4000, umur: 30 },
@@ -224,9 +225,13 @@ const InputDraftPenjualanAyam = () => {
             <div className="flex items-center">
               <span className="mr-2">Rp</span>
               <input
-                type="number"
-                value={pricePerChicken}
-                onChange={(e) => setHargaPerEkor(e.target.value)}
+                type="text"
+                inputMode="numeric"
+                value={formatThousand(pricePerChicken)}
+                onChange={(e) => {
+                  const raw = onlyDigits(e.target.value);
+                  setHargaPerEkor(raw);
+                }}
                 className="w-full border px-3 py-2 rounded bg-gray-100"
               />
             </div>

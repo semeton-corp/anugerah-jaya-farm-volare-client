@@ -163,6 +163,8 @@ const InputAyam = () => {
       const errorMessage =
         error?.response?.data?.message || error.message || "Terjadi kesalahan";
 
+        
+
       if (errorMessage === "chicken monitoring already exists for today") {
         alert("❌Sudah terdapat data untuk kandang yang dipilih hari ini!");
       } else if (
@@ -176,7 +178,9 @@ const InputAyam = () => {
             amount
           )} kg`
         );
-      } else {
+      }else if(errorMessage === "total chicken is less than total sick chicken") {
+        alert("❌ Jumlah ayam sakit melebihi jumlah ayam yang hidup!");
+      }else {
         alert("❌Gagal menyimpan data: " + errorMessage);
       }
 

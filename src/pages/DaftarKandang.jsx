@@ -147,6 +147,9 @@ const DaftarKandang = () => {
                   Usia (minggu)
                 </th>
                 <th className="px-4 py-2 text-left whitespace-nowrap">
+                  Jumlah ayam hidup (Ekor)
+                </th>
+                <th className="px-4 py-2 text-left whitespace-nowrap">
                   Kapasitas Maksimum (Ekor)
                 </th>
                 <th className="px-4 py-2 text-left whitespace-nowrap">
@@ -181,6 +184,9 @@ const DaftarKandang = () => {
                   </td>
                   <td className="px-4 py-2 whitespace-nowrap">
                     {row.chickenAge}
+                  </td>
+                  <td className="px-4 py-2 whitespace-nowrap">
+                    {row.totalChicken}
                   </td>
                   <td className="px-4 py-2 whitespace-nowrap">
                     {row.cage.capacity}
