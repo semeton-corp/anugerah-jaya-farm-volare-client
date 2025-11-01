@@ -34,56 +34,13 @@ import { getLocations } from "../services/location";
 import { getChickenCage } from "../services/cages";
 import { getChickenOverview } from "../services/chickenMonitorings";
 import { getTodayDateInBahasa } from "../utils/dateFormat";
-
-const ayamChartData = [
-  {
-    date: "29 Mar",
-    ayamMati: 12,
-    ayamSakit: 3,
-  },
-  {
-    date: "30 Mar",
-    ayamMati: 7,
-    ayamSakit: 5,
-  },
-  {
-    date: "31 Mar",
-    ayamMati: 18,
-    ayamSakit: 4,
-  },
-  {
-    date: "01 Apr",
-    ayamMati: 14,
-    ayamSakit: 2,
-  },
-  {
-    date: "02 Apr",
-    ayamMati: 9,
-    ayamSakit: 1,
-  },
-  {
-    date: "03 Apr",
-    ayamMati: 15,
-    ayamSakit: 2,
-  },
-  {
-    date: "04 Apr",
-    ayamMati: 25,
-    ayamSakit: 3,
-  },
-];
-
-const chickenAgeData = [
-  { age: "DOC", value: 40 },
-  { age: "Grower", value: 48 },
-  { age: "Prelayer", value: 27 },
-  { age: "Layer", value: 44 },
-  { age: "Afkir", value: 45 },
-];
+import YearSelector from "../components/YearSelector";
 
 const Ayam = () => {
   const location = useLocation();
   const userRole = localStorage.getItem("role");
+
+  const [year, setYear] = useState(2025);
 
   const [siteOptions, setSiteOptions] = useState([]);
   const [selectedSite, setSelectedSite] = useState(
@@ -142,11 +99,19 @@ const Ayam = () => {
 
   const fetchOverviewData = async () => {
     try {
+      let selectedYear = undefined;
+
+      if (graphFilter === "Tahun Ini") {
+        selectedYear = year;
+      }
+
       const overviewResponse = await getChickenOverview(
         selectedSite,
         selectedChickenCage,
-        graphFilter
+        graphFilter,
+        selectedYear
       );
+
       console.log("overviewResponse: ", overviewResponse);
       if (overviewResponse.status == 200) {
         const data = overviewResponse.data.data;
@@ -182,7 +147,7 @@ const Ayam = () => {
 
   useEffect(() => {
     fetchOverviewData();
-  }, [selectedChickenCage, selectedSite, graphFilter]);
+  }, [year, selectedChickenCage, selectedSite, graphFilter]);
 
   return (
     <>
@@ -312,19 +277,24 @@ const Ayam = () => {
                 <h2 className="text-lg sm:text-xl font-semibold">
                   Ayam Mati & Ayam Sakit
                 </h2>
-                <div className="flex items-center rounded-lg px-3 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer w-full sm:w-auto">
-                  <FaCalendarAlt size={18} />
-                  <select
-                    value={graphFilter}
-                    onChange={(e) => setGraphFilter(e.target.value)}
-                    className="ml-2 bg-transparent text-sm sm:text-base font-medium outline-none w-full sm:w-auto"
-                  >
-                    {graphFilterOptions.map((choice, index) => (
-                      <option key={index} value={choice}>
-                        {choice}
-                      </option>
-                    ))}
-                  </select>
+                <div className="flex gap-4">
+                  {graphFilter === "Tahun Ini" && (
+                    <YearSelector year={year} setYear={setYear} />
+                  )}
+                  <div className="flex items-center rounded-lg px-3 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer w-full sm:w-auto">
+                    <FaCalendarAlt size={18} />
+                    <select
+                      value={graphFilter}
+                      onChange={(e) => setGraphFilter(e.target.value)}
+                      className="ml-2 bg-transparent text-sm sm:text-base font-medium outline-none w-full sm:w-auto"
+                    >
+                      {graphFilterOptions.map((choice, index) => (
+                        <option key={index} value={choice}>
+                          {choice}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
               </div>
 
