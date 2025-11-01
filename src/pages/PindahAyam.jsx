@@ -274,7 +274,7 @@ const PindahAyam = () => {
                       <td className="px-4 py-2">{k.chickenAge}</td>
                       <td className="px-4 py-2">{k.totalChicken}</td>
                       <td className="px-4 py-2">
-                        {k.batchId && (
+                        {k.batchId && k.totalChicken != 0 && (
                           <button
                             onClick={() => handlePilihAsal(k)}
                             className="bg-orange-300 hover:bg-orange-500 px-3 py-1 rounded cursor-pointer"
