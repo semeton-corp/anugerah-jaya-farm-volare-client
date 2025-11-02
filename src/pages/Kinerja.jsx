@@ -43,6 +43,7 @@ import {
 import { getLocations } from "../services/location";
 import { getChickenCage } from "../services/cages";
 import { getChickenAndCompanyPerformanceOverview } from "../services/chickenMonitorings";
+import YearSelector from "../components/YearSelector";
 
 const getBarColor = (day) => {
   if (day === "Selasa") return "#FF5E5E";
@@ -53,6 +54,8 @@ const getBarColor = (day) => {
 const Kinerja = () => {
   const userRole = localStorage.getItem("role");
   const userName = localStorage.getItem("userName");
+
+  const [year, setYear] = useState(new Date().getFullYear());
 
   const [siteOptions, setSiteOptions] = useState([]);
   const [selectedSite, setSelectedSite] = useState(
@@ -159,7 +162,6 @@ const Kinerja = () => {
 
   const fetchPerformanceOverview = async () => {
     try {
-      const year = getTodayYear();
       const performanceResponse = await getChickenAndCompanyPerformanceOverview(
         selectedSite === 0 ? undefined : selectedSite,
         selectedChickenCage === 0 ? undefined : selectedChickenCage,
@@ -191,7 +193,7 @@ const Kinerja = () => {
 
   useEffect(() => {
     fetchPerformanceOverview();
-  }, [selectedChickenCage, selectedSite]);
+  }, [year, selectedChickenCage, selectedSite]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -430,9 +432,13 @@ const Kinerja = () => {
           </div>
 
           <div className="p-6 border border-black-6 rounded-lg mt-3">
-            <h2 className="text-lg font-bold mb-4">
-              Grafik Pendapatan vs Pengeluaran
-            </h2>
+            <div className="flex justify-between">
+              <h2 className="text-lg font-bold mb-4">
+                Grafik Pendapatan vs Pengeluaran
+              </h2>
+
+              <YearSelector year={year} setYear={setYear} />
+            </div>
 
             {/* Wrapper scrollable */}
             <div className="overflow-x-auto">

@@ -26,7 +26,7 @@ import { getTodayDateInBahasa } from "../utils/dateFormat";
 import YearSelector from "../components/YearSelector";
 
 const ProduksiTelur = () => {
-  const [year, setYear] = useState(2025);
+  const [year, setYear] = useState(new Date().getFullYear());
   const userRole = localStorage.getItem("role");
   const userName = localStorage.getItem("userName");
 

@@ -40,7 +40,7 @@ const Ayam = () => {
   const location = useLocation();
   const userRole = localStorage.getItem("role");
 
-  const [year, setYear] = useState(2025);
+  const [year, setYear] = useState(new Date().getFullYear());
 
   const [siteOptions, setSiteOptions] = useState([]);
   const [selectedSite, setSelectedSite] = useState(

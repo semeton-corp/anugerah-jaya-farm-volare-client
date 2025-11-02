@@ -100,7 +100,7 @@ const ChartCard = ({ title, children }) => (
 );
 
 export default function GeneralCashflow() {
-  const [year, setYear] = useState(2025);
+  const [year, setYear] = useState(new Date().getFullYear());
   const [cashflowSummary, setCashflowSummary] = useState([]);
   const [cashflowGraphs, setCashflowGraphs] = useState([]);
   const [eggSaleCashflowGraphs, setEggSaleCashflowGraphs] = useState([]);
