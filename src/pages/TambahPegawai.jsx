@@ -23,6 +23,8 @@ import { formatRupiah, formatThousand, onlyDigits } from "../utils/moneyFormat";
 import { getRoles } from "../services/roles";
 import { getLocations } from "../services/location";
 import { getUserById, updateUser } from "../services/user";
+import { uploadFile } from "../services/file";
+import { useRef } from "react";
 
 const TambahPegawai = () => {
   const { userId } = useParams();
@@ -312,6 +314,8 @@ const TambahPegawai = () => {
           setSelectedPic={setSelectedPic}
           username={username}
           setUsername={setUsername}
+          profilePicture={photoProfile}
+          setProfilePicture={setPhotoProfile}
         />
       ) : (
         <GajiPokokForm
@@ -432,6 +436,8 @@ function ProfilPegawaiForm({
   setSelectedPic,
   username,
   setUsername,
+  profilePicture,
+  setProfilePicture,
 }) {
   const { userId } = useParams();
   const [placeHolderLokasi, setPlaceHolderLokasi] = useState(
@@ -440,6 +446,23 @@ function ProfilPegawaiForm({
   const [labelLokasi, setLabelLokasi] = useState("Lokasi Bekerja");
   const [isShowLocationIdField, setIsShowLocationIdField] = useState(true);
   const [isShowPicField, setIsShowPicField] = useState(true);
+
+  const fileInputRef = useRef(null);
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      const uploadedUrl = await uploadFile(file);
+
+      setProfilePicture(uploadedUrl);
+      console.log("✅ File uploaded successfully:", uploadedUrl);
+    } catch (error) {
+      console.error("❌ Upload failed:", error);
+      alert("Gagal mengunggah foto profil. Silakan coba lagi.");
+    }
+  };
 
   useEffect(() => {
     const roleName = roles.find((r) => r.id === parseInt(selectedRole))?.name;
@@ -484,14 +507,42 @@ function ProfilPegawaiForm({
   }, [selectedRole, roles]);
 
   return (
-    <div className="border border-black-6 p-6 rounded-md shadow-sm w-full max-w-5xl mx-auto">
+    <div className="border border-black-6 p-6 rounded-md shadow-sm w-full mx-auto">
       <h2 className="font-bold text-xl mb-4">Profil Pegawai</h2>
 
       <div className="grid gap-4 mb-4">
         <label className="mb-1">Foto Profil Pegawai</label>
-        <div className="hover:bg-black-6 cursor-pointer rounded-full size-25 bg-black-8 flex justify-center items-center">
-          <IoMdAdd size={24} className="text-white hover:text-black-9" />
-        </div>
+
+        <input
+          type="file"
+          accept="image/*"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          className="hidden"
+        />
+
+        {profilePicture ? (
+          <div className="relative size-25 rounded-full overflow-hidden">
+            <img
+              src={profilePicture}
+              alt="Profile"
+              className="object-cover w-full h-full"
+            />
+            <button
+              onClick={() => fileInputRef.current.click()}
+              className="absolute bottom-0 left-0 w-full bg-black/50 text-white py-1 text-sm text-center hover:bg-black/70 transition"
+            >
+              Ganti Foto
+            </button>
+          </div>
+        ) : (
+          <div
+            onClick={() => fileInputRef.current.click()}
+            className="cursor-pointer rounded-full size-25 bg-black-8 flex justify-center items-center hover:bg-black-6 transition"
+          >
+            <IoMdAdd size={24} className="text-white hover:text-black-9" />
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
