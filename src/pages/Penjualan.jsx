@@ -268,16 +268,20 @@ const Penjualan = () => {
                   <>
                     <FaArrowUpLong color="#00A651" />
                     <p className="text-[16px] text-[#00A651] ml-1">
-                      {`${cashflowSaleSummary.incomeDiffPercentage}`}% dibanding
-                      bulan kemarin
+                      {`${(
+                        cashflowSaleSummary?.incomeDiffPercentage ?? 0
+                      ).toFixed(2)}`}
+                      % dibanding bulan kemarin
                     </p>
                   </>
                 ) : (
                   <>
                     <FaArrowDownLong color="#F41C1C" />
                     <p className="text-[16px] text-[#F41C1C] ml-1">
-                      {`${cashflowSaleSummary.incomeDiffPercentage}`}% dibanding
-                      bulan kemarin
+                      {`${(
+                        cashflowSaleSummary?.incomeDiffPercentage ?? 0
+                      ).toFixed(2)}`}
+                      % dibanding bulan kemarin
                     </p>
                   </>
                 )}
@@ -300,16 +304,20 @@ const Penjualan = () => {
                   <>
                     <FaArrowUpLong color="#00A651" />
                     <p className="text-[16px] text-[#00A651] ml-1">
-                      {`${cashflowSaleSummary.profitDiffPercentage}`}% dibanding
-                      bulan kemarin
+                      {`${(
+                        cashflowSaleSummary.profitDiffPercentage ?? 0
+                      ).toFixed(2)}`}
+                      % dibanding bulan kemarin
                     </p>
                   </>
                 ) : (
                   <>
                     <FaArrowDownLong color="#F41C1C" />
                     <p className="text-[16px] text-[#F41C1C] ml-1">
-                      {`${cashflowSaleSummary.incomeDiffPercentage}`}% dibanding
-                      bulan kemarin
+                      {`${(
+                        cashflowSaleSummary.incomeDiffPercentage ?? 0
+                      ).toFixed(2)}`}
+                      % dibanding bulan kemarin
                     </p>
                   </>
                 )}
@@ -330,16 +338,20 @@ const Penjualan = () => {
                   <>
                     <FaArrowUpLong color="#00A651" />
                     <p className="text-[16px] text-[#00A651] ml-1">
-                      {`${cashflowSaleSummary.expenseDiffPercentage}`}% bulan
-                      dibanding kemarin
+                      {`${(
+                        cashflowSaleSummary.expenseDiffPercentage ?? 0
+                      ).toFixed(2)}`}
+                      % bulan dibanding kemarin
                     </p>
                   </>
                 ) : (
                   <>
                     <FaArrowDownLong color="#F41C1C" />
                     <p className="text-[16px] text-[#F41C1C] ml-1">
-                      {`${cashflowSaleSummary.expenseDiffPercentage}`}% bulan
-                      dibanding kemarin
+                      {`${(
+                        cashflowSaleSummary.expenseDiffPercentage ?? 0
+                      ).toFixed(2)}`}
+                      % bulan dibanding kemarin
                     </p>
                   </>
                 )}

@@ -269,7 +269,7 @@ const Profile = ({ mode }) => {
                     <FaClock size={24} color="white" />
                   </div>
                   <p className="text-3xl font-semibold">
-                    {userInformation?.totalWorkHour ?? "-"}
+                    {(userInformation?.totalWorkHour ?? 0).toFixed(2)}
                     <span className="text-lg ml-1">jam</span>
                   </p>
                 </div>
@@ -285,7 +285,7 @@ const Profile = ({ mode }) => {
                     <FaChartLine size={24} color="white" />
                   </div>
                   <p className="text-3xl font-semibold">
-                    {userInformation?.workKpiScore ?? "-"}
+                    {(userInformation?.workKpiScore ?? 0).toFixed(2)}
                     <span className="text-lg ml-1">%</span>
                   </p>
                 </div>
@@ -302,7 +302,7 @@ const Profile = ({ mode }) => {
                       <FaChartLine size={24} color="white" />
                     </div>
                     <p className="text-3xl font-semibold">
-                      {userInformation?.chickenKpiScore ?? "-"}
+                      {(userInformation?.chickenKpiScore ?? 0).toFixed(2)}
                       <span className="text-lg ml-1">%</span>
                     </p>
                   </div>
@@ -412,7 +412,9 @@ const Profile = ({ mode }) => {
                       </p>
                       <p className="text-base">Tugas</p>
                       <div className="rounded bg-[#FF5E5E] px-3 mt-2">
-                        <p className="text-center text-kritis-text-color">Tidak Selesai</p>
+                        <p className="text-center text-kritis-text-color">
+                          Tidak Selesai
+                        </p>
                       </div>
                     </div>
                   </div>
