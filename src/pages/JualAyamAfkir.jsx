@@ -59,7 +59,7 @@ const JualAyamAfkir = () => {
   const fetchSalesData = async () => {
     try {
       const saleResponse = await getAfkirChickenSales(page, paymentStatus);
-
+      console.log("saleResponse: ", saleResponse);
       if (saleResponse.status == 200) {
         setSalesData(saleResponse.data.data.afkirChickenSales);
         setTotalData(saleResponse.data.data.totalData);
@@ -138,6 +138,7 @@ const JualAyamAfkir = () => {
                 <th className="p-2 sm:p-3">Pelanggan</th>
                 <th className="p-2 sm:p-3">Jumlah</th>
                 <th className="p-2 sm:p-3">Status Pembayaran</th>
+                <th className="p-2 sm:p-3">Tanggal Pengambilan</th>
                 <th className="p-2 sm:p-3">Aksi</th>
               </tr>
             </thead>
@@ -158,6 +159,7 @@ const JualAyamAfkir = () => {
                       {item.paymentStatus}
                     </span>
                   </td>
+                  <td className="p-2 sm:p-3">{`${item.takenAt}`}</td>
                   <td className="p-2 sm:p-3">
                     <button
                       onClick={() =>

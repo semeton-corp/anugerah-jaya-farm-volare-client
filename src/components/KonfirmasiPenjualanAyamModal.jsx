@@ -52,6 +52,8 @@ const KonfirmasiPenjualanAyamModal = ({
   const [paymentType, setPaymentType] = useState("Penuh");
   const [paymentMethod, setPaymentMethod] = useState("Tunai");
 
+  const [takenAt, setTakenAt] = useState(new Date().toISOString().slice(0, 10));
+
   const [payments, setPayments] = useState([]);
   const orderTotal = useMemo(
     () => Number(totalSellChicken || 0) * Number(pricePerChicken || 0),
@@ -159,6 +161,7 @@ const KonfirmasiPenjualanAyamModal = ({
       afkirChickenCustomerId: sale.customer?.id ?? null,
       totalSellChicken: Number(totalSellChicken || 0),
       pricePerChicken: pricePerChicken || "0",
+      takenAt: toInputDate(takenAt),
       payments: cleanedPayments.map((p) => ({
         ...p,
         nominal: String(p.nominal),
@@ -282,8 +285,19 @@ const KonfirmasiPenjualanAyamModal = ({
           </div>
         </div>
 
+        <div className="flex flex-col mt-4 ">
+          <label className="text-sm text-gray-600">Tanggal Pengambilan</label>
+          <input
+            type="date"
+            className="w-full border rounded p-2 mb-3"
+            value={takenAt}
+            onChange={(e) => setTakenAt(e.target.value)}
+            ref={dateRef}
+          />
+        </div>
+
         {/* Global payment controls */}
-        <div className="flex flex-col mt-4 mb-2">
+        <div className="flex flex-col mb-2">
           <label className="text-sm text-gray-600">Tipe Pembayaran</label>
           <select
             className="border rounded p-2"

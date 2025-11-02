@@ -40,13 +40,14 @@ const DraftPenjualanAyam = () => {
   };
 
   const handleConfirm = async (payload) => {
-    // console.log("payload: ", payload);
     try {
       const confirmResponse = await confirmationAfkirChickenSaleDraft(
         payload,
         selectedConfirmItem.id
       );
-      // console.log("confirmResponse: ", confirmResponse);
+
+      console.log("confirmResponse: ", confirmResponse);
+
       if (confirmResponse.status == 201) {
         const newPath = location.pathname.replace("/draft-penjualan-ayam", "");
         navigate(newPath, { state: { refetch: true } });
@@ -144,7 +145,8 @@ const DraftPenjualanAyam = () => {
                     <div className="flex gap-2">
                       <button
                         onClick={() => {
-                          const localNumber = item?.afkirChickenCustomer?.phoneNumber;
+                          const localNumber =
+                            item?.afkirChickenCustomer?.phoneNumber;
                           const waNumber = localNumber.startsWith("62")
                             ? localNumber
                             : localNumber.replace(/^0/, "62");
