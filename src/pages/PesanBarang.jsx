@@ -75,7 +75,7 @@ const PesanBarang = () => {
       // console.log("warehousesReponse: ", warehousesReponse);
       if (warehousesReponse.status == 200) {
         setAllWarehouses(warehousesReponse.data.data);
-        setSelectedWarehouse(warehousesReponse.data.data[0].id);
+        // setSelectedWarehouse(warehousesReponse.data.data[0].id);
       }
     } catch (error) {
       console.log("error :", error);
@@ -151,6 +151,7 @@ const PesanBarang = () => {
     );
     console.log("filteredWarehouse: ", filteredWarehouse);
     setFilteredWarehouses(filteredWarehouse);
+    setSelectedWarehouse("");
   };
 
   useEffect(() => {
@@ -198,7 +199,9 @@ const PesanBarang = () => {
           <div className="flex justify-center flex-wrap gap-4">
             <div className="flex flex-col items-center justify-center w-32 py-4 bg-green-200 rounded-md">
               <p className="text-3xl font-bold text-center">
-                {stok.quantity ? parseInt(stok.quantity) : "-"}
+                {stok.quantity && selectedWarehouse
+                  ? parseInt(stok.quantity)
+                  : "-"}
               </p>
               <p className="text-xl text-center">Ikat</p>
             </div>
@@ -210,22 +213,6 @@ const PesanBarang = () => {
         <div className="flex justify-between items-center">
           <h2 className="font-bold text-lg">Input Pemesanan Barang</h2>
           <p className="text-sm">{tanggal}</p>
-        </div>
-
-        <div>
-          <label className="block text-sm mb-1">Gudang Pemesanan</label>
-          <select
-            value={selectedWarehouse}
-            onChange={(e) => setSelectedWarehouse(e.target.value)}
-            className="w-full border bg-gray-100 p-2 rounded"
-          >
-            <option value="">Pilih gudang tempat pemesanan</option>
-            {filteredWarehouses?.map((warehouse, index) => (
-              <option key={index} value={warehouse.id}>
-                {warehouse.name}
-              </option>
-            ))}
-          </select>
         </div>
 
         {userRole == "Owner" && (
@@ -250,6 +237,22 @@ const PesanBarang = () => {
             </select>
           </div>
         )}
+
+        <div>
+          <label className="block text-sm mb-1">Gudang Pemesanan</label>
+          <select
+            value={selectedWarehouse}
+            onChange={(e) => setSelectedWarehouse(e.target.value)}
+            className="w-full border bg-gray-100 p-2 rounded"
+          >
+            <option value="">Pilih gudang tempat pemesanan</option>
+            {filteredWarehouses?.map((warehouse, index) => (
+              <option key={index} value={warehouse.id}>
+                {warehouse.name}
+              </option>
+            ))}
+          </select>
+        </div>
 
         <div>
           <label className="block text-sm mb-1">Nama Barang</label>
