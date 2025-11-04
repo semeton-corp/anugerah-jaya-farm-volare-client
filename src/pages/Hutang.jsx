@@ -20,6 +20,12 @@ import { formatThousand } from "../utils/moneyFormat";
 const formatRupiah = (n = 0) =>
   "Rp " + n || (0).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
+const formatRupiah2 = (n = 0) =>
+  "Rp " +
+  Number(n || 0)
+    .toFixed(0)
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
 const COLORS = {
   "Sudah dibayar": "#215963",
   "Jatuh tempo": "#215963",
@@ -27,6 +33,7 @@ const COLORS = {
 };
 
 const CATEGORY_OPTIONS = [
+  "Semua",
   "Pengadaan Ayam DOC",
   "Pengadaan Gudang",
   "Pengadaan Jagung",
@@ -41,6 +48,10 @@ export default function Hutang() {
   const [monthName, setMonthName] = useState(
     new Intl.DateTimeFormat("id-ID", { month: "long" }).format(new Date())
   );
+
+  const [totalDebt, setTotalDebt] = useState(0);
+  const [totalPaidDebt, setTotalPaidDebt] = useState(0);
+  const [totalUnpaidDebt, setTotalUnpaidDebt] = useState(0);
 
   const notifications = useSelector((state) => state?.notifications);
   const pageNotifications = notifications.filter((item) =>
@@ -81,6 +92,9 @@ export default function Hutang() {
         const payload = res.data?.data || {};
         setPie(payload.debtPie || null);
         setDebts(payload.debts || []);
+        setTotalDebt(payload.totalDebt || 0);
+        setTotalPaidDebt(payload.totalPaidDebt || 0);
+        setTotalUnpaidDebt(payload.totalDebt - payload.totalPaidDebt || 0);
       } else {
         setPie(null);
         setDebts([]);
@@ -182,6 +196,41 @@ export default function Hutang() {
             setMonthName={setMonthName}
             setYear={setYear}
           />
+        </div>
+      </div>
+
+      <div className="flex flex-wrap items-start gap-3">
+        <div className="flex flex-wrap gap-3">
+          <span className="text-sm text-gray-600">
+            Periode:{" "}
+            <span className="text-lg font-medium">
+              {monthName} {year}
+            </span>
+          </span>
+          <span className="text-sm text-gray-600">
+            Kategori: <span className="text-lg font-medium">{category}</span>
+          </span>
+          <span className="text-sm text-gray-600">
+            Total Hutang:{" "}
+            <span className="text-lg font-semibold">
+              {formatRupiah2(totalDebt)}
+            </span>
+          </span>
+        </div>
+
+        <div className="flex flex-wrap gap-3 w-full mt-1">
+          <span className="text-sm text-aman-text-color">
+            Sudah Dibayar:{" "}
+            <span className="text-lg font-semibold">
+              {formatRupiah2(totalPaidDebt)}
+            </span>
+          </span>
+          <span className="text-sm text-kritis-text-color">
+            Belum Dibayar:{" "}
+            <span className="text-lg font-semibold">
+              {formatRupiah2(totalUnpaidDebt)}
+            </span>
+          </span>
         </div>
       </div>
 

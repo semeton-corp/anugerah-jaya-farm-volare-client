@@ -46,13 +46,28 @@ const TugasPegawai = () => {
     }
   };
 
+  const fetchTugasTambahanData = async () => {
+    try {
+      const additionalResponse = await getAdditionalWorks();
+      console.log("additionalResponse: ", additionalResponse);
+      if (additionalResponse.status === 200) {
+        // setTugasTambahanData(
+        //   additionalResponse.data.data.additionalWorkSummaries
+        // );
+      }
+    } catch (error) {
+      console.log("error :", error);
+    }
+  };
+
   useEffect(() => {
     fetchOverviewData();
     // fetchTugasRutinData();
-    // fetchTugasTambahanData();
+    fetchTugasTambahanData();
     if (location.state?.refetch) {
+      fetchOverviewData();
       // fetchTugasRutinData();
-      // fetchTugasTambahanData();
+      fetchTugasTambahanData();
       window.history.replaceState({}, document.title);
     }
   }, [location]);
