@@ -30,6 +30,7 @@ const COLORS = {
 };
 
 const CATEGORY_OPTIONS = [
+  "Semua",
   "Penjualan Telur Toko",
   "Penjualan Telur Gudang",
   "Penjualan Ayam Afkir",
@@ -45,6 +46,10 @@ export default function Piutang() {
   const [monthName, setMonthName] = useState(
     new Intl.DateTimeFormat("id-ID", { month: "long" }).format(new Date())
   );
+
+  const [totalReceivables, setTotalReceivables] = useState(0);
+  const [totalPaidReceivables, setTotalPaidReceivables] = useState(0);
+  const [totalUnpaidReceivables, setTotalUnpaidReceivables] = useState(0);
 
   const notifications = useSelector((state) => state?.notifications);
   const pageNotifications = notifications.filter((item) =>
@@ -74,6 +79,11 @@ export default function Piutang() {
         const payload = res.data?.data || {};
         setPie(payload.receivablesPie || null);
         setReceivables(payload.receivables || []);
+        setTotalReceivables(payload.totalReceivables || 0);
+        setTotalPaidReceivables(payload.totalPaidReceivables || 0);
+        setTotalUnpaidReceivables(
+          payload.totalReceivables - payload.totalPaidReceivables || 0
+        );
       }
     } catch (e) {
       console.error("Gagal memuat piutang:", e);
@@ -179,6 +189,40 @@ export default function Piutang() {
             setMonthName={setMonthName}
             setYear={setYear}
           />
+        </div>
+      </div>
+      <div className="flex flex-wrap items-start gap-3">
+        <div className="flex flex-wrap gap-3">
+          <span className="text-sm text-gray-600">
+            Periode:{" "}
+            <span className="text-lg font-medium">
+              {monthName} {year}
+            </span>
+          </span>
+          <span className="text-sm text-gray-600">
+            Kategori: <span className="text-lg font-medium">{category}</span>
+          </span>
+          <span className="text-sm text-gray-600">
+            Total Piutang:{" "}
+            <span className="text-lg font-semibold">
+              {formatRupiah(totalReceivables)}
+            </span>
+          </span>
+        </div>
+
+        <div className="flex flex-wrap gap-3 w-full mt-1">
+          <span className="text-sm text-aman-text-color">
+            Sudah Dibayar:{" "}
+            <span className="text-lg font-semibold">
+              {formatRupiah(totalPaidReceivables)}
+            </span>
+          </span>
+          <span className="text-sm text-kritis-text-color">
+            Belum Dibayar:{" "}
+            <span className="text-lg font-semibold">
+              {formatRupiah(totalUnpaidReceivables)}
+            </span>
+          </span>
         </div>
       </div>
 

@@ -323,7 +323,7 @@ export default function Pengeluaran() {
               )}
             </tbody>
 
-            {expenseData.length > 0 && (
+            {/* {expenseData.length > 0 && (
               <tfoot>
                 <tr className="bg-gray-50">
                   <td className="py-3 px-4 font-semibold" colSpan={4}>
@@ -335,7 +335,7 @@ export default function Pengeluaran() {
                   <td />
                 </tr>
               </tfoot>
-            )}
+            )} */}
           </table>
         </div>
       </div>

@@ -302,7 +302,7 @@ export default function Pendapatan() {
               </tbody>
 
               {/* Table footer total */}
-              {incomeData.length > 0 && (
+              {/* {incomeData.length > 0 && (
                 <tfoot>
                   <tr className="bg-gray-50">
                     <td className="py-3 px-4 font-semibold" colSpan={6}>
@@ -314,7 +314,7 @@ export default function Pendapatan() {
                     <td />
                   </tr>
                 </tfoot>
-              )}
+              )} */}
             </table>
           </div>
         </div>
