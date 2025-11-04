@@ -13,10 +13,16 @@ import { IoIosArrowDown } from "react-icons/io";
 import { PiCalendarBlank } from "react-icons/pi";
 import profileAvatar from "../assets/profile_avatar.svg";
 
+const ADDITIONAL_WORK_OPTIONS = ["Semua", "Belum Terpenuhi", "Sudah Terpenuhi"];
+
 const TugasPegawai = () => {
   const userRole = localStorage.getItem("role");
   const location = useLocation();
   const navigate = useNavigate();
+
+  const [additionalWorkStatus, setAdditionalWorkStatus] = useState(
+    ADDITIONAL_WORK_OPTIONS[0]
+  );
 
   const [tugasRutinData, setTugasRutinData] = useState([]);
   const [tugasTambahanData, setTugasTambahanData] = useState([]);
@@ -37,9 +43,9 @@ const TugasPegawai = () => {
       console.log("overviewResponse: ", overviewResponse);
       if (overviewResponse.status === 200) {
         setTugasRutinData(overviewResponse.data.data.dailyWorkSummaries);
-        setTugasTambahanData(
-          overviewResponse.data.data.additionalWorkSummaries
-        );
+        // setTugasTambahanData(
+        //   overviewResponse.data.data.additionalWorkSummaries
+        // );
       }
     } catch (error) {
       console.log("error :", error);
@@ -48,12 +54,13 @@ const TugasPegawai = () => {
 
   const fetchTugasTambahanData = async () => {
     try {
-      const additionalResponse = await getAdditionalWorks();
+      const additionalResponse = await getAdditionalWorks(additionalWorkStatus);
       console.log("additionalResponse: ", additionalResponse);
       if (additionalResponse.status === 200) {
         // setTugasTambahanData(
         //   additionalResponse.data.data.additionalWorkSummaries
         // );
+        setTugasTambahanData(additionalResponse.data.data);
       }
     } catch (error) {
       console.log("error :", error);
@@ -70,7 +77,7 @@ const TugasPegawai = () => {
       fetchTugasTambahanData();
       window.history.replaceState({}, document.title);
     }
-  }, [location]);
+  }, [location, additionalWorkStatus]);
 
   const tambahTugasTambahanHandle = () => {
     navigate(`${location.pathname}/tambah-tugas-tambahan`);
@@ -106,11 +113,28 @@ const TugasPegawai = () => {
       <div className=" rounded-[4px] border border-black-6">
         <div className="px-6 pt-8 pb-4 flex items-center justify-between">
           <p className="text-lg font-bold">Tugas Tambahan</p>
-          <div
-            onClick={() => tambahTugasTambahanHandle()}
-            className="rounded-[4px] py-2 px-6 bg-orange-300 hover:bg-orange-500 flex items-center justify-center text-black text-base font-medium cursor-pointer"
-          >
-            + Tambah tugas
+
+          <div className="flex gap-4">
+            <div className="flex items-center rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer">
+              <select
+                value={additionalWorkStatus}
+                onChange={(e) => setAdditionalWorkStatus(e.target.value)}
+                className="ml-2 bg-transparent text-base font-medium outline-none cursor-pointer"
+              >
+                {ADDITIONAL_WORK_OPTIONS.map((label) => (
+                  <option key={label} value={label}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div
+              onClick={() => tambahTugasTambahanHandle()}
+              className="rounded-[4px] py-2 px-6 bg-orange-300 hover:bg-orange-500 flex items-center justify-center text-black text-base font-medium cursor-pointer"
+            >
+              + Tambah tugas
+            </div>
           </div>
         </div>
 

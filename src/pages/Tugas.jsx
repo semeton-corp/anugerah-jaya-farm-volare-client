@@ -79,7 +79,7 @@ const Tugas = () => {
         locationType = "Toko";
       }
       const tugasTambahanResponse = await getAdditionalWorks(
-        "Available",
+        "Belum Terpenuhi",
         locationId,
         locationType,
         placeIds
