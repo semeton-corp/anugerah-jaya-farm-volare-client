@@ -30,6 +30,7 @@ const MONTHS_ID = [
 ];
 
 const CATEGORY_OPTIONS = [
+  "Semua",
   "Penjualan Telur Toko",
   "Penjualan Telur Gudang",
   "Penjualan Ayam Afkir",
@@ -66,6 +67,7 @@ export default function Pendapatan() {
 
   const [incomeData, setIncomeData] = useState([]);
   const [pieChartData, setPieChartData] = useState([]);
+  const [totalNominal, setTotalNominal] = useState(0);
 
   const [popupImage, setPopupImage] = useState(null);
 
@@ -95,11 +97,6 @@ export default function Pendapatan() {
       return byMonth && byCat;
     });
   }, [incomeData, category, month, year]);
-
-  const totalNominal = useMemo(
-    () => filtered.reduce((sum, r) => sum + Number(r.nominal || 0), 0),
-    [filtered]
-  );
 
   const PieTip = ({ active, payload, label }) => {
     if (!active || !payload?.length) return null;
@@ -132,6 +129,7 @@ export default function Pendapatan() {
       if (fetchIncomeResponse.status == 200) {
         setIncomeData(fetchIncomeResponse.data.data.incomes);
         setPieChartData(fetchIncomeResponse.data.data.incomePie);
+        setTotalNominal(fetchIncomeResponse.data.data.totalIncomes);
       }
     } catch (error) {
       console.log("error :", error);
@@ -180,16 +178,18 @@ export default function Pendapatan() {
       <div className="flex flex-wrap items-center gap-3">
         <span className="text-sm text-gray-600">
           Periode:{" "}
-          <span className="font-medium">
+          <span className="text-lg font-medium">
             {monthName} {year}
           </span>
         </span>
         <span className="text-sm text-gray-600">
-          Kategori: <span className="font-medium">{category}</span>
+          Kategori: <span className="text-lg font-medium">{category}</span>
         </span>
         <span className="text-sm text-gray-600">
           Total Pemasukan:{" "}
-          <span className="font-semibold">{formatRupiah(totalNominal)}</span>
+          <span className="text-lg font-semibold">
+            {formatRupiah(totalNominal)}
+          </span>
         </span>
       </div>
 

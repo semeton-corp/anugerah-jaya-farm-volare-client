@@ -15,6 +15,7 @@ import { useEffect } from "react";
 import ImagePopUp from "../components/ImagePopUp";
 
 const CATEGORY_OPTIONS = [
+  "Semua",
   "Operasional",
   "Pengadaan Ayam DOC",
   "Pengadaan Barang",
@@ -44,6 +45,7 @@ export default function Pengeluaran() {
 
   const [expenseData, setExpenseData] = useState([]);
   const [pieChartData, setPieChartData] = useState([]);
+  const [totalNominal, setTotalNominal] = useState(0);
 
   const pieData = useMemo(() => {
     if (!pieChartData) return [];
@@ -111,6 +113,7 @@ export default function Pengeluaran() {
       if (fetchExpenseResponse.status == 200) {
         setExpenseData(fetchExpenseResponse.data.data.expenses);
         setPieChartData(fetchExpenseResponse.data.data.expensePie);
+        setTotalNominal(fetchExpenseResponse.data.data.totalExpense);
       }
     } catch (error) {
       console.log("error :", error);
@@ -154,6 +157,24 @@ export default function Pengeluaran() {
             setYear={setYear}
           />
         </div>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-3">
+        <span className="text-sm text-gray-600">
+          Periode:{" "}
+          <span className="text-lg font-medium">
+            {monthName} {year}
+          </span>
+        </span>
+        <span className="text-sm text-gray-600">
+          Kategori: <span className="text-lg font-medium">{category}</span>
+        </span>
+        <span className="text-sm text-gray-600">
+          Total Pemasukan:{" "}
+          <span className="text-lg font-semibold">
+            {formatRupiah(totalNominal)}
+          </span>
+        </span>
       </div>
 
       {/* Table */}
@@ -308,8 +329,10 @@ export default function Pengeluaran() {
                   <td className="py-3 px-4 font-semibold" colSpan={4}>
                     Total
                   </td>
-                  <td className="py-3 px-4 font-semibold"></td>
-                  <td colSpan={2} />
+                  <td className="py-3 px-4 font-semibold">
+                    {formatRupiah(totalNominal)}
+                  </td>
+                  <td />
                 </tr>
               </tfoot>
             )}
