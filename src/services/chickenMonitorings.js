@@ -374,6 +374,15 @@ export const confirmationAfkirChickenSaleDraft = (payload, id) => {
   });
 };
 
+export const confirmationTakeAfkirChickenSale = (id) => {
+  return api.patch(`/chickens/afkir/sales/${id}/confirmations`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/json",
+    },
+  });
+};
+
 export const deleteAfkirChickenSaleDraft = (id) => {
   return api.delete(`/chickens/afkir/sales/drafts/${id}`, {
     headers: {

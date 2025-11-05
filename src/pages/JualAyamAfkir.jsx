@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { FaMoneyBillWave } from "react-icons/fa6";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { getAfkirChickenSales } from "../services/chickenMonitorings";
+import {
+  confirmationTakeAfkirChickenSale,
+  getAfkirChickenSales,
+} from "../services/chickenMonitorings";
 import { useEffect } from "react";
 import { LiaOilCanSolid } from "react-icons/lia";
 import { useSelector } from "react-redux";
@@ -32,6 +35,9 @@ const JualAyamAfkir = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalData, setTotalData] = useState(0);
+
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState();
 
   const notifications = useSelector((state) => state?.notifications);
   const pageNotifications = notifications.filter((item) =>
@@ -64,6 +70,21 @@ const JualAyamAfkir = () => {
         setSalesData(saleResponse.data.data.afkirChickenSales);
         setTotalData(saleResponse.data.data.totalData);
         setTotalPages(saleResponse.data.data.totalPage);
+      }
+    } catch (error) {
+      console.log("error :", error);
+    }
+  };
+
+  const handleConfirm = async () => {
+    try {
+      const confirmResponse = await confirmationTakeAfkirChickenSale(
+        selectedItem.id
+      );
+      console.log("confirmResponse: ", confirmResponse);
+      if (confirmResponse.status == 204) {
+        setShowConfirmModal(false);
+        fetchSalesData();
       }
     } catch (error) {
       console.log("error :", error);
@@ -138,6 +159,7 @@ const JualAyamAfkir = () => {
                 <th className="p-2 sm:p-3">Pelanggan</th>
                 <th className="p-2 sm:p-3">Jumlah</th>
                 <th className="p-2 sm:p-3">Status Pembayaran</th>
+                <th className="p-2 sm:p-3">Status Pengambilan</th>
                 <th className="p-2 sm:p-3">Tanggal Pengambilan</th>
                 <th className="p-2 sm:p-3">Aksi</th>
               </tr>
@@ -159,16 +181,40 @@ const JualAyamAfkir = () => {
                       {item.paymentStatus}
                     </span>
                   </td>
+                  <td className="p-2 sm:p-3">
+                    <span
+                      className={`text-xs sm:text-sm px-2 sm:px-3 py-1 rounded font-medium ${
+                        item.isTaken
+                          ? "bg-aman-box-surface-color text-aman-text-color"
+                          : "bg-kritis-box-surface-color text-kritis-text-color"
+                      }`}
+                    >
+                      {item.isTaken ? "Sudah Diambil" : "Belum Diambil"}
+                    </span>
+                  </td>
                   <td className="p-2 sm:p-3">{`${item.takenAt}`}</td>
                   <td className="p-2 sm:p-3">
-                    <button
-                      onClick={() =>
-                        navigate(`detail-penjualan-ayam/${item.id}`)
-                      }
-                      className="bg-green-700 hover:bg-green-900 cursor-pointer text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm"
-                    >
-                      Lihat Detail
-                    </button>
+                    <div className="flex gap-4">
+                      {!item.isTaken && (
+                        <button
+                          onClick={() => {
+                            setShowConfirmModal(true);
+                            setSelectedItem(item);
+                          }}
+                          className="bg-orange-300 hover:bg-orange-500 text-black px-3 py-1 rounded text-sm font-medium"
+                        >
+                          Barang Sampai
+                        </button>
+                      )}
+                      <button
+                        onClick={() =>
+                          navigate(`detail-penjualan-ayam/${item.id}`)
+                        }
+                        className="bg-green-700 hover:bg-green-900 cursor-pointer text-white px-2 sm:px-3 py-1 rounded text-xs sm:text-sm"
+                      >
+                        Lihat Detail
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -211,6 +257,32 @@ const JualAyamAfkir = () => {
           </div>
         </div>
       </div>
+
+      {showConfirmModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+          <div className="bg-white rounded-2xl shadow-md px-8 py-6 max-w-md text-center">
+            <p className="text-lg font-semibold mb-6">
+              Apakah anda yakin untuk konfirmasi pengambilan ayam?
+            </p>
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => setShowConfirmModal(false)}
+                className="bg-gray-300 hover:bg-gray-400 cursor-pointer text-black font-semibold px-6 py-2 rounded-lg"
+              >
+                Tidak
+              </button>
+              <button
+                onClick={() => {
+                  handleConfirm();
+                }}
+                className="bg-green-700 hover:bg-green-900 cursor-pointer text-white font-semibold px-6 py-2 rounded-lg"
+              >
+                Ya, Lanjutkan
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
