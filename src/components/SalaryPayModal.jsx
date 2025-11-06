@@ -3,13 +3,17 @@ import { getUserSalaryDetail, payUserSalary } from "../services/cashflow";
 import { uploadFile } from "../services/file";
 
 /** ========= Utilities ========= */
-const formatIDR = (n) =>
-  new Intl.NumberFormat("id-ID", {
+const formatIDR = (n) => {
+  const num = parseFloat(n);
+  if (isNaN(num)) return "Rp 0";
+  const rounded = Math.round(num);
+  return new Intl.NumberFormat("id-ID", {
     style: "currency",
     currency: "IDR",
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-  }).format(Number(n || 0));
+  }).format(rounded);
+};
 
 const toNumber = (v) => {
   if (typeof v === "number") return v;
@@ -83,6 +87,7 @@ export default function SalaryPayModal({ isOpen, onClose, salaryId, onSaved }) {
         }
 
         const d = payload.data || {};
+        console.log("payload.data: ", payload.data);
 
         const monthFromApi =
           d.salaryMonth ||
@@ -150,7 +155,7 @@ export default function SalaryPayModal({ isOpen, onClose, salaryId, onSaved }) {
           user: normalizedUser,
 
           baseSalary: toNumber(d.baseSalary),
-          bonus: toNumber(d.bonusSalary),
+          bonus: Math.ceil(Number(d.bonusSalary) || 0),
           defaultCompensation: toNumber(d.compentationSalary),
 
           additionalJobs,
@@ -158,6 +163,7 @@ export default function SalaryPayModal({ isOpen, onClose, salaryId, onSaved }) {
 
           kasbons,
         };
+        console.log("normalized: ", normalized);
 
         setDetail(normalized);
         setCompensation(normalized.defaultCompensation || 0);
@@ -509,7 +515,7 @@ export default function SalaryPayModal({ isOpen, onClose, salaryId, onSaved }) {
                       </div>
 
                       <RowLine label="Bonus" right={formatIDR(detail.bonus)} />
-
+                      {console.log("detail.bonus: ", detail.bonus)}
                       <div className="flex items-center justify-between gap-3">
                         <div className="text-gray-700">Kompensasi</div>
                         <div className="flex items-center justify-between gap-3">
