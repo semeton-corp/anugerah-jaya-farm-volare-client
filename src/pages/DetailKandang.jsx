@@ -4,6 +4,7 @@ import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 import HapusKandangModal from "./HapusKandangModal";
 import { useEffect } from "react";
 import { deleteCage, getChickenCageById } from "../services/cages";
+import { formatThousand } from "../utils/moneyFormat";
 
 const DetailKandang = () => {
   const location = useLocation();
@@ -94,7 +95,7 @@ const DetailKandang = () => {
           </div>
           <div>
             <p className="text-sm text-gray-500">Jumlah ayam dalam kandang</p>
-            <p className="font-bold">{data.totalChicken}</p>
+            <p className="font-bold">{formatThousand(data.totalChicken)}</p>
           </div>
         </div>
       </div>
@@ -124,7 +125,9 @@ const DetailKandang = () => {
           <div>
             <p className="text-sm text-gray-500">Kapasitas Maksimum</p>
             <p className="font-bold">
-              {data?.cage?.capacity ? data?.cage?.capacity : "-"}
+              {data?.cage?.capacity
+                ? formatThousand(data?.cage?.capacity)
+                : "-"}
             </p>
           </div>
         </div>

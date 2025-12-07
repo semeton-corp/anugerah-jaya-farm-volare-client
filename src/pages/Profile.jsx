@@ -28,6 +28,12 @@ import { getListUser, getOverviewUser, getUserById } from "../services/user";
 import MonthYearSelector from "../components/MonthYearSelector";
 import { deleteAccount } from "../services/authServices";
 
+const roleNotes = {
+  "Pekerja Kandang": "Lebih diperhatikan kesehatan ayamnya ya!",
+  "Pekerja Toko": "Pastikan stok dan kebersihan toko selalu terjaga!",
+  "Pekerja Gudang": "Cek ketersediaan barang dan kondisi gudang secara rutin!",
+};
+
 const Profile = ({ mode }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -37,7 +43,7 @@ const Profile = ({ mode }) => {
   const userName = localStorage.getItem("userName");
   const userRole = localStorage.getItem("role");
   const userId = mode == "MyProfile" ? localStorage.getItem("userId") : id;
-  const [note, setNote] = useState("Lebih di perhatikan kesehatan ayamnya ya!");
+  const [note, setNote] = useState(roleNotes[userRole] ?? "");
 
   const [userInformation, setUserInformation] = useState([]);
   const [userPresenceInformation, setUserPresenceInformation] = useState([]);
@@ -248,14 +254,16 @@ const Profile = ({ mode }) => {
         {showSection && (
           <div className="w-full md:w-4/6 flex flex-col gap-4">
             {/* Catatan Kinerja */}
-            <div className="bg-white p-4 sm:p-6 rounded border border-gray-300">
-              <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-3">
-                Catatan Kinerja
-              </h2>
-              <div className="bg-amber-100/60 p-3 rounded-lg">
-                <p className="text-gray-700 text-sm sm:text-base">{note}</p>
+            {note && (
+              <div className="bg-white p-4 sm:p-6 rounded border border-gray-300">
+                <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-3">
+                  Catatan Kinerja
+                </h2>
+                <div className="bg-amber-100/60 p-3 rounded-lg">
+                  <p className="text-gray-700 text-sm sm:text-base">{note}</p>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* KPI Section */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

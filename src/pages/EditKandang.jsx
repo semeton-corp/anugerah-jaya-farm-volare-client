@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getChickenCageById, updateCage } from "../services/cages";
 import { useNavigate, useParams } from "react-router-dom";
 import { getLocations } from "../services/location";
+import { formatThousand, onlyDigits } from "../utils/moneyFormat";
 
 const EditKandang = () => {
   const navigate = useNavigate();
@@ -71,7 +72,8 @@ const EditKandang = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const newValue = onlyDigits(value);
+    setFormData((prev) => ({ ...prev, [name]: newValue }));
   };
 
   const handleSubmit = async (e) => {
@@ -154,9 +156,10 @@ const EditKandang = () => {
             Kapasitas Maksimum Kandang (Ekor)
           </label>
           <input
-            type="number"
+            type="text"
+            inputMode="numeric"
             name="capacity"
-            value={formData.capacity}
+            value={formatThousand(formData.capacity)}
             onChange={handleChange}
             className="w-full border rounded px-3 py-2 bg-black-4 border-black-7"
           />
