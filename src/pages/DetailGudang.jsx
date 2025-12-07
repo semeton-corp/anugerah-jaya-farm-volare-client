@@ -25,6 +25,7 @@ const DetailGudang = () => {
 
   const [roles, setRoles] = useState([]);
   const [selectedRole, setSelectedRole] = useState("");
+  const [isCanBeDelete, setIsCanBeDelete] = useState(false);
 
   const [employees, setEmployees] = useState([]);
 
@@ -40,6 +41,13 @@ const DetailGudang = () => {
   };
 
   const handleDeleteGudang = async () => {
+    if (!isCanBeDelete) {
+      alert(
+        "❌Gudang tidak dapat dihapus karena masih memiliki item di dalamnya. Harap kosongkan gudang terlebih dahulu sebelum menghapusnya."
+      );
+      return;
+    }
+
     try {
       const deleteResponse = await deleteWarehouse(id);
       if (deleteResponse.status === 204) {
@@ -77,6 +85,7 @@ const DetailGudang = () => {
       if (detailResponse.status === 200) {
         SetGudang(detailResponse.data.data);
         setEmployees(detailResponse.data.data.users);
+        setIsCanBeDelete(detailResponse.data.data.isItemsEmpty);
         // console.log("detailResponse.data.data: ", detailResponse.data.data);
       }
     } catch (error) {
@@ -263,10 +272,7 @@ const DetailGudang = () => {
               </button>
               <button
                 onClick={() => {
-                  // Call your delete logic here
-                  //   alert("Deleting gudang…");
                   handleDeleteGudang();
-                  setShowDeleteGudangModal(false);
                 }}
                 className="px-4 py-2 rounded bg-red-500 hover:bg-red-600 text-white flex items-center gap-1 cursor-pointer"
               >

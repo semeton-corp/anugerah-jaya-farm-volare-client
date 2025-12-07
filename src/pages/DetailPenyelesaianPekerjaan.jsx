@@ -163,12 +163,14 @@ const DetailPenyelesaianPekerjaan = () => {
                     <td className="py-2 px-4 whitespace-nowrap">
                       <span
                         className={`px-3 py-1 rounded text-sm font-medium ${
-                          item.isDone
+                          item.status == "Selesai"
                             ? "bg-aman-box-surface-color text-aman-text-color"
+                            : item.status == "Terlambat"
+                            ? "bg-warning-box-surface-color text-warning-text-color"
                             : "bg-kritis-box-surface-color text-kritis-text-color"
                         }`}
                       >
-                        {item.isDone ? "Selesai" : "Dalam Proses"}
+                        {item.status}
                       </span>
                     </td>
                   </tr>
@@ -251,12 +253,14 @@ const DetailPenyelesaianPekerjaan = () => {
                     <td className="py-2 px-4 whitespace-nowrap">
                       <span
                         className={`px-3 py-1 rounded text-sm font-medium ${
-                          item.isDone
+                          item.status == "Selesai"
                             ? "bg-aman-box-surface-color text-aman-text-color"
+                            : item.status == "Terlambat"
+                            ? "bg-orange-200 text-warning-text-color"
                             : "bg-kritis-box-surface-color text-kritis-text-color"
                         }`}
                       >
-                        {item.isDone ? "Selesai" : "Tidak Selesai"}
+                        {item.status}
                       </span>
                     </td>
                   </tr>

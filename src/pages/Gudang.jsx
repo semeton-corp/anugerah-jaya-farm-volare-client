@@ -385,7 +385,7 @@ const Gudang = () => {
                     <tr key={index} className="border-b text-center">
                       <td className="py-2 px-4">{item.item.name}</td>
                       <td className="py-2 px-4">{item.item.category}</td>
-                      <td className="py-2 px-4">{item.quantity}</td>
+                      <td className="py-2 px-4">{item.quantity.toFixed(2)}</td>
                       <td className="py-2 px-4">{item.item.unit}</td>
                       <td className="py-2 px-4">{item.expiredAt}</td>
                       <td className="py-2 px-4">

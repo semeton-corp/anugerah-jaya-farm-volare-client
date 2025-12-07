@@ -17,6 +17,19 @@ import {
   getCurrentUserWarehousePlacement,
 } from "../services/placement";
 
+function isTimePassed(endTime) {
+  if (!endTime) return false;
+
+  const [h, m] = endTime.split(":").map(Number);
+
+  const now = new Date();
+  const end = new Date();
+
+  end.setHours(h, m, 0, 0);
+
+  return now > end;
+}
+
 const Tugas = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -321,31 +334,43 @@ const Tugas = () => {
         <div>
           <h3 className="text-md font-semibold mb-2">Tugas Rutin</h3>
           <div className="space-y-2">
-            {dailyWorks.map((item, i) => (
-              <div
-                key={i}
-                className="border bg-gray-100 px-3 sm:px-4 py-2 sm:py-3 rounded-md flex justify-between items-center text-sm"
-              >
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs sm:text-sm font-medium ">
-                    {item.dailyWork.description}
-                  </p>
-                  <p className="text-xs sm:text-sm text-gray-600">
-                    {item.dailyWork.startTime}
-                  </p>
-                </div>
-                <button
-                  onClick={() => finishDailyTask(item.id)}
-                  className={`flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 ml-2 rounded-md flex justify-center items-center cursor-pointer ${
-                    item.isDone
-                      ? "bg-[#87FF8B] text-black hover:bg-[#4d8e4f]"
-                      : "bg-gray-200 hover:bg-gray-400"
-                  }`}
+            {dailyWorks.map((item, i) => {
+              const timePassed = isTimePassed(item.dailyWork.endTime);
+
+              return (
+                <div
+                  key={i}
+                  className={`
+        px-3 sm:px-4 py-2 sm:py-3 rounded-md flex justify-between items-center text-sm
+
+        ${timePassed ? "border-orange-400 bg-orange-200" : "border bg-gray-100"}
+      `}
                 >
-                  {item.isDone && <FiCheck />}
-                </button>
-              </div>
-            ))}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs sm:text-sm font-medium ">
+                      {item.dailyWork.description}
+                    </p>
+                    <p className="text-xs sm:text-sm text-gray-600">
+                      {item.dailyWork.startTime} - {item.dailyWork.endTime}
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={() => finishDailyTask(item.id)}
+                    className={`
+          flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 ml-2 rounded-md flex justify-center items-center cursor-pointer
+          ${
+            item.isDone
+              ? "bg-[#87FF8B] text-black hover:bg-[#4d8e4f]"
+              : "bg-gray-200 hover:bg-gray-400"
+          }
+        `}
+                  >
+                    {item.isDone && <FiCheck />}
+                  </button>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
