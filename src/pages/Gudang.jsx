@@ -21,6 +21,7 @@ import { GoAlertFill } from "react-icons/go";
 import { getCurrentUserWarehousePlacement } from "../services/placement";
 import { useSelector } from "react-redux";
 import PageNotificationsSection from "../components/PageNotificationsSection";
+import { formatThousand } from "../utils/moneyFormat";
 
 const Gudang = () => {
   const location = useLocation();
@@ -347,7 +348,9 @@ const Gudang = () => {
               <div className="flex flex-col sm:flex-row  gap-4 items-center">
                 <div className="flex gap-2 items-center text-sm sm:text-base">
                   <span>Kapasitas Maksimum Gudang :</span>
-                  <span className="font-semibold">{cornCapacity} Kg</span>
+                  <span className="font-semibold">
+                    {formatThousand(cornCapacity)} Kg
+                  </span>
                 </div>
 
                 <div

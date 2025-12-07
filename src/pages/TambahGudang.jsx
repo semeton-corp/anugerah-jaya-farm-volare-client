@@ -4,10 +4,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getLocations } from "../services/location";
 import {
   createWarehouses,
+  getWarehouses,
   getWarehousesDetail,
   updateWarehouseItem,
   updateWarehouses,
 } from "../services/warehouses";
+import { formatThousand, onlyDigits } from "../utils/moneyFormat";
 
 const TambahGudang = () => {
   const navigate = useNavigate();
@@ -17,6 +19,7 @@ const TambahGudang = () => {
   const [namaGudang, setNamaGudang] = useState("");
   const [lokasiGudang, setLokasiGudang] = useState("");
   const [maxCornCapacity, setMaxCornCapacity] = useState("");
+  const [warehouses, setWarehouses] = useState([]);
 
   const [locationOptions, setLocationOptions] = useState([]);
 
@@ -28,7 +31,6 @@ const TambahGudang = () => {
       return;
     }
 
-    
     const data = {
       name: namaGudang,
       locationId: parseInt(lokasiGudang),
@@ -65,12 +67,12 @@ const TambahGudang = () => {
   const fetchDetailData = async () => {
     try {
       const detailResponse = await getWarehousesDetail(id);
-      //   console.log("detailResponse: ", detailResponse);
+      console.log("detailResponseEDIT: ", detailResponse);
       if (detailResponse.status === 200) {
         // SetGudang(detailResponse.data.data);3
         setNamaGudang(detailResponse.data.data.name);
         setLokasiGudang(detailResponse.data.data.location.id);
-
+        fetchWarehouseData(detailResponse.data.data.location.id);
         // console.log("detailResponse.data.data: ", detailResponse.data.data);
       }
     } catch (error) {
@@ -102,9 +104,21 @@ const TambahGudang = () => {
     }
   };
 
+  const fetchWarehouseData = async (siteId) => {
+    try {
+      const warehouseResponse = await getWarehouses(siteId);
+      if (warehouseResponse.status == 200) {
+        const warehousesData = warehouseResponse.data.data;
+        const selectedWarehouse = warehousesData.find((item) => item.id == id);
+        setMaxCornCapacity(selectedWarehouse.cornCapacity);
+      }
+    } catch (error) {
+      console.log("error :", error);
+    }
+  };
+
   useEffect(() => {
     fetchLocationOptions();
-
     if (id) {
       fetchDetailData();
     }
@@ -113,7 +127,7 @@ const TambahGudang = () => {
   return (
     <div className="mx-6 mt-10 p-6 bg-white rounded border">
       <h1 className="text-xl font-bold mb-6">
-        {id ? "Edit Toko" : "Tambah Gudang"}
+        {id ? "Edit Gudang" : "Tambah Gudang"}
       </h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -153,9 +167,13 @@ const TambahGudang = () => {
             Kapasitas Maksimum Jagung (Kg)
           </label>
           <input
-            type="number"
-            value={maxCornCapacity}
-            onChange={(e) => setMaxCornCapacity(e.target.value)}
+            type="text"
+            inputMode="numeric"
+            value={formatThousand(maxCornCapacity)}
+            onChange={(e) => {
+              const raw = onlyDigits(e.target.value);
+              setMaxCornCapacity(raw);
+            }}
             placeholder="Masukkan jumlah maksimal jagung..."
             className="w-full border rounded px-3 py-2 bg-gray-100 focus:outline-none focus:ring"
             required
