@@ -174,7 +174,7 @@ const PresensiLokasi = () => {
                       />
                     </div>
                     <p className="text-xs text-gray-500 mt-1">
-                      {row.workDonePercentage}%
+                      {parseInt(row.workDonePercentage)}%
                     </p>
                   </td>
                 </tr>
