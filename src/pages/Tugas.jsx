@@ -344,7 +344,13 @@ const Tugas = () => {
               key={i}
               className="bg-gray-100 px-3 sm:px-4 py-2 sm:py-3 border rounded-md flex justify-between items-center mb-2 text-sm"
             >
-              <p className="font-medium">{item.additionalWork.name}</p>
+              <div>
+                <p className="font-medium">{item.additionalWork.name}</p>
+                <p className="font-xs flex gap-2 ">
+                  <p className="text-gray-400 italic">Jam Mulai:</p>
+                  {item.additionalWork.time}
+                </p>
+              </div>
               <button
                 onClick={() => {
                   if (!item.isDone) finishAdditionalTask(item.id);
