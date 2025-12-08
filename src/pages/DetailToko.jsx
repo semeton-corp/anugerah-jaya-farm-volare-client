@@ -25,7 +25,7 @@ const DetailToko = () => {
 
   const [roles, setRoles] = useState([]);
   const [selectedRole, setSelectedRole] = useState("");
-  const [isCanBeDeleted, setIsCanBeDeleted] = useState(false)
+  const [isCanBeDeleted, setIsCanBeDeleted] = useState(false);
 
   const detailPages = ["profile"];
 
@@ -54,15 +54,18 @@ const DetailToko = () => {
     }
   };
   const handleDeleteToko = async () => {
-    if(!isCanBeDeleted ){
-      alert("❌Toko tidak dapat dihapus karena masih memiliki item terkait. Silahkan hapus item terlebih dahulu sebelum menghapus toko.");
-      return
+    if (!isCanBeDeleted) {
+      alert(
+        "❌Toko tidak dapat dihapus karena masih memiliki item terkait. Silahkan hapus item terlebih dahulu sebelum menghapus toko."
+      );
+      return;
     }
 
     try {
       const deleteResponse = await deleteStore(id);
       // console.log("deleteResponse: ", deleteResponse);
       if (deleteResponse.status === 204) {
+        alert("✅Toko Berhasil dihapus");
         navigate(-1, { state: { refetch: true } });
       }
     } catch (error) {
@@ -94,7 +97,7 @@ const DetailToko = () => {
       if (res.status === 200) {
         setToko(res.data.data);
         setEmployees(res.data.data.users);
-        setIsCanBeDeleted(res.data.data.isItemsEmpty);  
+        setIsCanBeDeleted(res.data.data.isItemsEmpty);
       }
     } catch (err) {
       console.error(err);

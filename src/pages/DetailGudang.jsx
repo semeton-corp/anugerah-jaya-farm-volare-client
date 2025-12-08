@@ -51,6 +51,7 @@ const DetailGudang = () => {
     try {
       const deleteResponse = await deleteWarehouse(id);
       if (deleteResponse.status === 204) {
+        alert("✅Gudang Berhasil dihapus");
         navigate(-1, { state: { refetch: true } });
       }
     } catch (error) {

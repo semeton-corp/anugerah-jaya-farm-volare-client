@@ -212,8 +212,6 @@ const TambahPegawai = () => {
       name &&
       username &&
       selectedRole &&
-      locationId &&
-      selectedPic &&
       address &&
       phone &&
       salary &&

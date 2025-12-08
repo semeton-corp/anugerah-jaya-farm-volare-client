@@ -48,7 +48,8 @@ const DaftarPegawai = () => {
       const fetchResponse = await getUserOverviewList(
         page,
         filteredKeyword,
-        filteredRoleId
+        filteredRoleId,
+        selectedSite
       );
       console.log("fetchResponse:", fetchResponse);
       if (fetchResponse.status == 200) {
@@ -121,7 +122,7 @@ const DaftarPegawai = () => {
 
   useEffect(() => {
     fetchPegawaiAktifData();
-  }, [debouncedKeyword, roleId, page]);
+  }, [debouncedKeyword, roleId, page, selectedSite]);
 
   if (isDetailPage) {
     return <Outlet />;
@@ -160,7 +161,22 @@ const DaftarPegawai = () => {
             </div>
           </div>
 
-          <div className="flex md:ml-auto">
+          <div className="flex md:ml-auto gap-4">
+            <div className="flex items-center rounded-lg px-3 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer w-full sm:w-auto">
+              <MdStore size={18} />
+              <select
+                value={selectedSite}
+                onChange={(e) => setSelectedSite(e.target.value)}
+                className="ml-2 bg-transparent text-sm sm:text-base font-medium outline-none w-full sm:w-auto"
+              >
+                <option value="">Semua Site</option>
+                {siteOptions.map((site) => (
+                  <option key={site.id} value={site.id}>
+                    {site.name}
+                  </option>
+                ))}
+              </select>
+            </div>
             <div className="flex items-center rounded px-3 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer w-full md:w-auto">
               <select
                 value={roleId}

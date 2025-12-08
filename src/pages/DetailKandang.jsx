@@ -35,6 +35,7 @@ const DetailKandang = () => {
       const deleteResponse = await deleteCage(data.cage.id);
       console.log("deleteResponse: ", deleteResponse);
       if (deleteResponse.status == 204) {
+        alert("✅Kandang Berhasil dihapus");
         navigate(-1, { state: { refetch: true } });
       }
     } catch (error) {

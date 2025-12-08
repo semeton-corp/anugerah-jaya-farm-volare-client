@@ -30,6 +30,37 @@ function isTimePassed(endTime) {
   return now > end;
 }
 
+const dummyAdditionalWorks = [
+  {
+    id: 1,
+    isDone: false,
+    additionalWork: {
+      name: "Membersihkan Kandang Samping",
+    },
+  },
+  {
+    id: 2,
+    isDone: true,
+    additionalWork: {
+      name: "Mengambil Pakan dari Gudang",
+    },
+  },
+  {
+    id: 3,
+    isDone: false,
+    additionalWork: {
+      name: "Mengecek Ventilasi Ayam",
+    },
+  },
+  {
+    id: 4,
+    isDone: true,
+    additionalWork: {
+      name: "Membuang Sampah Organik",
+    },
+  },
+];
+
 const Tugas = () => {
   const location = useLocation();
   const navigate = useNavigate();

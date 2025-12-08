@@ -35,7 +35,7 @@ export const getOverviewUser = (id, year, month) => {
   });
 };
 
-export const getUserOverviewList = (page, keyword, roleId) => {
+export const getUserOverviewList = (page, keyword, roleId, locationId) => {
   return api.get(`users/overview`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -44,6 +44,7 @@ export const getUserOverviewList = (page, keyword, roleId) => {
       page: page,
       keyword: keyword,
       roleId: roleId,
+      locationId: locationId,
     },
   });
 };
