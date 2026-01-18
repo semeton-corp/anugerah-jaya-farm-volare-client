@@ -96,20 +96,20 @@ const TambahTugasRutin = () => {
     }
   };
 
-  const deleteTaskHandle = async (id) => {
-    try {
-      const deleteResponse = await deleteDailyWork(id);
+  const deleteTaskHandle = async (id, indexToRemove) => {
+    setTasks((prevTasks) =>
+      prevTasks.filter((_, index) => index !== indexToRemove),
+    );
 
-      if (deleteResponse.status === 204) {
-        fetchDailyWork(selectedRole.id);
-        console.log("All deletions succeeded!");
-      } else {
-        console.warn("Some deletions failed.", deleteResponse);
-      }
+    if (!id) return;
+
+    try {
+      await deleteDailyWork(id);
     } catch (error) {
       console.log("error :", error);
     }
   };
+
   useEffect(() => {
     fetchRoles();
   }, []);
@@ -162,7 +162,7 @@ const TambahTugasRutin = () => {
                 //   (location) => location.name == e.target.value
                 // );
                 const selected = roles.find(
-                  (role) => role.name == e.target.value
+                  (role) => role.name == e.target.value,
                 );
                 console.log("selected: ", selected);
                 setSelectedRole(selected);
@@ -215,14 +215,14 @@ const TambahTugasRutin = () => {
                           handleTasksChange(
                             index,
                             "description",
-                            e.target.value
+                            e.target.value,
                           )
                         }
                       />
                       <button
                         className="ml-2 text-red-600 hover:text-red-800 cursor-pointer"
                         onClick={() => {
-                          deleteTaskHandle(task.id);
+                          deleteTaskHandle(task.id, index);
                         }}
                       >
                         <RiDeleteBinFill size={32} />
@@ -231,8 +231,10 @@ const TambahTugasRutin = () => {
                     <div className="flex gap-2 mt-2">
                       <input
                         type="time"
+                        step="60"
+                        lang="en-GB"
                         className="border rounded p-2 bg-white"
-                        value={task.startTime || ""}
+                        value={task.startTime || "00:00"}
                         onChange={(e) =>
                           handleTasksChange(index, "startTime", e.target.value)
                         }
@@ -240,8 +242,10 @@ const TambahTugasRutin = () => {
                       <span>sampai</span>
                       <input
                         type="time"
+                        step="60"
+                        lang="en-GB"
                         className="border rounded p-2 bg-white"
-                        value={task.endTime || ""}
+                        value={task.startTime || "00:00"}
                         onChange={(e) =>
                           handleTasksChange(index, "endTime", e.target.value)
                         }
@@ -288,19 +292,16 @@ const TambahTugasRutin = () => {
         </div>
 
         {/* Simpan Button */}
-        {/* <div className="mt-6 text-right ">
+        <div className="mt-6 text-right ">
           <button
             onClick={() => {
               console.log("tasks: ", tasks);
-              console.log("selectedRole: ", selectedRole);
-              console.log("selectedRole.id: ", selectedRole.id);
-              console.log("deletedTasks: ", deletedTasks);
             }}
             className="bg-green-700 text-white py-2 px-6 rounded hover:bg-green-900 cursor-pointer"
           >
             Check
           </button>
-        </div> */}
+        </div>
       </div>
     </div>
   );

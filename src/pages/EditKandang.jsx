@@ -123,7 +123,9 @@ const EditKandang = () => {
             type="text"
             name="name"
             value={formData.name}
-            onChange={handleChange}
+            onChange={() => {
+              setFormData((prev) => ({ ...prev, name: event.target.value }));
+            }}
             className="w-full border rounded px-3 py-2 bg-black-4 border-black-7"
           />
         </div>
