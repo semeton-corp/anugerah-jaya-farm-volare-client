@@ -30,36 +30,20 @@ function isTimePassed(endTime) {
   return now > end;
 }
 
-const dummyAdditionalWorks = [
-  {
-    id: 1,
-    isDone: false,
-    additionalWork: {
-      name: "Membersihkan Kandang Samping",
-    },
-  },
-  {
-    id: 2,
-    isDone: true,
-    additionalWork: {
-      name: "Mengambil Pakan dari Gudang",
-    },
-  },
-  {
-    id: 3,
-    isDone: false,
-    additionalWork: {
-      name: "Mengecek Ventilasi Ayam",
-    },
-  },
-  {
-    id: 4,
-    isDone: true,
-    additionalWork: {
-      name: "Membuang Sampah Organik",
-    },
-  },
-];
+const isWithinTimeRange = (startTime, endTime) => {
+  const now = new Date();
+
+  const [startHour, startMinute] = startTime.split(":").map(Number);
+  const [endHour, endMinute] = endTime.split(":").map(Number);
+
+  const start = new Date();
+  start.setHours(startHour, startMinute, 0, 0);
+
+  const end = new Date();
+  end.setHours(endHour, endMinute, 0, 0);
+
+  return now >= start;
+};
 
 const Tugas = () => {
   const location = useLocation();
@@ -79,7 +63,7 @@ const Tugas = () => {
   const detailPages = ["detail-tugas-tambahan"];
 
   const isDetailPage = detailPages.some((segment) =>
-    location.pathname.includes(segment)
+    location.pathname.includes(segment),
   );
 
   const fetchPlacement = async () => {
@@ -126,7 +110,7 @@ const Tugas = () => {
         "Belum Terpenuhi",
         locationId,
         locationType,
-        placeIds
+        placeIds,
       );
       console.log("tugasTambahanResponse: ", tugasTambahanResponse);
 
@@ -162,7 +146,7 @@ const Tugas = () => {
       // console.log("takeResponse: ", takeResponse);
       if (takeResponse.status == 201) {
         alert(
-          "✅Berhasil mengambil tugas tambahan, tugas akan masuk ke tugas pegawai saat slot pekerja terpenuhi!"
+          "✅Berhasil mengambil tugas tambahan, tugas akan masuk ke tugas pegawai saat slot pekerja terpenuhi!",
         );
         fetchTugasTambahanData();
         fetchAllTugas();
@@ -184,7 +168,7 @@ const Tugas = () => {
       if (presenceResponse.status == 200) {
         console.log(
           "presenceResponse.data.data.status: ",
-          presenceResponse.data.data.status
+          presenceResponse.data.data.status,
         );
         // setIsPresence(presenceResponse.data.data.isPresent);
         if (presenceResponse.data.data.status === "Hadir") {
@@ -217,19 +201,28 @@ const Tugas = () => {
     }
   };
 
-  const finishDailyTask = async (taskId) => {
+  const finishDailyTask = async (task) => {
+    const { id, dailyWork } = task;
+    const { startTime, endTime } = dailyWork;
+
+    if (!isWithinTimeRange(startTime, endTime)) {
+      alert("❌Tugas hanya bisa diselesaikan pada jam yang ditentukan!");
+      return;
+    }
+
     const payload = {
       isDone: true,
     };
 
     try {
-      const updateResponse = await updateDailyWorkStaff(payload, taskId);
-      console.log("updateResponse: ", updateResponse);
-      if (updateResponse.status == 200) {
+      const updateResponse = await updateDailyWorkStaff(payload, id);
+      console.log("updateResponse:", updateResponse);
+
+      if (updateResponse.status === 200) {
         fetchAllTugas();
       }
     } catch (error) {
-      console.log("error :", error);
+      console.log("error:", error);
     }
   };
 
@@ -300,7 +293,7 @@ const Tugas = () => {
                 <td className="py-2 px-3 sm:px-4">
                   <span
                     className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-medium ${getStatusStyle(
-                      item.status
+                      item.status,
                     )}`}
                   >
                     {item.status}
@@ -393,7 +386,7 @@ const Tugas = () => {
                   </div>
 
                   <button
-                    onClick={() => finishDailyTask(item.id)}
+                    onClick={() => finishDailyTask(item)}
                     className={`
           flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 ml-2 rounded-md flex justify-center items-center cursor-pointer
           ${
