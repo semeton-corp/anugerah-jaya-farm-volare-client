@@ -60,7 +60,7 @@ const Profile = ({ mode }) => {
   const [month, setMonth] = useState(new Date().getMonth());
   const [year, setYear] = useState(new Date().getFullYear());
   const [monthName, setMonthName] = useState(
-    new Intl.DateTimeFormat("id-ID", { month: "long" }).format(new Date())
+    new Intl.DateTimeFormat("id-ID", { month: "long" }).format(new Date()),
   );
   const detailPages = [
     "tambah-pegawai",
@@ -69,7 +69,7 @@ const Profile = ({ mode }) => {
   ];
 
   const isDetailPage = detailPages.some((segment) =>
-    location.pathname.includes(segment)
+    location.pathname.includes(segment),
   );
 
   const [userData, setUserData] = useState([]);
@@ -93,7 +93,7 @@ const Profile = ({ mode }) => {
       }
     } catch (error) {
       alert(
-        "❌ Detail kinerja pengguna tidak ditemukan untuk bulan yang dipilih!"
+        "❌ Detail kinerja pengguna tidak ditemukan untuk bulan yang dipilih!",
       );
       console.log("error :", error);
     }
@@ -330,19 +330,33 @@ const Profile = ({ mode }) => {
                     <LineChart data={kpiPerformances}>
                       <XAxis dataKey="key" />
                       <YAxis />
-                      <Tooltip />
+                      <Tooltip
+                        formatter={(value, name) => {
+                          if (name === "chickenKpiScore") {
+                            return [value, "Skor KPI Ayam"];
+                          }
+
+                          if (name === "workKpiScore") {
+                            return [value, "Skor KPI"];
+                          }
+
+                          return [value, name];
+                        }}
+                      />
                       <Line
                         type="monotone"
                         dataKey="workKpiScore"
                         stroke="#FF0000"
                         strokeWidth={2}
                       />
-                      <Line
-                        type="monotone"
-                        dataKey="chickenKpiScore"
-                        stroke="#FFD700"
-                        strokeWidth={2}
-                      />
+                      {userData?.role?.name === "Pekerja Kandang" && (
+                        <Line
+                          type="monotone"
+                          dataKey="chickenKpiScore"
+                          stroke="#FFD700"
+                          strokeWidth={2}
+                        />
+                      )}
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
