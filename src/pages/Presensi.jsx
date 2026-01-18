@@ -45,7 +45,7 @@ const Presensi = () => {
   const [month, setMonth] = useState(new Date().getMonth());
   const [year, setYear] = useState(new Date().getFullYear());
   const [monthName, setMonthName] = useState(
-    new Intl.DateTimeFormat("id-ID", { month: "long" }).format(new Date())
+    new Intl.DateTimeFormat("id-ID", { month: "long" }).format(new Date()),
   );
 
   const handleDateChange = (e) => {
@@ -84,7 +84,7 @@ const Presensi = () => {
     try {
       const allPresenceResponse = await getSelfCurrentUserPresences(
         monthName,
-        year
+        year,
       );
       console.log("allPresenceResponse: ", allPresenceResponse);
       if (allPresenceResponse.status == 200) {
@@ -133,7 +133,6 @@ const Presensi = () => {
           const serverMessage = err?.response?.data?.message;
 
           let customMessage = "Terjadi kesalahan tak terduga" + err;
-
           if (serverMessage === "can't presence start more than 17.00 PM") {
             customMessage =
               "❌Tidak bisa melakukan presensi melebihi jam kerja 17.00 PM";
@@ -152,7 +151,7 @@ const Presensi = () => {
       },
       (error) => {
         console.error("Location error:", error);
-      }
+      },
     );
   };
 
@@ -205,7 +204,7 @@ const Presensi = () => {
       },
       (error) => {
         console.error("Location error:", error);
-      }
+      },
     );
   };
 
@@ -259,7 +258,7 @@ const Presensi = () => {
           if (res.status == 200) {
             getTodayPresence();
             alert(
-              "✅Berhasil melakukan pengajuan sakit, mohon tunggu persetujuan"
+              "✅Berhasil melakukan pengajuan sakit, mohon tunggu persetujuan",
             );
             setShowModal(false);
             setEvidence(null);
@@ -284,7 +283,7 @@ const Presensi = () => {
       },
       (error) => {
         console.error("Location error:", error);
-      }
+      },
     );
   };
   const handleSubmitIzin = async () => {
@@ -327,7 +326,7 @@ const Presensi = () => {
           if (res.status == 200) {
             getTodayPresence();
             alert(
-              "✅Berhasil melakukan pengajuan izin, mohon tunggu persetujuan"
+              "✅Berhasil melakukan pengajuan izin, mohon tunggu persetujuan",
             );
             setShowModal(false);
             setEvidence(null);
@@ -352,7 +351,7 @@ const Presensi = () => {
       },
       (error) => {
         console.error("Location error:", error);
-      }
+      },
     );
   };
 
@@ -385,22 +384,22 @@ const Presensi = () => {
               isGoHome
                 ? () => {}
                 : isPresence
-                ? departureHandlePresence
-                : arrivalHandlePresence
+                  ? departureHandlePresence
+                  : arrivalHandlePresence
             }
             className={`text-center py-2 rounded text-base sm:text-lg font-semibold ${
               isGoHome
                 ? "bg-black-5 text-black-8"
                 : isPresence
-                ? "bg-kritis-box-surface-color hover:bg-[#C34747] text-kritis-text-color cursor-pointer hover:text-white"
-                : "bg-aman-box-surface-color hover:bg-[#1D7E20] text-aman-text-color cursor-pointer hover:text-white"
+                  ? "bg-kritis-box-surface-color hover:bg-[#C34747] text-kritis-text-color cursor-pointer hover:text-white"
+                  : "bg-aman-box-surface-color hover:bg-[#1D7E20] text-aman-text-color cursor-pointer hover:text-white"
             }`}
           >
             {isGoHome
               ? "Anda sudah melakukan presensi hari ini"
               : isPresence
-              ? "Pulang"
-              : "Hadir"}
+                ? "Pulang"
+                : "Hadir"}
           </div>
 
           {!isPresence && !isGoHome && (
