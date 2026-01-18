@@ -21,6 +21,7 @@ const EditKandang = () => {
     capacity: "",
     isUsed: false,
   });
+  const [totalLiveChicken, setTotalLiveChicken] = useState(0);
 
   const fetchDetailData = async () => {
     try {
@@ -35,6 +36,7 @@ const EditKandang = () => {
           capacity: chickenCage.cage.capacity || "",
           isUsed: chickenCage.cage.isUsed || false,
         });
+        setTotalLiveChicken(chickenCage.totalChicken || 0);
       }
     } catch (error) {
       console.log("error :", error);
@@ -53,7 +55,7 @@ const EditKandang = () => {
         console.log("allLocations: ", allLocations);
         if (role !== "Owner") {
           const filteredLocations = allLocations.filter(
-            (item) => item.id === locationId
+            (item) => item.id === locationId,
           );
           setLocationOptions(filteredLocations);
         } else {
@@ -78,6 +80,16 @@ const EditKandang = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("parseInt(formData.capacity): ", parseInt(formData.capacity));
+    console.log("totalLiveChicken: ", totalLiveChicken);
+
+    if (parseInt(formData.capacity) < totalLiveChicken) {
+      alert(
+        `Kapasitas kandang tidak boleh kurang dari jumlah ayam hidup saat ini (${totalLiveChicken} ekor).`,
+      );
+      return;
+    }
+
     const payload = {
       name: formData.name,
       locationId: parseInt(formData.locationId),
@@ -164,6 +176,12 @@ const EditKandang = () => {
             className="w-full border rounded px-3 py-2 bg-black-4 border-black-7"
           />
         </div>
+        <div>
+          <label className="block mb-1 font-medium">
+            Jumlah ayam hidup di kandang (Ekor)
+          </label>
+          <p>{`${totalLiveChicken} Ekor`}</p>
+        </div>
 
         {/* Tombol */}
         <div className="text-right pt-2">
@@ -176,13 +194,13 @@ const EditKandang = () => {
         </div>
       </form>
 
-      <button
+      {/* <button
         onClick={() => {
           console.log("formData: ", formData);
         }}
       >
         CHECK
-      </button>
+      </button> */}
     </div>
   );
 };
