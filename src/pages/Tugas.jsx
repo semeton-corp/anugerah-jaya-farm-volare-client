@@ -186,13 +186,21 @@ const Tugas = () => {
     navigate(`${location.pathname}/detail-tugas-tambahan/${id}`);
   };
 
-  const finishAdditionalTask = async (taskId) => {
+  const finishAdditionalTask = async (task) => {
+    const { id, additionalWork } = task;
+    const { time } = additionalWork;
+
+    if (!isWithinTimeRange(time, time)) {
+      alert("❌Tugas hanya bisa diselesaikan pada jam yang ditentukan!");
+      return;
+    }
+
     const payload = {
       isDone: true,
     };
 
     try {
-      const updateResponse = await updateAdditionalWorkStaff(payload, taskId);
+      const updateResponse = await updateAdditionalWorkStaff(payload, task.id);
       if (updateResponse.status == 200) {
         fetchAllTugas();
       }
@@ -275,6 +283,7 @@ const Tugas = () => {
           <thead>
             <tr className="bg-green-700 text-white text-left">
               <th className="py-2 px-3 sm:px-4">Tanggal</th>
+              <th className="py-2 px-3 sm:px-4">Waktu Pelaksanaan</th>
               <th className="py-2 px-3 sm:px-4">Tugas Tambahan</th>
               <th className="py-2 px-3 sm:px-4">Lokasi</th>
               <th className="py-2 px-3 sm:px-4">Sisa Slot</th>
@@ -287,6 +296,7 @@ const Tugas = () => {
             {tugasTambahanData?.map((item, index) => (
               <tr key={index} className="border-b">
                 <td className="py-2 px-3 sm:px-4">{item.date}</td>
+                <td className="py-2 px-3 sm:px-4">{item.time}</td>
                 <td className="py-2 px-3 sm:px-4">{item.name}</td>
                 <td className="py-2 px-3 sm:px-4">{item.location}</td>
                 <td className="py-2 px-3 sm:px-4">{item.remainingSlot}</td>
@@ -346,7 +356,7 @@ const Tugas = () => {
               </div>
               <button
                 onClick={() => {
-                  if (!item.isDone) finishAdditionalTask(item.id);
+                  if (!item.isDone) finishAdditionalTask(item);
                 }}
                 className={`w-7 h-7 sm:w-8 sm:h-8 rounded-md flex justify-center items-center cursor-pointer ${
                   item.isDone

@@ -12,6 +12,7 @@ import {
   deleteDailyWorkByRoleId,
 } from "../services/dailyWorks";
 import { RiDeleteBinFill } from "react-icons/ri";
+import DeleteModal from "../components/DeleteModal";
 
 const TambahTugasRutin = () => {
   const userRole = localStorage.getItem("role");
@@ -27,6 +28,9 @@ const TambahTugasRutin = () => {
   const [tasks, setTasks] = useState([]);
 
   const [isEditMode, setIsEditMode] = useState(true);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedDeleteTask, setSelectedDeleteTask] = useState();
+  const [selectedDeleteTaskIndex, setSelectedDeleteTaskIndex] = useState();
 
   const addTask = () => {
     setTasks([
@@ -101,10 +105,15 @@ const TambahTugasRutin = () => {
       prevTasks.filter((_, index) => index !== indexToRemove),
     );
 
-    if (!id) return;
+    if (!id) {
+      setShowDeleteModal(false);
+      return;
+    }
 
     try {
       await deleteDailyWork(id);
+      setShowDeleteModal(false);
+      alert("✅Tugas harian berhasil dihapus");
     } catch (error) {
       console.log("error :", error);
     }
@@ -222,7 +231,9 @@ const TambahTugasRutin = () => {
                       <button
                         className="ml-2 text-red-600 hover:text-red-800 cursor-pointer"
                         onClick={() => {
-                          deleteTaskHandle(task.id, index);
+                          setShowDeleteModal(true);
+                          setSelectedDeleteTask(task);
+                          setSelectedDeleteTaskIndex(index);
                         }}
                       >
                         <RiDeleteBinFill size={32} />
@@ -269,7 +280,7 @@ const TambahTugasRutin = () => {
 
         {/* Simpan Button */}
         <div className="mt-6 text-right flex gap-2 justify-end">
-          {id && (
+          {id && !isEditMode && (
             <button
               onClick={() => setIsEditMode(!isEditMode)}
               className={`${
@@ -303,6 +314,13 @@ const TambahTugasRutin = () => {
           </button>
         </div>
       </div>
+      <DeleteModal
+        isOpen={showDeleteModal}
+        onCancel={() => setShowDeleteModal(false)}
+        onConfirm={() => {
+          deleteTaskHandle(selectedDeleteTask.id, selectedDeleteTaskIndex);
+        }}
+      />
     </div>
   );
 };
