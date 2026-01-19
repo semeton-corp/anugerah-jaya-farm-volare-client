@@ -40,7 +40,7 @@ const PresensiLokasi = () => {
 
   const detailPages = ["tambah-pegawai", "profile"];
   const isDetailPage = detailPages.some((segment) =>
-    location.pathname.includes(segment)
+    location.pathname.includes(segment),
   );
 
   const fetchTodayPresence = async () => {
@@ -51,8 +51,12 @@ const PresensiLokasi = () => {
         locationItem.roleId,
         locationItem.placeType,
         locationItem.placeId,
-        date
+        date,
       );
+      console.log("locationItem.roleId,: ", locationItem.roleId);
+      console.log("locationItem.placeType: ", locationItem.placeType);
+      console.log("locationItem.placeId: ", locationItem.placeId);
+      console.log("date: ", date);
 
       console.log("todayPresenceResponse: ", todayPresenceResponse);
 
@@ -71,7 +75,7 @@ const PresensiLokasi = () => {
         locationItem.placeType,
         locationItem.placeId,
         monthName,
-        year
+        year,
       );
       if (summaryResponse.status == 200) {
         setPresenceSummaries(summaryResponse.data.data);
@@ -148,10 +152,10 @@ const PresensiLokasi = () => {
                         row.status == "Alpha"
                           ? "bg-kritis-box-surface-color text-kritis-text-color"
                           : row.status == "Hadir"
-                          ? "bg-aman-box-surface-color text-aman-text-color"
-                          : row.status == "Sakit"
-                          ? "bg-orange-400 text-orange-900"
-                          : "bg-green-300 text-orange-8000"
+                            ? "bg-aman-box-surface-color text-aman-text-color"
+                            : row.status == "Sakit"
+                              ? "bg-orange-400 text-orange-900"
+                              : "bg-green-300 text-orange-8000"
                       }`}
                     >
                       {row.status}

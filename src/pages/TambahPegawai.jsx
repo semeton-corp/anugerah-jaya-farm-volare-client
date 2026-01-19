@@ -100,7 +100,7 @@ const TambahPegawai = () => {
         console.log("allLocations: ", allLocations);
         if (role !== "Owner") {
           const filteredLocations = allLocations.filter(
-            (item) => item.id === locationId
+            (item) => item.id === locationId,
           );
           setLocationOptions(filteredLocations);
         } else {
@@ -128,7 +128,7 @@ const TambahPegawai = () => {
         setSalary(userData.salary || 0);
         setSelectedSalaryInterval(userData.salaryInterval || "Harian");
         const placementIds = userData.placements.map((placement) =>
-          placement.placeId.toString()
+          placement.placeId.toString(),
         );
         setSelectedPic(placementIds || []);
         setPhotoProfile(userData.photoProfile);
@@ -247,7 +247,8 @@ const TambahPegawai = () => {
           setShowPopup(true);
         }
       } catch (error) {
-        var customMessage = "❌Terjadi kesalahan dalam membuat akun!";
+        var customMessage =
+          "❌Terjadi kesalahan dalam membuat akun! Coba username dan email lain.";
         if (error.response.data.message == "email already exists") {
           customMessage =
             "❌Email sudah terdaftar, coba gunakan alamat email lain!";
@@ -439,7 +440,7 @@ function ProfilPegawaiForm({
 }) {
   const { userId } = useParams();
   const [placeHolderLokasi, setPlaceHolderLokasi] = useState(
-    "Pilih site lokasi gudang"
+    "Pilih site lokasi gudang",
   );
   const [labelLokasi, setLabelLokasi] = useState("Lokasi Bekerja");
   const [isShowLocationIdField, setIsShowLocationIdField] = useState(true);
@@ -600,7 +601,7 @@ function ProfilPegawaiForm({
                           setSelectedPic((prev) => [...prev, e.target.value]);
                         } else {
                           setSelectedPic((prev) =>
-                            prev.filter((id) => id !== e.target.value)
+                            prev.filter((id) => id !== e.target.value),
                           );
                         }
                       }}
@@ -616,7 +617,7 @@ function ProfilPegawaiForm({
                 value={selectedPic}
                 onChange={(e) => {
                   const options = Array.from(e.target.selectedOptions).map(
-                    (opt) => opt.value
+                    (opt) => opt.value,
                   );
                   setSelectedPic(options);
                 }}

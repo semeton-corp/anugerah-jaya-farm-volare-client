@@ -25,7 +25,7 @@ const DetailPenyelesaianPekerjaan = () => {
   const [month, setMonth] = useState(new Date().getMonth());
   const [year, setYear] = useState(new Date().getFullYear());
   const [monthName, setMonthName] = useState(
-    new Intl.DateTimeFormat("id-ID", { month: "long" }).format(new Date())
+    new Intl.DateTimeFormat("id-ID", { month: "long" }).format(new Date()),
   );
 
   const [tugasTambahanData, setTugasTambahanData] = useState([]);
@@ -166,8 +166,8 @@ const DetailPenyelesaianPekerjaan = () => {
                           item.status == "Selesai"
                             ? "bg-aman-box-surface-color text-aman-text-color"
                             : item.status == "Terlambat"
-                            ? "bg-warning-box-surface-color text-warning-text-color"
-                            : "bg-kritis-box-surface-color text-kritis-text-color"
+                              ? "bg-warning-box-surface-color text-warning-text-color"
+                              : "bg-kritis-box-surface-color text-kritis-text-color"
                         }`}
                       >
                         {item.status}
@@ -225,7 +225,7 @@ const DetailPenyelesaianPekerjaan = () => {
           <table className="min-w-[600px] w-full text-sm">
             <thead>
               <tr className="bg-green-700 text-white text-left">
-                <th className="py-2 px-4 whitespace-nowrap">Tanggal Selesai</th>
+                <th className="py-2 px-4 whitespace-nowrap">Tanggal</th>
                 <th className="py-2 px-4 whitespace-nowrap">Waktu Selesai</th>
                 <th className="py-2 px-4 whitespace-nowrap">Nama Pekerjaan</th>
                 <th className="py-2 px-4 whitespace-nowrap">Keterangan</th>
@@ -241,9 +241,7 @@ const DetailPenyelesaianPekerjaan = () => {
               ) : (
                 dailyWorks.map((item, index) => (
                   <tr key={index} className="border-b">
-                    <td className="py-2 px-4 whitespace-nowrap">
-                      {item.finishedDate}
-                    </td>
+                    <td className="py-2 px-4 whitespace-nowrap">{item.date}</td>
                     <td className="py-2 px-4 whitespace-nowrap">
                       {item.finishedTime}
                     </td>
@@ -256,8 +254,8 @@ const DetailPenyelesaianPekerjaan = () => {
                           item.status == "Selesai"
                             ? "bg-aman-box-surface-color text-aman-text-color"
                             : item.status == "Terlambat"
-                            ? "bg-orange-200 text-warning-text-color"
-                            : "bg-kritis-box-surface-color text-kritis-text-color"
+                              ? "bg-orange-200 text-warning-text-color"
+                              : "bg-kritis-box-surface-color text-kritis-text-color"
                         }`}
                       >
                         {item.status}
