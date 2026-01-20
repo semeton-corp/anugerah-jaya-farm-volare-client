@@ -10,8 +10,11 @@ import { getWarehouses } from "../services/warehouses";
 import { getLocations } from "../services/location";
 import { MdStore } from "react-icons/md";
 
-const rupiahKg = (n) =>
-  `${Number(n || 0).toLocaleString("id-ID", { maximumFractionDigits: 0 })} Kg`;
+const formatKg = (n) =>
+  `${Number(n || 0).toLocaleString("id-ID", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  })} Kg`;
 
 export default function PembagianPakan() {
   const locationId = localStorage.getItem("locationId");
@@ -30,7 +33,7 @@ export default function PembagianPakan() {
 
   const [siteOptions, setSiteOptions] = useState([]);
   const [selectedSite, setSelectedSite] = useState(
-    userRole === "Owner" ? 0 : localStorage.getItem("locationId")
+    userRole === "Owner" ? 0 : localStorage.getItem("locationId"),
   );
 
   const canConfirmRow = (row) => {
@@ -74,7 +77,7 @@ export default function PembagianPakan() {
     try {
       const confirmResponse = await confirmationChickenCageFeed(
         payload,
-        selected.id
+        selected.id,
       );
       if (confirmResponse.status == 200) {
         closeModal();
@@ -83,7 +86,7 @@ export default function PembagianPakan() {
     } catch (error) {
       if (error.response.data.message == "warehouse item not found") {
         alert(
-          "❌ Gudang tidak memiliki barang yang diperlukan, silahkan hubungi penanggung jawab!"
+          "❌ Gudang tidak memiliki barang yang diperlukan, silahkan hubungi penanggung jawab!",
         );
         return;
       }
@@ -116,7 +119,7 @@ export default function PembagianPakan() {
 
         if (userRole !== "Owner") {
           filteredWarehouses = warehouses.filter(
-            (warehouse) => warehouse.location.id == locationId
+            (warehouse) => warehouse.location.id == locationId,
           );
         } else {
           filteredWarehouses = warehouses;
@@ -201,7 +204,7 @@ export default function PembagianPakan() {
                   {r.totalChicken.toLocaleString("id-ID")} Ekor
                 </td>
                 <td className="p-3">{r.feedType}</td>
-                <td className="p-3">{rupiahKg(r.totalFeed)}</td>
+                <td className="p-3">{formatKg(r.totalFeed)}</td>
                 <td className="p-3 text-sm sm:text-base whitespace-normal break-words">
                   {r.chickenCategory && (
                     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
@@ -289,7 +292,7 @@ export default function PembagianPakan() {
                 <div>
                   <p className="text-sm text-gray-600">Sisa Pakan</p>
                   <p className="font-semibold">
-                    {rupiahKg(confirmationData.remainingTotalFeed)}
+                    {formatKg(confirmationData.remainingTotalFeed)}
                   </p>
                 </div>
                 <div>
@@ -297,7 +300,7 @@ export default function PembagianPakan() {
                     Jumlah yang akan dibuat
                   </p>
                   <p className="font-semibold">
-                    {rupiahKg(confirmationData.totalFeed)}
+                    {formatKg(confirmationData.totalFeed)}
                   </p>
                 </div>
               </div>
@@ -367,13 +370,13 @@ export default function PembagianPakan() {
                                     prev.map((d, idx) =>
                                       idx === i
                                         ? { ...d, quantity: newValue }
-                                        : d
-                                    )
+                                        : d,
+                                    ),
                                   );
                                 }}
                               />
                             ) : (
-                              rupiahKg(f?.quantity)
+                              formatKg(f?.quantity)
                             )}
                           </td>
                         </tr>

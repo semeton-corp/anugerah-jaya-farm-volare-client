@@ -4,6 +4,12 @@ import { getCageFeed, updateCageFeed } from "../services/cages";
 import { getItems } from "../services/item";
 import { MdDelete } from "react-icons/md";
 
+const normalizeNumber = (value) => {
+  if (value === null || value === undefined) return NaN;
+  const normalized = value.toString().replace(",", ".");
+  return Number(normalized);
+};
+
 const EditFormulaPakan = () => {
   const navigate = useNavigate();
 
@@ -19,12 +25,12 @@ const EditFormulaPakan = () => {
 
   const selectedIds = useMemo(
     () => komposisi.map((k) => k.itemId).filter(Boolean),
-    [komposisi]
+    [komposisi],
   );
 
   const getAvailableItems = (currentId) =>
     (itemList || []).filter(
-      (item) => item.id === currentId || !selectedIds.includes(item.id)
+      (item) => item.id === currentId || !selectedIds.includes(item.id),
     );
 
   const handleChange = (index, field, value) => {
@@ -47,61 +53,73 @@ const EditFormulaPakan = () => {
     setKomposisi((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = async () => {
-    if (!feedType) {
-      alert("Pilih jenis pakan terlebih dahulu.");
+const handleSubmit = async () => {
+  if (!feedType) {
+    alert("Pilih jenis pakan terlebih dahulu.");
+    return;
+  }
+
+  const totalFeed = normalizeNumber(jumlahPakan);
+  if (jumlahPakan === "" || isNaN(totalFeed)) {
+    alert("Isi jumlah pakan dengan angka.");
+    return;
+  }
+
+  for (const row of komposisi) {
+    const pct = normalizeNumber(row.percentage);
+
+    if (!row.itemId) {
+      alert("Pilih item pakan untuk semua baris komposisi.");
       return;
     }
-    if (jumlahPakan === "" || isNaN(Number(jumlahPakan))) {
-      alert("Isi jumlah pakan dengan angka.");
+
+    if (row.percentage === "" || isNaN(pct)) {
+      alert("Isi persentase komposisi dengan angka.");
       return;
     }
-    for (const row of komposisi) {
-      if (!row.itemId) {
-        alert("Pilih item pakan untuk semua baris komposisi.");
-        return;
-      }
-      if (row.percentage === "" || isNaN(Number(row.percentage))) {
-        alert("Isi persentase komposisi dengan angka.");
-        return;
-      }
-    }
-    const totalPct = komposisi.reduce(
-      (sum, r) => sum + Number(r.percentage || 0),
-      0
-    );
-    if (totalPct !== 100) {
-      if (
-        !confirm(
-          `Total persentase saat ini ${totalPct}%. Lanjutkan tetap simpan?`
-        )
+  }
+
+  const totalPct = komposisi.reduce(
+    (sum, r) => sum + normalizeNumber(r.percentage || 0),
+    0
+  );
+
+  // Allow floating-point tolerance
+  if (Math.abs(totalPct - 100) > 0.0001) {
+    if (
+      !confirm(
+        `Total persentase saat ini ${totalPct.toFixed(
+          2
+        )}%. Lanjutkan tetap simpan?`
       )
-        return;
+    ) {
+      return;
     }
+  }
 
-    const payload = {
-      chickenCategory: cageData?.chickenCategory,
-      feedType,
-      totalFeed: Number(jumlahPakan || 0),
-      cageFeedDetails: komposisi.map((r) => ({
-        ...(r.id ? { id: r.id } : {}),
-        itemId: r.itemId,
-        percentage: Number(r.percentage || 0),
-      })),
-    };
-
-    console.log("payload: ", payload);
-    try {
-      const updateResponse = await updateCageFeed(payload, id);
-      console.log("updateResponse: ", updateResponse);
-      if (updateResponse.status == 200) {
-        navigate(-1, { state: { refetch: true } });
-      }
-    } catch (error) {
-      console.log("error :", error);
-    }
-    console.log("Submitted:", payload);
+  const payload = {
+    chickenCategory: cageData?.chickenCategory,
+    feedType,
+    totalFeed,
+    cageFeedDetails: komposisi.map((r) => ({
+      ...(r.id ? { id: r.id } : {}),
+      itemId: r.itemId,
+      percentage: normalizeNumber(r.percentage || 0),
+    })),
   };
+
+  console.log("payload:", payload);
+
+  try {
+    const updateResponse = await updateCageFeed(payload, id);
+    if (updateResponse.status === 200) {
+      navigate(-1, { state: { refetch: true } });
+    }
+  } catch (error) {
+    console.log("error:", error);
+  }
+};
+
 
   const fetchDetailData = async () => {
     try {
@@ -121,7 +139,7 @@ const EditFormulaPakan = () => {
               itemId: r.item.id ?? "",
               percentage:
                 r.percentage !== undefined ? Number(r.percentage) : "",
-            }))
+            })),
           );
         }
       }
@@ -148,11 +166,11 @@ const EditFormulaPakan = () => {
     console.log("type?.trim().toLowerCase(): ", type?.trim().toLowerCase());
     if (type?.trim().toLowerCase() == "pakan jadi") {
       selectedItem = items?.filter(
-        (item) => item.category?.trim().toLowerCase() === "pakan jadi"
+        (item) => item.category?.trim().toLowerCase() === "pakan jadi",
       );
     } else if (type?.trim().toLowerCase() === "pakan adukan") {
       selectedItem = items?.filter((item) =>
-        item.category?.trim().toLowerCase().includes("bahan baku adukan")
+        item.category?.trim().toLowerCase().includes("bahan baku adukan"),
       );
     }
     setItemList(selectedItem);
@@ -251,6 +269,7 @@ const EditFormulaPakan = () => {
                 <div className="flex items-center gap-2">
                   <input
                     type="number"
+                    step="0.01"
                     className="w-full border px-3 py-2 rounded"
                     value={k.percentage}
                     onChange={(e) =>

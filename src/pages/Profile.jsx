@@ -39,7 +39,6 @@ const Profile = ({ mode }) => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const photoProfile = localStorage.getItem("photoProfile");
   const userName = localStorage.getItem("userName");
   const userRole = localStorage.getItem("role");
   const userId = mode == "MyProfile" ? localStorage.getItem("userId") : id;
@@ -50,6 +49,9 @@ const Profile = ({ mode }) => {
   const [userSalaryInformation, setUserSalaryInformation] = useState([]);
   const [userWorkInformation, setUserWorkInformation] = useState([]);
   const [kpiPerformances, setKpiPerformances] = useState([]);
+  const [photoProfile, setPhotoProfile] = useState(
+    localStorage.getItem("photoProfile"),
+  );
 
   const [showDelete, setShowDelete] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -79,7 +81,7 @@ const Profile = ({ mode }) => {
     try {
       // console.log("monthName: ", monthName);
       const overviewResponse = await getOverviewUser(userId, year, monthName);
-      // console.log("overviewResponse: ", overviewResponse);
+      console.log("overviewResponse: ", overviewResponse);
       if (overviewResponse.status == 200) {
         const data = overviewResponse.data.data;
         setUserInformation(data.userInformation);
@@ -88,6 +90,8 @@ const Profile = ({ mode }) => {
         setUserWorkInformation(data.userWorkInformation);
         setKpiPerformances(data.kpiPerformances);
         setUserData(data.user);
+        // console.log("data.user.photoProfile: ", data.user.photoProfile);
+        setPhotoProfile(data.user.photoProfile);
         setUserPlacements(data.placements);
         console.log("data.placements: ", data.placements);
       }
