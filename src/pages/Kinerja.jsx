@@ -59,7 +59,7 @@ const Kinerja = () => {
 
   const [siteOptions, setSiteOptions] = useState([]);
   const [selectedSite, setSelectedSite] = useState(
-    userRole === "Owner" ? 0 : localStorage.getItem("locationId")
+    userRole === "Owner" ? 0 : localStorage.getItem("locationId"),
   );
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
 
@@ -68,7 +68,7 @@ const Kinerja = () => {
 
   const [chickenBarCharts, setChickenBarCharts] = useState([]);
   const [chickenPerformanceSummary, setChickenPerformanceSummary] = useState(
-    []
+    [],
   );
 
   const [
@@ -116,7 +116,7 @@ const Kinerja = () => {
   const detailPages = ["detail-kinerja-ayam"];
 
   const isDetailPage = detailPages.some((segment) =>
-    location.pathname.includes(segment)
+    location.pathname.includes(segment),
   );
   const navigate = useNavigate();
 
@@ -165,16 +165,16 @@ const Kinerja = () => {
       const performanceResponse = await getChickenAndCompanyPerformanceOverview(
         selectedSite === 0 ? undefined : selectedSite,
         selectedChickenCage === 0 ? undefined : selectedChickenCage,
-        year
+        year,
       );
       console.log("performanceResponse: ", performanceResponse);
       if (performanceResponse.status === 200) {
         setChickenBarCharts(performanceResponse.data.data.chickenBarCharts);
         setChickenPerformanceSummary(
-          performanceResponse.data.data.chickenPerformanceSummary
+          performanceResponse.data.data.chickenPerformanceSummary,
         );
         setIncomeAndExpensePerformanceBarCharts(
-          performanceResponse.data.data.incomeAndExpensePerformanceBarCharts
+          performanceResponse.data.data.incomeAndExpensePerformanceBarCharts,
         );
 
         setBepGoodEgg(performanceResponse.data.data.bepGoodEgg);
@@ -272,7 +272,9 @@ const Kinerja = () => {
                 </div>
                 <div className="flex items-center">
                   <p className="text-3xl font-semibold me-3">
-                    {chickenPerformanceSummary?.foodConsumption}
+                    {Number(
+                      chickenPerformanceSummary?.foodConsumption ?? 0,
+                    ).toFixed(3)}
                   </p>
                   <p className="text-xl font-semibold">Ton</p>
                 </div>
@@ -292,7 +294,7 @@ const Kinerja = () => {
                   <div className="flex items-center">
                     <p className="text-3xl font-semibold pe-2">
                       {Number(
-                        chickenPerformanceSummary?.foodConsumption
+                        chickenPerformanceSummary?.foodConsumption,
                       ).toFixed(2)}
                     </p>
                     <p className="text-xl font-semibold">%</p>
@@ -313,7 +315,7 @@ const Kinerja = () => {
                   <div className="flex items-center">
                     <p className="text-3xl font-semibold pe-2">
                       {Number(
-                        chickenPerformanceSummary?.averageEggWeight
+                        chickenPerformanceSummary?.averageEggWeight,
                       ).toFixed(2)}
                     </p>
                     <p className="text-xl font-semibold">gr</p>
@@ -335,7 +337,7 @@ const Kinerja = () => {
                     <div className="flex">
                       <p className="text-3xl font-semibold pe-2">
                         {Number(
-                          chickenPerformanceSummary?.averageFCR || 0
+                          chickenPerformanceSummary?.averageFCR || 0,
                         ).toFixed(2)}
                       </p>
                     </div>
@@ -356,7 +358,7 @@ const Kinerja = () => {
                 <div>
                   <p className="text-3xl font-semibold">
                     {Number(
-                      chickenPerformanceSummary?.averageMortalityRate
+                      chickenPerformanceSummary?.averageMortalityRate,
                     ).toFixed(2)}
                   </p>
                 </div>

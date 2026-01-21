@@ -29,13 +29,13 @@ const Gudang = () => {
   const userRole = localStorage.getItem("role");
 
   const [selectedSite] = useState(
-    userRole === "Owner" ? 0 : localStorage.getItem("locationId")
+    userRole === "Owner" ? 0 : localStorage.getItem("locationId"),
   );
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
 
   const notifications = useSelector((state) => state?.notifications);
   const pageNotifications = notifications.filter((item) =>
-    item.notificationContexts?.includes("Barang Gudang")
+    item.notificationContexts?.includes("Barang Gudang"),
   );
 
   const [warehouses, setWarehouses] = useState();
@@ -57,7 +57,7 @@ const Gudang = () => {
   const detailPages = ["edit-stok-telur", "edit-stok-barang"];
 
   const isDetailPage = detailPages.some((segment) =>
-    location.pathname.includes(segment)
+    location.pathname.includes(segment),
   );
 
   const editStokTelurHandle = (item) => {
@@ -125,7 +125,7 @@ const Gudang = () => {
     try {
       const overviewResponse = await getWarehousesOverview(
         selectedWarehouse,
-        selectedDate
+        selectedDate,
       );
       // console.log("selectedWarehouse: ", selectedWarehouse);
       console.log("overviewData: ", overviewResponse);
@@ -138,7 +138,7 @@ const Gudang = () => {
         setCornStocks(overviewResponse.data.data.cornStocks);
         console.log(
           "overviewResponse.data.data.cornStocks: ",
-          overviewResponse.data.data.cornStocks
+          overviewResponse.data.data.cornStocks,
         );
       }
     } catch (error) {
@@ -149,7 +149,7 @@ const Gudang = () => {
   const handleUpdateCornCapacity = async () => {
     if (newCornCapacity < currentCornStockKg) {
       alert(
-        `❌ Stok jagung saat ini (${currentCornStockKg} Kg) melebihi kapasitas baru (${newCornCapacity} Kg)!`
+        `❌ Stok jagung saat ini (${currentCornStockKg} Kg) melebihi kapasitas baru (${newCornCapacity} Kg)!`,
       );
       return;
     }
@@ -199,7 +199,7 @@ const Gudang = () => {
   useEffect(() => {
     const totalCornStockKg = cornStocks.reduce(
       (sum, item) => sum + item.quantity,
-      0
+      0,
     );
     setCurrentCornStockKg(totalCornStockKg);
   }, [cornStocks]);
@@ -227,7 +227,7 @@ const Gudang = () => {
                       setSelectedWarehouse(warehouseId);
 
                       const selected = warehouses?.find(
-                        (w) => w.id == warehouseId
+                        (w) => w.id == warehouseId,
                       );
                       if (selected) {
                         setCornCapacity(selected.cornCapacity);
@@ -385,7 +385,9 @@ const Gudang = () => {
                     <tr key={index} className="border-b text-center">
                       <td className="py-2 px-4">{item.item.name}</td>
                       <td className="py-2 px-4">{item.item.category}</td>
-                      <td className="py-2 px-4">{item.quantity}</td>
+                      <td className="py-2 px-4">
+                        {Number(item.quantity).toFixed(2)}
+                      </td>
                       <td className="py-2 px-4">{item.item.unit}</td>
                       <td className="py-2 px-4">{item.expiredAt}</td>
                       <td className="py-2 px-4">
@@ -431,46 +433,55 @@ const Gudang = () => {
                     <tr key={index} className="border-b text-center">
                       <td className="py-2 px-4">{item.item.name}</td>
                       <td className="py-2 px-4">{item.item.category}</td>
-                      <td className="py-2 px-4">{item.quantity}</td>
+                      <td className="py-2 px-4">
+                        {Number(item.quantity).toFixed(2)}
+                      </td>
                       <td className="py-2 px-4">{item.item.unit}</td>
                       <td className="py-2 px-4">
-                        {`${parseInt(item.estimationRunOut)} hari`}
+                        {Number.isNaN(parseInt(item.estimationRunOut))
+                          ? "-"
+                          : `${parseInt(item.estimationRunOut)} hari`}
                       </td>
                       <td className="py-2 px-4">
                         <div className="flex justify-center items-center relative group">
                           <span
                             className={`w-24 py-1 flex justify-center items-center rounded text-sm font-semibold ${
-                              item.description === "Aman"
-                                ? "bg-aman-box-surface-color text-aman-text-color"
-                                : "bg-kritis-box-surface-color text-kritis-text-color"
+                              Number.isNaN(parseInt(item.estimationRunOut))
+                                ? ""
+                                : item.description === "Aman"
+                                  ? "bg-aman-box-surface-color text-aman-text-color"
+                                  : "bg-kritis-box-surface-color text-kritis-text-color"
                             }`}
                           >
-                            {item.description}
+                            {Number.isNaN(parseInt(item.estimationRunOut))
+                              ? "-"
+                              : item.description}
                           </span>
 
-                          {item.description === "Kritis" && (
-                            <div
-                              className="
-                              absolute
-                              left-0
-                              top-1/2
-                              -translate-x-full
-                              -translate-y-1/2
-                              mr-2
-                              w-80
-                              bg-gray-800 text-white
-                              px-3 py-2 rounded-lg
-                              opacity-0 group-hover:opacity-100
-                              transition-opacity duration-200
-                              z-50
-                            "
-                            >
-                              <p>
-                                <strong>Kritis:</strong> Stok kemungkinan habis
-                                dalam waktu kurang dari 3 hari.
-                              </p>
-                            </div>
-                          )}
+                          {!Number.isNaN(parseInt(item.estimationRunOut)) &&
+                            item.description === "Kritis" && (
+                              <div
+                                className="
+                                absolute
+                                left-0
+                                top-1/2
+                                -translate-x-full
+                                -translate-y-1/2
+                                mr-2
+                                w-80
+                                bg-gray-800 text-white
+                                px-3 py-2 rounded-lg
+                                opacity-0 group-hover:opacity-100
+                                transition-opacity duration-200
+                                z-50
+                              "
+                              >
+                                <p>
+                                  <strong>Kritis:</strong> Stok kemungkinan
+                                  habis dalam waktu kurang dari 3 hari.
+                                </p>
+                              </div>
+                            )}
                         </div>
                       </td>
 

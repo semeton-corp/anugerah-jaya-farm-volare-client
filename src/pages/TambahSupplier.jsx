@@ -34,7 +34,7 @@ const TambahSupplier = () => {
       //   console.log("itemsResponse: ", itemsResponse);
       if (itemsResponse.status == 200) {
         setWarehouseItems(itemsResponse.data.data);
-        setSelectedItem(itemsResponse.data.data[0].id);
+        setSelectedItems([itemsResponse.data.data[0].id]);
       }
     } catch (error) {
       console.log("error :", error);
@@ -98,7 +98,7 @@ const TambahSupplier = () => {
           "PhoneNumber is not a valid phone number"
         ) {
           alert(
-            "❌ Nomor telepon tidak valid. Silakan masukkan nomor telepon yang benar. Contoh 08xxxxxxxx"
+            "❌ Nomor telepon tidak valid. Silakan masukkan nomor telepon yang benar. Contoh 08xxxxxxxx",
           );
         } else {
           alert("❌ Terjadi kesalahan saat menyimpan data.");
@@ -205,7 +205,7 @@ const TambahSupplier = () => {
                     type="button"
                     onClick={() => {
                       setSelectedItems(
-                        selectedItems.filter((_, i) => i !== index)
+                        selectedItems.filter((_, i) => i !== index),
                       );
                     }}
                     className="text-red-500 hover:text-red-300 cursor-pointer"
