@@ -9,6 +9,8 @@ import {
 } from "../services/chickenMonitorings";
 import { useEffect } from "react";
 import { Trash2 } from "lucide-react";
+import { useSelector } from "react-redux";
+import PageNotificationsCard from "../components/PageNotificationsCard";
 
 const DetailVaksinObat = () => {
   const { id } = useParams();
@@ -19,7 +21,7 @@ const DetailVaksinObat = () => {
   const detailPages = ["input-vaksin-&-obat"];
 
   const isDetailPage = detailPages.some((segment) =>
-    location.pathname.includes(segment)
+    location.pathname.includes(segment),
   );
 
   const [chickenCage, setChickenCage] = useState();
@@ -28,10 +30,16 @@ const DetailVaksinObat = () => {
   const [deleteItem, setDeleteItem] = useState();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
+  const notificationContexs = ["Vaksin Ayam"];
+  const notifications = useSelector((state) => state?.notifications);
+  const pageNotifications = notifications.filter((item) =>
+    item.notificationContexts.some((ctx) => notificationContexs.includes(ctx)),
+  );
+
   const inputHandle = () => {
     const newPath = location.pathname.replace(
       "detail-vaksin-&-obat",
-      "input-vaksin-&-obat"
+      "input-vaksin-&-obat",
     );
     navigate(newPath);
   };
@@ -43,7 +51,7 @@ const DetailVaksinObat = () => {
       if (detailResponse.status === 200) {
         setChickenCage(detailResponse.data.data.chickenCage);
         setChickenHealthMonitorings(
-          detailResponse.data.data.chickenHealthMonitorings
+          detailResponse.data.data.chickenHealthMonitorings,
         );
         console.log("detailResponse.data.data: ", detailResponse.data.data);
       }
@@ -55,7 +63,7 @@ const DetailVaksinObat = () => {
   const editHealthHandle = (monitoringId) => {
     const tempPath = location.pathname.replace(
       "detail-vaksin-&-obat",
-      "input-vaksin-&-obat"
+      "input-vaksin-&-obat",
     );
     const newPath = `${tempPath}/${monitoringId}`;
     navigate(newPath);
@@ -73,7 +81,7 @@ const DetailVaksinObat = () => {
     try {
       const deleteResponse = await deleteChickenHealthMonitoring(
         payload,
-        deleteItem.id
+        deleteItem.id,
       );
       if (deleteResponse.status == 204) {
         fetchDetailVaksinObat();
@@ -128,14 +136,22 @@ const DetailVaksinObat = () => {
       </div>
 
       {/* Alert */}
-      {chickenCage?.isNeedRoutineVaccine && (
+      {/* {chickenCage?.isNeedRoutineVaccine && (
         <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 text-yellow-800 flex items-start sm:items-center rounded text-sm sm:text-base">
           <AlertTriangle className="w-5 h-5 mr-2 flex-shrink-0" />
           <span>
             {`Lakukan vaksin ${chickenCage.chickenCategory}, umur ayam sudah mencapai ketentuan vaksin`}
           </span>
         </div>
-      )}
+      )} */}
+
+      {/* notification list */}
+      <div className="max-h-72 overflow-y-auto flex flex-col gap-3">
+        {pageNotifications &&
+          pageNotifications.map((item, index) => (
+            <PageNotificationsCard key={index} description={item.description} />
+          ))}
+      </div>
 
       {/* Riwayat Vaksin & Obat */}
       <div className="bg-white border border-black-6 rounded">

@@ -44,7 +44,7 @@ const Ayam = () => {
 
   const [siteOptions, setSiteOptions] = useState([]);
   const [selectedSite, setSelectedSite] = useState(
-    userRole === "Owner" ? 0 : localStorage.getItem("locationId")
+    userRole === "Owner" ? 0 : localStorage.getItem("locationId"),
   );
 
   const [chickenCageOptions, setChickenCageOptions] = useState([]);
@@ -64,7 +64,7 @@ const Ayam = () => {
   const detailPages = ["detail-ayam"];
 
   const isDetailPage = detailPages.some((segment) =>
-    location.pathname.includes(segment)
+    location.pathname.includes(segment),
   );
   const navigate = useNavigate();
 
@@ -109,7 +109,7 @@ const Ayam = () => {
         selectedSite,
         selectedChickenCage,
         graphFilter,
-        selectedYear
+        selectedYear,
       );
 
       console.log("overviewResponse: ", overviewResponse);
@@ -214,7 +214,11 @@ const Ayam = () => {
                 </div>
               </div>
               <p className="text-2xl sm:text-3xl font-semibold">
-                {chickenDetail?.totalLiveChicken ?? "-"}
+                {chickenDetail?.totalLiveChicken != null
+                  ? Number(chickenDetail.totalLiveChicken).toLocaleString(
+                      "id-ID",
+                    )
+                  : "-"}
               </p>
             </div>
 

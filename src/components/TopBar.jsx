@@ -79,6 +79,7 @@ export default function TopBar({ isMobileOpen, setIsMobileOpen }) {
       params.userIds = userId;
       params.notificationsContexs = notificationsContexs;
       params.isMarked = false;
+      console.log("params: ", params);
 
       // console.log("params: ", params);
       const notificationResponse = await getNotifications(params);

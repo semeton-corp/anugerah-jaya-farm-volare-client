@@ -1,7 +1,7 @@
 const roleNotificationContexts = {
   "Pekerja Telur": ["Monitoring Telur"],
-  "Pekerja Kandang": ["Monitoring Ayam"],
-  "Kepala Kandang": ["Monitoring Ayam", "Monitoring Telur"],
+  "Pekerja Kandang": ["Monitoring Ayam", "Vaksin Ayam"],
+  "Kepala Kandang": ["Monitoring Ayam", "Monitoring Telur", "Vaksin Ayam"],
   "Pekerja Toko": ["Penjualan Toko"],
   "Pekerja Gudang": ["Penjualan Gudang", "Barang Gudang"],
   Owner: [

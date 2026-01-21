@@ -13,6 +13,7 @@ import {
 } from "../utils/dateFormat";
 import { getChickenCage } from "../services/cages";
 import { getLocations } from "../services/location";
+import { useSelector } from "react-redux";
 
 const data = [
   { date: "29 Mar", produksi: 25, penjualan: 30 },
@@ -33,15 +34,17 @@ const VaksinObat = () => {
 
   const [siteOptions, setSiteOptions] = useState([]);
   const [selectedSite, setSelectedSite] = useState(
-    userRole === "Owner" ? 0 : localStorage.getItem("locationId")
+    userRole === "Owner" ? 0 : localStorage.getItem("locationId"),
   );
+
+
 
   const [detailAyamData, setDetailAyamState] = useState([]);
 
   const detailPages = ["detail-vaksin-&-obat", "input-vaksin-&-obat"];
 
   const isDetailPage = detailPages.some((segment) =>
-    location.pathname.includes(segment)
+    location.pathname.includes(segment),
   );
 
   async function editDataHandle(dataId) {
@@ -106,7 +109,7 @@ const VaksinObat = () => {
                 onChange={(e) => setSelectedSite(e.target.value)}
                 className="ml-2 bg-transparent text-base font-medium outline-none"
               >
-                <option value="">Semua Site</option>
+                <option value="">Semua Site</option>+
                 {siteOptions.map((site) => (
                   <option key={site.id} value={site.id}>
                     {site.name}
