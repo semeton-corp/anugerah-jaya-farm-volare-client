@@ -133,9 +133,25 @@ const Presensi = () => {
           const serverMessage = err?.response?.data?.message;
 
           let customMessage = "Terjadi kesalahan tak terduga" + err;
-          if (serverMessage === "can't presence start more than 17.00 PM") {
+          if (serverMessage === "can't presence start more than 16.00 PM") {
             customMessage =
-              "❌Tidak bisa melakukan presensi melebihi jam kerja 17.00 PM";
+              "❌Tidak bisa melakukan presensi melebihi jam kerja 16.00 PM";
+          }
+
+          if (
+            serverMessage ===
+            "presence time must be between 05.00 AM and 08.00 AM"
+          ) {
+            customMessage =
+              "❌Presensi hanya bisa dilakukan antara jam 05.00 AM hingga 08.00 AM";
+          }
+
+          if (
+            serverMessage ===
+            "presence time must be between 05.00 AM and 07.00 AM"
+          ) {
+            customMessage =
+              "❌Presensi hanya bisa dilakukan antara jam 05.00 AM hingga 07.00 AM";
           }
 
           if (serverMessage === "location is not within the allowed radius") {

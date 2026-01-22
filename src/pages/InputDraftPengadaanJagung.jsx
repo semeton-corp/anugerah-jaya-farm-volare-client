@@ -85,7 +85,7 @@ const InputDraftPengadaanJagung = () => {
   );
 
   const [basePrice, setBasePrice] = useState(
-    computeDefaultBasePrice(formData.moistureLevel)
+    computeDefaultBasePrice(formData.moistureLevel),
   );
   const [basePriceEdited, setBasePriceEdited] = useState(false);
 
@@ -102,7 +102,7 @@ const InputDraftPengadaanJagung = () => {
     discountData.find(
       (d) =>
         parseFloat(formData.moistureLevel) > d.range[0] &&
-        parseFloat(formData.moistureLevel) <= d.range[1]
+        parseFloat(formData.moistureLevel) <= d.range[1],
     )?.discount || 0;
 
   const discountedPricePerKg = basePrice - (basePrice * discountRate) / 100;
@@ -143,7 +143,7 @@ const InputDraftPengadaanJagung = () => {
 
     if (isQuantityOverMax) {
       alert(
-        "❌ Jumlah barang yang anda masukkan melebihi jumlah maksimum pesan!"
+        "❌ Jumlah barang yang anda masukkan melebihi jumlah maksimum pesan!",
       );
       return;
     }
@@ -172,7 +172,7 @@ const InputDraftPengadaanJagung = () => {
       try {
         const updateResponse = await updateWarehouseItemCornProcurementDraft(
           payload,
-          id
+          id,
         );
         if (updateResponse.status == 200) {
           navigate(-1, { state: { refetch: true } });
@@ -183,9 +183,8 @@ const InputDraftPengadaanJagung = () => {
       }
     } else {
       try {
-        const createResponse = await createWarehouseItemCornProcurementDraft(
-          payload
-        );
+        const createResponse =
+          await createWarehouseItemCornProcurementDraft(payload);
         if (createResponse.status == 201) {
           navigate(-1, { state: { refetch: true } });
         }
@@ -211,7 +210,7 @@ const InputDraftPengadaanJagung = () => {
         let filteredWarehouse;
         if (userRole != "Owner") {
           filteredWarehouse = warehouses.filter(
-            (item) => item.location.id == locationId
+            (item) => item.location.id == locationId,
           );
         } else {
           filteredWarehouse = warehouses;
@@ -230,7 +229,7 @@ const InputDraftPengadaanJagung = () => {
       if (supplierResponse.status === 200) {
         const allSupplier = supplierResponse.data.data;
         const filteredSupplier = allSupplier.filter((item) =>
-          item.itemIds.some((id) => jagungItemIds.includes(id))
+          item.itemIds.some((id) => jagungItemIds.includes(id)),
         );
         setsupplierOptions(filteredSupplier);
       }
@@ -243,7 +242,7 @@ const InputDraftPengadaanJagung = () => {
     try {
       if (!selectedWarehouse?.id) return;
       const cornResponse = await getCornWarehouseItemSummary(
-        selectedWarehouse.id
+        selectedWarehouse.id,
       );
       if (cornResponse.status === 200) {
         setCurrentCornStock(cornResponse.data.data);
@@ -302,6 +301,12 @@ const InputDraftPengadaanJagung = () => {
     } catch (error) {
       console.log("error :", error);
     }
+  };
+
+  const tambahSupplierHandle = () => {
+    const basePath = location.pathname.split("pengadaan-jagung")[0];
+    const newPath = `${basePath}daftar-suplier/tambah-supplier`;
+    navigate(newPath);
   };
 
   useEffect(() => {
@@ -601,12 +606,18 @@ const InputDraftPengadaanJagung = () => {
           </div>
         </div>
 
-        <div>
+        <div className="flex gap-6">
+          <div
+            onClick={tambahSupplierHandle}
+            className="flex items-center justify-center sm:justify-start rounded-lg px-4 py-2 bg-orange-300 hover:bg-orange-500 cursor-pointer w-full sm:w-auto transition-all duration-200"
+          >
+            <span className="text-base font-medium">+ Tambah Supplier</span>
+          </div>
           <button
             type="button"
             onClick={() => {
               const selectedSupplier = supplierOptions.find(
-                (item) => item.id == formData.supplier
+                (item) => item.id == formData.supplier,
               );
               const localNumber = selectedSupplier?.phoneNumber;
               const waNumber = localNumber.replace(/^0/, "62");

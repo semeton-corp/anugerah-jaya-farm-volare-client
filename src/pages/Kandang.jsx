@@ -25,7 +25,7 @@ const Kandang = () => {
         console.log("allKandang: ", allKandang);
         if (userRole !== "Owner") {
           filteredKandang = allKandang.filter(
-            (item) => item.cage.location.id === locationId
+            (item) => item.cage.location.id === locationId,
           );
         }
 
@@ -64,8 +64,9 @@ const Kandang = () => {
                 <th className="py-2 px-4">Kandang</th>
                 <th className="py-2 px-4">ID Batch</th>
                 <th className="py-2 px-4">Kategori</th>
-                <th className="py-2 px-4">Usia (minggu)</th>
-                <th className="py-2 px-4">Kapasitas Maksimum (Ekor)</th>
+                <th className="py-2 px-4">Usia</th>
+                <th className="py-2 px-4">Jumlah Ayam Hidup</th>
+                <th className="py-2 px-4">Kapasitas Maksimum </th>
                 <th className="py-2 px-4">PIC Ayam</th>
                 <th className="py-2 px-4">PIC Telur</th>
               </tr>
@@ -76,8 +77,9 @@ const Kandang = () => {
                   <td className="py-2 px-4">{row?.cage?.name}</td>
                   <td className="py-2 px-4">{row.batchId}</td>
                   <td className="py-2 px-4">{row.cage.chickenCategory}</td>
-                  <td className="py-2 px-4">{row.cage.chickenAge}</td>
-                  <td className="py-2 px-4">{row.cage.capacity}</td>
+                  <td className="py-2 px-4">{`${row.chickenAge} minggu`}</td>
+                  <td className="py-2 px-4">{`${row.totalChicken} ekor`}</td>
+                  <td className="py-2 px-4">{`${row.cage.capacity} ekor`}</td>
                   <td className="py-2 px-4">{row.chickenPic}</td>
                   <td className="py-2 px-4">{row.eggPic}</td>
                 </tr>

@@ -23,6 +23,18 @@ import { useSelector } from "react-redux";
 import PageNotificationsSection from "../components/PageNotificationsSection";
 import { formatThousand } from "../utils/moneyFormat";
 
+const isExpired = (expiredAt) => {
+  if (!expiredAt) return null;
+
+  const [day, month, year] = expiredAt.split("-");
+  const expiredDate = new Date(year, month - 1, day);
+  const today = new Date();
+
+  today.setHours(0, 0, 0, 0);
+
+  return expiredDate < today;
+};
+
 const Gudang = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -376,6 +388,7 @@ const Gudang = () => {
                     <th className="py-2 px-4">Jumlah</th>
                     <th className="py-2 px-4">Satuan</th>
                     <th className="py-2 px-4">Kadaluarsa</th>
+                    <th className="py-2 px-4">Status</th>
                     {/* <th className="py-2 px-4">Keterangan</th> */}
                     <th className="py-2 px-4">Aksi</th>
                   </tr>
@@ -390,6 +403,19 @@ const Gudang = () => {
                       </td>
                       <td className="py-2 px-4">{item.item.unit}</td>
                       <td className="py-2 px-4">{item.expiredAt}</td>
+                      <td className="py-2 px-4 text-center">
+                        {isExpired(item.expiredAt) === null ? (
+                          "-"
+                        ) : isExpired(item.expiredAt) ? (
+                          <span className="px-3 py-1 rounded text-sm font-semibold bg-kritis-box-surface-color text-kritis-text-color">
+                            Kadaluarsa
+                          </span>
+                        ) : (
+                          <span className="px-3 py-1 rounded text-sm font-semibold bg-aman-box-surface-color text-aman-text-color">
+                            Aman
+                          </span>
+                        )}
+                      </td>
                       <td className="py-2 px-4">
                         <div className="flex justify-center gap-4">
                           <span

@@ -93,16 +93,16 @@ const Penjualan = () => {
 
   const [siteOptions, setSiteOptions] = useState([]);
   const [selectedSite, setSelectedSite] = useState(
-    userRole === "Owner" ? 0 : localStorage.getItem("locationId")
+    userRole === "Owner" ? 0 : localStorage.getItem("locationId"),
   );
 
   const [itemOptions, setItemOptions] = useState([]);
   const [selectedItem, setSelectedItem] = useState(
-    userRole === "Owner" ? 0 : localStorage.getItem("locationId")
+    userRole === "Owner" ? 0 : localStorage.getItem("locationId"),
   );
 
   const isDetailPage = detailPages.some((segment) =>
-    location.pathname.includes(segment)
+    location.pathname.includes(segment),
   );
   const navigate = useNavigate();
 
@@ -129,7 +129,7 @@ const Penjualan = () => {
       const res = await getItems("Telur");
       if (res.status === 200) {
         const filteredData = res.data.data.filter(
-          (item) => item.name != "Telur Reject"
+          (item) => item.name != "Telur Reject",
         );
         setItemOptions(filteredData);
         setSelectedItem(res.data.data[0].id);
@@ -140,12 +140,14 @@ const Penjualan = () => {
   };
 
   const fetchSaleOverview = async () => {
+    const locationId = selectedSite ? selectedSite : undefined;
+    console.log("locationId: ", locationId);
     try {
       const saleResponse = await getCashflowSaleOverview(
-        selectedSite,
+        locationId,
         monthName,
         year,
-        selectedItem
+        selectedItem,
       );
       console.log("saleResponse: ", saleResponse);
       if (saleResponse.status === 200) {
@@ -450,14 +452,14 @@ const Penjualan = () => {
                         ticks={generateTicks(
                           Math.min(
                             ...cashflowSaleGraph.map((d) =>
-                              Math.min(d.income, d.expense, d.profit)
-                            )
+                              Math.min(d.income, d.expense, d.profit),
+                            ),
                           ),
                           Math.max(
                             ...cashflowSaleGraph.map((d) =>
-                              Math.max(d.income, d.expense, d.profit)
-                            )
-                          )
+                              Math.max(d.income, d.expense, d.profit),
+                            ),
+                          ),
                         )}
                         tick={{ fontSize: 12 }}
                         tickFormatter={(value) =>
