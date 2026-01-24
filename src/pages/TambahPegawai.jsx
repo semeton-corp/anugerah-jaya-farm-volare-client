@@ -103,8 +103,10 @@ const TambahPegawai = () => {
             (item) => item.id === locationId,
           );
           setLocationOptions(filteredLocations);
+          setLocationId(filteredLocations[0]?.id || "");
         } else {
           setLocationOptions(allLocations);
+          setLocationId(allLocations[0]?.id || "");
         }
       }
     } catch (error) {
@@ -410,6 +412,27 @@ const TambahPegawai = () => {
           </div>
         </div>
       )}
+      <div
+        onClick={() => {
+          const payload = {
+            email: email,
+            name: name,
+            username: username,
+            password: username,
+            roleId: parseInt(selectedRole),
+            locationId: parseInt(locationId),
+            placementIds: selectedPic.map((id) => parseInt(id)),
+            address: address,
+            phoneNumber: phone,
+            salary: salary,
+            photoProfile: photoProfile,
+            salaryInterval: selectedSalaryInterval,
+          };
+          console.log("payload: ", payload);
+        }}
+      >
+        check
+      </div>
     </div>
   );
 };
@@ -569,7 +592,6 @@ function ProfilPegawaiForm({
               className="border rounded p-3 w-full focus:outline-none focus:ring"
               required
             >
-              <option value="">{placeHolderLokasi}</option>
               {locationOptions.map((lokasi, idx) => (
                 <option key={idx} value={lokasi.id}>
                   {lokasi.name}

@@ -118,6 +118,7 @@ export default function PembagianPakan() {
         let filteredWarehouses;
 
         if (userRole !== "Owner") {
+
           filteredWarehouses = warehouses.filter(
             (warehouse) => warehouse.location.id == locationId,
           );
