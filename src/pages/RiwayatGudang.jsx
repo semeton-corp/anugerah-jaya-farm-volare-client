@@ -29,7 +29,7 @@ const RiwayatGudang = () => {
 
   const detailPages = ["detail-riwayat-gudang"];
   const isDetailPage = detailPages.some((segment) =>
-    location.pathname.includes(segment)
+    location.pathname.includes(segment),
   );
 
   const dateInputRef = useRef(null);
@@ -121,7 +121,9 @@ const RiwayatGudang = () => {
               <tr>
                 <th className="py-2 px-4 whitespace-nowrap">Waktu</th>
                 <th className="py-2 px-4 whitespace-nowrap">Nama Barang</th>
-                <th className="py-2 px-4 whitespace-nowrap">Kuantitas</th>
+                <th className="py-2 px-4 whitespace-nowrap">
+                  Perubahan Kuantitas
+                </th>
                 <th className="py-2 px-4 whitespace-nowrap">Asal Barang</th>
                 <th className="py-2 px-4 whitespace-nowrap">Tujuan</th>
                 <th className="py-2 px-4 whitespace-nowrap">Keterangan</th>
@@ -144,7 +146,11 @@ const RiwayatGudang = () => {
                   >
                     <td className="py-2 px-4">{data.time}</td>
                     <td className="py-2 px-4">{data.itemName ?? "-"}</td>
-                    <td className="py-2 px-4">{data.quantity}</td>
+                    <td className="py-2 px-4">
+                      {data.status == "Barang Masuk"
+                        ? `+${data.quantity} `
+                        : data.quantity}
+                    </td>
                     <td className="py-2 px-4">{data.source}</td>
                     <td className="py-2 px-4">{data.destination}</td>
                     <td className="py-2 px-2 sm:px-4 text-center">
@@ -153,10 +159,10 @@ const RiwayatGudang = () => {
                           data.status === "Barang Masuk"
                             ? "bg-aman-box-surface-color text-aman-text-color"
                             : data.status === "Pending"
-                            ? "bg-green-200 text-green-900"
-                            : data.status === "Stok Diperbarui"
-                            ? "bg-orange-200 text-orange-900"
-                            : "bg-kritis-box-surface-color text-kritis-text-color"
+                              ? "bg-green-200 text-green-900"
+                              : data.status === "Stok Diperbarui"
+                                ? "bg-orange-200 text-orange-900"
+                                : "bg-kritis-box-surface-color text-kritis-text-color"
                         }`}
                       >
                         {data.status}

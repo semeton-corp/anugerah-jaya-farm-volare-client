@@ -17,7 +17,7 @@ const InputTelur = () => {
   const userName = localStorage.getItem("userName");
 
   const [locationId, setLocationId] = useState(
-    localStorage.getItem("locationId")
+    localStorage.getItem("locationId"),
   );
 
   const [chickenCages, setChickenCages] = useState([]);
@@ -44,7 +44,7 @@ const InputTelur = () => {
   const filteredWarehouses = useMemo(() => {
     return warehouses.filter(
       (warehouse) =>
-        warehouse.location.id === selectedChickenCage?.cage?.location?.id
+        warehouse.location.id === selectedChickenCage?.cage?.location?.id,
     );
   }, [warehouses, selectedChickenCage]);
 
@@ -74,7 +74,7 @@ const InputTelur = () => {
 
         if (userRole != "Owner" && userRole != "Kepala Kandang") {
           const filterCage = dataChickenCage.filter(
-            (cage) => cage.eggPic == userName
+            (cage) => cage.eggPic == userName,
           );
           setChickenCages(filterCage);
           setSelectedChickenCage(filterCage[0]);
@@ -99,11 +99,11 @@ const InputTelur = () => {
 
           if (updateResponse.status == 200) {
             const selectedCage = dataChickenCage.find(
-              (cage) => cage.cage.id === data.chickenCage.cage.id
+              (cage) => cage.cage.id === data.chickenCage.cage.id,
             );
 
             const selectedWarehouse = dataWarehouse.find(
-              (warehouse) => warehouse.id === data.warehouse.id
+              (warehouse) => warehouse.id === data.warehouse.id,
             );
             // console.log("dataChickenCage: ", dataChickenCage);
             // console.log("selectedWarehouse: ", selectedWarehouse);
@@ -126,7 +126,7 @@ const InputTelur = () => {
       } catch (error) {
         if (error.data.message == "egg monitoring already exists for today") {
           alert(
-            "❌Monitoring telur untuk hari ini sudah dilakukan untuk kandang ini!"
+            "❌Monitoring telur untuk hari ini sudah dilakukan untuk kandang ini!",
           );
         } else {
           console.log("error: ", error);
@@ -149,10 +149,10 @@ const InputTelur = () => {
       warehouseId: selectedWarehouse.id,
       totalKarpetGoodEgg: parseInt(totalKarpetGoodEgg),
       totalRemainingGoodEgg: parseInt(totalRemainingGoodEgg),
-      totalWeightGoodEgg: parseInt(totalWeightGoodEgg),
+      totalWeightGoodEgg: Number(totalWeightGoodEgg),
       totalKarpetCrackedEgg: parseInt(totalKarpetCrackedEgg),
       totalRemainingCrackedEgg: parseInt(totalRemainingCrackedEgg),
-      totalWeightCrackedEgg: parseInt(totalWeightCrackedEgg),
+      totalWeightCrackedEgg: Number(totalWeightCrackedEgg),
       totalKarpetRejectEgg: parseInt(totalKarpetRejectEgg),
       totalRemainingRejectEgg: parseInt(totalRemainingRejectEgg),
     };
@@ -177,7 +177,7 @@ const InputTelur = () => {
       } catch (error) {
         if (error.data.message == "egg monitoring already exists for today") {
           alert(
-            "❌Monitoring telur untuk hari ini sudah dilakukan untuk kandang ini!"
+            "❌Monitoring telur untuk hari ini sudah dilakukan untuk kandang ini!",
           );
         } else {
           console.error("Gagal mengirim data telur:", error);

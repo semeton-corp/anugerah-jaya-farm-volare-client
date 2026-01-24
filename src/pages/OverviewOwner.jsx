@@ -45,7 +45,7 @@ const OverviewOwner = () => {
   const [chickenSummary, setChickenSummary] = useState([]);
   const [eggSummary, setEggSummary] = useState([]);
   const [productionAndSaleEggGraphs, setProductionAndSaleEggGraphs] = useState(
-    []
+    [],
   );
   const [saleSummary, setSaleSummary] = useState([]);
   const [storeItemSummary, setStoreItemSummary] = useState([]);
@@ -59,7 +59,7 @@ const OverviewOwner = () => {
   ];
 
   const isDetailPage = detailPages.some((segment) =>
-    location.pathname.includes(segment)
+    location.pathname.includes(segment),
   );
 
   const fetchOverviewData = async () => {
@@ -83,7 +83,7 @@ const OverviewOwner = () => {
   const handleTotalAyamDetail = () => {
     const newPath = location.pathname.replace(
       "ringkasan",
-      "ayam/ringkasan-ayam"
+      "ayam/ringkasan-ayam",
     );
     navigate(newPath);
   };
@@ -91,7 +91,7 @@ const OverviewOwner = () => {
   const handleStokGudangDetail = () => {
     const newPath = location.pathname.replace(
       "ringkasan",
-      "gudang/stok-gudang"
+      "gudang/stok-gudang",
     );
     navigate(newPath);
   };
@@ -99,7 +99,7 @@ const OverviewOwner = () => {
   const handleStokTokoDetail = () => {
     const newPath = location.pathname.replace(
       "ringkasan",
-      "toko/overview-toko"
+      "toko/overview-toko",
     );
     navigate(newPath);
   };
@@ -131,27 +131,33 @@ const OverviewOwner = () => {
           <div className="flex justify-center flex-wrap gap-4">
             <div className="flex flex-col items-center justify-center w-32 py-4 bg-green-200 rounded-md">
               <p className="text-3xl font-bold text-center">
-                {eggSummary?.totalGoodEggProductionInIkat}
+                {Number(
+                  eggSummary?.totalGoodEggProductionInIkat,
+                ).toLocaleString("id-ID")}
               </p>
               <p className="text-xl text-center">Ikat</p>
             </div>
             <div className="flex flex-col items-center justify-center w-32 py-4 bg-green-200 rounded-md">
               <p className="text-3xl font-bold text-center">
-                {eggSummary?.totalGoodEggProductionInKarpet}
+                {Number(
+                  eggSummary?.totalGoodEggProductionInKarpet,
+                ).toLocaleString("id-ID")}
               </p>
               <p className="text-xl text-center">Karpet</p>
             </div>
             <div className="flex flex-col items-center justify-center w-32 py-4 bg-green-200 rounded-md">
               <p className="text-3xl font-bold text-center">
-                {" "}
-                {eggSummary?.totalGoodEggProductionInKg}
+                {Number(eggSummary?.totalGoodEggProductionInKg).toLocaleString(
+                  "id-ID",
+                )}
               </p>
               <p className="text-xl text-center">Kg</p>
             </div>
             <div className="flex flex-col items-center justify-center w-32 py-4 bg-green-200 rounded-md">
               <p className="text-3xl font-bold text-center">
-                {" "}
-                {eggSummary?.totalGoodEggProductionInButir}
+                {Number(
+                  eggSummary?.totalGoodEggProductionInButir,
+                ).toLocaleString("id-ID")}
               </p>
               <p className="text-xl text-center">Butir</p>
             </div>

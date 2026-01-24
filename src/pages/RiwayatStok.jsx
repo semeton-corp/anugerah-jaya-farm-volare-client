@@ -34,7 +34,7 @@ const RiwayatStok = () => {
 
   const detailPages = ["detail-riwayat-stok"];
   const isDetailPage = detailPages.some((segment) =>
-    location.pathname.includes(segment)
+    location.pathname.includes(segment),
   );
 
   const detailRiwayatHandle = (id) => {
@@ -112,7 +112,7 @@ const RiwayatStok = () => {
               <tr>
                 <th className="py-2 px-4">Waktu</th>
                 <th className="py-2 px-4">Nama barang</th>
-                <th className="py-2 px-4">Kuantitas</th>
+                <th className="py-2 px-4">Perubahan Kuantitas</th>
                 <th className="py-2 px-4">Pembeli</th>
                 <th className="py-2 px-4">Tempat pemesanan</th>
                 <th className="py-2 px-4">Keterangan</th>
@@ -128,7 +128,11 @@ const RiwayatStok = () => {
                 >
                   <td className="py-2 px-4">{item.time}</td>
                   <td className="py-2 px-4">{item.itemName}</td>
-                  <td className="py-2 px-4">{item.quantity}</td>
+                  <td className="py-2 px-4">
+                    {item.status == "Barang Masuk"
+                      ? `+${item.quantity} `
+                      : item.quantity}
+                  </td>
                   <td className="py-2 px-4">{item.destination}</td>
                   <td className="py-2 px-4">{item.source ?? "-"}</td>
                   <td className="py-2 px-2 sm:px-4 text-center">
@@ -137,10 +141,10 @@ const RiwayatStok = () => {
                         item.status === "Barang Masuk"
                           ? "bg-aman-box-surface-color text-aman-text-color"
                           : item.status === "Pending"
-                          ? "bg-green-200 text-green-900"
-                          : item.status === "Stok Diperbarui"
-                          ? "bg-orange-200 text-orange-900"
-                          : "bg-kritis-box-surface-color text-kritis-text-color"
+                            ? "bg-green-200 text-green-900"
+                            : item.status === "Stok Diperbarui"
+                              ? "bg-orange-200 text-orange-900"
+                              : "bg-kritis-box-surface-color text-kritis-text-color"
                       }`}
                     >
                       {item.status}

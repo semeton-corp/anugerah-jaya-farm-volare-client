@@ -39,6 +39,7 @@ import YearSelector from "../components/YearSelector";
 const Ayam = () => {
   const location = useLocation();
   const userRole = localStorage.getItem("role");
+  const userName = localStorage.getItem("userName");
 
   const [year, setYear] = useState(new Date().getFullYear());
 
@@ -89,8 +90,16 @@ const Ayam = () => {
   const fetchChickenCages = async () => {
     try {
       const cageResponse = await getChickenCage(selectedSite);
+      console.log("cageResponse: ", cageResponse);
       if (cageResponse.status === 200) {
         setChickenCageOptions(cageResponse.data.data);
+        if (userRole == "Pekerja Kandang") {
+          const defaultCage = cageResponse.data.data.find(
+            (cage) => cage.chickenPic == userName,
+          );
+          console.log("defaultCage: ", defaultCage);
+          setSelectedChickenCage(defaultCage.cage.id);
+        }
       }
     } catch (err) {
       console.error("Failed to fetch sites", err);

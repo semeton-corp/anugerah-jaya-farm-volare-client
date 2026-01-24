@@ -65,6 +65,11 @@ const Gudang = () => {
   const [eggStocks, setEggStocks] = useState();
   const [cornStocks, setCornStocks] = useState([]);
   const [equipmentStocks, setEquipmentStocks] = useState();
+  console.log("cornStocks: ", cornStocks);
+  const totalCornStockKg = cornStocks.reduce(
+    (total, item) => total + Number(item.quantity || 0),
+    0,
+  );
 
   const detailPages = ["edit-stok-telur", "edit-stok-barang"];
 
@@ -432,6 +437,16 @@ const Gudang = () => {
                     </tr>
                   ))}
                 </tbody>
+              </table>
+
+              <table className="w-full text-xs sm:text-sm">
+                <thead>
+                  <tr>
+                    <th className="py-2 px-4 text-left">
+                      Total Stok Jagung: {`${totalCornStockKg.toFixed(2)} Kg`}
+                    </th>
+                  </tr>
+                </thead>
               </table>
             </div>
           </div>
