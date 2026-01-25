@@ -6,6 +6,7 @@ import { getChickenCage } from "../services/cages";
 
 const Kandang = () => {
   const userRole = localStorage.getItem("role");
+  const userName = localStorage.getItem("userName");
 
   const [kandangData, setKandangData] = useState([]);
 
@@ -23,9 +24,13 @@ const Kandang = () => {
         let filteredKandang = allKandang;
 
         console.log("allKandang: ", allKandang);
-        if (userRole !== "Owner") {
+        if (userRole == "Kepala Kandang") {
           filteredKandang = allKandang.filter(
             (item) => item.cage.location.id === locationId,
+          );
+        } else if (userRole == "Pekerja Kandang") {
+          filteredKandang = allKandang.filter(
+            (item) => item.chickenPic === userName,
           );
         }
 

@@ -357,7 +357,12 @@ const Ayam = () => {
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="age" />
                     <YAxis />
-                    <Tooltip />
+                    <Tooltip
+                      formatter={(value) => [
+                        `${Number(value).toLocaleString("id-ID")} Ekor`,
+                        "Jumlah",
+                      ]}
+                    />
                     <Bar dataKey="value" fill="#4b9ea5" barSize={30} />
                   </BarChart>
                 </ResponsiveContainer>

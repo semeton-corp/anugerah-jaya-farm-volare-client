@@ -28,6 +28,8 @@ const data = [
 const VaksinObat = () => {
   const userRole = localStorage.getItem("role");
   const userName = localStorage.getItem("userName");
+  const locationId = localStorage.getItem("locationId");
+  console.log("locationId: ", locationId);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -36,8 +38,6 @@ const VaksinObat = () => {
   const [selectedSite, setSelectedSite] = useState(
     userRole === "Owner" ? 0 : localStorage.getItem("locationId"),
   );
-
-
 
   const [detailAyamData, setDetailAyamState] = useState([]);
 
@@ -59,7 +59,24 @@ const VaksinObat = () => {
 
       if (response.status === 200) {
         console.log("response.data.data: ", response.data.data);
-        setDetailAyamState(response.data.data);
+        if (userRole == "Pekerja Kandang") {
+          const allCages = response.data.data;
+          const filteredCages = allCages.filter(
+            (cage) => cage.chickenPic == userName,
+          );
+          setDetailAyamState(filteredCages);
+        } else if (userRole == "Kepala Kandang") {
+          const allCages = response.data.data;
+          console.log("allCages: ", allCages);
+          const filteredCages = allCages.filter(
+            (cage) => cage.cage.location.id == locationId,
+          );
+          console.log("filteredCages: ", filteredCages);
+          setDetailAyamState(filteredCages);
+        } else {
+          setDetailAyamState(response.data.data);
+        }
+
         // console.log("DetailAyamData: ", response.data.data);
       }
     } catch (error) {

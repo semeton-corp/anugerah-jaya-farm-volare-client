@@ -368,15 +368,18 @@ const Penjualan = () => {
               </div>
               <div className="flex justify-center flex-wrap gap-4">
                 <div className="flex flex-col items-center justify-center w-32 py-4 bg-green-200 rounded-md">
-                  <p className="text-3xl font-bold text-center">
-                    {eggSaleSummary.totalGoodEggInIkat}
+                  <p className="text-lg sm:text-xl font-bold text-center">
+                    {Number(eggSaleSummary.totalGoodEggInIkat).toLocaleString(
+                      "id-ID",
+                    )}
                   </p>
                   <p className="text-xl text-center">Ikat</p>
                 </div>
                 <div className="flex flex-col items-center justify-center w-32 py-4 bg-green-200 rounded-md">
-                  <p className="text-3xl font-bold text-center">
-                    {" "}
-                    {eggSaleSummary.totalGoodEggInKg}
+                  <p className="text-lg sm:text-xl font-bold text-center">
+                    {Number(eggSaleSummary.totalGoodEggInKg).toLocaleString(
+                      "id-ID",
+                    )}
                   </p>
                   <p className="text-xl text-center">Kg</p>
                 </div>
@@ -392,14 +395,18 @@ const Penjualan = () => {
               </div>
               <div className="flex justify-center flex-wrap gap-4">
                 <div className="flex flex-col items-center justify-center w-32 py-4 bg-green-200 rounded-md">
-                  <p className="text-3xl font-bold text-center">
-                    {eggSaleSummary.totalCrackedEggInIkat}
+                  <p className="text-lg sm:text-xl font-bold text-center">
+                    {Number(
+                      eggSaleSummary.totalCrackedEggInIkat,
+                    ).toLocaleString("id-ID")}
                   </p>
                   <p className="text-xl text-center">Ikat</p>
                 </div>
                 <div className="flex flex-col items-center justify-center w-32 py-4 bg-green-200 rounded-md">
-                  <p className="text-3xl font-bold text-center">
-                    {eggSaleSummary.totalCrackedEggInKg}
+                  <p className="text-lg sm:text-xl font-bold text-center">
+                    {Number(eggSaleSummary.totalCrackedEggInKg).toLocaleString(
+                      "id-ID",
+                    )}
                   </p>
                   <p className="text-xl text-center">Kg</p>
                 </div>
@@ -417,8 +424,10 @@ const Penjualan = () => {
               </div>
               <div className="flex justify-center flex-wrap gap-4">
                 <div className="flex flex-col items-center justify-center w-32 py-4 bg-green-200 rounded-md">
-                  <p className="text-3xl font-bold text-center">
-                    {eggSaleSummary.totalBrokenEggInPlastik}
+                  <p className="text-lg sm:text-xl font-bold text-center">
+                    {Number(
+                      eggSaleSummary.totalBrokenEggInPlastik,
+                    ).toLocaleString("id-ID")}
                   </p>
                   <p className="text-xl text-center">Plastik</p>
                 </div>

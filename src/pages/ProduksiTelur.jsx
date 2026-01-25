@@ -41,7 +41,7 @@ const ProduksiTelur = () => {
 
   const [siteOptions, setSiteOptions] = useState([]);
   const [selectedSite, setSelectedSite] = useState(
-    userRole === "Owner" ? 0 : localStorage.getItem("locationId")
+    userRole === "Owner" ? 0 : localStorage.getItem("locationId"),
   );
 
   const [chickenCageOptions, setChickenCageOptions] = useState([]);
@@ -55,7 +55,7 @@ const ProduksiTelur = () => {
   const [graphFilter, setGraphFilter] = useState("Minggu Ini");
 
   const isDetailPage = detailPages.some((segment) =>
-    location.pathname.includes(segment)
+    location.pathname.includes(segment),
   );
 
   const detailProduksiHandle = () => {
@@ -81,6 +81,14 @@ const ProduksiTelur = () => {
       const cageResponse = await getChickenCage(selectedSite);
       if (cageResponse.status === 200) {
         setChickenCageOptions(cageResponse.data.data);
+        if (userRole == "Pekerja Telur") {
+          const defaultCage = cageResponse.data.data.find(
+            (cage) => cage.eggPic == userName,
+          );
+          console.log("defaultCage: ", defaultCage);
+          setSelectedChickenCage(defaultCage.cage.id);
+        }
+
         console.log("cageResponse.data.data: ", cageResponse.data.data);
       }
     } catch (err) {
@@ -103,7 +111,7 @@ const ProduksiTelur = () => {
         selectedSite,
         selectedChickenCage,
         graphFilter,
-        selectedYear
+        selectedYear,
       );
       console.log("overviewResponse: ", overviewResponse);
       if (overviewResponse.status == 200) {
@@ -140,11 +148,13 @@ const ProduksiTelur = () => {
               ?.quantity ?? 0,
         };
 
+        console.log("details: ", details);
         const telurReject = {
           ikat:
-            details.find((d) => d.name === "Telur Reject" && d.unit === "Ikat")
+            details.find((d) => d.name === "Telur Reject" && d.unit === "Butir")
               ?.quantity ?? 0,
         };
+        console.log("telurOK: ", telurOK);
         setTelurOk(telurOK);
         setTelurRetak(telurRetak);
         setTelurReject(telurReject);
@@ -244,8 +254,8 @@ const ProduksiTelur = () => {
                     key={key}
                     className="flex flex-col items-center justify-center w-28 sm:w-32 py-3 sm:py-4 bg-green-200 rounded-md"
                   >
-                    <p className="text-2xl sm:text-3xl font-bold text-center">
-                      {value}
+                    <p className="text-lg sm:text-xl font-bold text-center">
+                      {Number(value).toLocaleString("id-ID")}
                     </p>
                     <p className="text-base sm:text-xl text-center">{key}</p>
                   </div>
@@ -267,8 +277,8 @@ const ProduksiTelur = () => {
                     key={key}
                     className="flex flex-col items-center justify-center w-28 sm:w-32 py-3 sm:py-4 bg-green-200 rounded-md"
                   >
-                    <p className="text-2xl sm:text-3xl font-bold text-center">
-                      {value}
+                    <p className="text-lg sm:text-xl font-bold text-center">
+                      {Number(value).toLocaleString("id-ID")}
                     </p>
                     <p className="text-base sm:text-xl text-center">{key}</p>
                   </div>
@@ -290,8 +300,8 @@ const ProduksiTelur = () => {
                     key={key}
                     className="flex flex-col items-center justify-center w-28 sm:w-32 py-3 sm:py-4 bg-green-200 rounded-md"
                   >
-                    <p className="text-2xl sm:text-3xl font-bold text-center">
-                      {value}
+                    <p className="text-lg sm:text-xl font-bold text-center">
+                      {Number(value).toLocaleString("id-ID")}
                     </p>
                     <p className="text-base sm:text-xl text-center">{key}</p>
                   </div>

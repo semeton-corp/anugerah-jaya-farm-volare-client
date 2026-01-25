@@ -130,7 +130,7 @@ const OverviewOwner = () => {
 
           <div className="flex justify-center flex-wrap gap-4">
             <div className="flex flex-col items-center justify-center w-32 py-4 bg-green-200 rounded-md">
-              <p className="text-3xl font-bold text-center">
+              <p className="text-lg sm:text-xl font-bold text-center">
                 {Number(
                   eggSummary?.totalGoodEggProductionInIkat,
                 ).toLocaleString("id-ID")}
@@ -138,7 +138,7 @@ const OverviewOwner = () => {
               <p className="text-xl text-center">Ikat</p>
             </div>
             <div className="flex flex-col items-center justify-center w-32 py-4 bg-green-200 rounded-md">
-              <p className="text-3xl font-bold text-center">
+              <p className="text-lg sm:text-xl font-bold text-center">
                 {Number(
                   eggSummary?.totalGoodEggProductionInKarpet,
                 ).toLocaleString("id-ID")}
@@ -146,7 +146,7 @@ const OverviewOwner = () => {
               <p className="text-xl text-center">Karpet</p>
             </div>
             <div className="flex flex-col items-center justify-center w-32 py-4 bg-green-200 rounded-md">
-              <p className="text-3xl font-bold text-center">
+              <p className="text-lg sm:text-xl font-bold text-center">
                 {Number(eggSummary?.totalGoodEggProductionInKg).toLocaleString(
                   "id-ID",
                 )}
@@ -154,7 +154,7 @@ const OverviewOwner = () => {
               <p className="text-xl text-center">Kg</p>
             </div>
             <div className="flex flex-col items-center justify-center w-32 py-4 bg-green-200 rounded-md">
-              <p className="text-3xl font-bold text-center">
+              <p className="text-lg sm:text-xl font-bold text-center">
                 {Number(
                   eggSummary?.totalGoodEggProductionInButir,
                 ).toLocaleString("id-ID")}
@@ -174,16 +174,18 @@ const OverviewOwner = () => {
 
           <div className="flex justify-center flex-wrap gap-4">
             <div className="flex flex-col items-center justify-center w-32 py-4 bg-green-200 rounded-md">
-              <p className="text-3xl font-bold text-center">
-                {" "}
-                {eggSummary?.totalGoodEggSaleInIkat}
+              <p className="text-lg sm:text-xl font-bold text-center">
+                {Number(eggSummary?.totalGoodEggSaleInIkat).toLocaleString(
+                  "id-ID",
+                )}
               </p>
               <p className="text-xl text-center">Ikat</p>
             </div>
             <div className="flex flex-col items-center justify-center w-32 py-4 bg-green-200 rounded-md">
-              <p className="text-3xl font-bold text-center">
-                {" "}
-                {eggSummary?.totalGoodEggSaleInKg}
+              <p className="text-lg sm:text-xl font-bold text-center">
+                {Number(eggSummary?.totalGoodEggSaleInKg).toLocaleString(
+                  "id-ID",
+                )}
               </p>
               <p className="text-xl text-center">Kg</p>
             </div>
