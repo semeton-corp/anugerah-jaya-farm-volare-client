@@ -148,13 +148,11 @@ const ProduksiTelur = () => {
               ?.quantity ?? 0,
         };
 
-        console.log("details: ", details);
         const telurReject = {
           ikat:
             details.find((d) => d.name === "Telur Reject" && d.unit === "Butir")
               ?.quantity ?? 0,
         };
-        console.log("telurOK: ", telurOK);
         setTelurOk(telurOK);
         setTelurRetak(telurRetak);
         setTelurReject(telurReject);

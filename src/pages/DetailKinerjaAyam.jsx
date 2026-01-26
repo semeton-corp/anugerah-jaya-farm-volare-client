@@ -33,7 +33,7 @@ const DetailKinerjaAyam = () => {
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
 
   const isDetailPage = detailPages.some((segment) =>
-    location.pathname.includes(segment)
+    location.pathname.includes(segment),
   );
   const navigate = useNavigate();
 
@@ -49,7 +49,7 @@ const DetailKinerjaAyam = () => {
   const handlePengadaanDoc = () => {
     const newUrl = location.pathname.replace(
       "detail-kinerja-ayam",
-      "pengadaan-doc"
+      "pengadaan-doc",
     );
     navigate(newUrl);
   };
@@ -57,7 +57,7 @@ const DetailKinerjaAyam = () => {
   const handleJualAyamAfkir = () => {
     const newUrl = location.pathname.replace(
       "detail-kinerja-ayam",
-      "jual-ayam-afkir"
+      "jual-ayam-afkir",
     );
     navigate(newUrl);
   };
@@ -138,7 +138,7 @@ const DetailKinerjaAyam = () => {
                     <th className="py-2 px-4">Jumlah Ayam</th>
                     <th className="py-2 px-4">Produksi (Butir)</th>
                     <th className="py-2 px-4">Konsumsi (Gr/Ekor)</th>
-                    <th className="py-2 px-4">Berat telur (Gr/Butir)</th>
+                    <th className="py-2 px-4">Berat telur OK (Gr/Butir)</th>
                     <th className="py-2 px-4">FCR</th>
                     <th className="py-2 px-4">%HDP</th>
                     <th className="py-2 px-4">Produktivitas</th>

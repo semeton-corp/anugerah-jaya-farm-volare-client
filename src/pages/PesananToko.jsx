@@ -67,7 +67,7 @@ const getSecondAction = (status) => {
 const PesananToko = () => {
   const userRole = localStorage.getItem("role");
   const [selectedSite] = useState(
-    userRole === "Owner" ? 0 : localStorage.getItem("locationId")
+    userRole === "Owner" ? 0 : localStorage.getItem("locationId"),
   );
   const [warehouses, setWarehouses] = useState([]);
   const [selectedWarehouse, setSelectedWarehouse] = useState();
@@ -127,7 +127,7 @@ const PesananToko = () => {
         date,
         page,
         selectedWarehouse,
-        undefined
+        undefined,
       );
       console.log("requestReponse: ", requestReponse);
       if (requestReponse.status == 200) {
@@ -149,7 +149,7 @@ const PesananToko = () => {
     try {
       const confirmResponse = await warehouseConfirmationStoreRequestItem(
         payload,
-        selectedItem.id
+        selectedItem.id,
       );
       console.log("confirmResponse: ", confirmResponse);
       if (confirmResponse.status == 200) {
@@ -168,7 +168,7 @@ const PesananToko = () => {
       console.log("selectedItem.id: ", selectedItem.id);
       const confirmResponse = await warehouseConfirmationStoreRequestItem(
         payload,
-        selectedItem.id
+        selectedItem.id,
       );
       console.log("confirmResponse: ", confirmResponse);
       if (confirmResponse.status == 200) {
@@ -195,7 +195,7 @@ const PesananToko = () => {
 
       const cancelResponse = await updateStoreRequestItem(
         payload,
-        selectedItemToCancel
+        selectedItemToCancel,
       );
 
       if (cancelResponse.status == 200) {
@@ -241,16 +241,16 @@ const PesananToko = () => {
       console.log("eggResponse: ", eggResponse);
       if (eggResponse.status == 200) {
         const telurOkKg = eggResponse.data.data.find(
-          (item) => item.name === "Telur OK" && item.unit === "Kg"
+          (item) => item.name === "Telur OK" && item.unit === "Kg",
         );
         const telurRetakKg = eggResponse.data.data.find(
-          (item) => item.name === "Telur Retak" && item.unit === "Kg"
+          (item) => item.name === "Telur Retak" && item.unit === "Kg",
         );
         const telurOkIkat = eggResponse.data.data.find(
-          (item) => item.name === "Telur OK" && item.unit === "Ikat"
+          (item) => item.name === "Telur OK" && item.unit === "Ikat",
         );
         const telurRetakIkat = eggResponse.data.data.find(
-          (item) => item.name === "Telur Retak" && item.unit === "Ikat"
+          (item) => item.name === "Telur Retak" && item.unit === "Ikat",
         );
         setTelurOkKg(telurOkKg ? telurOkKg.quantity : 0);
         setTelurOkIkat(telurOkIkat ? telurOkIkat.quantity : 0);
@@ -341,12 +341,14 @@ const PesananToko = () => {
           <div className="flex justify-center flex-wrap gap-4">
             {/* item ikat */}
             <div className="flex flex-col items-center justify-center w-32 py-4 bg-green-200 rounded-md">
-              <p className="text-3xl font-bold text-center">{telurOkIkat}</p>
+              <p className="text-2xl font-bold text-center">{telurOkIkat}</p>
               <p className="text-xl text-center">Ikat</p>
             </div>
 
             <div className="flex flex-col items-center justify-center w-32 py-4 bg-green-200 rounded-md">
-              <p className="text-3xl font-bold text-center">{telurOkKg}</p>
+              <p className="text-2xl font-bold text-center">
+                {telurOkKg.toFixed(1)}
+              </p>
               <p className="text-xl text-center">Kg</p>
             </div>
           </div>
@@ -364,12 +366,14 @@ const PesananToko = () => {
           <div className="flex justify-center flex-wrap gap-4">
             {/* item butir */}
             <div className="flex flex-col items-center justify-center w-32 py-4 bg-green-200 rounded-md">
-              <p className="text-3xl font-bold text-center">{telurRetakIkat}</p>
+              <p className="text-2xl font-bold text-center">{telurRetakIkat}</p>
               <p className="text-xl text-center">Ikat</p>
             </div>
 
             <div className="flex flex-col items-center justify-center w-32 py-4 bg-green-200 rounded-md">
-              <p className="text-3xl font-bold text-center">{telurRetakKg}</p>
+              <p className="text-2xl font-bold text-center">
+                {telurRetakKg.toFixed(1)}
+              </p>
               <p className="text-xl text-center">Kg</p>
             </div>
           </div>
@@ -409,7 +413,7 @@ const PesananToko = () => {
                   <td className="py-2 px-4 text-center">
                     <span
                       className={`${getStatusStyle(
-                        data.status
+                        data.status,
                       )} inline-block min-w-[100px] text-center px-3 py-1 text-sm rounded whitespace-nowrap`}
                     >
                       {data.status === "Menunggu"

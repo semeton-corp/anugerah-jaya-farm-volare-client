@@ -293,9 +293,7 @@ const Kinerja = () => {
                   </div>
                   <div className="flex items-center">
                     <p className="text-3xl font-semibold pe-2">
-                      {Number(
-                        chickenPerformanceSummary?.foodConsumption,
-                      ).toFixed(2)}
+                      {Number(chickenPerformanceSummary?.averageHDP).toFixed(2)}
                     </p>
                     <p className="text-xl font-semibold">%</p>
                   </div>
