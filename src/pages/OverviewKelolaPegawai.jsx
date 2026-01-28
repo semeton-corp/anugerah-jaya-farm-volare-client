@@ -75,7 +75,7 @@ const OverviewKelolaPegawai = () => {
       const num = parseInt(item.key.replace("Minggu ", ""), 10);
       return {
         ...item,
-        key: `Minggu ${num + 1}`,
+        key: `Minggu ${num}`,
       };
     });
   console.log("performaKpiChart: ", performaKpiChart);
@@ -83,7 +83,7 @@ const OverviewKelolaPegawai = () => {
 
   const [siteOptions, setSiteOptions] = useState([]);
   const [selectedSite, setSelectedSite] = useState(
-    userRole === "Owner" ? 0 : localStorage.getItem("locationId")
+    userRole === "Owner" ? 0 : localStorage.getItem("locationId"),
   );
 
   const [year, setYear] = useState(() => new Date().getFullYear());

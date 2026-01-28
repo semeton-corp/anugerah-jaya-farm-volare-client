@@ -30,6 +30,7 @@ export default function PembagianPakan() {
   const [confirmationData, setConfirmationData] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editedFeedDetails, setEditedFeedDetails] = useState([]);
+  const [isInfoMode, setIsInfoMode] = useState(false);
 
   const [siteOptions, setSiteOptions] = useState([]);
   const [selectedSite, setSelectedSite] = useState(
@@ -118,7 +119,6 @@ export default function PembagianPakan() {
         let filteredWarehouses;
 
         if (userRole !== "Owner") {
-
           filteredWarehouses = warehouses.filter(
             (warehouse) => warehouse.location.id == locationId,
           );
@@ -225,10 +225,13 @@ export default function PembagianPakan() {
                 </td>
 
                 <td className="p-3">
-                  {r.chickenCategory && r.isNeedFeed && (
+                  {r.chickenCategory && r.isNeedFeed ? (
                     <button
                       disabled={!canConfirmRow(r)}
-                      onClick={() => openModal(r)}
+                      onClick={() => {
+                        openModal(r);
+                        setIsInfoMode(false);
+                      }}
                       className={`px-4 py-1 rounded ${
                         canConfirmRow(r)
                           ? "bg-orange-300 hover:bg-orange-500 cursor-pointer"
@@ -236,6 +239,17 @@ export default function PembagianPakan() {
                       }`}
                     >
                       Konfirmasi
+                    </button>
+                  ) : (
+                    <button
+                      disabled={!canConfirmRow(r)}
+                      onClick={() => {
+                        openModal(r);
+                        setIsInfoMode(true);
+                      }}
+                      className={`px-4 py-1 rounded bg-green-600 hover:bg-green-800 cursor-pointer text-white `}
+                    >
+                      Check
                     </button>
                   )}
                 </td>
@@ -311,38 +325,42 @@ export default function PembagianPakan() {
                 <div className="px-4 py-3 border-b font-semibold flex justify-between">
                   Formula Pakan
                   <div>
-                    {isEditing ? (
-                      <div className="flex gap-2">
+                    {!isInfoMode &&
+                      (isEditing ? (
+                        <div className="flex gap-2">
+                          <button
+                            className="font-normal bg-orange-300 hover:bg-orange-500 rounded px-3 py-1 cursor-pointer"
+                            onClick={() => {
+                              setConfirmationData({
+                                ...confirmationData,
+                                feedDetails: editedFeedDetails,
+                              });
+                              setIsEditing(false);
+                            }}
+                          >
+                            Simpan
+                          </button>
+
+                          <button
+                            className="font-normal bg-white hover:bg-orange-100 border-orange-300 border-2 rounded px-3 py-1 cursor-pointer"
+                            onClick={() => {
+                              setEditedFeedDetails(
+                                confirmationData.feedDetails,
+                              );
+                              setIsEditing(false);
+                            }}
+                          >
+                            Batal
+                          </button>
+                        </div>
+                      ) : (
                         <button
                           className="font-normal bg-orange-300 hover:bg-orange-500 rounded px-3 py-1 cursor-pointer"
-                          onClick={() => {
-                            setConfirmationData({
-                              ...confirmationData,
-                              feedDetails: editedFeedDetails,
-                            });
-                            setIsEditing(false);
-                          }}
+                          onClick={() => setIsEditing(true)}
                         >
-                          Simpan
+                          Edit Jumlah Pakan Hari ini
                         </button>
-                        <button
-                          className="font-normal bg-white hover:bg-orange-100 border-orange-300 border-2 rounded px-3 py-1 cursor-pointer"
-                          onClick={() => {
-                            setEditedFeedDetails(confirmationData.feedDetails);
-                            setIsEditing(false);
-                          }}
-                        >
-                          Batal
-                        </button>
-                      </div>
-                    ) : (
-                      <button
-                        className="font-normal bg-orange-300 hover:bg-orange-500 rounded px-3 py-1 cursor-pointer"
-                        onClick={() => setIsEditing(true)}
-                      >
-                        Edit Jumlah Pakan Hari ini
-                      </button>
-                    )}
+                      ))}
                   </div>
                 </div>
                 <div className="p-4 overflow-x-auto">
@@ -398,25 +416,27 @@ export default function PembagianPakan() {
               </div>
 
               {/* Select Gudang */}
-              <div>
-                <label className="block text-sm text-gray-600 mb-1">
-                  Pilih Gudang
-                </label>
-                <select
-                  className="w-full border rounded px-3 py-2"
-                  value={gudangId}
-                  onChange={(e) => setGudangId(e.target.value)}
-                >
-                  <option value="" disabled>
-                    Pilih gudang
-                  </option>
-                  {gudangOptions?.map((g) => (
-                    <option key={g.id} value={g.id}>
-                      {g.name}
+              {!isInfoMode && (
+                <div>
+                  <label className="block text-sm text-gray-600 mb-1">
+                    Pilih Gudang
+                  </label>
+                  <select
+                    className="w-full border rounded px-3 py-2"
+                    value={gudangId}
+                    onChange={(e) => setGudangId(e.target.value)}
+                  >
+                    <option value="" disabled>
+                      Pilih gudang
                     </option>
-                  ))}
-                </select>
-              </div>
+                    {gudangOptions?.map((g) => (
+                      <option key={g.id} value={g.id}>
+                        {g.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
             </div>
 
             {/* Footer Modal */}
@@ -427,17 +447,19 @@ export default function PembagianPakan() {
               >
                 Batal
               </button>
-              <button
-                onClick={submitConfirm}
-                disabled={!gudangId || isEditing}
-                className={`px-4 py-2 rounded text-white ${
-                  gudangId && !isEditing
-                    ? "bg-green-700 hover:bg-green-900 cursor-pointer"
-                    : "bg-gray-400 cursor-not-allowed"
-                }`}
-              >
-                Konfirmasi
-              </button>
+              {!isInfoMode && (
+                <button
+                  onClick={submitConfirm}
+                  disabled={!gudangId || isEditing}
+                  className={`px-4 py-2 rounded text-white ${
+                    gudangId && !isEditing
+                      ? "bg-green-700 hover:bg-green-900 cursor-pointer"
+                      : "bg-gray-400 cursor-not-allowed"
+                  }`}
+                >
+                  Konfirmasi
+                </button>
+              )}
             </div>
           </div>
         </div>

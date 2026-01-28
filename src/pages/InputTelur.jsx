@@ -420,9 +420,7 @@ const InputTelur = () => {
           ) : (
             <div>
               <label className="block font-medium mb-1">Berat Telur (Kg)</label>
-              <p className="text-lg font-bold mb-4">
-                {totalRemainingCrackedEgg}
-              </p>
+              <p className="text-lg font-bold mb-4">{totalWeightCrackedEgg}</p>
             </div>
           )}
         </div>

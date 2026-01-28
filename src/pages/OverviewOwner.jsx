@@ -280,7 +280,9 @@ const OverviewOwner = () => {
             <div className="flex justify-between px-4">
               <div className="flex gap-2">
                 <p className="text-xl font-bold">
-                  {chickenSummary?.totalLiveChicken}
+                  {Number(chickenSummary?.totalLiveChicken).toLocaleString(
+                    "id-ID",
+                  )}
                 </p>
                 <p className="text-xl">Ekor</p>
               </div>
@@ -290,7 +292,9 @@ const OverviewOwner = () => {
             <div className="flex justify-between px-4">
               <div className="flex gap-2">
                 <p className="text-xl font-bold">
-                  {chickenSummary?.totalSickChicken}
+                  {Number(chickenSummary?.totalSickChicken).toLocaleString(
+                    "id-ID",
+                  )}
                 </p>
                 <p className="text-xl">Ekor</p>
               </div>
@@ -300,7 +304,9 @@ const OverviewOwner = () => {
             <div className="flex  justify-between px-4">
               <div className="flex gap-2">
                 <p className="text-xl font-bold">
-                  {chickenSummary?.totalDeathChicken}
+                  {Number(chickenSummary?.totalDeathChicken).toLocaleString(
+                    "id-ID",
+                  )}
                 </p>
                 <p className="text-xl">Ekor</p>
               </div>
