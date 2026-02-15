@@ -74,14 +74,23 @@ const EditKandang = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const newValue = onlyDigits(value);
-    setFormData((prev) => ({ ...prev, [name]: newValue }));
+
+    let newValue = value;
+
+    if (name === "capacity") {
+      newValue = onlyDigits(value);
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: newValue,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("parseInt(formData.capacity): ", parseInt(formData.capacity));
-    console.log("totalLiveChicken: ", totalLiveChicken);
+    // console.log("parseInt(formData.capacity): ", parseInt(formData.capacity));
+    // console.log("totalLiveChicken: ", totalLiveChicken);
 
     if (parseInt(formData.capacity) < totalLiveChicken) {
       alert(
@@ -98,7 +107,7 @@ const EditKandang = () => {
       isUsed: formData.isUsed,
     };
 
-    // console.log("payload: ", payload);
+    console.log("payload: ", payload);
 
     try {
       const updateResponse = await updateCage(payload, cageId);
@@ -196,13 +205,6 @@ const EditKandang = () => {
         </div>
       </form>
 
-      {/* <button
-        onClick={() => {
-          console.log("formData: ", formData);
-        }}
-      >
-        CHECK
-      </button> */}
     </div>
   );
 };
