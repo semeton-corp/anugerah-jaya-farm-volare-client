@@ -80,7 +80,7 @@ const InputDataPesanan = () => {
   const [stores, setStores] = useState([]);
   const [selectedStore, setSelectedStore] = useState("");
   const [selectedSite] = useState(
-    userRole === "Owner" ? 0 : localStorage.getItem("locationId")
+    userRole === "Owner" ? 0 : localStorage.getItem("locationId"),
   );
 
   const [items, setItems] = useState([]);
@@ -196,7 +196,6 @@ const InputDataPesanan = () => {
         ];
 
         setPlaceOptions(options);
-        console.log("options: ", options);
 
         if (options.length > 0) {
           setSelectedPlace(options[0]);
@@ -238,7 +237,6 @@ const InputDataPesanan = () => {
           name: store.name,
           type: "store",
         };
-        console.log("selectedStore: ", selectedStore);
         setSelectedPlace(selectedStore);
       }
     } catch (error) {
@@ -286,7 +284,7 @@ const InputDataPesanan = () => {
 
       if (response.status == 200) {
         const filterData = response.data.data.filter(
-          (item) => item.name != "Telur Reject"
+          (item) => item.name != "Telur Reject",
         );
         setItems(filterData);
 
@@ -309,16 +307,21 @@ const InputDataPesanan = () => {
 
   const fetchEditSaleStoreData = async (id) => {
     try {
+      const placeType =
+        state?.selectedPlace?.type || localStorage.getItem("selectedPlaceType");
+
       let detailResponse;
-      if (state?.selectedPlace?.type === "store") {
+
+      if (placeType === "store") {
         detailResponse = await getStoreSaleById(id);
-      } else if (state?.selectedPlace?.type === "warehouse") {
+      } else if (placeType === "warehouse") {
         detailResponse = await getWarehouseSaleById(id);
       } else {
-        console.log("state kosong atau tipe tidak dikenal");
+        console.log("Type tidak ditemukan");
+        return;
       }
-      console.log("detailResponse: ", detailResponse);
 
+      console.log("detailResponse: ", detailResponse);
       if (detailResponse.status == 200) {
         // setSelectedStore(detailResponse.data.data.store.id);
         setCustomerName(detailResponse.data.data.customer.name);
@@ -335,11 +338,17 @@ const InputDataPesanan = () => {
         setIsSend(detailResponse.data.data.isSend);
         setDeadlinePaymentDate(detailResponse.data.data.deadlinePaymentDate);
         setIsMoreThanDeadlinePaymentDate(
-          detailResponse.data.data.isMoreThanDeadlinePaymentDate
+          detailResponse.data.data.isMoreThanDeadlinePaymentDate,
         );
+        if (placeType === "store") {
+          setSelectedPlace(detailResponse.data.data.store);
+        } else if (placeType === "warehouse") {
+          setSelectedPlace(detailResponse.data.data.warehouse);
+        }
+
         const phoneNumber = detailResponse.data.data.customer.phoneNumber;
         const selectedCustomer = customers.find(
-          (item) => item.phoneNumber == phoneNumber
+          (item) => item.phoneNumber == phoneNumber,
         );
         setTransactionCount(selectedCustomer?.totalTransaction);
       }
@@ -348,18 +357,18 @@ const InputDataPesanan = () => {
 
   const getPrice = () => {
     const priceItem = itemPrices.find(
-      (price) => price.item.name == selectedItem.name && price.saleUnit == unit
+      (price) => price.item.name == selectedItem.name && price.saleUnit == unit,
     );
 
     const applicableDiscounts = itemPriceDiscounts.filter(
-      (discount) => transactionCount >= discount.minimumTransactionUser
+      (discount) => transactionCount >= discount.minimumTransactionUser,
     );
 
     const selectedDiscount = applicableDiscounts.length
       ? applicableDiscounts.reduce((prev, curr) =>
           curr.minimumTransactionUser > prev.minimumTransactionUser
             ? curr
-            : prev
+            : prev,
         )
       : 0;
 
@@ -398,23 +407,23 @@ const InputDataPesanan = () => {
         const eggSummaries = summaryResponse.data.data;
         const okKg =
           eggSummaries.find(
-            (item) => item.name === "Telur OK" && item.unit === "Kg"
+            (item) => item.name === "Telur OK" && item.unit === "Kg",
           )?.quantity ?? 0;
         const okIkat =
           eggSummaries.find(
-            (item) => item.name === "Telur OK" && item.unit === "Ikat"
+            (item) => item.name === "Telur OK" && item.unit === "Ikat",
           )?.quantity ?? 0;
         const retakKg =
           eggSummaries.find(
-            (item) => item.name === "Telur Retak" && item.unit === "Kg"
+            (item) => item.name === "Telur Retak" && item.unit === "Kg",
           )?.quantity ?? 0;
         const retakIkat =
           eggSummaries.find(
-            (item) => item.name === "Telur Retak" && item.unit === "Ikat"
+            (item) => item.name === "Telur Retak" && item.unit === "Ikat",
           )?.quantity ?? 0;
         const bonyokPlastik =
           eggSummaries.find(
-            (item) => item.name === "Telur Bonyok" && item.unit === "Plastik"
+            (item) => item.name === "Telur Bonyok" && item.unit === "Plastik",
           )?.quantity ?? 0;
 
         setTelurOkKg(okKg);
@@ -453,6 +462,7 @@ const InputDataPesanan = () => {
     console.log("create payload is ready: ", payload);
 
     try {
+
       let submitResponse;
       if (selectedPlace.type == "store") {
         submitResponse = await createStoreSale(payload);
@@ -476,7 +486,7 @@ const InputDataPesanan = () => {
         error.response.data.message == "nominal is not equal to total price"
       ) {
         alert(
-          "❌Jumlah pembayaran penuh harus memiliki nominal yang sama dengan tagihan total dikarenakan pembayaran PENUH"
+          "❌Jumlah pembayaran penuh harus memiliki nominal yang sama dengan tagihan total dikarenakan pembayaran PENUH",
         );
       } else if (
         error.response.data.message ==
@@ -489,7 +499,7 @@ const InputDataPesanan = () => {
         alert("❌Silahkan pastikan anda memilih NOMOR PEMBELI dengan benar!");
       } else {
         alert(
-          "❌Gagal menyimpan data pesanan, periksa kembali data input anda"
+          "❌Gagal menyimpan data pesanan, periksa kembali data input anda",
         );
       }
     }
@@ -528,11 +538,14 @@ const InputDataPesanan = () => {
         sendDate: formatDateToDDMMYYYY(sendDate),
       };
 
+      const placeType =
+        state?.selectedPlace?.type || localStorage.getItem("selectedPlaceType");
+
       let queueResponse;
 
-      if (selectedPlace.type == "store") {
+      if (placeType === "store") {
         queueResponse = await createStoreSaleQueue(payload);
-      } else if (selectedPlace.type == "warehouse") {
+      } else if (placeType === "warehouse") {
         queueResponse = await createWarehouseSaleQueue(payload);
       } else {
         alert("❌ Terjadi kesalahan saat membuat data antrian!");
@@ -542,7 +555,7 @@ const InputDataPesanan = () => {
       if (queueResponse.status === 201) {
         const newPath = location.pathname.replace(
           "daftar-pesanan/input-data-pesanan",
-          "antrian-pesanan"
+          "antrian-pesanan",
         );
         navigate(newPath, { state: { selectedPlace } });
       }
@@ -576,7 +589,7 @@ const InputDataPesanan = () => {
         error.response.data.message == "nominal is not equal to total price"
       ) {
         alert(
-          "Jumlah pembayaran penuh harus memiliki nominal yang sama dengan tagihan total"
+          "Jumlah pembayaran penuh harus memiliki nominal yang sama dengan tagihan total",
         );
       } else {
         alert("Gagal menyimpan data pesanan");
@@ -586,20 +599,21 @@ const InputDataPesanan = () => {
 
   const handleDelete = async () => {
     try {
+      const placeType =
+        state?.selectedPlace?.type || localStorage.getItem("selectedPlaceType");
+
       let deleteResponse;
 
-      if (state?.selectedPlace.type == "store") {
+      if (placeType === "store") {
         console.log("MASUK A:");
         deleteResponse = await deleteStoreSale(id);
-      } else if (state?.selectedPlace.type == "warehouse") {
+      } else if (placeType === "warehouse") {
         console.log("MASUK B:");
         deleteResponse = await deleteWarehouseSale(id);
       } else {
         alert("❌ Terjadi kesalahan saat membuat data antrian!");
         return;
       }
-
-      console.log("deleteResponse: ", deleteResponse);
 
       if (deleteResponse.status === 204) {
         setShowDeleteModal(false);
@@ -613,17 +627,19 @@ const InputDataPesanan = () => {
 
   const handleDeletePayment = async () => {
     try {
+      const placeType =
+        state?.selectedPlace?.type || localStorage.getItem("selectedPlaceType");
+
       let deleteResponse;
-      console.log("state?.selectedPlace?.type: ", state?.selectedPlace?.type);
-      if (state?.selectedPlace?.type == "store") {
+      if (placeType === "store") {
         deleteResponse = await deleteStoreSalePayment(
           id,
-          selectedDeletePaymentId
+          selectedDeletePaymentId,
         );
-      } else if (state?.selectedPlace?.type == "warehouse") {
+      } else if (placeType === "warehouse") {
         deleteResponse = await deleteWarehouseSalePayment(
           id,
-          selectedDeletePaymentId
+          selectedDeletePaymentId,
         );
       } else {
         alert("❌ Terjadi kesalahan saat membuat data antrian!");
@@ -655,17 +671,18 @@ const InputDataPesanan = () => {
     };
 
     try {
+      const placeType =
+        state?.selectedPlace?.type || localStorage.getItem("selectedPlaceType");
+
       let paymentResponse;
-      if (state?.selectedPlace.type == "store") {
+      if (placeType === "store") {
         paymentResponse = await createStoreSalePayment(payload, id);
-      } else if (state?.selectedPlace.type == "warehouse") {
+      } else if (placeType === "warehouse") {
         paymentResponse = await createWarehouseSalePayment(payload, id);
       } else {
         alert("❌ Terjadi kesalahan saat membuat data antrian!");
         return;
       }
-
-      console.log("paymentResponse: ", paymentResponse);
 
       if (paymentResponse.status == 201) {
         fetchEditSaleStoreData(id);
@@ -683,13 +700,13 @@ const InputDataPesanan = () => {
         "total payment is greater than total price"
       ) {
         alert(
-          "Pembayaran yang dilakukan melebihi total tagihan, periksa kembali nominal bayar! "
+          "Pembayaran yang dilakukan melebihi total tagihan, periksa kembali nominal bayar! ",
         );
       } else if (
         error?.response?.data?.message == "store sale is already sent"
       ) {
         alert(
-          "Pembayaran yang dilakukan melebihi total tagihan, periksa kembali nominal bayar! "
+          "Pembayaran yang dilakukan melebihi total tagihan, periksa kembali nominal bayar! ",
         );
       } else {
         alert("Gagal menambahkan pembayaran ");
@@ -707,22 +724,22 @@ const InputDataPesanan = () => {
     };
 
     try {
+      const placeType =
+        state?.selectedPlace?.type || localStorage.getItem("selectedPlaceType");
+
       let updateResponse;
-      if (state?.selectedPlace.type == "store") {
+      if (placeType === "store") {
         updateResponse = await updateStoreSalePayment(id, paymentId, payload);
-      } else if (state?.selectedPlace.type == "warehouse") {
+      } else if (placeType === "warehouse") {
         updateResponse = await updateWarehouseSalePayment(
           id,
           paymentId,
-          payload
+          payload,
         );
       } else {
         alert("❌ Terjadi kesalahan saat membuat data antrian!");
         return;
       }
-
-      console.log("updateResponse: ", updateResponse);
-
       if (updateResponse.status == 200) {
         fetchEditSaleStoreData(id);
         setPaymentType("Cicil");
@@ -739,7 +756,7 @@ const InputDataPesanan = () => {
         "total payment is greater than total price"
       ) {
         alert(
-          "Pembayaran yang dilakukan melebihi total tagihan, periksa kembali nominal bayar! "
+          "Pembayaran yang dilakukan melebihi total tagihan, periksa kembali nominal bayar! ",
         );
       } else {
         alert("Gagal menambahkan pembayaran ");
@@ -750,7 +767,7 @@ const InputDataPesanan = () => {
   useEffect(() => {
     const subtotal = Math.max(
       Number(itemTotalPrice || 0) - Number(itemPriceDiscount || 0),
-      0
+      0,
     );
 
     const paid = (tablePayments || []).reduce((sum, payment) => {
@@ -758,8 +775,6 @@ const InputDataPesanan = () => {
     }, 0);
 
     const remainingAmount = Math.max(subtotal - paid, 0);
-
-    console.log({ subtotal, paid, remainingAmount, tablePayments });
 
     setRemaining(remainingAmount);
   }, [itemTotalPrice, itemPriceDiscount, tablePayments]);
@@ -828,6 +843,12 @@ const InputDataPesanan = () => {
       getPrice();
     }
   }, [selectedItem, transactionCount, quantity, unit]);
+
+  useEffect(() => {
+    if (state?.selectedPlace?.type) {
+      localStorage.setItem("selectedPlaceType", state.selectedPlace.type);
+    }
+  }, [state]);
 
   return (
     <div className="flex flex-col px-4 py-3 gap-4 ">
@@ -951,7 +972,7 @@ const InputDataPesanan = () => {
                   onChange={(e) => {
                     const [type, id] = e.target.value.split("-");
                     const selected = placeOptions.find(
-                      (item) => item.type === type && String(item.id) === id
+                      (item) => item.type === type && String(item.id) === id,
                     );
                     setSelectedPlace(selected);
                   }}
@@ -966,7 +987,7 @@ const InputDataPesanan = () => {
                   ))}
                 </select>
               ) : (
-                <p className="text-lg font-bold">{selectedItem.name}</p>
+                <p className="text-lg font-bold">{selectedPlace.name}</p>
               )}
             </div>
           )}
@@ -981,7 +1002,7 @@ const InputDataPesanan = () => {
                 value={selectedItem?.id}
                 onChange={(e) => {
                   const selected = items.find(
-                    (item) => item.id == e.target.value
+                    (item) => item.id == e.target.value,
                   );
                   setUnit(selected.unit);
                   setSelectedItem(selected);
@@ -1056,7 +1077,6 @@ const InputDataPesanan = () => {
                 const waNumber = localNumber.replace(/^0/, "62");
                 const namaPelanggan = customerName;
                 const namaBarang = selectedItem.name;
-                console.log("selectedItem: ", selectedItem);
                 const unit = selectedItem.unit;
                 const rencanaPembelian = `${quantity} ${unit}`;
                 const hargaPerUnit = itemPrice;
@@ -1221,7 +1241,7 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
                 Rp{" "}
                 {isOutOfStock && !id
                   ? "0"
-                  : itemTotalPrice.toLocaleString("id-ID") ?? "0"}
+                  : (itemTotalPrice.toLocaleString("id-ID") ?? "0")}
               </span>
             </div>
 
@@ -1266,7 +1286,7 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
                 {isOutOfStock && !id
                   ? "0"
                   : (itemTotalPrice - itemPriceDiscount).toLocaleString(
-                      "id-ID"
+                      "id-ID",
                     )}
               </span>
             </div>
@@ -1415,8 +1435,8 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
                   paymentStatus == "Lunas"
                     ? "text-gray-200"
                     : isMoreThanDeadlinePaymentDate
-                    ? "text-red-600"
-                    : ""
+                      ? "text-red-600"
+                      : ""
                 }`}
               >
                 {paymentStatus == "Lunas"
@@ -1465,7 +1485,7 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
 
                     const remaining = Math.max(
                       itemTotalPrice - itemPriceDiscount - totalPaidSoFar,
-                      0
+                      0,
                     );
 
                     return (
@@ -1519,7 +1539,7 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
                                 setSelectedDeletePaymentId(payment.id);
                               } else {
                                 setPayments((prev) =>
-                                  prev.filter((_, i) => i !== index)
+                                  prev.filter((_, i) => i !== index),
                                 );
                               }
                             }}

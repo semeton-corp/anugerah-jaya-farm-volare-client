@@ -33,7 +33,7 @@ const DaftarPesanan = () => {
   const navigate = useNavigate();
 
   const [selectedSite] = useState(
-    userRole === "Owner" ? 0 : localStorage.getItem("locationId")
+    userRole === "Owner" ? 0 : localStorage.getItem("locationId"),
   );
 
   const [page, setPage] = useState(1);
@@ -48,13 +48,12 @@ const DaftarPesanan = () => {
     userRole === "Owner"
       ? ["Penjualan Toko", "Penjualan Gudang"]
       : userRole == "Pekerja Toko"
-      ? ["Penjualan Toko"]
-      : ["Penjualan Gudang"];
+        ? ["Penjualan Toko"]
+        : ["Penjualan Gudang"];
   const notifications = useSelector((state) => state?.notifications);
   const pageNotifications = notifications.filter((item) =>
-    item.notificationContexts.some((ctx) => notificationContexs.includes(ctx))
+    item.notificationContexts.some((ctx) => notificationContexs.includes(ctx)),
   );
-  console.log("pageNotifications: ", pageNotifications);
 
   const [paymentStatus, setPaymentStatus] = useState("");
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
@@ -71,7 +70,7 @@ const DaftarPesanan = () => {
 
   const detailPages = ["input-data-pesanan"];
   const isDetailPage = detailPages.some((segment) =>
-    location.pathname.includes(segment)
+    location.pathname.includes(segment),
   );
 
   const editDataPesananHandle = (item) => {
@@ -197,14 +196,14 @@ const DaftarPesanan = () => {
           date,
           paymentStatus || undefined,
           page,
-          selectedPlace.id
+          selectedPlace.id,
         );
       } else if (selectedPlace.type == "warehouse") {
         antrianResponse = await getListWarehouseSales(
           date,
           paymentStatus || undefined,
           page,
-          selectedPlace.id
+          selectedPlace.id,
         );
       } else {
         alert("❌ Terjadi kesalahan saat memuat data!");
@@ -298,7 +297,7 @@ const DaftarPesanan = () => {
                     onChange={(e) => {
                       const [type, id] = e.target.value.split("-");
                       const selected = placeOptions.find(
-                        (item) => item.type === type && String(item.id) === id
+                        (item) => item.type === type && String(item.id) === id,
                       );
                       setSelectedPlace(selected);
                     }}
