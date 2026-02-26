@@ -40,8 +40,8 @@ export default function DetailRiwayatGudang() {
               historyData?.status === "Barang Masuk"
                 ? "bg-aman-box-surface-color text-aman-text-color"
                 : historyData?.status === "Barang Keluar"
-                ? "bg-kritis-box-surface-color text-kritis-text-color"
-                : "bg-orange-200 text-yellow-900"
+                  ? "bg-kritis-box-surface-color text-kritis-text-color"
+                  : "bg-orange-200 text-yellow-900"
             }`}
           >
             {historyData?.status}
@@ -107,13 +107,13 @@ export default function DetailRiwayatGudang() {
             <p className="text-gray-600 text-sm sm:text-base">
               Jumlah Barang Awal
             </p>
-            <p className="font-bold text-base sm:text-lg">{`${historyData?.quantityBefore} ${historyData?.itemUnit}`}</p>
+            <p className="font-bold text-base sm:text-lg">{`${Number(historyData?.quantityBefore ?? 0).toFixed(2)} ${historyData?.itemUnit}`}</p>
           </div>
           <div>
             <p className="text-gray-600 text-sm sm:text-base">
               Jumlah Barang Akhir
             </p>
-            <p className="font-bold text-base sm:text-lg">{`${historyData?.quantityAfter} ${historyData?.itemUnit}`}</p>
+            <p className="font-bold text-base sm:text-lg">{`${Number(historyData?.quantityAfter ?? 0).toFixed(2)} ${historyData?.itemUnit}`}</p>
           </div>
         </div>
 

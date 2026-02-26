@@ -148,8 +148,8 @@ const RiwayatGudang = () => {
                     <td className="py-2 px-4">{data.itemName ?? "-"}</td>
                     <td className="py-2 px-4">
                       {data.status == "Barang Masuk"
-                        ? `+${data.quantity} `
-                        : data.quantity}
+                        ? `+${data.quantity.toFixed(2)} `
+                        : data.quantity.toFixed(2)}
                     </td>
                     <td className="py-2 px-4">{data.source}</td>
                     <td className="py-2 px-4">{data.destination}</td>

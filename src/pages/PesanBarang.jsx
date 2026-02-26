@@ -228,7 +228,6 @@ const PesanBarang = () => {
               }}
               className="w-full border bg-gray-100 p-2 rounded"
             >
-              <option value="">Pilih toko pemesan</option>
               {stores?.map((store, index) => (
                 <option key={index} value={store.id}>
                   {store.name}
