@@ -8,7 +8,7 @@ import {
 } from "../services/warehouses";
 import { getItems } from "../services/item";
 import { getSuppliers } from "../services/supplier";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { formatThousand, onlyDigits } from "../utils/moneyFormat";
 import { IoLogoWhatsapp } from "react-icons/io5";
 
@@ -19,6 +19,7 @@ export default function InputDraftPengadaanBarang() {
   const { id } = useParams();
   const userRole = localStorage.getItem("role");
   const locationId = localStorage.getItem("locationId");
+  const location = useLocation();
   const navigate = useNavigate();
 
   const allowedCategories = ["Pakan Jadi", "Barang", "Bahan Baku Adukan"];
@@ -79,7 +80,7 @@ export default function InputDraftPengadaanBarang() {
       try {
         const updateResponse = await updateWarehouseItemProcurementDraft(
           payload,
-          id
+          id,
         );
         console.log("updateResponse: ", updateResponse);
         if (updateResponse.status == 200) {
@@ -96,9 +97,8 @@ export default function InputDraftPengadaanBarang() {
       }
 
       try {
-        const createResponse = await createWarehouseItemProcurementDraft(
-          payload
-        );
+        const createResponse =
+          await createWarehouseItemProcurementDraft(payload);
         console.log("createResponse: ", createResponse);
         if (createResponse.status == 201) {
           navigate(-1, { state: { refetch: true } });
@@ -117,7 +117,7 @@ export default function InputDraftPengadaanBarang() {
         let filteredWarehouses;
         if (userRole != "Owner") {
           filteredWarehouses = warehousesData.filter(
-            (item) => item.location.id == locationId
+            (item) => item.location.id == locationId,
           );
         } else {
           filteredWarehouses = warehousesData;
@@ -137,7 +137,7 @@ export default function InputDraftPengadaanBarang() {
       if (itemResponse.status == 200) {
         const itemsData = itemResponse.data.data;
         const filteredItem = (itemsData ?? []).filter((item) =>
-          allowedCategories.includes(item.category)
+          allowedCategories.includes(item.category),
         );
         setItemOptions(filteredItem);
         setItem(filteredItem[0]);
@@ -203,7 +203,7 @@ export default function InputDraftPengadaanBarang() {
     setDailySpending(item?.dailySpending);
 
     const filteredSupplier = supplierOptions.filter((supplier) =>
-      supplier.itemIds.includes(item.id)
+      supplier.itemIds.includes(item.id),
     );
     setFilteredSupplierOptions(filteredSupplier);
   }, [item]);
@@ -228,7 +228,7 @@ export default function InputDraftPengadaanBarang() {
             value={warehouse?.id || ""}
             onChange={(e) =>
               setWarehouse(
-                warehouseOptions.find((g) => g.id === Number(e.target.value))
+                warehouseOptions.find((g) => g.id === Number(e.target.value)),
               )
             }
           >
@@ -336,7 +336,7 @@ export default function InputDraftPengadaanBarang() {
             value={supplier?.id || ""}
             onChange={(e) =>
               setSupplier(
-                supplierOptions.find((s) => s.id === Number(e.target.value))
+                supplierOptions.find((s) => s.id === Number(e.target.value)),
               )
             }
           >
