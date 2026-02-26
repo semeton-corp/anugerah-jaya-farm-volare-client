@@ -27,12 +27,12 @@ const DetailAyam = () => {
 
   const notifications = useSelector((state) => state?.notifications);
   const pageNotifications = notifications.filter((item) =>
-    item.notificationContexts?.includes("Monitoring Ayam")
+    item.notificationContexts?.includes("Monitoring Ayam"),
   );
 
   const [siteOptions, setSiteOptions] = useState([]);
   const [selectedSite, setSelectedSite] = useState(
-    userRole === "Owner" ? 0 : localStorage.getItem("locationId")
+    userRole === "Owner" ? 0 : localStorage.getItem("locationId"),
   );
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()));
 
@@ -57,7 +57,7 @@ const DetailAyam = () => {
 
   const detailPages = ["input-ayam", "detail-vaksin-obat"];
   const isDetailPage = detailPages.some((segment) =>
-    location.pathname.includes(segment)
+    location.pathname.includes(segment),
   );
 
   const inputAyamHandle = () => {
@@ -231,7 +231,7 @@ const DetailAyam = () => {
                     {row.chickenCage.batchId}
                   </td>
                   <td className="py-2 px-2 sm:px-4">
-                    {row.chickenCage.cage.chickenCategory}
+                    {row.chickenCage.chickenCategory}
                   </td>
                   <td className="py-2 px-2 sm:px-4">
                     {row.chickenCage.chickenAge}
