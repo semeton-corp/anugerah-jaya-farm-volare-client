@@ -376,7 +376,13 @@ const InputDataPesanan = () => {
       : 0;
 
     const price = priceItem?.price;
-    const discountPercent = selectedDiscount.totalDiscount / 100;
+
+    let discountPercent;
+    if (discount === null) {
+      discountPercent = selectedDiscount.totalDiscount / 100;
+    } else {
+      discountPercent = discount / 100;
+    }
 
     if (!price && !id) {
       alert("❌ Harga barang yang dipilih belum ditentukan oleh pusat!");
