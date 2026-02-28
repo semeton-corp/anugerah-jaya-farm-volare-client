@@ -161,7 +161,7 @@ export const takeWarehouseOrderItem = (id) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
 };
 
@@ -214,7 +214,7 @@ export const confirmationWarehouseItemProcurementDraft = (payload, id) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
 };
 
@@ -230,7 +230,7 @@ export const getWarehouseItemProcurements = (
   warehouseId,
   paymentStatus,
   date,
-  page = 1
+  page = 1,
 ) => {
   const params = {
     warehouseId: warehouseId,
@@ -272,7 +272,7 @@ export const createWarehouseItemProcurementPayment = (payload, id) => {
 export const updateWarehouseItemProcurementPayment = (
   payload,
   warehouseItemProcurementId,
-  id
+  id,
 ) => {
   return api.put(
     `/warehouses/items/procurements/${warehouseItemProcurementId}/payments/${id}`,
@@ -281,13 +281,13 @@ export const updateWarehouseItemProcurementPayment = (
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
 };
 
 export const deleteWarehouseItemProcurementPayment = (
   warehouseItemProcurementId,
-  id
+  id,
 ) => {
   return api.delete(
     `/warehouses/items/procurements/${warehouseItemProcurementId}/payments/${id}`,
@@ -295,7 +295,7 @@ export const deleteWarehouseItemProcurementPayment = (
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
 };
 
@@ -364,14 +364,14 @@ export const confirmationWarehouseItemCornProcurementDraft = (payload, id) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
 };
 
 export const getWarehouseItemCornProcurements = (
   warehouseId,
   paymentStatus,
-  page = 1
+  page = 1,
 ) => {
   const params = {
     warehouseId: warehouseId,
@@ -410,14 +410,14 @@ export const createWarehouseItemCornProcurementPayment = (payload, id) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
 };
 
 export const updateWarehouseItemCornProcurementPayment = (
   payload,
   warehouseItemCornProcurementId,
-  id
+  id,
 ) => {
   return api.put(
     `/warehouses/items/corns/procurements/${warehouseItemCornProcurementId}/payments/${id}`,
@@ -426,13 +426,13 @@ export const updateWarehouseItemCornProcurementPayment = (
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
 };
 
 export const deleteWarehouseItemCornProcurementPayment = (
   warehouseItemCornProcurementId,
-  id
+  id,
 ) => {
   return api.delete(
     `/warehouses/items/corns/procurements/${warehouseItemCornProcurementId}/payments/${id}`,
@@ -440,7 +440,7 @@ export const deleteWarehouseItemCornProcurementPayment = (
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
 };
 
@@ -454,7 +454,7 @@ export const getWarehouseItemCornPrice = () => {
 
 export const arrivalConfirmationWarehouseItemCornProcurement = (
   payload,
-  id
+  id,
 ) => {
   return api.put(
     `/warehouses/items/corns/procurements/${id}/arrivals`,
@@ -463,7 +463,7 @@ export const arrivalConfirmationWarehouseItemCornProcurement = (
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
 };
 
@@ -475,7 +475,7 @@ export const createReadyToEatFeed = (payload) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
 };
 
@@ -491,7 +491,7 @@ export const getListWarehouseSales = (
   date,
   paymentStatus,
   page,
-  warehouseId
+  warehouseId,
 ) => {
   return api.get(`/warehouses/sales`, {
     headers: {
@@ -562,7 +562,19 @@ export const deleteWarehouseSalePayment = (warehouseSaleId, paymentId) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
+  );
+};
+
+export const updateWarehouseSale = (warehouseSaleId, payload) => {
+  return api.put(
+    `/warehouses/sales/${warehouseSaleId}`,
+    payload,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
   );
 };
 
@@ -574,7 +586,7 @@ export const updateWarehouseSalePayment = (warehouseSaleId, id, payload) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
 };
 

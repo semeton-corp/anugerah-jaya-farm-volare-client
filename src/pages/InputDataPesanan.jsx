@@ -50,6 +50,7 @@ import {
   getEggWarehouseItemSummary,
   getWarehouses,
   getWarehouseSaleById,
+  updateWarehouseSale,
   updateWarehouseSalePayment,
 } from "../services/warehouses";
 import { formatThousand, onlyDigits } from "../utils/moneyFormat";
@@ -132,7 +133,7 @@ const InputDataPesanan = () => {
   const [itemTotalPrice, setItemTotalPrice] = useState([]);
   const [itemPriceDiscounts, setItemPriceDiscounts] = useState([]);
   const [itemPriceDiscount, setItemPriceDiscount] = useState([]);
-  const [discount, setDiscount] = useState([]);
+  const [discount, setDiscount] = useState(null);
 
   const [transactionCount, setTransactionCount] = useState(0);
 
@@ -340,6 +341,8 @@ const InputDataPesanan = () => {
         setIsMoreThanDeadlinePaymentDate(
           detailResponse.data.data.isMoreThanDeadlinePaymentDate,
         );
+        setDiscount(detailResponse.data.data.discount);
+
         if (placeType === "store") {
           setSelectedPlace(detailResponse.data.data.store);
         } else if (placeType === "warehouse") {
@@ -382,7 +385,9 @@ const InputDataPesanan = () => {
     const totalitemPrice = price * quantity;
     const totalDiscount = totalitemPrice * discountPercent;
 
-    setDiscount(selectedDiscount.totalDiscount);
+    if (!discount) {
+      setDiscount(selectedDiscount.totalDiscount);
+    }
     setItemPrice(price);
     setItemTotalPrice(totalitemPrice);
     setItemPriceDiscount(totalDiscount);
@@ -462,7 +467,6 @@ const InputDataPesanan = () => {
     console.log("create payload is ready: ", payload);
 
     try {
-
       let submitResponse;
       if (selectedPlace.type == "store") {
         submitResponse = await createStoreSale(payload);
@@ -579,8 +583,20 @@ const InputDataPesanan = () => {
     };
 
     try {
-      const response = await updateStoreSale(id, payload);
-      if (response.status == 200) {
+      const placeType =
+        state?.selectedPlace?.type || localStorage.getItem("selectedPlaceType");
+
+      let updateResponse;
+      if (placeType === "store") {
+        updateResponse = await updateStoreSale(id, payload);
+      } else if (placeType === "warehouse") {
+        updateResponse = await updateWarehouseSale(id, payload);
+      } else {
+        alert("❌ Terjadi kesalahan saat mengupdate data antrian!");
+        return;
+      }
+
+      if (updateResponse.status == 200) {
         navigate(-1, { state: { refetch: true } });
       }
     } catch (error) {
@@ -1650,42 +1666,16 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
       </div>
 
       {/* simpan button */}
-      {/* <div className="flex justify-end mb-8">
+      <div className="flex justify-end mb-8">
         <div
           onClick={() => {
-            // const payments = {
-            //   paymentDate: formatDateToDDMMYYYY(paymentDate),
-            //   nominal: nominal.toString(),
-            //   paymentProof: paymentProof,
-            //   paymentMethod: paymentMethod,
-            // };
-            // const payload = {
-            //   itemId: selectedItem.id,
-            //   saleUnit: unit,
-            //   storeId: parseInt(selectedStore),
-            //   quantity: quantity,
-            //   price: itemTotalPrice.toString(),
-            //   discount: discount,
-            //   sendDate: formatDateToDDMMYYYY(sendDate),
-            //   paymentType: paymentType,
-            //   payments: payments,
-            //   customerType: customerType,
-            // };
-            // console.log("===== Form Data =====");
-            // console.log("payload: ", payload);
-            // console.log("customers: ", customers);
-            // console.log("itemPrices: ", itemPrices);
-            // console.log("itemPriceDiscounts: ", itemPriceDiscounts);
-            // console.log("id: ", id);
-            // console.log("paymentHistory: ", paymentHistory);
-            // console.log("=====================");
-            console.log("selectedStore: ", selectedStore);
+            console.log("discount: ", discount);
           }}
           className="px-5 py-3 bg-green-700 rounded-[4px] hover:bg-green-900 cursor-pointer text-white"
         >
           CHECK
         </div>
-      </div> */}
+      </div>
 
       {showPaymentModal && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
