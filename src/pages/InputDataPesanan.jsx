@@ -385,7 +385,7 @@ const InputDataPesanan = () => {
     const totalitemPrice = price * quantity;
     const totalDiscount = totalitemPrice * discountPercent;
 
-    if (!discount) {
+    if (discount === null) {
       setDiscount(selectedDiscount.totalDiscount);
     }
     setItemPrice(price);
