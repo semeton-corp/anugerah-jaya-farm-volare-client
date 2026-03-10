@@ -1101,7 +1101,6 @@ const InputDataPesanan = () => {
                 const waNumber = localNumber.replace(/^0/, "62");
                 const namaPelanggan = customerName;
                 const namaBarang = selectedItem.name;
-                const unit = unit;
                 const rencanaPembelian = `${quantity} ${unit}`;
                 const hargaPerUnit = itemPrice;
                 const jumlahTransaksiTotal = transactionCount;
