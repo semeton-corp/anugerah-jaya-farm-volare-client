@@ -291,7 +291,7 @@ const InputDataPesanan = () => {
 
         setSelectedItem(filterData[0]);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const fetchCustomerData = async () => {
@@ -355,7 +355,7 @@ const InputDataPesanan = () => {
         );
         setTransactionCount(selectedCustomer?.totalTransaction);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const getPrice = () => {
@@ -369,10 +369,10 @@ const InputDataPesanan = () => {
 
     const selectedDiscount = applicableDiscounts.length
       ? applicableDiscounts.reduce((prev, curr) =>
-          curr.minimumTransactionUser > prev.minimumTransactionUser
-            ? curr
-            : prev,
-        )
+        curr.minimumTransactionUser > prev.minimumTransactionUser
+          ? curr
+          : prev,
+      )
       : 0;
 
     const price = priceItem?.price;
@@ -393,6 +393,8 @@ const InputDataPesanan = () => {
 
     if (discount === null) {
       setDiscount(selectedDiscount.totalDiscount);
+    } else if (selectedDiscount.totalDiscount == null) {
+      setDiscount(0);
     }
     setItemPrice(price);
     setItemTotalPrice(totalitemPrice);
@@ -533,12 +535,12 @@ const InputDataPesanan = () => {
         customerType: customerType,
         ...(customerType === "Pelanggan Baru"
           ? {
-              customerName: customerName,
-              customerPhoneNumber: phone.toString(),
-            }
+            customerName: customerName,
+            customerPhoneNumber: phone.toString(),
+          }
           : {
-              customerId: selectedCustomerId,
-            }),
+            customerId: selectedCustomerId,
+          }),
         itemId: selectedItem.id,
         ...(selectedPlace.type == "store"
           ? { storeId: parseInt(selectedPlace.id) }
@@ -1099,7 +1101,7 @@ const InputDataPesanan = () => {
                 const waNumber = localNumber.replace(/^0/, "62");
                 const namaPelanggan = customerName;
                 const namaBarang = selectedItem.name;
-                const unit = selectedItem.unit;
+                const unit = unit;
                 const rencanaPembelian = `${quantity} ${unit}`;
                 const hargaPerUnit = itemPrice;
                 const jumlahTransaksiTotal = transactionCount;
@@ -1133,11 +1135,10 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
               disabled={
                 !customerName || !selectedItem || !quantity || isOutOfStock
               }
-              className={`px-4 py-2 rounded flex items-center gap-2 ${
-                !customerName || !selectedItem || !quantity || isOutOfStock
-                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  : "bg-green-600 hover:bg-green-800 text-white"
-              }`}
+              className={`px-4 py-2 rounded flex items-center gap-2 ${!customerName || !selectedItem || !quantity || isOutOfStock
+                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                : "bg-green-600 hover:bg-green-800 text-white"
+                }`}
             >
               <IoLogoWhatsapp size={20} />
               Tawarkan Harga
@@ -1147,9 +1148,8 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
 
         <div>
           <label
-            className={`block font-medium mt-4 ${
-              isOutOfStock && !id ? " text-gray-400/40" : "text-black"
-            }`}
+            className={`block font-medium mt-4 ${isOutOfStock && !id ? " text-gray-400/40" : "text-black"
+              }`}
           >
             {`Harga per ${unit}`}
           </label>
@@ -1158,11 +1158,10 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
           ) : (
             <input
               disabled={isOutOfStock}
-              className={`w-full border bg-black-4  rounded p-2 mb-4 ${
-                isOutOfStock
-                  ? "bg-gray-400/10 cursor-not-allowed text-gray-400/20"
-                  : ""
-              }`}
+              className={`w-full border bg-black-4  rounded p-2 mb-4 ${isOutOfStock
+                ? "bg-gray-400/10 cursor-not-allowed text-gray-400/20"
+                : ""
+                }`}
               type="text"
               inputMode="numeric"
               value={formatThousand(itemPrice)}
@@ -1176,9 +1175,8 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
 
         <div>
           <label
-            className={`block font-medium mt-4 flex items-center gap-1 ${
-              isOutOfStock && !id ? "text-gray-400/40" : "text-black"
-            }`}
+            className={`block font-medium mt-4 flex items-center gap-1 ${isOutOfStock && !id ? "text-gray-400/40" : "text-black"
+              }`}
           >
             <div className="relative group">
               <IoInformationCircleOutline
@@ -1197,11 +1195,10 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
           ) : (
             <input
               disabled={isOutOfStock}
-              className={`w-full border bg-black-4  rounded p-2 mb-4 ${
-                isOutOfStock
-                  ? "bg-gray-400/10 cursor-not-allowed text-gray-400/20"
-                  : ""
-              }`}
+              className={`w-full border bg-black-4  rounded p-2 mb-4 ${isOutOfStock
+                ? "bg-gray-400/10 cursor-not-allowed text-gray-400/20"
+                : ""
+                }`}
               type="text"
               inputMode="numeric"
               value={discount}
@@ -1215,9 +1212,8 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
         <div className="flex justify-between gap-4">
           <div className="w-full">
             <label
-              className={`block font-medium mt-4 ${
-                isOutOfStock && !id ? " text-gray-400/40" : "text-black"
-              }`}
+              className={`block font-medium mt-4 ${isOutOfStock && !id ? " text-gray-400/40" : "text-black"
+                }`}
             >
               Tanggal Kirim
             </label>
@@ -1225,11 +1221,10 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
               <input
                 disabled={isOutOfStock}
                 ref={dateInputRef}
-                className={`w-full border bg-black-4  rounded p-2 mb-4 ${
-                  isOutOfStock
-                    ? "bg-gray-400/10 cursor-not-allowed text-gray-400/20"
-                    : "cursor-pointer"
-                }`}
+                className={`w-full border bg-black-4  rounded p-2 mb-4 ${isOutOfStock
+                  ? "bg-gray-400/10 cursor-not-allowed text-gray-400/20"
+                  : "cursor-pointer"
+                  }`}
                 type="date"
                 value={sendDate}
                 onClick={() => {
@@ -1249,16 +1244,14 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
             {/* Harga Barang */}
             <div className="grid grid-cols-1 sm:grid-cols-2 mb-2 gap-y-1">
               <span
-                className={`text-base sm:text-lg ${
-                  isOutOfStock && !id ? "text-gray-400/30" : "text-black"
-                }`}
+                className={`text-base sm:text-lg ${isOutOfStock && !id ? "text-gray-400/30" : "text-black"
+                  }`}
               >
                 Harga Barang :
               </span>
               <span
-                className={`font-bold text-base sm:text-lg sm:text-right ${
-                  isOutOfStock && !id ? "text-gray-400/30" : "text-black"
-                }`}
+                className={`font-bold text-base sm:text-lg sm:text-right ${isOutOfStock && !id ? "text-gray-400/30" : "text-black"
+                  }`}
               >
                 Rp{" "}
                 {isOutOfStock && !id
@@ -1270,16 +1263,14 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
             {/* Potongan Harga */}
             <div className="grid grid-cols-1 sm:grid-cols-2 mb-4 gap-y-1">
               <span
-                className={`text-base sm:text-lg ${
-                  isOutOfStock && !id ? "text-gray-400/30" : "text-black"
-                }`}
+                className={`text-base sm:text-lg ${isOutOfStock && !id ? "text-gray-400/30" : "text-black"
+                  }`}
               >
                 Potongan Harga :
               </span>
               <span
-                className={`font-bold text-base sm:text-lg sm:text-right ${
-                  isOutOfStock && !id ? "text-gray-400/30" : "text-black"
-                }`}
+                className={`font-bold text-base sm:text-lg sm:text-right ${isOutOfStock && !id ? "text-gray-400/30" : "text-black"
+                  }`}
               >
                 Rp -
                 {isOutOfStock && !id
@@ -1293,23 +1284,21 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
             {/* Total */}
             <div className="grid grid-cols-1 sm:grid-cols-2 mt-4 gap-y-1">
               <span
-                className={`text-base sm:text-lg ${
-                  isOutOfStock && !id ? "text-gray-400/30" : "text-black"
-                }`}
+                className={`text-base sm:text-lg ${isOutOfStock && !id ? "text-gray-400/30" : "text-black"
+                  }`}
               >
                 Total :
               </span>
               <span
-                className={`font-bold text-base sm:text-lg sm:text-right ${
-                  isOutOfStock && !id ? "text-gray-400/30" : "text-black"
-                }`}
+                className={`font-bold text-base sm:text-lg sm:text-right ${isOutOfStock && !id ? "text-gray-400/30" : "text-black"
+                  }`}
               >
                 Rp{" "}
                 {isOutOfStock && !id
                   ? "0"
                   : (itemTotalPrice - itemPriceDiscount).toLocaleString(
-                      "id-ID",
-                    )}
+                    "id-ID",
+                  )}
               </span>
             </div>
           </div>
@@ -1342,19 +1331,17 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
       <div className="p-4 border border-black-6 rounded-[4px]">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
           <h1
-            className={`text-lg font-bold ${
-              isOutOfStock && !id ? "text-gray-400/30" : "text-black"
-            }`}
+            className={`text-lg font-bold ${isOutOfStock && !id ? "text-gray-400/30" : "text-black"
+              }`}
           >
             Pembayaran
           </h1>
 
           <button
-            className={`px-5 py-3 rounded-[4px] text-sm sm:text-base transition-colors duration-200 ${
-              isOutOfStock && !id
-                ? "bg-orange-400/30 cursor-not-allowed text-gray-500"
-                : "bg-orange-400 hover:bg-orange-600 cursor-pointer text-black"
-            }`}
+            className={`px-5 py-3 rounded-[4px] text-sm sm:text-base transition-colors duration-200 ${isOutOfStock && !id
+              ? "bg-orange-400/30 cursor-not-allowed text-gray-500"
+              : "bg-orange-400 hover:bg-orange-600 cursor-pointer text-black"
+              }`}
             onClick={() => {
               if (!isOutOfStock) {
                 if (paymentStatus === "Lunas") {
@@ -1374,19 +1361,17 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
         {!id && (
           <>
             <label
-              className={`block font-medium mt-4 ${
-                isOutOfStock && !id ? " text-gray-400/40" : "text-black"
-              }`}
+              className={`block font-medium mt-4 ${isOutOfStock && !id ? " text-gray-400/40" : "text-black"
+                }`}
             >
               Tipe Pembayaran
             </label>
             <select
               disabled={isOutOfStock}
-              className={`w-full border bg-black-4  rounded p-2 mb-4 ${
-                isOutOfStock
-                  ? "bg-gray-400/10 cursor-not-allowed text-gray-400/20"
-                  : "cursor-pointer"
-              }`}
+              className={`w-full border bg-black-4  rounded p-2 mb-4 ${isOutOfStock
+                ? "bg-gray-400/10 cursor-not-allowed text-gray-400/20"
+                : "cursor-pointer"
+                }`}
               value={paymentType}
               onChange={(e) => setPaymentType(e.target.value)}
               title="Tipe Pembayaran"
@@ -1453,13 +1438,12 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
             <div>Tenggat Pembayaran</div>
             <div className="flex gap-2 items-center">
               <span
-                className={`text-xl font-semibold ${
-                  paymentStatus == "Lunas"
-                    ? "text-gray-200"
-                    : isMoreThanDeadlinePaymentDate
-                      ? "text-red-600"
-                      : ""
-                }`}
+                className={`text-xl font-semibold ${paymentStatus == "Lunas"
+                  ? "text-gray-200"
+                  : isMoreThanDeadlinePaymentDate
+                    ? "text-red-600"
+                    : ""
+                  }`}
               >
                 {paymentStatus == "Lunas"
                   ? "(Lunas)"
@@ -1479,11 +1463,10 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
           <div className="overflow-x-auto">
             <table className="w-full min-w-[800px]">
               <thead
-                className={`${
-                  isOutOfStock && !id
-                    ? "bg-green-700/30 text-white"
-                    : "bg-green-700 text-white"
-                }`}
+                className={`${isOutOfStock && !id
+                  ? "bg-green-700/30 text-white"
+                  : "bg-green-700 text-white"
+                  }`}
               >
                 <tr>
                   <th className="px-4 py-2">Tanggal</th>
@@ -1576,9 +1559,8 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
                   <tr>
                     <td
                       colSpan={6}
-                      className={`text-center py-4 italic ${
-                        isOutOfStock ? "text-gray-500/20" : "text-gray-500"
-                      }`}
+                      className={`text-center py-4 italic ${isOutOfStock ? "text-gray-500/20" : "text-gray-500"
+                        }`}
                     >
                       Belum ada data pembayaran.
                     </td>
@@ -1594,22 +1576,19 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
           {/* Status Pembayaran */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
             <h1
-              className={`text-lg font-bold ${
-                isOutOfStock && !id ? "text-gray-400/50" : "text-black"
-              }`}
+              className={`text-lg font-bold ${isOutOfStock && !id ? "text-gray-400/50" : "text-black"
+                }`}
             >
               Status Pembayaran:
             </h1>
             <div
-              className={`px-4 py-2 text-base sm:text-xl rounded-[4px] font-semibold ${
-                paymentStatus === "Belum Lunas"
-                  ? "bg-orange-200 text-kritis-text-color"
-                  : "bg-aman-box-surface-color text-aman-text-color"
-              } ${
-                isOutOfStock && !id
+              className={`px-4 py-2 text-base sm:text-xl rounded-[4px] font-semibold ${paymentStatus === "Belum Lunas"
+                ? "bg-orange-200 text-kritis-text-color"
+                : "bg-aman-box-surface-color text-aman-text-color"
+                } ${isOutOfStock && !id
                   ? "bg-orange-200/50 text-kritis-text-color/30"
                   : ""
-              }`}
+                }`}
             >
               {paymentStatus}
             </div>
@@ -1618,16 +1597,14 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
           {/* Sisa Cicilan */}
           <div className="flex flex-col items-start sm:items-end gap-1">
             <div
-              className={`text-lg sm:text-xl font-semibold ${
-                isOutOfStock && !id ? "text-gray-500/20" : "text-black"
-              }`}
+              className={`text-lg sm:text-xl font-semibold ${isOutOfStock && !id ? "text-gray-500/20" : "text-black"
+                }`}
             >
               Sisa Cicilan
             </div>
             <div
-              className={`font-semibold text-2xl sm:text-3xl flex items-center gap-1 ${
-                isOutOfStock && !id ? "text-gray-500/20" : "text-black"
-              }`}
+              className={`font-semibold text-2xl sm:text-3xl flex items-center gap-1 ${isOutOfStock && !id ? "text-gray-500/20" : "text-black"
+                }`}
             >
               <span>Rp</span>
               <span>
@@ -1794,11 +1771,10 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
                   setShowPaymentModal(false);
                 }}
                 disabled={isUploading}
-                className={`px-4 py-2 rounded text-white ${
-                  isUploading
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-green-700 hover:bg-green-900 cursor-pointer"
-                }`}
+                className={`px-4 py-2 rounded text-white ${isUploading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-green-700 hover:bg-green-900 cursor-pointer"
+                  }`}
               >
                 {isUploading ? "Mengunggah..." : "Simpan"}
               </button>
@@ -1997,7 +1973,7 @@ Kami dari *Anugerah Jaya Farm* ingin mengkonfirmasi harga barang *PER ${unit.toU
           customerPhoneNumber={phone}
           itemName={selectedItem.name}
           quantity={quantity}
-          unit={selectedItem.unit}
+          unit={unit}
           itemPrice={itemPrice}
           itemTotalPrice={itemTotalPrice}
           itemPriceDiscount={itemPriceDiscount}
